@@ -185,7 +185,7 @@ public class FlappyImService {
                         HolderLoginCallback.getInstance().addLoginCallBack(uuid, callback);
 
                     }
- 
+
                     @Override
                     protected void netError(Exception e, String tag) {
                         callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
