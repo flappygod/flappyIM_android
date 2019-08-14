@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/testrect"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="50dp" />
+
+    <EditText
+        android:layout_margin="20dp"
+        android:id="@+id/userid"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@color/colorAccent"
+        android:text="注册账号"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@color/colorAccent"
+        android:text="登录账号"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/session"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@color/colorAccent"
+        android:text="创建会话"
+        android:textColor="#ffffff" />
+
+
+    <EditText
+        android:layout_margin="20dp"
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="45dp" />
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@color/colorAccent"
+        android:text="发送消息"
+        android:textColor="#ffffff" />
+
+
+    <Button
+        android:id="@+id/send_img"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="20dp"
+        android:background="@color/colorAccent"
+        android:text="发送消息"
+        android:textColor="#ffffff" />
+
+</LinearLayout>
