@@ -221,7 +221,7 @@ public class ChatSingleSession extends FlappyBaseSession {
     }
 
     //重发消息
-    private void resendMessage(final ChatMessage chatMessage, final FlappyIMCallback<ChatMessage> callback) {
+    public void resendMessage(final ChatMessage chatMessage, final FlappyIMCallback<ChatMessage> callback) {
         //重新发送
         if (chatMessage.getMessageType().intValue() == Integer.parseInt(ChatMessage.MSG_TYPE_TEXT)) {
             sendMessage(chatMessage, callback);
