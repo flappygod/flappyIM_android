@@ -64,7 +64,10 @@ public class FlappyService extends Service {
         ChatUser user = DataManager.getInstance().getLoginUser();
         //已经被踢下线了，不要挣扎了
         if (user != null && user.isLogin() == false) {
-            knickedOutListener.knickedOut();
+            //如果不为空
+            if(knickedOutListener!=null) {
+                knickedOutListener.knickedOut();
+            }
         }
     }
 
