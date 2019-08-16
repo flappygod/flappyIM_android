@@ -7,6 +7,7 @@ import android.os.Build;
 import com.flappygo.flappyim.ApiServer.Base.BaseListParseCallBack;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.Config.BaseConfig;
@@ -289,14 +290,14 @@ public class FlappyImService {
 
 
     //创建群组会话
-    public void createGroupSession(String users,
+    public void createGroupSession(List<String> users,
                                    String groupID,
                                    String groupName,
                                    final FlappyIMCallback<ChatGroupSession> callback) {
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
-        hashMap.put("users", users);
+        hashMap.put("users", GsonTool.jsonArrayListStr(users));
         //外部用户ID
         hashMap.put("createUser", DataManager.getInstance().getLoginUser().getUserId());
         //外部的群组ID
