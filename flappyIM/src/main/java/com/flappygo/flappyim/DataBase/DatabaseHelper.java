@@ -42,8 +42,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // 消息id
                 "messageSend" + " varchar,"
                 +
+                // 消息id
+                "messageSendExtendid" + " varchar,"
+                +
                 // 消息类型
                 "messageRecieve" + " varchar,"
+                +
+                // 消息类型
+                "messageRecieveExtendid" + " varchar,"
                 +
                 // 发送flag
                 "messageContent" + " varchar,"
@@ -98,8 +104,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         // 消息id
                         "messageSend" + " varchar,"
                         +
+                        // 消息id
+                        "messageSendExtendid" + " varchar,"
+                        +
                         // 消息类型
                         "messageRecieve" + " varchar,"
+                        +
+                        // 消息类型
+                        "messageRecieveExtendid" + " varchar,"
                         +
                         // 发送flag
                         "messageContent" + " varchar,"

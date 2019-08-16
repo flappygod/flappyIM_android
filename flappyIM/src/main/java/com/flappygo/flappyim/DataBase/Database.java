@@ -106,8 +106,12 @@ public class Database {
                 values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
             if (chatMessage.getMessageSend() != null)
                 values.put("messageSend", chatMessage.getMessageSend());
+            if (chatMessage.getMessageSend() != null)
+                values.put("messageSendExtendid", chatMessage.getMessageSendExtendid());
             if (chatMessage.getMessageRecieve() != null)
                 values.put("messageRecieve", chatMessage.getMessageRecieve());
+            if (chatMessage.getMessageRecieveExtendid() != null)
+                values.put("messageRecieveExtendid", chatMessage.getMessageRecieveExtendid());
             if (chatMessage.getMessageContent() != null)
                 values.put("messageContent", chatMessage.getMessageContent());
             if (chatMessage.getMessageSended() != null)
@@ -179,8 +183,12 @@ public class Database {
                         values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
                     if (chatMessage.getMessageSend() != null)
                         values.put("messageSend", chatMessage.getMessageSend());
+                    if (chatMessage.getMessageSend() != null)
+                        values.put("messageSendExtendid", chatMessage.getMessageSendExtendid());
                     if (chatMessage.getMessageRecieve() != null)
                         values.put("messageRecieve", chatMessage.getMessageRecieve());
+                    if (chatMessage.getMessageRecieveExtendid() != null)
+                        values.put("messageRecieveExtendid", chatMessage.getMessageRecieveExtendid());
                     if (chatMessage.getMessageContent() != null)
                         values.put("messageContent", chatMessage.getMessageContent());
                     if (chatMessage.getMessageSended() != null)
@@ -217,8 +225,12 @@ public class Database {
                         values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
                     if (chatMessage.getMessageSend() != null)
                         values.put("messageSend", chatMessage.getMessageSend());
+                    if (chatMessage.getMessageSend() != null)
+                        values.put("messageSendExtendid", chatMessage.getMessageSendExtendid());
                     if (chatMessage.getMessageRecieve() != null)
                         values.put("messageRecieve", chatMessage.getMessageRecieve());
+                    if (chatMessage.getMessageRecieveExtendid() != null)
+                        values.put("messageRecieveExtendid", chatMessage.getMessageRecieveExtendid());
                     if (chatMessage.getMessageContent() != null)
                         values.put("messageContent", chatMessage.getMessageContent());
                     if (chatMessage.getMessageSended() != null)
@@ -281,8 +293,12 @@ public class Database {
                         .getColumnIndex("messageType"))));
                 info.setMessageSend(cursor.getString(cursor
                         .getColumnIndex("messageSend")));
+                info.setMessageSendExtendid(cursor.getString(cursor
+                        .getColumnIndex("messageSendExtendid")));
                 info.setMessageRecieve(cursor.getString(cursor
                         .getColumnIndex("messageRecieve")));
+                info.setMessageRecieveExtendid(cursor.getString(cursor
+                        .getColumnIndex("messageRecieveExtendid")));
                 info.setMessageContent(cursor.getString(cursor
                         .getColumnIndex("messageContent")));
                 info.setMessageSended(new BigDecimal(cursor.getInt(cursor
@@ -331,8 +347,12 @@ public class Database {
                         .getColumnIndex("messageType"))));
                 info.setMessageSend(cursor.getString(cursor
                         .getColumnIndex("messageSend")));
+                info.setMessageSendExtendid(cursor.getString(cursor
+                        .getColumnIndex("messageSendExtendid")));
                 info.setMessageRecieve(cursor.getString(cursor
                         .getColumnIndex("messageRecieve")));
+                info.setMessageRecieveExtendid(cursor.getString(cursor
+                        .getColumnIndex("messageRecieveExtendid")));
                 info.setMessageContent(cursor.getString(cursor
                         .getColumnIndex("messageContent")));
                 info.setMessageSended(new BigDecimal(cursor.getInt(cursor
@@ -381,8 +401,12 @@ public class Database {
                     .getColumnIndex("messageType"))));
             info.setMessageSend(cursor.getString(cursor
                     .getColumnIndex("messageSend")));
+            info.setMessageSendExtendid(cursor.getString(cursor
+                    .getColumnIndex("messageSendExtendid")));
             info.setMessageRecieve(cursor.getString(cursor
                     .getColumnIndex("messageRecieve")));
+            info.setMessageRecieveExtendid(cursor.getString(cursor
+                    .getColumnIndex("messageRecieveExtendid")));
             info.setMessageContent(cursor.getString(cursor
                     .getColumnIndex("messageContent")));
             info.setMessageSended(new BigDecimal(cursor.getInt(cursor
@@ -432,8 +456,12 @@ public class Database {
                     .getColumnIndex("messageType"))));
             info.setMessageSend(cursor.getString(cursor
                     .getColumnIndex("messageSend")));
+            info.setMessageSendExtendid(cursor.getString(cursor
+                    .getColumnIndex("messageSendExtendid")));
             info.setMessageRecieve(cursor.getString(cursor
                     .getColumnIndex("messageRecieve")));
+            info.setMessageRecieveExtendid(cursor.getString(cursor
+                    .getColumnIndex("messageRecieveExtendid")));
             info.setMessageContent(cursor.getString(cursor
                     .getColumnIndex("messageContent")));
             info.setMessageSended(new BigDecimal(cursor.getInt(cursor
@@ -482,8 +510,12 @@ public class Database {
                     .getColumnIndex("messageType"))));
             info.setMessageSend(cursor.getString(cursor
                     .getColumnIndex("messageSend")));
+            info.setMessageSendExtendid(cursor.getString(cursor
+                    .getColumnIndex("messageSendExtendid")));
             info.setMessageRecieve(cursor.getString(cursor
                     .getColumnIndex("messageRecieve")));
+            info.setMessageRecieveExtendid(cursor.getString(cursor
+                    .getColumnIndex("messageRecieveExtendid")));
             info.setMessageContent(cursor.getString(cursor
                     .getColumnIndex("messageContent")));
             info.setMessageSended(new BigDecimal(cursor.getInt(cursor
