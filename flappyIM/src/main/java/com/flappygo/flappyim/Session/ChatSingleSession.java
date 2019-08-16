@@ -3,11 +3,13 @@ package com.flappygo.flappyim.Session;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.DataBase.Database;
+import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Holder.HolderMessageRecieve;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
 
 import java.math.BigDecimal;
@@ -49,15 +51,29 @@ public class ChatSingleSession extends FlappyBaseSession {
     }
 
     //会话
-    private SingleSessionData session;
+    private SessionData session;
 
 
-    public SingleSessionData getSession() {
+    public SessionData getSession() {
         return session;
     }
 
-    public void setSession(SingleSessionData session) {
+    public void setSession(SessionData session) {
         this.session = session;
+    }
+
+
+    private ChatUser getMine(){
+        return DataManager.getInstance().getLoginUser();
+    }
+
+    private ChatUser getPeer(){
+        for(int s=0;s<getSession().getUsers().size();s++){
+            if(!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())){
+                return getSession().getUsers().get(s);
+            }
+        }
+        return null;
     }
 
 
@@ -73,9 +89,13 @@ public class ChatSingleSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(getSession().getUserOne().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getSession().getUserTwo().getUserId());
+        msg.setMessageRecieve(getPeer().getUserId());
+        //接收者
+        msg.setMessageSendExtendid(getPeer().getUserExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_TEXT));
         //设置内容
@@ -103,9 +123,13 @@ public class ChatSingleSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(getSession().getUserOne().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getSession().getUserTwo().getUserId());
+        msg.setMessageRecieve(getPeer().getUserId());
+        //接收者
+        msg.setMessageSendExtendid(getPeer().getUserExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //消息
@@ -138,9 +162,13 @@ public class ChatSingleSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(getSession().getUserOne().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getSession().getUserTwo().getUserId());
+        msg.setMessageRecieve(getPeer().getUserId());
+        //接收者
+        msg.setMessageSendExtendid(getPeer().getUserExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //设置内容
@@ -169,9 +197,13 @@ public class ChatSingleSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(getSession().getUserOne().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getSession().getUserTwo().getUserId());
+        msg.setMessageRecieve(getPeer().getUserId());
+        //接收者
+        msg.setMessageSendExtendid(getPeer().getUserExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //创建语音
@@ -203,9 +235,13 @@ public class ChatSingleSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(getSession().getUserOne().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getSession().getUserTwo().getUserId());
+        msg.setMessageRecieve(getPeer().getUserId());
+        //接收者
+        msg.setMessageSendExtendid(getPeer().getUserExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //设置内容

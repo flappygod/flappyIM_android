@@ -9,6 +9,7 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
 
 import java.math.BigDecimal;
@@ -49,17 +50,21 @@ public class ChatGroupSession extends FlappyBaseSession {
     }
 
     //会话
-    private GroupSessionData session;
+    private SessionData session;
 
 
-    public GroupSessionData getSession() {
+    public SessionData getSession() {
         return session;
     }
 
-    public void setSession(GroupSessionData session) {
+    public void setSession(SessionData session) {
         this.session = session;
     }
 
+
+    private ChatUser getMine(){
+        return DataManager.getInstance().getLoginUser();
+    }
 
     //发送消息
     public ChatMessage sendText(String text,
@@ -73,9 +78,13 @@ public class ChatGroupSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(DataManager.getInstance().getLoginUser().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
         msg.setMessageRecieve(session.getSessionId());
+        //接收者
+        msg.setMessageSendExtendid(session.getSessionExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_TEXT));
         //设置内容
@@ -103,9 +112,13 @@ public class ChatGroupSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(DataManager.getInstance().getLoginUser().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
         msg.setMessageRecieve(session.getSessionId());
+        //接收者
+        msg.setMessageSendExtendid(session.getSessionExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //消息
@@ -138,9 +151,13 @@ public class ChatGroupSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(DataManager.getInstance().getLoginUser().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
         msg.setMessageRecieve(session.getSessionId());
+        //接收者
+        msg.setMessageSendExtendid(session.getSessionExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //设置内容
@@ -169,9 +186,13 @@ public class ChatGroupSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(DataManager.getInstance().getLoginUser().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
         msg.setMessageRecieve(session.getSessionId());
+        //接收者
+        msg.setMessageSendExtendid(session.getSessionExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //创建语音
@@ -203,9 +224,13 @@ public class ChatGroupSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSend(DataManager.getInstance().getLoginUser().getUserId());
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
         msg.setMessageRecieve(session.getSessionId());
+        //接收者
+        msg.setMessageSendExtendid(session.getSessionExtendId());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //设置内容

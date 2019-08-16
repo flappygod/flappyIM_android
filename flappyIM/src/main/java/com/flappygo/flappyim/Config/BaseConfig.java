@@ -27,15 +27,20 @@ public class BaseConfig {
     //自动登录
     public final static String autoLogin = serverUrl + "/api/autoLogin";
 
-    //创建会话
-    public final static String createSession = serverUrl + "/api/createSession";
+    //创建单聊会话
+    public final static String createSingleSession = serverUrl + "/api/createSingleSession";
 
+    //获取单聊会话
+    public final static String getSingleSession = serverUrl + "/api/getSingleSession";
 
     //创建群组会话
     public final static String createGroupSession = serverUrl + "/api/createGroupSession";
 
     //获取群组会话
-    public final static String getGroupSession = serverUrl + "/api/getGroupSession";
+    public final static String getSessionByID = serverUrl + "/api/getSessionByID";
+
+    //获取用户的所有会话
+    public final static String getUserSessions = serverUrl + "/api/getUserSessions";
 
     //向会话中添加人员
     public final static String addUserToSession = serverUrl + "/api/addUserToSession";

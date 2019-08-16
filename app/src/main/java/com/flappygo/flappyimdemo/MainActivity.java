@@ -120,7 +120,7 @@ public class MainActivity extends Activity {
         session.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlappyImService.getInstance().createSession("101", new FlappyIMCallback<ChatSingleSession>() {
+                FlappyImService.getInstance().createSingleSession("101", new FlappyIMCallback<ChatSingleSession>() {
                     @Override
                     public void success(ChatSingleSession chatSingleSession) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();

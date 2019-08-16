@@ -4469,56 +4469,76 @@ public final class Flappy {
         getMessageSendBytes();
 
     /**
-     * <code>string messageRecieve = 8;</code>
+     * <code>string messageSendExtendid = 8;</code>
+     */
+    String getMessageSendExtendid();
+    /**
+     * <code>string messageSendExtendid = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getMessageSendExtendidBytes();
+
+    /**
+     * <code>string messageRecieve = 9;</code>
      */
     String getMessageRecieve();
     /**
-     * <code>string messageRecieve = 8;</code>
+     * <code>string messageRecieve = 9;</code>
      */
     com.google.protobuf.ByteString
         getMessageRecieveBytes();
 
     /**
-     * <code>string messageContent = 9;</code>
+     * <code>string messageRecieveExtendid = 10;</code>
+     */
+    String getMessageRecieveExtendid();
+    /**
+     * <code>string messageRecieveExtendid = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getMessageRecieveExtendidBytes();
+
+    /**
+     * <code>string messageContent = 11;</code>
      */
     String getMessageContent();
     /**
-     * <code>string messageContent = 9;</code>
+     * <code>string messageContent = 11;</code>
      */
     com.google.protobuf.ByteString
         getMessageContentBytes();
 
     /**
-     * <code>int32 messageSended = 10;</code>
+     * <code>int32 messageSended = 12;</code>
      */
     int getMessageSended();
 
     /**
-     * <code>int32 messageReaded = 11;</code>
+     * <code>int32 messageReaded = 13;</code>
      */
     int getMessageReaded();
 
     /**
-     * <code>string messageDate = 12;</code>
+     * <code>string messageDate = 14;</code>
      */
     String getMessageDate();
     /**
-     * <code>string messageDate = 12;</code>
+     * <code>string messageDate = 14;</code>
      */
     com.google.protobuf.ByteString
         getMessageDateBytes();
 
     /**
-     * <code>int32 messageDeleted = 13;</code>
+     * <code>int32 messageDeleted = 15;</code>
      */
     int getMessageDeleted();
 
     /**
-     * <code>string messageDeletedDate = 14;</code>
+     * <code>string messageDeletedDate = 16;</code>
      */
     String getMessageDeletedDate();
     /**
-     * <code>string messageDeletedDate = 14;</code>
+     * <code>string messageDeletedDate = 16;</code>
      */
     com.google.protobuf.ByteString
         getMessageDeletedDateBytes();
@@ -4544,7 +4564,9 @@ public final class Flappy {
       messageSession_ = "";
       messageTableSeq_ = "";
       messageSend_ = "";
+      messageSendExtendid_ = "";
       messageRecieve_ = "";
+      messageRecieveExtendid_ = "";
       messageContent_ = "";
       messageDate_ = "";
       messageDeletedDate_ = "";
@@ -4622,37 +4644,49 @@ public final class Flappy {
             case 66: {
               String s = input.readStringRequireUtf8();
 
-              messageRecieve_ = s;
+              messageSendExtendid_ = s;
               break;
             }
             case 74: {
               String s = input.readStringRequireUtf8();
 
+              messageRecieve_ = s;
+              break;
+            }
+            case 82: {
+              String s = input.readStringRequireUtf8();
+
+              messageRecieveExtendid_ = s;
+              break;
+            }
+            case 90: {
+              String s = input.readStringRequireUtf8();
+
               messageContent_ = s;
               break;
             }
-            case 80: {
+            case 96: {
 
               messageSended_ = input.readInt32();
               break;
             }
-            case 88: {
+            case 104: {
 
               messageReaded_ = input.readInt32();
               break;
             }
-            case 98: {
+            case 114: {
               String s = input.readStringRequireUtf8();
 
               messageDate_ = s;
               break;
             }
-            case 104: {
+            case 120: {
 
               messageDeleted_ = input.readInt32();
               break;
             }
-            case 114: {
+            case 130: {
               String s = input.readStringRequireUtf8();
 
               messageDeletedDate_ = s;
@@ -4853,10 +4887,44 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGERECIEVE_FIELD_NUMBER = 8;
+    public static final int MESSAGESENDEXTENDID_FIELD_NUMBER = 8;
+    private volatile Object messageSendExtendid_;
+    /**
+     * <code>string messageSendExtendid = 8;</code>
+     */
+    public String getMessageSendExtendid() {
+      Object ref = messageSendExtendid_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageSendExtendid_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageSendExtendid = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMessageSendExtendidBytes() {
+      Object ref = messageSendExtendid_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageSendExtendid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGERECIEVE_FIELD_NUMBER = 9;
     private volatile Object messageRecieve_;
     /**
-     * <code>string messageRecieve = 8;</code>
+     * <code>string messageRecieve = 9;</code>
      */
     public String getMessageRecieve() {
       Object ref = messageRecieve_;
@@ -4871,7 +4939,7 @@ public final class Flappy {
       }
     }
     /**
-     * <code>string messageRecieve = 8;</code>
+     * <code>string messageRecieve = 9;</code>
      */
     public com.google.protobuf.ByteString
         getMessageRecieveBytes() {
@@ -4887,10 +4955,44 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGECONTENT_FIELD_NUMBER = 9;
+    public static final int MESSAGERECIEVEEXTENDID_FIELD_NUMBER = 10;
+    private volatile Object messageRecieveExtendid_;
+    /**
+     * <code>string messageRecieveExtendid = 10;</code>
+     */
+    public String getMessageRecieveExtendid() {
+      Object ref = messageRecieveExtendid_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageRecieveExtendid_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string messageRecieveExtendid = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMessageRecieveExtendidBytes() {
+      Object ref = messageRecieveExtendid_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageRecieveExtendid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGECONTENT_FIELD_NUMBER = 11;
     private volatile Object messageContent_;
     /**
-     * <code>string messageContent = 9;</code>
+     * <code>string messageContent = 11;</code>
      */
     public String getMessageContent() {
       Object ref = messageContent_;
@@ -4905,7 +5007,7 @@ public final class Flappy {
       }
     }
     /**
-     * <code>string messageContent = 9;</code>
+     * <code>string messageContent = 11;</code>
      */
     public com.google.protobuf.ByteString
         getMessageContentBytes() {
@@ -4921,28 +5023,28 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGESENDED_FIELD_NUMBER = 10;
+    public static final int MESSAGESENDED_FIELD_NUMBER = 12;
     private int messageSended_;
     /**
-     * <code>int32 messageSended = 10;</code>
+     * <code>int32 messageSended = 12;</code>
      */
     public int getMessageSended() {
       return messageSended_;
     }
 
-    public static final int MESSAGEREADED_FIELD_NUMBER = 11;
+    public static final int MESSAGEREADED_FIELD_NUMBER = 13;
     private int messageReaded_;
     /**
-     * <code>int32 messageReaded = 11;</code>
+     * <code>int32 messageReaded = 13;</code>
      */
     public int getMessageReaded() {
       return messageReaded_;
     }
 
-    public static final int MESSAGEDATE_FIELD_NUMBER = 12;
+    public static final int MESSAGEDATE_FIELD_NUMBER = 14;
     private volatile Object messageDate_;
     /**
-     * <code>string messageDate = 12;</code>
+     * <code>string messageDate = 14;</code>
      */
     public String getMessageDate() {
       Object ref = messageDate_;
@@ -4957,7 +5059,7 @@ public final class Flappy {
       }
     }
     /**
-     * <code>string messageDate = 12;</code>
+     * <code>string messageDate = 14;</code>
      */
     public com.google.protobuf.ByteString
         getMessageDateBytes() {
@@ -4973,19 +5075,19 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGEDELETED_FIELD_NUMBER = 13;
+    public static final int MESSAGEDELETED_FIELD_NUMBER = 15;
     private int messageDeleted_;
     /**
-     * <code>int32 messageDeleted = 13;</code>
+     * <code>int32 messageDeleted = 15;</code>
      */
     public int getMessageDeleted() {
       return messageDeleted_;
     }
 
-    public static final int MESSAGEDELETEDDATE_FIELD_NUMBER = 14;
+    public static final int MESSAGEDELETEDDATE_FIELD_NUMBER = 16;
     private volatile Object messageDeletedDate_;
     /**
-     * <code>string messageDeletedDate = 14;</code>
+     * <code>string messageDeletedDate = 16;</code>
      */
     public String getMessageDeletedDate() {
       Object ref = messageDeletedDate_;
@@ -5000,7 +5102,7 @@ public final class Flappy {
       }
     }
     /**
-     * <code>string messageDeletedDate = 14;</code>
+     * <code>string messageDeletedDate = 16;</code>
      */
     public com.google.protobuf.ByteString
         getMessageDeletedDateBytes() {
@@ -5051,26 +5153,32 @@ public final class Flappy {
       if (!getMessageSendBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, messageSend_);
       }
+      if (!getMessageSendExtendidBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, messageSendExtendid_);
+      }
       if (!getMessageRecieveBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 8, messageRecieve_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, messageRecieve_);
+      }
+      if (!getMessageRecieveExtendidBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 10, messageRecieveExtendid_);
       }
       if (!getMessageContentBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, messageContent_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 11, messageContent_);
       }
       if (messageSended_ != 0) {
-        output.writeInt32(10, messageSended_);
+        output.writeInt32(12, messageSended_);
       }
       if (messageReaded_ != 0) {
-        output.writeInt32(11, messageReaded_);
+        output.writeInt32(13, messageReaded_);
       }
       if (!getMessageDateBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, messageDate_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, messageDate_);
       }
       if (messageDeleted_ != 0) {
-        output.writeInt32(13, messageDeleted_);
+        output.writeInt32(15, messageDeleted_);
       }
       if (!getMessageDeletedDateBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, messageDeletedDate_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 16, messageDeletedDate_);
       }
       unknownFields.writeTo(output);
     }
@@ -5105,29 +5213,35 @@ public final class Flappy {
       if (!getMessageSendBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, messageSend_);
       }
+      if (!getMessageSendExtendidBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, messageSendExtendid_);
+      }
       if (!getMessageRecieveBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, messageRecieve_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, messageRecieve_);
+      }
+      if (!getMessageRecieveExtendidBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, messageRecieveExtendid_);
       }
       if (!getMessageContentBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, messageContent_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, messageContent_);
       }
       if (messageSended_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(10, messageSended_);
+          .computeInt32Size(12, messageSended_);
       }
       if (messageReaded_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(11, messageReaded_);
+          .computeInt32Size(13, messageReaded_);
       }
       if (!getMessageDateBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, messageDate_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, messageDate_);
       }
       if (messageDeleted_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(13, messageDeleted_);
+          .computeInt32Size(15, messageDeleted_);
       }
       if (!getMessageDeletedDateBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, messageDeletedDate_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(16, messageDeletedDate_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -5158,8 +5272,12 @@ public final class Flappy {
           != other.getMessageType()) return false;
       if (!getMessageSend()
           .equals(other.getMessageSend())) return false;
+      if (!getMessageSendExtendid()
+          .equals(other.getMessageSendExtendid())) return false;
       if (!getMessageRecieve()
           .equals(other.getMessageRecieve())) return false;
+      if (!getMessageRecieveExtendid()
+          .equals(other.getMessageRecieveExtendid())) return false;
       if (!getMessageContent()
           .equals(other.getMessageContent())) return false;
       if (getMessageSended()
@@ -5197,8 +5315,12 @@ public final class Flappy {
       hash = (53 * hash) + getMessageType();
       hash = (37 * hash) + MESSAGESEND_FIELD_NUMBER;
       hash = (53 * hash) + getMessageSend().hashCode();
+      hash = (37 * hash) + MESSAGESENDEXTENDID_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageSendExtendid().hashCode();
       hash = (37 * hash) + MESSAGERECIEVE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageRecieve().hashCode();
+      hash = (37 * hash) + MESSAGERECIEVEEXTENDID_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageRecieveExtendid().hashCode();
       hash = (37 * hash) + MESSAGECONTENT_FIELD_NUMBER;
       hash = (53 * hash) + getMessageContent().hashCode();
       hash = (37 * hash) + MESSAGESENDED_FIELD_NUMBER;
@@ -5362,7 +5484,11 @@ public final class Flappy {
 
         messageSend_ = "";
 
+        messageSendExtendid_ = "";
+
         messageRecieve_ = "";
+
+        messageRecieveExtendid_ = "";
 
         messageContent_ = "";
 
@@ -5409,7 +5535,9 @@ public final class Flappy {
         result.messageTableSeq_ = messageTableSeq_;
         result.messageType_ = messageType_;
         result.messageSend_ = messageSend_;
+        result.messageSendExtendid_ = messageSendExtendid_;
         result.messageRecieve_ = messageRecieve_;
+        result.messageRecieveExtendid_ = messageRecieveExtendid_;
         result.messageContent_ = messageContent_;
         result.messageSended_ = messageSended_;
         result.messageReaded_ = messageReaded_;
@@ -5489,8 +5617,16 @@ public final class Flappy {
           messageSend_ = other.messageSend_;
           onChanged();
         }
+        if (!other.getMessageSendExtendid().isEmpty()) {
+          messageSendExtendid_ = other.messageSendExtendid_;
+          onChanged();
+        }
         if (!other.getMessageRecieve().isEmpty()) {
           messageRecieve_ = other.messageRecieve_;
+          onChanged();
+        }
+        if (!other.getMessageRecieveExtendid().isEmpty()) {
+          messageRecieveExtendid_ = other.messageRecieveExtendid_;
           onChanged();
         }
         if (!other.getMessageContent().isEmpty()) {
@@ -5897,9 +6033,78 @@ public final class Flappy {
         return this;
       }
 
+      private Object messageSendExtendid_ = "";
+      /**
+       * <code>string messageSendExtendid = 8;</code>
+       */
+      public String getMessageSendExtendid() {
+        Object ref = messageSendExtendid_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageSendExtendid_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string messageSendExtendid = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMessageSendExtendidBytes() {
+        Object ref = messageSendExtendid_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageSendExtendid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageSendExtendid = 8;</code>
+       */
+      public Builder setMessageSendExtendid(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageSendExtendid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string messageSendExtendid = 8;</code>
+       */
+      public Builder clearMessageSendExtendid() {
+        
+        messageSendExtendid_ = getDefaultInstance().getMessageSendExtendid();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string messageSendExtendid = 8;</code>
+       */
+      public Builder setMessageSendExtendidBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageSendExtendid_ = value;
+        onChanged();
+        return this;
+      }
+
       private Object messageRecieve_ = "";
       /**
-       * <code>string messageRecieve = 8;</code>
+       * <code>string messageRecieve = 9;</code>
        */
       public String getMessageRecieve() {
         Object ref = messageRecieve_;
@@ -5914,7 +6119,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageRecieve = 8;</code>
+       * <code>string messageRecieve = 9;</code>
        */
       public com.google.protobuf.ByteString
           getMessageRecieveBytes() {
@@ -5930,7 +6135,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageRecieve = 8;</code>
+       * <code>string messageRecieve = 9;</code>
        */
       public Builder setMessageRecieve(
           String value) {
@@ -5943,7 +6148,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageRecieve = 8;</code>
+       * <code>string messageRecieve = 9;</code>
        */
       public Builder clearMessageRecieve() {
         
@@ -5952,7 +6157,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageRecieve = 8;</code>
+       * <code>string messageRecieve = 9;</code>
        */
       public Builder setMessageRecieveBytes(
           com.google.protobuf.ByteString value) {
@@ -5966,9 +6171,78 @@ public final class Flappy {
         return this;
       }
 
+      private Object messageRecieveExtendid_ = "";
+      /**
+       * <code>string messageRecieveExtendid = 10;</code>
+       */
+      public String getMessageRecieveExtendid() {
+        Object ref = messageRecieveExtendid_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageRecieveExtendid_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string messageRecieveExtendid = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMessageRecieveExtendidBytes() {
+        Object ref = messageRecieveExtendid_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageRecieveExtendid_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string messageRecieveExtendid = 10;</code>
+       */
+      public Builder setMessageRecieveExtendid(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageRecieveExtendid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string messageRecieveExtendid = 10;</code>
+       */
+      public Builder clearMessageRecieveExtendid() {
+        
+        messageRecieveExtendid_ = getDefaultInstance().getMessageRecieveExtendid();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string messageRecieveExtendid = 10;</code>
+       */
+      public Builder setMessageRecieveExtendidBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageRecieveExtendid_ = value;
+        onChanged();
+        return this;
+      }
+
       private Object messageContent_ = "";
       /**
-       * <code>string messageContent = 9;</code>
+       * <code>string messageContent = 11;</code>
        */
       public String getMessageContent() {
         Object ref = messageContent_;
@@ -5983,7 +6257,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageContent = 9;</code>
+       * <code>string messageContent = 11;</code>
        */
       public com.google.protobuf.ByteString
           getMessageContentBytes() {
@@ -5999,7 +6273,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageContent = 9;</code>
+       * <code>string messageContent = 11;</code>
        */
       public Builder setMessageContent(
           String value) {
@@ -6012,7 +6286,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageContent = 9;</code>
+       * <code>string messageContent = 11;</code>
        */
       public Builder clearMessageContent() {
         
@@ -6021,7 +6295,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageContent = 9;</code>
+       * <code>string messageContent = 11;</code>
        */
       public Builder setMessageContentBytes(
           com.google.protobuf.ByteString value) {
@@ -6037,13 +6311,13 @@ public final class Flappy {
 
       private int messageSended_ ;
       /**
-       * <code>int32 messageSended = 10;</code>
+       * <code>int32 messageSended = 12;</code>
        */
       public int getMessageSended() {
         return messageSended_;
       }
       /**
-       * <code>int32 messageSended = 10;</code>
+       * <code>int32 messageSended = 12;</code>
        */
       public Builder setMessageSended(int value) {
         
@@ -6052,7 +6326,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>int32 messageSended = 10;</code>
+       * <code>int32 messageSended = 12;</code>
        */
       public Builder clearMessageSended() {
         
@@ -6063,13 +6337,13 @@ public final class Flappy {
 
       private int messageReaded_ ;
       /**
-       * <code>int32 messageReaded = 11;</code>
+       * <code>int32 messageReaded = 13;</code>
        */
       public int getMessageReaded() {
         return messageReaded_;
       }
       /**
-       * <code>int32 messageReaded = 11;</code>
+       * <code>int32 messageReaded = 13;</code>
        */
       public Builder setMessageReaded(int value) {
         
@@ -6078,7 +6352,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>int32 messageReaded = 11;</code>
+       * <code>int32 messageReaded = 13;</code>
        */
       public Builder clearMessageReaded() {
         
@@ -6089,7 +6363,7 @@ public final class Flappy {
 
       private Object messageDate_ = "";
       /**
-       * <code>string messageDate = 12;</code>
+       * <code>string messageDate = 14;</code>
        */
       public String getMessageDate() {
         Object ref = messageDate_;
@@ -6104,7 +6378,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageDate = 12;</code>
+       * <code>string messageDate = 14;</code>
        */
       public com.google.protobuf.ByteString
           getMessageDateBytes() {
@@ -6120,7 +6394,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageDate = 12;</code>
+       * <code>string messageDate = 14;</code>
        */
       public Builder setMessageDate(
           String value) {
@@ -6133,7 +6407,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageDate = 12;</code>
+       * <code>string messageDate = 14;</code>
        */
       public Builder clearMessageDate() {
         
@@ -6142,7 +6416,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageDate = 12;</code>
+       * <code>string messageDate = 14;</code>
        */
       public Builder setMessageDateBytes(
           com.google.protobuf.ByteString value) {
@@ -6158,13 +6432,13 @@ public final class Flappy {
 
       private int messageDeleted_ ;
       /**
-       * <code>int32 messageDeleted = 13;</code>
+       * <code>int32 messageDeleted = 15;</code>
        */
       public int getMessageDeleted() {
         return messageDeleted_;
       }
       /**
-       * <code>int32 messageDeleted = 13;</code>
+       * <code>int32 messageDeleted = 15;</code>
        */
       public Builder setMessageDeleted(int value) {
         
@@ -6173,7 +6447,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>int32 messageDeleted = 13;</code>
+       * <code>int32 messageDeleted = 15;</code>
        */
       public Builder clearMessageDeleted() {
         
@@ -6184,7 +6458,7 @@ public final class Flappy {
 
       private Object messageDeletedDate_ = "";
       /**
-       * <code>string messageDeletedDate = 14;</code>
+       * <code>string messageDeletedDate = 16;</code>
        */
       public String getMessageDeletedDate() {
         Object ref = messageDeletedDate_;
@@ -6199,7 +6473,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageDeletedDate = 14;</code>
+       * <code>string messageDeletedDate = 16;</code>
        */
       public com.google.protobuf.ByteString
           getMessageDeletedDateBytes() {
@@ -6215,7 +6489,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string messageDeletedDate = 14;</code>
+       * <code>string messageDeletedDate = 16;</code>
        */
       public Builder setMessageDeletedDate(
           String value) {
@@ -6228,7 +6502,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageDeletedDate = 14;</code>
+       * <code>string messageDeletedDate = 16;</code>
        */
       public Builder clearMessageDeletedDate() {
         
@@ -6237,7 +6511,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string messageDeletedDate = 14;</code>
+       * <code>string messageDeletedDate = 16;</code>
        */
       public Builder setMessageDeletedDateBytes(
           com.google.protobuf.ByteString value) {
@@ -7186,18 +7460,19 @@ public final class Flappy {
       "essage\"F\n\010KafkaMsg\022\014\n\004type\030\001 \001(\005\022\025\n\005rout" +
       "e\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\0132\010.Message\"E" +
       "\n\005Route\022\016\n\006userID\030\001 \001(\t\022\016\n\006device\030\002 \001(\t\022" +
-      "\016\n\006pushid\030\003 \001(\t\022\014\n\004time\030\004 \001(\t\"\330\002\n\007Messag" +
+      "\016\n\006pushid\030\003 \001(\t\022\014\n\004time\030\004 \001(\t\"\225\003\n\007Messag" +
       "e\022\021\n\tmessageId\030\001 \001(\t\022\026\n\016messageSession\030\002" +
       " \001(\t\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n\024mess" +
       "ageSessionOffset\030\004 \001(\005\022\027\n\017messageTableSe" +
       "q\030\005 \001(\t\022\023\n\013messageType\030\006 \001(\005\022\023\n\013messageS" +
-      "end\030\007 \001(\t\022\026\n\016messageRecieve\030\010 \001(\t\022\026\n\016mes" +
-      "sageContent\030\t \001(\t\022\025\n\rmessageSended\030\n \001(\005" +
-      "\022\025\n\rmessageReaded\030\013 \001(\005\022\023\n\013messageDate\030\014" +
-      " \001(\t\022\026\n\016messageDeleted\030\r \001(\005\022\032\n\022messageD" +
-      "eletedDate\030\016 \001(\t\";\n\tLoginInfo\022\016\n\006userID\030" +
-      "\001 \001(\t\022\016\n\006device\030\002 \001(\t\022\016\n\006pushid\030\003 \001(\tb\006p" +
-      "roto3"
+      "end\030\007 \001(\t\022\033\n\023messageSendExtendid\030\010 \001(\t\022\026" +
+      "\n\016messageRecieve\030\t \001(\t\022\036\n\026messageRecieve" +
+      "Extendid\030\n \001(\t\022\026\n\016messageContent\030\013 \001(\t\022\025" +
+      "\n\rmessageSended\030\014 \001(\005\022\025\n\rmessageReaded\030\r" +
+      " \001(\005\022\023\n\013messageDate\030\016 \001(\t\022\026\n\016messageDele" +
+      "ted\030\017 \001(\005\022\032\n\022messageDeletedDate\030\020 \001(\t\";\n" +
+      "\tLoginInfo\022\016\n\006userID\030\001 \001(\t\022\016\n\006device\030\002 \001" +
+      "(\t\022\016\n\006pushid\030\003 \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -7232,7 +7507,7 @@ public final class Flappy {
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Message_descriptor,
-        new String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "MessageSend", "MessageRecieve", "MessageContent", "MessageSended", "MessageReaded", "MessageDate", "MessageDeleted", "MessageDeletedDate", });
+        new String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "MessageSend", "MessageSendExtendid", "MessageRecieve", "MessageRecieveExtendid", "MessageContent", "MessageSended", "MessageReaded", "MessageDate", "MessageDeleted", "MessageDeletedDate", });
     internal_static_LoginInfo_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_LoginInfo_fieldAccessorTable = new

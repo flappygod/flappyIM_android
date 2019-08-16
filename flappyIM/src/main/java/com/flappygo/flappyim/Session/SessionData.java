@@ -5,7 +5,7 @@ import com.flappygo.flappyim.Models.Server.ChatUser;
 
 import java.util.List;
 
-public class GroupSessionData extends ChatSession {
+public class SessionData extends ChatSession {
 
     List<ChatUser> users;
 
