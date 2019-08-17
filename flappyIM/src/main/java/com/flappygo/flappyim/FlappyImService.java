@@ -102,23 +102,27 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel model, String tag) {
                         //失败
+                        if(callback!=null)
                         callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
                     }
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
                         //解析失败
+                        if(callback!=null)
                         callback.failure(e, Integer.parseInt(RESULT_JSONERROR));
                     }
 
                     @Override
                     public void stateTrue(String s, String tag) {
                         //这里代表注册账户成功
+                        if(callback!=null)
                         callback.success(s);
                     }
 
                     @Override
                     protected void netError(Exception e, String tag) {
+                        if(callback!=null)
                         callback.failure(e, Integer.parseInt(RESULT_NETERROR));
                     }
                 }, null);
@@ -147,12 +151,14 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel model, String tag) {
                         //失败
+                        if(callback!=null)
                         callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
                     }
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
                         //解析失败
+                        if(callback!=null)
                         callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
                     }
 
@@ -186,12 +192,14 @@ public class FlappyImService {
                             getAppContext().startService(intent);
                         }
                         //设置登录的回调
+                        if(callback!=null)
                         HolderLoginCallback.getInstance().addLoginCallBack(uuid, callback);
 
                     }
 
                     @Override
                     protected void netError(Exception e, String tag) {
+                        if(callback!=null)
                         callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
                     }
                 }, null);
@@ -201,6 +209,7 @@ public class FlappyImService {
     //创建会话
     public void createSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -223,12 +232,14 @@ public class FlappyImService {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
@@ -236,11 +247,13 @@ public class FlappyImService {
             public void stateTrue(SessionData data, String tag) {
                 FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
+                if(callback!=null)
                 callback.success(session);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
         }, null);
@@ -250,6 +263,7 @@ public class FlappyImService {
     //获取单聊会话
     public void getSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -272,12 +286,14 @@ public class FlappyImService {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
@@ -285,11 +301,13 @@ public class FlappyImService {
             public void stateTrue(SessionData data, String tag) {
                 FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
+                if(callback!=null)
                 callback.success(session);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
         }, null);
@@ -304,6 +322,7 @@ public class FlappyImService {
                                    final FlappyIMCallback<FlappyChatSession> callback) {
 
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -324,12 +343,14 @@ public class FlappyImService {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
@@ -337,11 +358,13 @@ public class FlappyImService {
             public void stateTrue(SessionData data, String tag) {
                 FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
+                if(callback!=null)
                 callback.success(session);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
         }, null);
@@ -353,6 +376,7 @@ public class FlappyImService {
                                final FlappyIMCallback<FlappyChatSession> callback) {
 
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -366,12 +390,14 @@ public class FlappyImService {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
@@ -380,11 +406,13 @@ public class FlappyImService {
 
                 FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
+                if(callback!=null)
                 callback.success(session);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
         }, null);
@@ -395,6 +423,7 @@ public class FlappyImService {
     public void getUserSessions(final FlappyIMCallback<List<ChatSession>> callback) {
 
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -409,22 +438,26 @@ public class FlappyImService {
             @Override
             public void stateFalse(String message, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(message), Integer.parseInt(tag));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
             @Override
             public void stateTrue(List<ChatSession> data, String tag) {
+                if(callback!=null)
                 callback.success(data);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
 
@@ -443,6 +476,7 @@ public class FlappyImService {
             final FlappyIMCallback<String> callback) {
 
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -458,22 +492,26 @@ public class FlappyImService {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
             @Override
             public void stateTrue(String data, String tag) {
+                if(callback!=null)
                 callback.success(data);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
         }, null);
@@ -487,6 +525,7 @@ public class FlappyImService {
             final FlappyIMCallback<String> callback) {
 
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -502,22 +541,26 @@ public class FlappyImService {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
+                if(callback!=null)
                 callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
             }
 
             @Override
             protected void jsonError(Exception e, String tag) {
                 //解析失败
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
             }
 
             @Override
             public void stateTrue(String data, String tag) {
+                if(callback!=null)
                 callback.success(data);
             }
 
             @Override
             protected void netError(Exception e, String tag) {
+                if(callback!=null)
                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
             }
         }, null);
@@ -528,6 +571,7 @@ public class FlappyImService {
     public void logout(final FlappyIMCallback<String> callback) {
 
         if(DataManager.getInstance().getLoginUser()==null){
+            if(callback!=null)
             callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
@@ -555,25 +599,29 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel model, String tag) {
                         //失败
+                        if(callback!=null)
                         callback.failure(new Exception(model.getResultMessage()), Integer.parseInt(model.getResultCode()));
                     }
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
                         //解析失败
+                        if(callback!=null)
                         callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSONERROR));
                     }
 
                     @Override
                     public void stateTrue(String response, String tag) {
-                        //退出登录成功
-                        callback.success(response);
                         //清空当期的用户数据信息
                         DataManager.getInstance().clearUser();
+                        //退出登录成功
+                        if(callback!=null)
+                        callback.success(response);
                     }
 
                     @Override
                     protected void netError(Exception e, String tag) {
+                        if(callback!=null)
                         callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
                     }
                 }, null);
