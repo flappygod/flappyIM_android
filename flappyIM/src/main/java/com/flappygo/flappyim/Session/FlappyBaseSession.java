@@ -130,7 +130,7 @@ public class FlappyBaseSession {
                 //地址
                 fileMap.put("file", voice.getSendPath());
                 //返回的字符串
-                String str = UploadTool.postFile(BaseConfig.uploadUrl, parmap, fileMap);
+                String str = UploadTool.postFile(BaseConfig.getInstance().uploadUrl, parmap, fileMap);
                 //返回数据
                 BaseApiModel<String> baseApiModel = new BaseApiModel<String>();
                 //创建
@@ -209,7 +209,7 @@ public class FlappyBaseSession {
                 //保存宽高
                 LXImageWH lxImageWH = new LXImageWH();
                 //返回的字符串
-                String str = UploadTool.postImage(BaseConfig.uploadUrl, parmap, fileMap, lxImageWH);
+                String str = UploadTool.postImage(BaseConfig.getInstance().uploadUrl, parmap, fileMap, lxImageWH);
                 //返回数据
                 BaseApiModel<String> baseApiModel = new BaseApiModel<String>();
                 //创建

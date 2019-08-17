@@ -243,7 +243,7 @@ public class FlappyService extends Service {
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getApplicationContext()));
 
         //进行callBack
-        LXHttpClient.getInstacne().postParam(BaseConfig.autoLogin,
+        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().autoLogin,
                 hashMap,
                 new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                     @Override
