@@ -71,7 +71,7 @@ public class FlappyImService {
 
     //初始化
     public void init(Context appContext,String serverPath,String  uploadPath) {
-        
+
         //更新服务器地址和资源文件上传地址
         BaseConfig.getInstance().setServerUrl(serverPath,uploadPath);
 
