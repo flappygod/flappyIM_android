@@ -120,21 +120,6 @@ public class MainActivity extends Activity {
         });
 
 
-        FlappyImService.getInstance().logout( new FlappyIMCallback<String>() {
-            @Override
-            public void success(String data) {
-
-                Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void failure(Exception ex, int code) {
-
-                Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         //创建会话
         Button session = findViewById(R.id.session);
         session.setOnClickListener(new View.OnClickListener() {
