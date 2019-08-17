@@ -1,6 +1,11 @@
 package com.flappygo.flappyim.Models.Server;
 
+import android.util.Base64;
+
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
+import com.flappygo.flappyim.Models.Request.ChatImage;
+import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Tools.StringTool;
 
@@ -10,19 +15,16 @@ import java.util.Date;
 public class ChatMessage {
 
 
-
     //消息被创建
-    public final static int SEND_STATE_CREATE=0;
+    public final static int SEND_STATE_CREATE = 0;
     //消息已经送达服务器
-    public final static int SEND_STATE_SENDED=1;
+    public final static int SEND_STATE_SENDED = 1;
     //消息已经推送给客户端
-    public final static int SEND_STATE_PUSHED=2;
+    public final static int SEND_STATE_PUSHED = 2;
     //消息已经到达
-    public final static int SEND_STATE_REACHED=3;
+    public final static int SEND_STATE_REACHED = 3;
     //消息发送失败
-    public final static int SEND_STATE_FAILURE=9;
-
-
+    public final static int SEND_STATE_FAILURE = 9;
 
 
     //文本消息
@@ -40,8 +42,6 @@ public class ChatMessage {
     public ChatMessage() {
 
     }
-
-
 
 
     private String messageId;
@@ -215,9 +215,9 @@ public class ChatMessage {
         messageTableSeq = StringTool.strToDecimal(msg.getMessageTableSeq());
         messageType = new BigDecimal(msg.getMessageType());
         messageSend = msg.getMessageSend();
-        messageSendExtendid =msg.getMessageSendExtendid();
+        messageSendExtendid = msg.getMessageSendExtendid();
         messageRecieve = msg.getMessageRecieve();
-        messageRecieveExtendid=msg.getMessageRecieveExtendid();
+        messageRecieveExtendid = msg.getMessageRecieveExtendid();
         messageContent = msg.getMessageContent();
         messageSended = new BigDecimal(msg.getMessageSended());
         messageReaded = new BigDecimal(msg.getMessageReaded());
@@ -264,4 +264,46 @@ public class ChatMessage {
 
         return msgBuilder.build();
     }
+
+    //设置文本
+    public void setChatText(String text) {
+        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_TEXT)) {
+            String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
+            setMessageContent(strBase64);
+        }
+    }
+
+    //获取聊天文本
+    public String getChatText() {
+        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_TEXT)) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return new String(Base64.decode(str.getBytes(), Base64.DEFAULT));
+            }
+        }
+        return null;
+    }
+
+    //获取聊天图片
+    public ChatImage getChatImage() {
+        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_IMG)) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(str, ChatImage.class);
+            }
+        }
+        return null;
+    }
+    
+    //获取聊天语音
+    public ChatVoice getChatVoice() {
+        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_VOICE)) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(str, ChatVoice.class);
+            }
+        }
+        return null;
+    }
+
 }

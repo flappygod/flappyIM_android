@@ -123,7 +123,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_TEXT));
         //设置内容
-        msg.setMessageContent(text);
+        msg.setChatText(text);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
