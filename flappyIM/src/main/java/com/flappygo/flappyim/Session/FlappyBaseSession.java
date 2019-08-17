@@ -224,6 +224,10 @@ public class FlappyBaseSession {
                 baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
                 //设置返回的数据
                 baseApiModel.setResultData(jb.optString("resultData"));
+                //上传不成功抛出异常
+                if(!baseApiModel.getResultCode().equals(RESULT_SUCCESS)){
+                    throw new Exception(baseApiModel.getResultMessage());
+                }
                 //设置宽度
                 image.setWidth(lxImageWH.getWidth() + "");
                 //设置高度
