@@ -294,7 +294,7 @@ public class ChatMessage {
         }
         return null;
     }
-    
+
     //获取聊天语音
     public ChatVoice getChatVoice() {
         if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_VOICE)) {
