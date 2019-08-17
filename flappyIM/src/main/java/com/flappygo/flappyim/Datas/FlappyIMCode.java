@@ -12,5 +12,7 @@ public class FlappyIMCode {
     public final static String RESULT_JSONERROR = "3";
     //已经被踢下线了
     public final static String RESULT_NETERROR = "4";
+    //当前用户未登录
+    public final static String RESULT_NOTLOGIN = "5";
 
 }

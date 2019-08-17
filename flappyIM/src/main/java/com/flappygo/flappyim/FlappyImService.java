@@ -31,6 +31,7 @@ import java.util.List;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_JSONERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NETERROR;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NOTLOGIN;
 
 
 //服务
@@ -199,6 +200,10 @@ public class FlappyImService {
 
     //创建会话
     public void createSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
         //判断是否为空
         if (StringTool.isEmpty(userTwo)) {
             throw new RuntimeException("账户ID不能为空");
@@ -244,6 +249,10 @@ public class FlappyImService {
 
     //获取单聊会话
     public void getSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
         //判断是否为空
         if (StringTool.isEmpty(userTwo)) {
             throw new RuntimeException("账户ID不能为空");
@@ -293,6 +302,12 @@ public class FlappyImService {
                                    String groupID,
                                    String groupName,
                                    final FlappyIMCallback<FlappyChatSession> callback) {
+
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
+
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
@@ -336,6 +351,12 @@ public class FlappyImService {
     //获取群组的会话
     public void getSessionByID(String groupID,
                                final FlappyIMCallback<FlappyChatSession> callback) {
+
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
+
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
@@ -372,6 +393,11 @@ public class FlappyImService {
 
     //通过用户ID获取session
     public void getUserSessions(final FlappyIMCallback<List<ChatSession>> callback) {
+
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
 
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -415,6 +441,12 @@ public class FlappyImService {
             String userID,
             String groupID,
             final FlappyIMCallback<String> callback) {
+
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
+
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
@@ -453,6 +485,12 @@ public class FlappyImService {
             String userID,
             String groupID,
             final FlappyIMCallback<String> callback) {
+
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
+
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
@@ -487,7 +525,12 @@ public class FlappyImService {
 
 
     //注销当前的登录
-    public void logout(String userExtendID, final FlappyIMCallback<String> callback) {
+    public void logout(final FlappyIMCallback<String> callback) {
+
+        if(DataManager.getInstance().getLoginUser()==null){
+            callback.failure(new Exception("当前用户未登录"),Integer.parseInt(RESULT_NOTLOGIN));
+            return;
+        }
 
         //先关闭当前的长连接
         if (FlappyService.getInstance() != null) {
@@ -499,7 +542,7 @@ public class FlappyImService {
         //用户ID不用传了
         hashMap.put("userID", "");
         //外部用户ID
-        hashMap.put("userExtendID", StringTool.ToNotNullStr(userExtendID));
+        hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
         //设备ID
         hashMap.put("device", BaseConfig.device);
         //设备ID

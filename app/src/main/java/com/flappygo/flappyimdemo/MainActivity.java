@@ -19,9 +19,13 @@ import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TakePicTool;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -115,12 +119,28 @@ public class MainActivity extends Activity {
             }
         });
 
+
+        FlappyImService.getInstance().logout( new FlappyIMCallback<String>() {
+            @Override
+            public void success(String data) {
+
+                Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void failure(Exception ex, int code) {
+
+                Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //创建会话
         Button session = findViewById(R.id.session);
         session.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlappyImService.getInstance().createSingleSession("101", new FlappyIMCallback<FlappyChatSession>() {
+                FlappyImService.getInstance().getSessionByID("187-188", new FlappyIMCallback<FlappyChatSession>() {
                     @Override
                     public void success(FlappyChatSession chatSingleSession) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
