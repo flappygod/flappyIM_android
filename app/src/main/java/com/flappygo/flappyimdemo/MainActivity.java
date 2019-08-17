@@ -143,6 +143,10 @@ public class MainActivity extends Activity {
                             }
                         });
 
+
+                        ChatMessage mes= mySession.getLatestMessage();
+                        rect.setText(mes.getChatText());
+
                     }
 
                     @Override
@@ -165,6 +169,7 @@ public class MainActivity extends Activity {
                     if (message.getText().toString().equals("")) {
                         return;
                     }
+
 
 
                     mySession.sendText(message.getText().toString(), new FlappyIMCallback<ChatMessage>() {
