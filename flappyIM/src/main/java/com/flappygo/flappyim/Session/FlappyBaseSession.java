@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NETERROR;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDED;
@@ -144,6 +145,10 @@ public class FlappyBaseSession {
                 baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
                 //设置返回的数据
                 baseApiModel.setResultData(jb.optString("resultData"));
+                //上传不成功抛出异常
+                if(!baseApiModel.getResultCode().equals(RESULT_SUCCESS)){
+                    throw new Exception(baseApiModel.getResultMessage());
+                }
                 //设置数据返回
                 voice.setPath(baseApiModel.getResultData());
                 //长度
