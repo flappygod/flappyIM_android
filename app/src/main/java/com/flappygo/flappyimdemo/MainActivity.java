@@ -19,7 +19,7 @@ import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Session.ChatSingleSession;
+import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TakePicTool;
 
@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
     // 获取相册图片
     private static final int REQUEST_GETPICTURE = 24;
 
-    private ChatSingleSession mySession;
+    private FlappyChatSession mySession;
 
 
     @Override
@@ -120,9 +120,9 @@ public class MainActivity extends Activity {
         session.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlappyImService.getInstance().createSingleSession("101", new FlappyIMCallback<ChatSingleSession>() {
+                FlappyImService.getInstance().createSingleSession("101", new FlappyIMCallback<FlappyChatSession>() {
                     @Override
-                    public void success(ChatSingleSession chatSingleSession) {
+                    public void success(FlappyChatSession chatSingleSession) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
 
                         //成功创建会话了崔我嫩

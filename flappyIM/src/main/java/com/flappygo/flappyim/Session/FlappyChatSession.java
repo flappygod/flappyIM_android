@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 //单聊的会话
-public class ChatSingleSession extends FlappyBaseSession {
+public class FlappyChatSession extends FlappyBaseSession {
 
     //保留的监听列表
     private List<MessageListener> listenerList = new ArrayList<>();
@@ -63,17 +63,41 @@ public class ChatSingleSession extends FlappyBaseSession {
     }
 
 
-    private ChatUser getMine(){
+    private ChatUser getMine() {
         return DataManager.getInstance().getLoginUser();
     }
 
-    private ChatUser getPeer(){
-        for(int s=0;s<getSession().getUsers().size();s++){
-            if(!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())){
-                return getSession().getUsers().get(s);
+
+    private String getPeerID() {
+        //如果是群聊，返回会话ID
+        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
+            return getSession().getSessionId();
+        }
+        //如果是单聊，返回用户ID
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
+            for (int s = 0; s < getSession().getUsers().size(); s++) {
+                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
+                    return getSession().getUsers().get(s).getUserId();
+                }
             }
         }
-        return null;
+        throw new RuntimeException("账号错误，聊天对象丢失");
+    }
+
+    private String getPeerExtendID() {
+        //如果是群聊，返回会话ID
+        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
+            return getSession().getSessionId();
+        }
+        //如果是单聊，返回用户ID
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
+            for (int s = 0; s < getSession().getUsers().size(); s++) {
+                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
+                    return getSession().getUsers().get(s).getUserId();
+                }
+            }
+        }
+        throw new RuntimeException("账号错误，聊天对象丢失");
     }
 
 
@@ -93,9 +117,9 @@ public class ChatSingleSession extends FlappyBaseSession {
         //发送者
         msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getPeer().getUserId());
+        msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeer().getUserExtendId());
+        msg.setMessageSendExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_TEXT));
         //设置内容
@@ -127,9 +151,9 @@ public class ChatSingleSession extends FlappyBaseSession {
         //发送者
         msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getPeer().getUserId());
+        msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeer().getUserExtendId());
+        msg.setMessageSendExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //消息
@@ -166,9 +190,9 @@ public class ChatSingleSession extends FlappyBaseSession {
         //发送者
         msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getPeer().getUserId());
+        msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeer().getUserExtendId());
+        msg.setMessageSendExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //设置内容
@@ -201,9 +225,9 @@ public class ChatSingleSession extends FlappyBaseSession {
         //发送者
         msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getPeer().getUserId());
+        msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeer().getUserExtendId());
+        msg.setMessageSendExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //创建语音
@@ -239,9 +263,9 @@ public class ChatSingleSession extends FlappyBaseSession {
         //发送者
         msg.setMessageSendExtendid(getMine().getUserExtendId());
         //接收者
-        msg.setMessageRecieve(getPeer().getUserId());
+        msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeer().getUserExtendId());
+        msg.setMessageSendExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //设置内容

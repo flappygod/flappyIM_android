@@ -18,12 +18,11 @@ import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatSession;
-import com.flappygo.flappyim.Session.ChatGroupSession;
 import com.flappygo.flappyim.Session.FlappyBaseSession;
 import com.flappygo.flappyim.Session.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Service.FlappyService;
-import com.flappygo.flappyim.Session.ChatSingleSession;
+import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
 
@@ -199,7 +198,7 @@ public class FlappyImService {
 
 
     //创建会话
-    public void createSingleSession(final String userTwo, final FlappyIMCallback<ChatSingleSession> callback) {
+    public void createSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
         //判断是否为空
         if (StringTool.isEmpty(userTwo)) {
             throw new RuntimeException("账户ID不能为空");
@@ -230,7 +229,7 @@ public class FlappyImService {
 
             @Override
             public void stateTrue(SessionData data, String tag) {
-                ChatSingleSession session = new ChatSingleSession();
+                FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
                 callback.success(session);
             }
@@ -244,7 +243,7 @@ public class FlappyImService {
 
 
     //获取单聊会话
-    public void getSingleSession(final String userTwo, final FlappyIMCallback<ChatSingleSession> callback) {
+    public void getSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
         //判断是否为空
         if (StringTool.isEmpty(userTwo)) {
             throw new RuntimeException("账户ID不能为空");
@@ -275,7 +274,7 @@ public class FlappyImService {
 
             @Override
             public void stateTrue(SessionData data, String tag) {
-                ChatSingleSession session = new ChatSingleSession();
+                FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
                 callback.success(session);
             }
@@ -293,7 +292,7 @@ public class FlappyImService {
     public void createGroupSession(List<String> users,
                                    String groupID,
                                    String groupName,
-                                   final FlappyIMCallback<ChatGroupSession> callback) {
+                                   final FlappyIMCallback<FlappyChatSession> callback) {
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
@@ -321,7 +320,7 @@ public class FlappyImService {
 
             @Override
             public void stateTrue(SessionData data, String tag) {
-                ChatGroupSession session = new ChatGroupSession();
+                FlappyChatSession session = new FlappyChatSession();
                 session.setSession(data);
                 callback.success(session);
             }
@@ -358,19 +357,9 @@ public class FlappyImService {
             @Override
             public void stateTrue(SessionData data, String tag) {
 
-                if (data.getSessionType().intValue() == ChatSession.TYPE_GROUP) {
-
-                    ChatGroupSession session = new ChatGroupSession();
-                    session.setSession(data);
-                    callback.success(session);
-
-                } else if (data.getSessionType().intValue() == ChatSession.TYPE_SINGLE) {
-
-                    ChatSingleSession session = new ChatSingleSession();
-                    session.setSession(data);
-                    callback.success(session);
-
-                }
+                FlappyChatSession session = new FlappyChatSession();
+                session.setSession(data);
+                callback.success(session);
             }
 
             @Override
