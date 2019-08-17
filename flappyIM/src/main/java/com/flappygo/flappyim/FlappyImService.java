@@ -335,7 +335,7 @@ public class FlappyImService {
 
     //获取群组的会话
     public void getSessionByID(String groupID,
-                               final FlappyIMCallback<FlappyBaseSession> callback) {
+                               final FlappyIMCallback<FlappyChatSession> callback) {
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
@@ -371,13 +371,12 @@ public class FlappyImService {
 
 
     //通过用户ID获取session
-    public void getUserSessions(String userExtendID,
-                                final FlappyIMCallback<List<ChatSession>> callback) {
+    public void getUserSessions(final FlappyIMCallback<List<ChatSession>> callback) {
 
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         //用户ID
-        hashMap.put("userExtendID", userExtendID);
+        hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
         //调用
         LXHttpClient.getInstacne().postParam(BaseConfig.getUserSessions, hashMap, new BaseListParseCallBack<ChatSession>(ChatSession.class) {
 
