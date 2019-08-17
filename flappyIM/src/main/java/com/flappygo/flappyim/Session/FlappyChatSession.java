@@ -119,7 +119,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //接收者
         msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeerExtendID());
+        msg.setMessageRecieveExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_TEXT));
         //设置内容
@@ -153,7 +153,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //接收者
         msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeerExtendID());
+        msg.setMessageRecieveExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //消息
@@ -192,7 +192,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //接收者
         msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeerExtendID());
+        msg.setMessageRecieveExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //设置内容
@@ -227,7 +227,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //接收者
         msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeerExtendID());
+        msg.setMessageRecieveExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //创建语音
@@ -265,7 +265,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //接收者
         msg.setMessageRecieve(getPeerID());
         //接收者
-        msg.setMessageSendExtendid(getPeerExtendID());
+        msg.setMessageRecieveExtendid(getPeerExtendID());
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //设置内容
