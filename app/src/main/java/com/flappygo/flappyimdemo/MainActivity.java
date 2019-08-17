@@ -138,7 +138,7 @@ public class MainActivity extends Activity {
                             @Override
                             public void messageRecieved(ChatMessage chatMessage) {
 
-                                rect.setText(chatMessage.getMessageContent());
+                                rect.setText(chatMessage.getChatText());
 
                             }
                         });
