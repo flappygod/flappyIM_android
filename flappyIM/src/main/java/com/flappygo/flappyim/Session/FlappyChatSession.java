@@ -87,7 +87,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     private String getPeerExtendID() {
         //如果是群聊，返回会话ID
         if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
-            return getSession().getSessionId();
+            return getSession().getSessionExtendId();
         }
         //如果是单聊，返回用户ID
         else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
