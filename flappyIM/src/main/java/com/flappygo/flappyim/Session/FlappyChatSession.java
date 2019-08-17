@@ -93,7 +93,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
             for (int s = 0; s < getSession().getUsers().size(); s++) {
                 if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
-                    return getSession().getUsers().get(s).getUserId();
+                    return getSession().getUsers().get(s).getUserExtendId();
                 }
             }
         }
