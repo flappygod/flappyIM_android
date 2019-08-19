@@ -125,27 +125,18 @@ public class MainActivity extends Activity {
         session.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FlappyImService.getInstance().getSessionByID("187-188", new FlappyIMCallback<FlappyChatSession>() {
+                FlappyImService.getInstance().createSingleSession("101", new FlappyIMCallback<FlappyChatSession>() {
                     @Override
-                    public void success(FlappyChatSession chatSingleSession) {
+                    public void success(FlappyChatSession data) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
+                        mySession=data;
 
-                        //成功创建会话了崔我嫩
-                        mySession = chatSingleSession;
-
-                        //设置
                         mySession.addMessageListener(new MessageListener() {
                             @Override
                             public void messageRecieved(ChatMessage chatMessage) {
-
                                 rect.setText(chatMessage.getChatText());
-
                             }
                         });
-
-
-                        ChatMessage mes= mySession.getLatestMessage();
-                        rect.setText(mes.getChatText());
 
                     }
 
