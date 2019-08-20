@@ -18,7 +18,6 @@ import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatSession;
-import com.flappygo.flappyim.Session.FlappyBaseSession;
 import com.flappygo.flappyim.Session.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Service.FlappyService;
