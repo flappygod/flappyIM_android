@@ -130,8 +130,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Flappy.FlappyResponse response) throws Exception {
-
+    protected void messageReceived(ChannelHandlerContext ctx, Flappy.FlappyResponse response) throws Exception {
         //转换为字符串
         //登录成功,现在才代表真正的登录成功
         if (response.getType() == FlappyResponse.RES_LOGIN) {
@@ -182,6 +181,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         msg.obj = chatMessage;
                         //成功
                         this.handlerMessage.sendMessage(msg);
+                        //到达
+                        sendMessageArrive(chatMessage);
                     }
                 }
 
@@ -233,6 +234,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     msg.obj = chatMessage;
                     //成功
                     this.handlerMessage.sendMessage(msg);
+
+                    sendMessageArrive(chatMessage);
                 }
             }
         }
@@ -275,6 +278,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         context.close();
     }
 
+    //消息已经到达
+    private void sendMessageArrive(ChatMessage chatMessage){
+
+    }
 
     //发送消息
     public void sendMessage(ChatMessage chatMessage, final FlappyIMCallback<String> callback) {
@@ -316,4 +323,5 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             handlerSendCall.sendMessage(message);
         }
     }
+
 }

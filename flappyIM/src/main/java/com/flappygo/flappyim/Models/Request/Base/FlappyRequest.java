@@ -9,6 +9,8 @@ public class FlappyRequest {
     public final static int REQ_MSG = 2;
     //心跳消息
     public final static int REQ_PING = 3;
+    //接收到消息的回执
+    public final static int REQ_RECIEVE = 4;
 
 
 }

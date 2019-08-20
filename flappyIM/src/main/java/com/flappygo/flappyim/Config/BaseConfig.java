@@ -24,7 +24,7 @@ public class BaseConfig {
 
 
     //链接的http服务器器的地址192.168.124.105
-    public String serverUrl = "http://192.168.124.105";
+    public String serverUrl = "http://192.168.31.80";
     //public String serverUrl = "http://49.234.106.91";
 
     //上传地址
