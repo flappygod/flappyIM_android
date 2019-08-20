@@ -3470,11 +3470,21 @@ public final class Flappy {
         getPushidBytes();
 
     /**
-     * <code>string time = 4;</code>
+     * <code>string pushType = 4;</code>
+     */
+    String getPushType();
+    /**
+     * <code>string pushType = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getPushTypeBytes();
+
+    /**
+     * <code>string time = 5;</code>
      */
     String getTime();
     /**
-     * <code>string time = 4;</code>
+     * <code>string time = 5;</code>
      */
     com.google.protobuf.ByteString
         getTimeBytes();
@@ -3499,6 +3509,7 @@ public final class Flappy {
       userID_ = "";
       device_ = "";
       pushid_ = "";
+      pushType_ = "";
       time_ = "";
     }
 
@@ -3551,6 +3562,12 @@ public final class Flappy {
               break;
             }
             case 34: {
+              String s = input.readStringRequireUtf8();
+
+              pushType_ = s;
+              break;
+            }
+            case 42: {
               String s = input.readStringRequireUtf8();
 
               time_ = s;
@@ -3690,10 +3707,44 @@ public final class Flappy {
       }
     }
 
-    public static final int TIME_FIELD_NUMBER = 4;
+    public static final int PUSHTYPE_FIELD_NUMBER = 4;
+    private volatile Object pushType_;
+    /**
+     * <code>string pushType = 4;</code>
+     */
+    public String getPushType() {
+      Object ref = pushType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        pushType_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string pushType = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPushTypeBytes() {
+      Object ref = pushType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        pushType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TIME_FIELD_NUMBER = 5;
     private volatile Object time_;
     /**
-     * <code>string time = 4;</code>
+     * <code>string time = 5;</code>
      */
     public String getTime() {
       Object ref = time_;
@@ -3708,7 +3759,7 @@ public final class Flappy {
       }
     }
     /**
-     * <code>string time = 4;</code>
+     * <code>string time = 5;</code>
      */
     public com.google.protobuf.ByteString
         getTimeBytes() {
@@ -3747,8 +3798,11 @@ public final class Flappy {
       if (!getPushidBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pushid_);
       }
+      if (!getPushTypeBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, pushType_);
+      }
       if (!getTimeBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, time_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, time_);
       }
       unknownFields.writeTo(output);
     }
@@ -3768,8 +3822,11 @@ public final class Flappy {
       if (!getPushidBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pushid_);
       }
+      if (!getPushTypeBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, pushType_);
+      }
       if (!getTimeBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, time_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, time_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -3792,6 +3849,8 @@ public final class Flappy {
           .equals(other.getDevice())) return false;
       if (!getPushid()
           .equals(other.getPushid())) return false;
+      if (!getPushType()
+          .equals(other.getPushType())) return false;
       if (!getTime()
           .equals(other.getTime())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -3811,6 +3870,8 @@ public final class Flappy {
       hash = (53 * hash) + getDevice().hashCode();
       hash = (37 * hash) + PUSHID_FIELD_NUMBER;
       hash = (53 * hash) + getPushid().hashCode();
+      hash = (37 * hash) + PUSHTYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getPushType().hashCode();
       hash = (37 * hash) + TIME_FIELD_NUMBER;
       hash = (53 * hash) + getTime().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -3956,6 +4017,8 @@ public final class Flappy {
 
         pushid_ = "";
 
+        pushType_ = "";
+
         time_ = "";
 
         return this;
@@ -3987,6 +4050,7 @@ public final class Flappy {
         result.userID_ = userID_;
         result.device_ = device_;
         result.pushid_ = pushid_;
+        result.pushType_ = pushType_;
         result.time_ = time_;
         onBuilt();
         return result;
@@ -4046,6 +4110,10 @@ public final class Flappy {
         }
         if (!other.getPushid().isEmpty()) {
           pushid_ = other.pushid_;
+          onChanged();
+        }
+        if (!other.getPushType().isEmpty()) {
+          pushType_ = other.pushType_;
           onChanged();
         }
         if (!other.getTime().isEmpty()) {
@@ -4288,9 +4356,78 @@ public final class Flappy {
         return this;
       }
 
+      private Object pushType_ = "";
+      /**
+       * <code>string pushType = 4;</code>
+       */
+      public String getPushType() {
+        Object ref = pushType_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          pushType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <code>string pushType = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPushTypeBytes() {
+        Object ref = pushType_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          pushType_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string pushType = 4;</code>
+       */
+      public Builder setPushType(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        pushType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string pushType = 4;</code>
+       */
+      public Builder clearPushType() {
+        
+        pushType_ = getDefaultInstance().getPushType();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string pushType = 4;</code>
+       */
+      public Builder setPushTypeBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        pushType_ = value;
+        onChanged();
+        return this;
+      }
+
       private Object time_ = "";
       /**
-       * <code>string time = 4;</code>
+       * <code>string time = 5;</code>
        */
       public String getTime() {
         Object ref = time_;
@@ -4305,7 +4442,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string time = 4;</code>
+       * <code>string time = 5;</code>
        */
       public com.google.protobuf.ByteString
           getTimeBytes() {
@@ -4321,7 +4458,7 @@ public final class Flappy {
         }
       }
       /**
-       * <code>string time = 4;</code>
+       * <code>string time = 5;</code>
        */
       public Builder setTime(
           String value) {
@@ -4334,7 +4471,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string time = 4;</code>
+       * <code>string time = 5;</code>
        */
       public Builder clearTime() {
         
@@ -4343,7 +4480,7 @@ public final class Flappy {
         return this;
       }
       /**
-       * <code>string time = 4;</code>
+       * <code>string time = 5;</code>
        */
       public Builder setTimeBytes(
           com.google.protobuf.ByteString value) {
@@ -7458,21 +7595,22 @@ public final class Flappy {
       "sage\022\031\n\005login\030\004 \001(\0132\n.LoginInfo\"5\n\016Flapp" +
       "yResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003(\0132\010.M" +
       "essage\"F\n\010KafkaMsg\022\014\n\004type\030\001 \001(\005\022\025\n\005rout" +
-      "e\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\0132\010.Message\"E" +
+      "e\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\0132\010.Message\"W" +
       "\n\005Route\022\016\n\006userID\030\001 \001(\t\022\016\n\006device\030\002 \001(\t\022" +
-      "\016\n\006pushid\030\003 \001(\t\022\014\n\004time\030\004 \001(\t\"\225\003\n\007Messag" +
-      "e\022\021\n\tmessageId\030\001 \001(\t\022\026\n\016messageSession\030\002" +
-      " \001(\t\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n\024mess" +
-      "ageSessionOffset\030\004 \001(\005\022\027\n\017messageTableSe" +
-      "q\030\005 \001(\t\022\023\n\013messageType\030\006 \001(\005\022\023\n\013messageS" +
-      "end\030\007 \001(\t\022\033\n\023messageSendExtendid\030\010 \001(\t\022\026" +
-      "\n\016messageRecieve\030\t \001(\t\022\036\n\026messageRecieve" +
-      "Extendid\030\n \001(\t\022\026\n\016messageContent\030\013 \001(\t\022\025" +
-      "\n\rmessageSended\030\014 \001(\005\022\025\n\rmessageReaded\030\r" +
-      " \001(\005\022\023\n\013messageDate\030\016 \001(\t\022\026\n\016messageDele" +
-      "ted\030\017 \001(\005\022\032\n\022messageDeletedDate\030\020 \001(\t\";\n" +
-      "\tLoginInfo\022\016\n\006userID\030\001 \001(\t\022\016\n\006device\030\002 \001" +
-      "(\t\022\016\n\006pushid\030\003 \001(\tb\006proto3"
+      "\016\n\006pushid\030\003 \001(\t\022\020\n\010pushType\030\004 \001(\t\022\014\n\004tim" +
+      "e\030\005 \001(\t\"\225\003\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\026" +
+      "\n\016messageSession\030\002 \001(\t\022\032\n\022messageSession" +
+      "Type\030\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\005" +
+      "\022\027\n\017messageTableSeq\030\005 \001(\t\022\023\n\013messageType" +
+      "\030\006 \001(\005\022\023\n\013messageSend\030\007 \001(\t\022\033\n\023messageSe" +
+      "ndExtendid\030\010 \001(\t\022\026\n\016messageRecieve\030\t \001(\t" +
+      "\022\036\n\026messageRecieveExtendid\030\n \001(\t\022\026\n\016mess" +
+      "ageContent\030\013 \001(\t\022\025\n\rmessageSended\030\014 \001(\005\022" +
+      "\025\n\rmessageReaded\030\r \001(\005\022\023\n\013messageDate\030\016 " +
+      "\001(\t\022\026\n\016messageDeleted\030\017 \001(\005\022\032\n\022messageDe" +
+      "letedDate\030\020 \001(\t\";\n\tLoginInfo\022\016\n\006userID\030\001" +
+      " \001(\t\022\016\n\006device\030\002 \001(\t\022\016\n\006pushid\030\003 \001(\tb\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -7501,7 +7639,7 @@ public final class Flappy {
     internal_static_Route_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Route_descriptor,
-        new String[] { "UserID", "Device", "Pushid", "Time", });
+        new String[] { "UserID", "Device", "Pushid", "PushType", "Time", });
     internal_static_Message_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_Message_fieldAccessorTable = new
