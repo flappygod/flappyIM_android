@@ -279,8 +279,18 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     //消息已经到达
-    private void sendMessageArrive(ChatMessage chatMessage){
+    private void sendMessageArrive(ChatMessage chatMessage) {
+        //返回
+        if (!chatMessage.getMessageSend().equals(DataManager.getInstance().getLoginUser().getUserId())) {
 
+            //创建登录请求消息
+            Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                    .setLatest(chatMessage.getMessageTableSeq().toString())
+                    .setType(FlappyRequest.REQ_RECIEVE);
+
+            //发送收到消息的回执
+            channelHandlerContext.writeAndFlush(builder.build());
+        }
     }
 
     //发送消息
