@@ -14,6 +14,16 @@
 
     <application>
 
+        <!-- 注册的监听 -->
+        <receiver
+            android:name=".Reciver.ActionReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+                <category android:name="com.szieo.foodtable" />
+            </intent-filter>
+        </receiver>
+
         <!-- 服务端服务,用于通讯 -->
         <service
             android:name="com.flappygo.flappyim.Service.FlappyService"

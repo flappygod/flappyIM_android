@@ -35,13 +35,13 @@ public class NotificationUtil extends ContextWrapper {
         super(context);
     }
 
-    public void sendNotification(String title, String content) {
+    public void sendNotification(ChatMessage chatMessage, String title, String content) {
         if (Build.VERSION.SDK_INT >= 26) {
             createNotificationChannel();
-            Notification notification = getNotification_26(title, content).build();
+            Notification notification = getNotification_26(chatMessage, title, content).build();
             getmManager().notify(1, notification);
         } else {
-            Notification notification = getNotification_25(title, content).build();
+            Notification notification = getNotification_25(chatMessage, title, content).build();
             getmManager().notify(1, notification);
         }
     }
@@ -83,14 +83,13 @@ public class NotificationUtil extends ContextWrapper {
         return bm;
     }
 
-    public NotificationCompat.Builder getNotification_25(String title, String content) {
+    public NotificationCompat.Builder getNotification_25(ChatMessage chatMessage, String title, String content) {
 
         // 以下是展示大图的通知
         androidx.core.app.NotificationCompat.BigPictureStyle style = new androidx.core.app.NotificationCompat.BigPictureStyle();
         style.setBigContentTitle(title);
         style.setSummaryText(content);
         style.bigPicture(getBitmap(getApplicationContext()));
-
         // 以下是展示多文本通知
         androidx.core.app.NotificationCompat.BigTextStyle style1 = new androidx.core.app.NotificationCompat.BigTextStyle();
         style1.setBigContentTitle(title);
@@ -108,9 +107,9 @@ public class NotificationUtil extends ContextWrapper {
     }
 
 
-    public PendingIntent getPendingIntent(ChatMessage chatMessage){
+    public PendingIntent getPendingIntent(ChatMessage chatMessage) {
         Intent openintent = new Intent(this, ActionReceiver.class);
-        openintent.putExtra("msg", GsonTool.modelToString(chatMessage,ChatMessage.class));
+        openintent.putExtra("msg", GsonTool.modelToString(chatMessage, ChatMessage.class));
         PendingIntent pendingIntent = PendingIntent.getBroadcast(FlappyService.getInstance().getApplicationContext(),
                 0, openintent, PendingIntent.FLAG_CANCEL_CURRENT);
         return pendingIntent;
@@ -118,12 +117,13 @@ public class NotificationUtil extends ContextWrapper {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotification_26(String title, String content) {
+    public Notification.Builder getNotification_26(ChatMessage chatMessage, String title, String content) {
         return new Notification.Builder(getApplicationContext(), sID)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setLargeIcon(getBitmap(getApplicationContext()))
                 .setSmallIcon(R.drawable.nothing)
+                .setContentIntent(getPendingIntent(chatMessage))
                 .setSound(RingtoneManager
                         .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setStyle(new Notification.BigPictureStyle().bigPicture(getBitmap(getApplicationContext())))

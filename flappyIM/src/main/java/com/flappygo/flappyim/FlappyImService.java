@@ -93,18 +93,18 @@ public class FlappyImService {
             if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_NORMAL) {
 
                 if (chatMessage.getMessageType().intValue() == Integer.parseInt(MSG_TYPE_TEXT)) {
-                    util.sendNotification("消息提醒", chatMessage.getChatText());
+                    util.sendNotification(chatMessage, "消息提醒", chatMessage.getChatText());
                 }
                 if (chatMessage.getMessageType().intValue() == Integer.parseInt(MSG_TYPE_IMG)) {
-                    util.sendNotification("消息提醒", "您有一条图片消息");
+                    util.sendNotification(chatMessage, "消息提醒", "您有一条图片消息");
                 }
                 if (chatMessage.getMessageType().intValue() == Integer.parseInt(MSG_TYPE_VOICE)) {
-                    util.sendNotification("消息提醒", "您有一条语音消息");
+                    util.sendNotification(chatMessage, "消息提醒", "您有一条语音消息");
                 }
 
             } else if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_HIDE) {
 
-                util.sendNotification("消息提醒", "您有一条新的消息");
+                util.sendNotification(chatMessage, "消息提醒", "您有一条新的消息");
             }
         }
     }
