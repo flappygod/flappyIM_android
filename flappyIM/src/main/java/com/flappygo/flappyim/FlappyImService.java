@@ -710,7 +710,7 @@ public class FlappyImService {
 
     //设置通知消息被点击的监听
     public void setNotificationClickListener(NotificationClickListener listener) {
-
+        FlappyService.setNotificationClickListener(listener);
     }
 
     //判断当前是否是登录的状态

@@ -3,8 +3,10 @@ package com.flappygo.flappyim.Tools;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,7 +19,11 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.R;
+import com.flappygo.flappyim.Reciver.ActionReceiver;
+import com.flappygo.flappyim.Service.FlappyService;
 
 public class NotificationUtil extends ContextWrapper {
 
@@ -100,6 +106,16 @@ public class NotificationUtil extends ContextWrapper {
                 .setStyle(style)
                 .setAutoCancel(true);
     }
+
+
+    public PendingIntent getPendingIntent(ChatMessage chatMessage){
+        Intent openintent = new Intent(this, ActionReceiver.class);
+        openintent.putExtra("msg", GsonTool.modelToString(chatMessage,ChatMessage.class));
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(FlappyService.getInstance().getApplicationContext(),
+                0, openintent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return pendingIntent;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Notification.Builder getNotification_26(String title, String content) {

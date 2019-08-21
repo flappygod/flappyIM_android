@@ -22,6 +22,7 @@ import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Handler.HandlerLoginCallback;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
+import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Thread.NettyThread;
@@ -42,6 +43,9 @@ public class FlappyService extends Service {
 
     //被踢下线的监听
     private static KnickedOutListener knickedOutListener;
+
+    //监听
+    private static NotificationClickListener notificationClickListener;
 
     //返回
     public static FlappyService getInstance() {
@@ -72,6 +76,13 @@ public class FlappyService extends Service {
         }
     }
 
+    public static void setNotificationClickListener(NotificationClickListener listener) {
+        notificationClickListener=listener;
+    }
+
+    public static NotificationClickListener getNotificationClickListener() {
+        return notificationClickListener;
+    }
 
     @Nullable
     @Override
