@@ -100,6 +100,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setContentText(content)
                 .setLargeIcon(getBitmap(getApplicationContext()))
                 .setSmallIcon(R.drawable.nothing)
+                .setContentIntent(getPendingIntent(chatMessage))
                 .setSound(RingtoneManager
                         .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setStyle(style)
