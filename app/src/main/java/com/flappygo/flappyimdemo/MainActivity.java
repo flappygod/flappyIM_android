@@ -17,6 +17,7 @@ import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
+import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatSession;
@@ -115,6 +116,19 @@ public class MainActivity extends Activity {
 
                             }
                         });
+
+            }
+        });
+
+
+        FlappyImService.getInstance().setNotificationClickListener(new NotificationClickListener() {
+            @Override
+            public void notificationClicked(ChatMessage chatMessage) {
+
+                Intent intent=new Intent(getBaseContext(),MainActivity.class);
+
+                startActivity(intent);
+
 
             }
         });
