@@ -11,10 +11,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.RingtoneManager;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+
+import com.flappygo.flappyim.R;
 
 public class NotificationUtil extends ContextWrapper {
 
@@ -67,7 +70,8 @@ public class NotificationUtil extends ContextWrapper {
         } catch (PackageManager.NameNotFoundException e) {
             applicationInfo = null;
         }
-        Drawable d = packageManager.getApplicationIcon(applicationInfo); //xxx根据自己的情况获取drawable
+        //xxx根据自己的情况获取drawable
+        Drawable d = packageManager.getApplicationIcon(applicationInfo);
         BitmapDrawable bd = (BitmapDrawable) d;
         Bitmap bm = bd.getBitmap();
         return bm;
@@ -90,6 +94,9 @@ public class NotificationUtil extends ContextWrapper {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setLargeIcon(getBitmap(getApplicationContext()))
+                .setSmallIcon(R.drawable.nothing)
+                .setSound(RingtoneManager
+                        .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setStyle(style)
                 .setAutoCancel(true);
     }
@@ -100,6 +107,9 @@ public class NotificationUtil extends ContextWrapper {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setLargeIcon(getBitmap(getApplicationContext()))
+                .setSmallIcon(R.drawable.nothing)
+                .setSound(RingtoneManager
+                        .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setStyle(new Notification.BigPictureStyle().bigPicture(getBitmap(getApplicationContext())))
                 .setNumber(1)
                 .setAutoCancel(true);

@@ -13,12 +13,12 @@ public class RunninTool {
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(context.getPackageName())) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
-                    Log.i("后台", appProcess.processName);
-                    return true;
-                } else {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                     Log.i("前台", appProcess.processName);
                     return false;
+                } else {
+                    Log.i("后台", appProcess.processName);
+                    return true;
                 }
             }
         }
