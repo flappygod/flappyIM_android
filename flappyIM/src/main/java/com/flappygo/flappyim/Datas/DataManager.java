@@ -18,6 +18,8 @@ public class DataManager {
     // 用户信息保存
     private final static String KEY_FOR_USER = "com.flappygo.flappyim.data.KEY_FOR_USER";
 
+    // 推送方式的保存
+    private final static String KEY_FOR_PUSHTYPE = "com.flappygo.flappyim.data.KEY_FOR_PUSHTYPE";
 
 
     /********
@@ -61,6 +63,27 @@ public class DataManager {
         //返回配置信息
         return model;
     }
+
+
+    //保存用户的推送类型
+    public void savePushType(String pushType){
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_PUSHTYPE, pushType);
+        editor.commit();
+    }
+
+    //获取用户的推送类型
+    public String getPushType(){
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME, Context.MODE_PRIVATE);
+        //获取到设置信息
+        String setting = mSharedPreferences.getString(KEY_FOR_PUSHTYPE, "0");
+        return setting;
+    }
+
 
     //清空当前的用户信息，用户已经退出登录了
     public void clearUser(){

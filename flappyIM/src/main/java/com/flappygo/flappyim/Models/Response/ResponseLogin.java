@@ -1,6 +1,7 @@
 package com.flappygo.flappyim.Models.Response;
 
 
+import com.flappygo.flappyim.Models.Server.ChatRoute;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 
 import java.io.Serializable;
@@ -35,6 +36,9 @@ public class ResponseLogin implements Serializable {
 
     //用户信息
     private ChatUser user;
+
+    //上个用户的route信息
+    private ChatRoute route;
 
 
     public String getServerIP() {
@@ -75,5 +79,13 @@ public class ResponseLogin implements Serializable {
 
     public void setServerGroup(String serverGroup) {
         this.serverGroup = serverGroup;
+    }
+
+    public ChatRoute getRoute() {
+        return route;
+    }
+
+    public void setRoute(ChatRoute route) {
+        this.route = route;
     }
 }

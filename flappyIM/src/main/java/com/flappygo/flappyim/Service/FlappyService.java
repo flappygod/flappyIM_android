@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+
 import androidx.annotation.Nullable;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
@@ -65,7 +66,7 @@ public class FlappyService extends Service {
         //已经被踢下线了，不要挣扎了
         if (user != null && user.isLogin() == false) {
             //如果不为空
-            if(knickedOutListener!=null) {
+            if (knickedOutListener != null) {
                 knickedOutListener.knickedOut();
             }
         }
@@ -251,6 +252,7 @@ public class FlappyService extends Service {
                         //当前的用户已经被踢下线了
                         if (model.getResultCode().equals(RESULT_KNICKED)) {
 
+
                             //设置登录状态
                             ChatUser user = DataManager.getInstance().getLoginUser();
                             //当前没有登录
@@ -276,6 +278,11 @@ public class FlappyService extends Service {
 
                     @Override
                     public void stateTrue(ResponseLogin response, String tag) {
+
+                        //保存推送设置
+                        DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+
+
                         //自动登录成功，我们拿到了相应的数据
                         startConnect(response.getUser(),
                                 response.getServerIP(),
