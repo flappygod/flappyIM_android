@@ -107,7 +107,7 @@ public class NotificationUtil extends ContextWrapper {
                 .setAutoCancel(true);
     }
 
-
+    //获取跳转
     public PendingIntent getPendingIntent(ChatMessage chatMessage) {
         Intent openintent = new Intent(this, ActionReceiver.class);
         openintent.putExtra("msg", GsonTool.modelToString(chatMessage, ChatMessage.class));
