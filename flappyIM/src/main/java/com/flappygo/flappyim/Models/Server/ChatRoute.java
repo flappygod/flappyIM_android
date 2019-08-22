@@ -2,9 +2,10 @@ package com.flappygo.flappyim.Models.Server;
 
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ChatRoute {
+public class ChatRoute implements Serializable {
     //默认显示文本
     public final static int PUSH_TYPE_NORMAL = 0;
     //隐藏文本信息
