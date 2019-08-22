@@ -28,6 +28,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleStateEvent;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_PUSHED;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_REACHED;
 
 
@@ -168,7 +169,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //获取单个消息
                     ChatMessage chatMessage = messages.get(s);
                     //已经送达
-                    chatMessage.setMessageSended(new BigDecimal(SEND_STATE_REACHED));
+                    chatMessage.setMessageSended(new BigDecimal(SEND_STATE_PUSHED));
                     //如果插入成功
                     boolean flag = Database.getInstance().insertMessage(chatMessage);
                     //如果插入成功
@@ -212,7 +213,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //得到真正的消息对象
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
                 //已经送达
-                chatMessage.setMessageSended(new BigDecimal(SEND_STATE_REACHED));
+                chatMessage.setMessageSended(new BigDecimal(SEND_STATE_PUSHED));
                 //判断数据库是否存在
                 boolean flag = Database.getInstance().insertMessage(chatMessage);
                 //插入成功
