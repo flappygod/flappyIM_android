@@ -181,8 +181,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         msg.obj = chatMessage;
                         //成功
                         this.handlerMessage.sendMessage(msg);
-                        //到达
-                        sendMessageArrive(chatMessage);
                     }
                 }
 
@@ -194,6 +192,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     user.setLatest(StringTool.decimalToStr(messages.get(messages.size() - 1).getMessageTableSeq()));
                     //更新数据信息
                     DataManager.getInstance().saveLoginUser(user);
+                    //到达
+                    sendMessageArrive(messages.get(messages.size() - 1));
                 }
                 //发送成功消息
                 Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
