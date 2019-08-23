@@ -68,7 +68,7 @@ public class FlappyService extends Service {
         //获取用户数据
         ChatUser user = DataManager.getInstance().getLoginUser();
         //已经被踢下线了，不要挣扎了
-        if (user != null && user.isLogin() == false) {
+        if (user != null && user.isLogin() == 0) {
             //如果不为空
             if (knickedOutListener != null) {
                 knickedOutListener.knickedOut();
@@ -148,7 +148,7 @@ public class FlappyService extends Service {
         //如果不是新登录查看旧的是否登录了
         ChatUser user = DataManager.getInstance().getLoginUser();
         //之前已经登录了，那么我们开始断线重连
-        if (user != null && user.isLogin()) {
+        if (user != null && user.isLogin()==1) {
             if (NetTool.isConnected(getApplicationContext())) {
                 handler.removeMessages(1);
                 handler.sendEmptyMessageDelayed(1, delauMilis);
@@ -267,7 +267,7 @@ public class FlappyService extends Service {
                             //设置登录状态
                             ChatUser user = DataManager.getInstance().getLoginUser();
                             //当前没有登录
-                            user.setLogin(false);
+                            user.setLogin(0);
                             //清空用户数据
                             DataManager.getInstance().saveLoginUser(user);
 

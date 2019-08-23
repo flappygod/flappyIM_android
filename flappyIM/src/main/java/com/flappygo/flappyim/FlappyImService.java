@@ -718,7 +718,7 @@ public class FlappyImService {
         //存在账号
         ChatUser user = DataManager.getInstance().getLoginUser();
         //为空或者被踢下线
-        if (user == null || user.isLogin() == false) {
+        if (user == null || user.isLogin() == 0) {
             return false;
         }
         return true;

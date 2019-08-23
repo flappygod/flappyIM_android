@@ -32,13 +32,13 @@ public class ChatUser implements Serializable {
     //最后更新的时间戳
     private String  latest;
     //当前的登录信息
-    private boolean login;
+    private int login;
 
-    public boolean isLogin() {
+    public int isLogin() {
         return login;
     }
 
-    public void setLogin(boolean login) {
+    public void setLogin(int login) {
         this.login = login;
     }
 

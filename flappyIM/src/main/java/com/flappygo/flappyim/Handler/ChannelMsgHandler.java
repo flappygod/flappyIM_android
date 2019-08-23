@@ -140,7 +140,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             if (this.handlerLogin != null) {
 
                 //保存用户成功的登录信息
-                user.setLogin(true);
+                user.setLogin(1);
                 //保存用户数据
                 DataManager.getInstance().saveLoginUser(user);
 
