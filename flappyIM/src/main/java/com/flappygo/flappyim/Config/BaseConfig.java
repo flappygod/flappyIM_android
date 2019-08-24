@@ -1,7 +1,5 @@
 package com.flappygo.flappyim.Config;
 
-import com.flappygo.flappyim.FlappyImService;
-
 public class BaseConfig {
 
 
@@ -31,7 +29,10 @@ public class BaseConfig {
     public String serverUploadUrl = serverUrl;
 
     //上传文件的地址
-    public String uploadUrl = serverUploadUrl + "/upload/fileUpload";
+    public String fileUpload = serverUploadUrl + "/upload/fileUpload";
+
+    //上传视频的地址
+    public String videoUpload = serverUploadUrl + "/upload/videoUpload";
 
     //创建账户
     public String register = serverUrl + "/api/register";
@@ -70,7 +71,7 @@ public class BaseConfig {
     //服务器的地址
     public void setServerUrl(String serverUrl, String serverUploadUrl) {
 
-        if (serverUrl == null||serverUploadUrl==null) {
+        if (serverUrl == null || serverUploadUrl == null) {
             throw new RuntimeException("服务器地址不能为空");
         }
 
@@ -81,7 +82,10 @@ public class BaseConfig {
 
 
         //上传文件的地址
-        uploadUrl = serverUploadUrl + "/upload/fileUpload";
+        fileUpload = serverUploadUrl + "/upload/fileUpload";
+
+        //视频文件上传的地址
+        videoUpload = serverUploadUrl + "/upload/videoUpload";
 
         //创建账户
         register = serverUrl + "/api/register";

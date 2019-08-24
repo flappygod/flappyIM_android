@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.Session;
 
-import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 
@@ -29,7 +28,6 @@ import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
@@ -138,7 +136,7 @@ public class FlappyBaseSession {
                 //地址
                 fileMap.put("file", voice.getSendPath());
                 //返回的字符串
-                String str = UploadTool.postFile(BaseConfig.getInstance().uploadUrl, parmap, fileMap);
+                String str = UploadTool.postFile(BaseConfig.getInstance().fileUpload, parmap, fileMap);
 
 
                 //返回数据
@@ -220,7 +218,7 @@ public class FlappyBaseSession {
                 //保存宽高
                 LXImageWH lxImageWH = new LXImageWH();
                 //返回的字符串
-                String str = UploadTool.postImage(BaseConfig.getInstance().uploadUrl, parmap, fileMap, lxImageWH);
+                String str = UploadTool.postImage(BaseConfig.getInstance().fileUpload, parmap, fileMap, lxImageWH);
 
 
                 //返回数据
@@ -303,7 +301,7 @@ public class FlappyBaseSession {
                 //本地地址
                 fileMap.put("overFile", info.getOverPath());
                 //返回的字符串
-                String str = UploadTool.postFile(BaseConfig.getInstance().uploadUrl, parmap, fileMap);
+                String str = UploadTool.postFile(BaseConfig.getInstance().videoUpload, parmap, fileMap);
                 //返回数据
                 BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
                 //创建
