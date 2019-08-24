@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
+import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Config.BaseConfig;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -67,13 +68,14 @@ public class FlappyBaseSession {
     }
 
     //发送消息
-    protected void sendMessage(final ChatMessage chatMessage, final FlappyIMCallback<ChatMessage> callback) {
+    protected void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
         FlappyService flappyService = FlappyService.getInstance();
+
         //如果当前服务不在线，错误
         if (flappyService == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(new Exception("服务已停止"), Integer.parseInt(RESULT_NETERROR));
+            callback.failure(chatMessage, new Exception("服务已停止"), Integer.parseInt(RESULT_NETERROR));
             return;
         }
 
@@ -81,7 +83,7 @@ public class FlappyBaseSession {
         NettyThread thread = flappyService.getClientThread();
         if (thread == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(new Exception("线程已停止"), Integer.parseInt(RESULT_NETERROR));
+            callback.failure(chatMessage, new Exception("线程已停止"), Integer.parseInt(RESULT_NETERROR));
             return;
         }
 
@@ -89,7 +91,7 @@ public class FlappyBaseSession {
         ChannelMsgHandler handler = thread.getChannelMsgHandler();
         if (handler == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(new Exception("Handler不存在"), Integer.parseInt(RESULT_NETERROR));
+            callback.failure(chatMessage, new Exception("Handler不存在"), Integer.parseInt(RESULT_NETERROR));
             return;
         }
 
@@ -104,13 +106,13 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception ex, int code) {
                 updateMsgFailure(chatMessage);
-                callback.failure(ex, code);
+                callback.failure(chatMessage, ex, code);
             }
         });
     }
 
     //上传音频文件并发送
-    protected void uploadVoiceAndSend(final ChatMessage msg, final FlappyIMCallback callback) {
+    protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback callback) {
         //client
         LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
@@ -146,7 +148,7 @@ public class FlappyBaseSession {
                 //设置返回的数据
                 baseApiModel.setResultData(jb.optString("resultData"));
                 //上传不成功抛出异常
-                if(!baseApiModel.getResultCode().equals(RESULT_SUCCESS)){
+                if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getResultMessage());
                 }
                 //设置数据返回
@@ -173,7 +175,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String s) {
                 updateMsgFailure(msg);
-                callback.failure(e, Integer.parseInt(RESULT_NETERROR));
+                callback.failure(msg, e, Integer.parseInt(RESULT_NETERROR));
             }
 
             @Override
@@ -181,14 +183,13 @@ public class FlappyBaseSession {
                 //得到上传后的消息实体
                 ChatMessage message = (ChatMessage) msg;
                 //设置真实的信息
-                //发送消息
                 sendMessage(message, callback);
             }
         }, msg, null);
     }
 
     //上传图片并发送
-    protected void uploadImageAndSend(final ChatMessage msg, final FlappyIMCallback callback) {
+    protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback callback) {
         //client
         LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
@@ -225,7 +226,7 @@ public class FlappyBaseSession {
                 //设置返回的数据
                 baseApiModel.setResultData(jb.optString("resultData"));
                 //上传不成功抛出异常
-                if(!baseApiModel.getResultCode().equals(RESULT_SUCCESS)){
+                if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getResultMessage());
                 }
                 //设置宽度
@@ -243,7 +244,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String s) {
                 updateMsgFailure(msg);
-                callback.failure(e, StringTool.strToDecimal(s).intValue());
+                callback.failure(msg, e, StringTool.strToDecimal(s).intValue());
             }
 
             @Override
@@ -255,8 +256,6 @@ public class FlappyBaseSession {
             }
         }, msg, null);
     }
-
-
 
 
 }

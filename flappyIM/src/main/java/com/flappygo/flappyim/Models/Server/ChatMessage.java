@@ -5,6 +5,8 @@ import android.util.Base64;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Models.Request.ChatImage;
+import com.flappygo.flappyim.Models.Request.ChatLocation;
+import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Tools.StringTool;
@@ -13,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ChatMessage {
+
 
 
     //消息被创建
@@ -27,16 +30,17 @@ public class ChatMessage {
     public final static int SEND_STATE_FAILURE = 9;
 
 
+
     //文本消息
-    public final static String MSG_TYPE_TEXT = "1";
+    public final static int MSG_TYPE_TEXT = 1;
     //图片消息
-    public final static String MSG_TYPE_IMG = "2";
+    public final static int MSG_TYPE_IMG = 2;
     //语音消息
-    public final static String MSG_TYPE_VOICE = "3";
-    //表情消息
-    public final static String MSG_TYPE_EMOJ = "4";
-    //红包消息
-    public final static String MSG_TYPE_REDBACKET = "5";
+    public final static int MSG_TYPE_VOICE = 3;
+    //位置信息
+    public final static int MSG_TYPE_LOCATE = 4;
+    //小视频消息
+    public final static int MSG_TYPE_VIDEO = 5;
 
 
     public ChatMessage() {
@@ -267,7 +271,7 @@ public class ChatMessage {
 
     //设置文本
     public void setChatText(String text) {
-        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_TEXT)) {
+        if (getMessageType().intValue() == MSG_TYPE_TEXT) {
             String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
@@ -275,7 +279,7 @@ public class ChatMessage {
 
     //获取聊天文本
     public String getChatText() {
-        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_TEXT)) {
+        if (getMessageType().intValue() == MSG_TYPE_TEXT) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
                 return new String(Base64.decode(str.getBytes(), Base64.DEFAULT));
@@ -286,7 +290,7 @@ public class ChatMessage {
 
     //获取聊天图片
     public ChatImage getChatImage() {
-        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_IMG)) {
+        if (getMessageType().intValue() == MSG_TYPE_IMG) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
                 return GsonTool.jsonObjectToModel(str, ChatImage.class);
@@ -297,10 +301,32 @@ public class ChatMessage {
 
     //获取聊天语音
     public ChatVoice getChatVoice() {
-        if (getMessageType().intValue() == Integer.parseInt(MSG_TYPE_VOICE)) {
+        if (getMessageType().intValue() == MSG_TYPE_VOICE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
                 return GsonTool.jsonObjectToModel(str, ChatVoice.class);
+            }
+        }
+        return null;
+    }
+
+    //获取定位信息
+    public ChatLocation getChatLocation() {
+        if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(str, ChatLocation.class);
+            }
+        }
+        return null;
+    }
+
+    //获取视频信息
+    public ChatVideo getChatVideo() {
+        if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(str, ChatVideo.class);
             }
         }
         return null;

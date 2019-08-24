@@ -2,11 +2,13 @@ package com.flappygo.flappyim.Session;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
+import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Holder.HolderMessageRecieve;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatImage;
+import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -103,7 +105,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送消息
     public ChatMessage sendText(String text,
-                                FlappyIMCallback<ChatMessage> callback) {
+                                FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -136,7 +138,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送本地图片
     public ChatMessage sendLocalImage(String path,
-                                      final FlappyIMCallback<ChatMessage> callback) {
+                                      final FlappySendCallback<ChatMessage> callback) {
 
         //创建消息
         final ChatMessage msg = new ChatMessage();
@@ -176,7 +178,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送图片
     public ChatMessage sendImage(ChatImage image,
-                                 FlappyIMCallback<ChatMessage> callback) {
+                                 FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -209,7 +211,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送本地的音频
     public ChatMessage sendLocalVoice(String path,
-                                      final FlappyIMCallback<ChatMessage> callback) {
+                                      final FlappySendCallback<ChatMessage> callback) {
 
 
         //创建消息
@@ -249,7 +251,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     //发送语音消息
     public ChatMessage sendVoice(
             ChatVoice image,
-            final FlappyIMCallback<ChatMessage> callback) {
+            final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -280,15 +282,56 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
+
+    //发送定位信息
+    public ChatMessage sendLocation(ChatLocation loaction,
+                                    final FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        final ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommomID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageRecieve(getPeerID());
+        //接收者
+        msg.setMessageRecieveExtendid(getPeerExtendID());
+        //类型
+        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_LOCATE));
+        //设置内容
+        msg.setMessageContent(GsonTool.modelToString(loaction, ChatLocation.class));
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //发送消息
+        sendMessage(msg, callback);
+
+        return msg;
+    }
+
+
     //重发消息
-    public void resendMessage(final ChatMessage chatMessage, final FlappyIMCallback<ChatMessage> callback) {
+    public void resendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
         //重新发送
-        if (chatMessage.getMessageType().intValue() == Integer.parseInt(ChatMessage.MSG_TYPE_TEXT)) {
+        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
+            //发送消息
             sendMessage(chatMessage, callback);
-        } else if (chatMessage.getMessageType().intValue() == Integer.parseInt(ChatMessage.MSG_TYPE_IMG)) {
+        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_IMG) {
+            //上传文件并发送
             uploadImageAndSend(chatMessage, callback);
-        } else if (chatMessage.getMessageType().intValue() == Integer.parseInt(ChatMessage.MSG_TYPE_VOICE)) {
+        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VOICE) {
+            //上传语音并发送
             uploadVoiceAndSend(chatMessage, callback);
+        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
+            //上传语音并发送
+            sendMessage(chatMessage, callback);
         }
     }
 

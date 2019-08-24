@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
+import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
@@ -125,7 +126,7 @@ public class MainActivity extends Activity {
             @Override
             public void notificationClicked(ChatMessage chatMessage) {
 
-                Intent intent=new Intent(getBaseContext(),MainActivity.class);
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
 
                 startActivity(intent);
 
@@ -143,7 +144,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void success(FlappyChatSession data) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
-                        mySession=data;
+                        mySession = data;
 
                         mySession.addMessageListener(new MessageListener() {
                             @Override
@@ -176,8 +177,7 @@ public class MainActivity extends Activity {
                     }
 
 
-
-                    mySession.sendText(message.getText().toString(), new FlappyIMCallback<ChatMessage>() {
+                    mySession.sendText(message.getText().toString(), new FlappySendCallback<ChatMessage>() {
                         @Override
                         public void success(ChatMessage data) {
 
@@ -186,11 +186,11 @@ public class MainActivity extends Activity {
                         }
 
                         @Override
-                        public void failure(Exception ex, int code) {
+                        public void failure(ChatMessage data, Exception ex, int code) {
 
                             Toast.makeText(getBaseContext(), "消息发送失败", Toast.LENGTH_SHORT).show();
-
                         }
+
                     });
                 }
             }
@@ -249,7 +249,7 @@ public class MainActivity extends Activity {
                 if (!StringTool.isEmpty(path)) {
 
                     //发送本地图片
-                    mySession.sendLocalImage(path, new FlappyIMCallback<ChatMessage>() {
+                    mySession.sendLocalImage(path, new FlappySendCallback<ChatMessage>() {
                         @Override
                         public void success(ChatMessage data) {
 
@@ -258,11 +258,11 @@ public class MainActivity extends Activity {
                         }
 
                         @Override
-                        public void failure(Exception ex, int code) {
+                        public void failure(ChatMessage data, Exception ex, int code) {
 
                             Toast.makeText(getBaseContext(), "消息发送失败", Toast.LENGTH_SHORT).show();
-
                         }
+
                     });
 
                 }

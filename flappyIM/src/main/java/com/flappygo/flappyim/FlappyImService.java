@@ -36,7 +36,9 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_JSONERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NETERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NOTLOGIN;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_LOCATE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_HIDE;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_NORMAL;
@@ -87,24 +89,32 @@ public class FlappyImService {
 
     //发送本地通知
     private void sendNotificaiton(ChatMessage chatMessage) {
+        //正在后台
         if (RunninTool.isBackground(FlappyImService.this.appContext)) {
+            //上下文
             NotificationUtil util = new NotificationUtil(FlappyImService.this.appContext);
             //普通
             if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_NORMAL) {
 
-                if (chatMessage.getMessageType().intValue() == Integer.parseInt(MSG_TYPE_TEXT)) {
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
                     util.sendNotification(chatMessage, "消息提醒", chatMessage.getChatText());
                 }
-                if (chatMessage.getMessageType().intValue() == Integer.parseInt(MSG_TYPE_IMG)) {
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_IMG) {
                     util.sendNotification(chatMessage, "消息提醒", "您有一条图片消息");
                 }
-                if (chatMessage.getMessageType().intValue() == Integer.parseInt(MSG_TYPE_VOICE)) {
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_VOICE) {
                     util.sendNotification(chatMessage, "消息提醒", "您有一条语音消息");
+                }
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_LOCATE) {
+                    util.sendNotification(chatMessage, "消息提醒", "您有一条位置消息");
+                }
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
+                    util.sendNotification(chatMessage, "消息提醒", "您有一条视频消息");
                 }
 
             } else if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_HIDE) {
-
                 util.sendNotification(chatMessage, "消息提醒", "您有一条新的消息");
+
             }
         }
     }

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ChatUser implements Serializable {
+
     private String userId;
 
     private String userExtendId;
@@ -31,6 +32,7 @@ public class ChatUser implements Serializable {
 
     //最后更新的时间戳
     private String  latest;
+
     //当前的登录信息
     private int login;
 
