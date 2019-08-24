@@ -127,13 +127,10 @@ public class MainActivity extends Activity {
             public void notificationClicked(ChatMessage chatMessage) {
 
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
-
                 startActivity(intent);
-
 
             }
         });
-
 
         //创建会话
         Button session = findViewById(R.id.session);
@@ -166,6 +163,7 @@ public class MainActivity extends Activity {
 
         //消息发送
         Button send = findViewById(R.id.send);
+
         //发送啦
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,13 +187,13 @@ public class MainActivity extends Activity {
                         public void failure(ChatMessage data, Exception ex, int code) {
 
                             Toast.makeText(getBaseContext(), "消息发送失败", Toast.LENGTH_SHORT).show();
+
                         }
 
                     });
                 }
             }
         });
-
 
         Button sendImg = findViewById(R.id.send_img);
         sendImg.setOnClickListener(new View.OnClickListener() {
@@ -207,13 +205,12 @@ public class MainActivity extends Activity {
 
     }
 
+
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-
             Toast.makeText(getBaseContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
         }
     };
-
 
     /************
      * 获取相册图片
@@ -242,24 +239,24 @@ public class MainActivity extends Activity {
     @SuppressWarnings("deprecation")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //成功
         if (resultCode == RESULT_OK) {
-            // 如果是获取图片，返回回来之后得到图片的地址
+            //如果是获取图片，返回回来之后得到图片的地址
             if (requestCode == REQUEST_GETPICTURE) {
+                //地址
                 String path = TakePicTool.getPicAnalyze(this, data);
+                //地址
                 if (!StringTool.isEmpty(path)) {
-
                     //发送本地图片
                     mySession.sendLocalImage(path, new FlappySendCallback<ChatMessage>() {
+
                         @Override
                         public void success(ChatMessage data) {
-
                             Toast.makeText(getBaseContext(), "消息已经发送", Toast.LENGTH_SHORT).show();
-
                         }
 
                         @Override
                         public void failure(ChatMessage data, Exception ex, int code) {
-
                             Toast.makeText(getBaseContext(), "消息发送失败", Toast.LENGTH_SHORT).show();
                         }
 
