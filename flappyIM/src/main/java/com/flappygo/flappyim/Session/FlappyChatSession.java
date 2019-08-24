@@ -8,9 +8,11 @@ import com.flappygo.flappyim.Holder.HolderMessageRecieve;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
+import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Response.ResponseSession;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
 
@@ -316,6 +318,74 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
+    //发送短视频
+    public ChatMessage senLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommomID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageRecieve(getPeerID());
+        //接收者
+        msg.setMessageRecieveExtendid(getPeerExtendID());
+        //类型
+        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VIDEO));
+        //创建语音
+        ChatVideo chatVoice = new ChatVideo();
+        //设置语音的本地地址
+        chatVoice.setSendPath(path);
+        //设置内容
+        msg.setMessageContent(GsonTool.modelToString(chatVoice, ChatVideo.class));
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //上传并发送
+        uploadVideoAndSend(msg, callback);
+        //返回消息体
+        return msg;
+    }
+
+    //发送视频信息
+    public ChatMessage sendVideo(ChatVideo chatVideo, final FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommomID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageRecieve(getPeerID());
+        //接收者
+        msg.setMessageRecieveExtendid(getPeerExtendID());
+        //类型
+        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VIDEO));
+        //设置内容
+        msg.setMessageContent(GsonTool.modelToString(chatVideo, ChatVideo.class));
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //上传并发送
+        sendMessage(msg, callback);
+        //返回消息体
+        return msg;
+    }
+
 
     //重发消息
     public void resendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
@@ -329,6 +399,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VOICE) {
             //上传语音并发送
             uploadVoiceAndSend(chatMessage, callback);
+        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
+            //上传短视频并发送
+            uploadVideoAndSend(chatMessage, callback);
         } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
             //上传语音并发送
             sendMessage(chatMessage, callback);
@@ -339,7 +412,6 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage getLatestMessage() {
         return Database.getInstance().getLatestMessage(getSession().getSessionId());
     }
-
 
     //获取列表
     public List<ChatMessage> getMessagesByOffset(String offset, int size) {

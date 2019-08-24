@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.Session;
 
+import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 
@@ -10,20 +11,25 @@ import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Config.BaseConfig;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
 import com.flappygo.flappyim.Models.Request.ChatImage;
+import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
+import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Service.FlappyService;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.Upload.LXImageWH;
 import com.flappygo.flappyim.Tools.Upload.UploadTool;
+import com.flappygo.flappyim.Tools.VideoTool;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
@@ -133,8 +139,10 @@ public class FlappyBaseSession {
                 fileMap.put("file", voice.getSendPath());
                 //返回的字符串
                 String str = UploadTool.postFile(BaseConfig.getInstance().uploadUrl, parmap, fileMap);
+
+
                 //返回数据
-                BaseApiModel<String> baseApiModel = new BaseApiModel<String>();
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
@@ -146,13 +154,15 @@ public class FlappyBaseSession {
                 //返回的总页码
                 baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
                 //设置返回的数据
-                baseApiModel.setResultData(jb.optString("resultData"));
+                baseApiModel.setResultData(GsonTool.jsonObjectToModel(jb.optString("resultData"), ResponseUpload.class));
                 //上传不成功抛出异常
                 if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getResultMessage());
                 }
+
                 //设置数据返回
-                voice.setPath(baseApiModel.getResultData());
+                voice.setPath(baseApiModel.getResultData().getFilePath());
+
                 //长度
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 //在获取前，设置文件路径（应该只能是本地路径）
@@ -211,10 +221,12 @@ public class FlappyBaseSession {
                 LXImageWH lxImageWH = new LXImageWH();
                 //返回的字符串
                 String str = UploadTool.postImage(BaseConfig.getInstance().uploadUrl, parmap, fileMap, lxImageWH);
+
+
                 //返回数据
-                BaseApiModel<String> baseApiModel = new BaseApiModel<String>();
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
                 //创建
-                JSONObject jb = new JSONObject((String) str);
+                JSONObject jb = new JSONObject(str);
                 //返回码
                 baseApiModel.setResultCode(jb.optString("resultCode"));
                 //解析code
@@ -224,17 +236,19 @@ public class FlappyBaseSession {
                 //返回的总页码
                 baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
                 //设置返回的数据
-                baseApiModel.setResultData(jb.optString("resultData"));
+                baseApiModel.setResultData(GsonTool.jsonObjectToModel(jb.optString("resultData"), ResponseUpload.class));
                 //上传不成功抛出异常
                 if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getResultMessage());
                 }
+
+
                 //设置宽度
                 image.setWidth(lxImageWH.getWidth() + "");
                 //设置高度
                 image.setHeight(lxImageWH.getHeight() + "");
                 //设置数据返回
-                image.setPath(baseApiModel.getResultData());
+                image.setPath(baseApiModel.getResultData().getFilePath());
                 //转换为content
                 message.setMessageContent(GsonTool.modelToString(image, ChatImage.class));
 
@@ -257,5 +271,87 @@ public class FlappyBaseSession {
         }, msg, null);
     }
 
+
+    //上传视频并发送
+    protected void uploadVideoAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //client
+        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
+        //发送
+        client.excute(new LXAsyncTask() {
+            @Override
+            public Object run(Object data, String s) throws Exception {
+
+                //取得消息体
+                ChatMessage message = (ChatMessage) data;
+                //取得图片信息
+                ChatVideo video = GsonTool.jsonObjectToModel(message.getMessageContent(), ChatVideo.class);
+
+
+                //构建文件参数
+                HashMap<String, Object> parmap = new HashMap<String, Object>();
+                //构建文件参数
+                HashMap<String, String> fileMap = new HashMap<String, String>();
+                //地址
+                fileMap.put("file", video.getSendPath());
+
+
+                //获取到图片的bitmap
+                VideoTool.VideoInfo info = VideoTool.getVideoInfo(FlappyImService.getInstance().getAppContext(),
+                        512,
+                        video.getSendPath());
+
+                //本地地址
+                fileMap.put("overFile", info.getOverPath());
+                //返回的字符串
+                String str = UploadTool.postFile(BaseConfig.getInstance().uploadUrl, parmap, fileMap);
+                //返回数据
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
+                //创建
+                JSONObject jb = new JSONObject(str);
+                //返回码
+                baseApiModel.setResultCode(jb.optString("resultCode"));
+                //解析code
+                baseApiModel.setResultMessage(jb.optString("resultMessage"));
+                //返回的消息
+                baseApiModel.setResultSign(jb.optString("resultSign"));
+                //返回的总页码
+                baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
+                //设置返回的数据
+                baseApiModel.setResultData(GsonTool.jsonObjectToModel(jb.optString("resultData"), ResponseUpload.class));
+                //上传不成功抛出异常
+                if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
+                    throw new Exception(baseApiModel.getResultMessage());
+                }
+                //设置时长
+                video.setDuration(info.getDuration());
+                //设置宽度
+                video.setWidth(info.getWidth());
+                //设置高度
+                video.setHeight(info.getHeight());
+                //设置数据返回
+                video.setPath(baseApiModel.getResultData().getFilePath());
+                //简介图片地址
+                video.setCoverPath(baseApiModel.getResultData().getOverFilePath());
+                //转换为content
+                message.setMessageContent(GsonTool.modelToString(video, ChatVideo.class));
+
+                return message;
+            }
+
+            @Override
+            public void failure(Exception e, String s) {
+                updateMsgFailure(msg);
+                callback.failure(msg, e, StringTool.strToDecimal(s).intValue());
+            }
+
+            @Override
+            public void success(Object msg, String s) {
+                //消息
+                ChatMessage message = (ChatMessage) msg;
+                //发送消息
+                sendMessage(message, callback);
+            }
+        }, msg, null);
+    }
 
 }
