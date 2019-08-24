@@ -1,7 +1,6 @@
 package com.flappygo.flappyim.Session;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -10,6 +9,7 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
+import com.flappygo.flappyim.Models.Response.ResponseSession;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
@@ -53,14 +53,14 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //会话
-    private SessionData session;
+    private ResponseSession session;
 
 
-    public SessionData getSession() {
+    public ResponseSession getSession() {
         return session;
     }
 
-    public void setSession(SessionData session) {
+    public void setSession(ResponseSession session) {
         this.session = session;
     }
 
@@ -72,11 +72,11 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     private String getPeerID() {
         //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
+        if (getSession().getSessionType().intValue() == ResponseSession.TYPE_GROUP) {
             return getSession().getSessionId();
         }
         //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
+        else if (getSession().getSessionType().intValue() == ResponseSession.TYPE_SINGLE) {
             for (int s = 0; s < getSession().getUsers().size(); s++) {
                 if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
                     return getSession().getUsers().get(s).getUserId();
@@ -88,11 +88,11 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     private String getPeerExtendID() {
         //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
+        if (getSession().getSessionType().intValue() == ResponseSession.TYPE_GROUP) {
             return getSession().getSessionExtendId();
         }
         //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
+        else if (getSession().getSessionType().intValue() == ResponseSession.TYPE_SINGLE) {
             for (int s = 0; s < getSession().getUsers().size(); s++) {
                 if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
                     return getSession().getUsers().get(s).getUserExtendId();

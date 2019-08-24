@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.FlappyImService;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Session.FlappyChatSession;
 
 public class DataManager {
 
@@ -66,7 +68,7 @@ public class DataManager {
 
 
     //保存用户的推送类型
-    public void savePushType(String pushType){
+    public void savePushType(String pushType) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME,
                 Context.MODE_PRIVATE);
@@ -76,7 +78,7 @@ public class DataManager {
     }
 
     //获取用户的推送类型
-    public String getPushType(){
+    public String getPushType() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME, Context.MODE_PRIVATE);
         //获取到设置信息
@@ -84,9 +86,28 @@ public class DataManager {
         return setting;
     }
 
+    //保存会话
+    public void saveChatSession(String key, FlappyChatSession chatSession) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(key, GsonTool.modelToString(chatSession, FlappyChatSession.class));
+        editor.commit();
+    }
+
+    //获取会话
+    public FlappyChatSession getChatSession(String key) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME, Context.MODE_PRIVATE);
+        //获取到设置信息
+        String str = mSharedPreferences.getString(key, null);
+        //返回本地的会话数据
+        return GsonTool.jsonObjectToModel(str, FlappyChatSession.class);
+    }
 
     //清空当前的用户信息，用户已经退出登录了
-    public void clearUser(){
+    public void clearUser() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME,
                 Context.MODE_PRIVATE);
@@ -94,5 +115,6 @@ public class DataManager {
         editor.putString(KEY_FOR_USER, "");
         editor.commit();
     }
+
 
 }
