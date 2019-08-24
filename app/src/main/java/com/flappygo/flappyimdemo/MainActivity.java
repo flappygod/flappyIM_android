@@ -218,7 +218,7 @@ public class MainActivity extends Activity {
             if (Build.VERSION.SDK_INT >= 19) {
                 Intent intent = new Intent(
                         Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, REQUEST_GETPICTURE);
             } else {
                 Intent intent = new Intent();
@@ -246,7 +246,7 @@ public class MainActivity extends Activity {
                 //地址
                 if (!StringTool.isEmpty(path)) {
                     //发送本地图片
-                    mySession.sendLocalImage(path, new FlappySendCallback<ChatMessage>() {
+                    mySession.senLocalVideo(path, new FlappySendCallback<ChatMessage>() {
 
                         @Override
                         public void success(ChatMessage data) {

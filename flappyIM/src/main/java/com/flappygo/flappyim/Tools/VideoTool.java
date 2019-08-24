@@ -16,7 +16,7 @@ import java.io.IOException;
 public class VideoTool {
 
 
-   public static class VideoInfo {
+    public static class VideoInfo {
         private String width;
         private String height;
         private String overPath;
@@ -132,6 +132,11 @@ public class VideoTool {
     //创建一个图片临时文件路径用于保存图片
     public static String generateTempImagePath(Context context) {
         String str = getDefaultDirPath(context);
+        //如果没有路径就创建路径
+        File file = new File(str);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         return str + System.currentTimeMillis() + ".png";
     }
 

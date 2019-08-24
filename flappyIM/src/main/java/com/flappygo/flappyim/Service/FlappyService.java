@@ -263,14 +263,12 @@ public class FlappyService extends Service {
                         //当前的用户已经被踢下线了
                         if (model.getResultCode().equals(RESULT_KNICKED)) {
 
-
                             //设置登录状态
                             ChatUser user = DataManager.getInstance().getLoginUser();
                             //当前没有登录
                             user.setLogin(0);
                             //清空用户数据
                             DataManager.getInstance().saveLoginUser(user);
-
                             //当前已经被踢下线了
                             if (knickedOutListener != null) {
                                 //只执行一次
@@ -306,6 +304,7 @@ public class FlappyService extends Service {
                     protected void netError(Exception e, String tag) {
                         testAutoLogin(5 * 1000);
                     }
+                    
                 }, null);
     }
 

@@ -27,7 +27,6 @@ public class FlappyChatSession extends FlappyBaseSession {
     //保留的监听列表
     private List<MessageListener> listenerList = new ArrayList<>();
 
-
     //设置消息的监听,新收到消息都会在这里
     public void addMessageListener(MessageListener messageListener) {
         //添加监听
@@ -57,21 +56,22 @@ public class FlappyChatSession extends FlappyBaseSession {
     //会话
     private ResponseSession session;
 
-
+    //获取会话数据
     public ResponseSession getSession() {
         return session;
     }
 
+    //设置会话数据
     public void setSession(ResponseSession session) {
         this.session = session;
     }
 
-
+    //获取自己
     private ChatUser getMine() {
         return DataManager.getInstance().getLoginUser();
     }
 
-
+    //获取要发送的ID
     private String getPeerID() {
         //如果是群聊，返回会话ID
         if (getSession().getSessionType().intValue() == ResponseSession.TYPE_GROUP) {
@@ -88,6 +88,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         throw new RuntimeException("账号错误，聊天对象丢失");
     }
 
+    //获取对方的extendID
     private String getPeerExtendID() {
         //如果是群聊，返回会话ID
         if (getSession().getSessionType().intValue() == ResponseSession.TYPE_GROUP) {
@@ -285,39 +286,6 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //发送定位信息
-    public ChatMessage sendLocation(ChatLocation loaction,
-                                    final FlappySendCallback<ChatMessage> callback) {
-        //创建消息
-        final ChatMessage msg = new ChatMessage();
-        //生成一个消息的ID
-        msg.setMessageId(IDGenerator.generateCommomID());
-        //设置
-        msg.setMessageSession(session.getSessionId());
-        //类型
-        msg.setMessageSessionType(session.getSessionType());
-        //发送者
-        msg.setMessageSend(getMine().getUserId());
-        //发送者
-        msg.setMessageSendExtendid(getMine().getUserExtendId());
-        //接收者
-        msg.setMessageRecieve(getPeerID());
-        //接收者
-        msg.setMessageRecieveExtendid(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_LOCATE));
-        //设置内容
-        msg.setMessageContent(GsonTool.modelToString(loaction, ChatLocation.class));
-        //时间
-        msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
-        //发送消息
-        sendMessage(msg, callback);
-
-        return msg;
-    }
-
     //发送短视频
     public ChatMessage senLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
@@ -386,6 +354,39 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
+
+    //发送定位信息
+    public ChatMessage sendLocation(ChatLocation loaction,
+                                    final FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        final ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommomID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSend(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendid(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageRecieve(getPeerID());
+        //接收者
+        msg.setMessageRecieveExtendid(getPeerExtendID());
+        //类型
+        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_LOCATE));
+        //设置内容
+        msg.setMessageContent(GsonTool.modelToString(loaction, ChatLocation.class));
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //发送消息
+        sendMessage(msg, callback);
+
+        return msg;
+    }
 
     //重发消息
     public void resendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
