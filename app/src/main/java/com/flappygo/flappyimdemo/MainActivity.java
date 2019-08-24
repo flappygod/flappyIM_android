@@ -48,8 +48,6 @@ public class MainActivity extends Activity {
         //用户text
         final EditText editText = findViewById(R.id.userid);
         final EditText message = findViewById(R.id.message);
-
-
         final TextView rect = findViewById(R.id.testrect);
 
 
