@@ -26,6 +26,9 @@ public class DataManager {
     // 消息被点击
     private final static String KEY_FOR_MESSAGECLICK = "com.flappygo.flappyim.data.KEY_FOR_MESSAGECLICK";
 
+    //进行缓存
+    private ChatUser chatUser;
+
     /********
      * 单例manager
      * @return
@@ -44,6 +47,8 @@ public class DataManager {
     //保存用户信息
     public void saveLoginUser(ChatUser user) {
 
+        chatUser = user;
+
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME,
                 Context.MODE_PRIVATE);
@@ -55,6 +60,11 @@ public class DataManager {
 
     //获取保存的用户信息
     public ChatUser getLoginUser() {
+        //如果不为空返回
+        if (chatUser != null) {
+            return chatUser;
+        }
+
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME, Context.MODE_PRIVATE);
         //获取到设置信息
@@ -64,6 +74,8 @@ public class DataManager {
         }
         //转换为设置
         ChatUser model = GsonTool.jsonObjectToModel(setting, ChatUser.class);
+        //进行缓存
+        chatUser = model;
         //返回配置信息
         return model;
     }
@@ -110,7 +122,7 @@ public class DataManager {
 
 
     //保存消息被点击事件
-    public void saveNotificationClick(String message){
+    public void saveNotificationClick(String message) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME,
                 Context.MODE_PRIVATE);
@@ -120,7 +132,7 @@ public class DataManager {
     }
 
     //获取消息被点击事件
-    public String  getNotificationClick() {
+    public String getNotificationClick() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME, Context.MODE_PRIVATE);
         //获取到设置信息
@@ -130,7 +142,7 @@ public class DataManager {
     }
 
     //移除消息被点击事件
-    public void removeNotificationClick(){
+    public void removeNotificationClick() {
 
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME,
