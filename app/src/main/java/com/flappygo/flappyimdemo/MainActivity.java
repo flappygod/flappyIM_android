@@ -79,6 +79,12 @@ public class MainActivity extends Activity {
             }
         });
 
+        FlappyImService.getInstance().setNotificationClickListener(new NotificationClickListener() {
+            @Override
+            public void notificationClicked(ChatMessage chatMessage) {
+                System.out.println(chatMessage.getChatText());
+            }
+        });
 
         FlappyImService.getInstance().setKnickedOutListener(new KnickedOutListener() {
             @Override
