@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -175,8 +174,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 for (int s = 0; s < messages.size(); s++) {
                     //获取单个消息
                     ChatMessage chatMessage = messages.get(s);
-                    //已经送达
-                    chatMessage.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
+                    //修改收到的状态
+                    messageArrivedState(chatMessage);
                     //如果插入成功
                     boolean flag = Database.getInstance().insertMessage(chatMessage);
                     //如果插入成功
@@ -201,7 +200,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //更新数据信息
                     DataManager.getInstance().saveLoginUser(user);
                     //到达
-                    messageArrived(messages.get(messages.size() - 1));
+                    messageArrivedReciept(messages.get(messages.size() - 1));
                 }
                 //发送成功消息
                 Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
@@ -221,8 +220,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
                 //有可能是发送成功的
                 messageSendSuccess(chatMessage.getMessageId());
-                //已经送达
-                chatMessage.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
+                //修改收到的状态
+                messageArrivedState(chatMessage);
                 //判断数据库是否存在
                 boolean flag = Database.getInstance().insertMessage(chatMessage);
                 //插入成功
@@ -245,7 +244,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //成功
                     this.handlerMessage.sendMessage(msg);
 
-                    messageArrived(chatMessage);
+                    messageArrivedReciept(chatMessage);
                 }
             }
         }
@@ -279,9 +278,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     handlers.remove(call.getMessageID());
                 }
             }
+            //清空
+            handlers.clear();
         }
-        //清空
-        handlers.clear();
 
         //如果这里还没有回调成功，那么就是登录失败
         if (this.handlerLogin != null) {
@@ -307,8 +306,22 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         context.close();
     }
 
+
+    //修改收到的状态
+    private void messageArrivedState(ChatMessage msg) {
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        //自己发送的，已经发送
+        if (chatUser.getUserId().equals(msg.getMessageSend())) {
+            msg.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
+        }
+        //其他人发送的，已经到达
+        else {
+            msg.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
+        }
+    }
+
     //消息已经到达
-    private void messageArrived(ChatMessage chatMessage) {
+    private void messageArrivedReciept(ChatMessage chatMessage) {
         //返回
         if (!chatMessage.getMessageSend().equals(DataManager.getInstance().getLoginUser().getUserId())) {
 
@@ -363,12 +376,15 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
+
+    //获取某个回调
     private synchronized HandlerSendCall getHandlerSendCall(String messageID) {
         synchronized (lock) {
             return handlers.get(messageID);
         }
     }
 
+    //添加回调
     private void addHandlerSendCall(String messageID, HandlerSendCall call) {
         synchronized (lock) {
             handlers.put(messageID, call);
