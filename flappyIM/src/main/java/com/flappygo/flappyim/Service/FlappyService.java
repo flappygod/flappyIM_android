@@ -1,6 +1,7 @@
 package com.flappygo.flappyim.Service;
 
-import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,11 +9,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
@@ -27,8 +30,10 @@ import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.R;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.NetTool;
+import com.flappygo.flappyim.Tools.NotificationUtil;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
 
@@ -40,6 +45,15 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_KNICKED;
 //应用的服务
 public class FlappyService extends Service {
 
+    //Channel ID 必须保证唯一
+
+    private String channelName = "IM通知服务";
+
+    private String channelTitle = "IM通知服务";
+
+    private String channelContent = "正在接收推送消息";
+
+    private String channelID = "com.appname.notification.channel";
 
     //线程
     private NettyThread clientThread;
@@ -114,11 +128,55 @@ public class FlappyService extends Service {
         super.onCreate();
         //当前
         instance = this;
-        //开始
-        startForeground(1, new Notification());
         //接收
         initReceiver();
+        //开启前台服务
+        setForegroundService();
     }
+
+
+    private void setForegroundService() {
+        //设定的通知渠道名称
+        //设置通知的重要程度
+        createNotificationChannel();
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelID);
+        //设置通知图标
+        builder.setSmallIcon(R.drawable.nothing)
+                //设置大图
+                .setLargeIcon(NotificationUtil.getBitmap(getApplicationContext()))
+                //设置通知标题
+                .setContentTitle(channelTitle)
+                //设置通知内容
+                .setContentText(channelContent)
+                //用户触摸时，自动关闭
+                .setAutoCancel(false)
+                //设置处于运行状态
+                .setOngoing(true);
+
+        //将服务置于启动状态 NOTIFICATION_ID指的是创建的通知的ID
+        startForeground(100, builder.build());
+    }
+
+    /**
+     * 创建通知渠道
+     */
+    private void createNotificationChannel() {
+        // 在API>=26的时候创建通知渠道
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //设置通知的重要程度
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            //构建通知渠道
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, importance);
+            //设置
+            channel.setDescription("IM消息接收通知，请勿关闭!");
+            //向系统注册通知渠道，注册后不能改变重要性以及其他通知行为
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            //创建channle
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 
     @Override
     public void onStart(Intent intent, int startId) {
@@ -205,6 +263,7 @@ public class FlappyService extends Service {
 
     @Override
     public void onDestroy() {
+        stopForeground(true);
         //注销广播的监听
         if (netReceiver != null) {
             unregisterReceiver(netReceiver);
