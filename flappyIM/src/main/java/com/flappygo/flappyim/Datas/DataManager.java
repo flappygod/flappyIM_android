@@ -23,6 +23,8 @@ public class DataManager {
     // 推送方式的保存
     private final static String KEY_FOR_PUSHTYPE = "com.flappygo.flappyim.data.KEY_FOR_PUSHTYPE";
 
+    // 消息被点击
+    private final static String KEY_FOR_MESSAGECLICK = "com.flappygo.flappyim.data.KEY_FOR_MESSAGECLICK";
 
     /********
      * 单例manager
@@ -104,6 +106,38 @@ public class DataManager {
         String str = mSharedPreferences.getString(key, null);
         //返回本地的会话数据
         return GsonTool.jsonObjectToModel(str, FlappyChatSession.class);
+    }
+
+
+    //保存消息被点击事件
+    public void saveNotificationClick(String message){
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_MESSAGECLICK, message);
+        editor.commit();
+    }
+
+    //获取消息被点击事件
+    public String  getNotificationClick() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME, Context.MODE_PRIVATE);
+        //获取到设置信息
+        String str = mSharedPreferences.getString(KEY_FOR_MESSAGECLICK, null);
+        //返回本地的会话数据
+        return str;
+    }
+
+    //移除消息被点击事件
+    public void removeNotificationClick(){
+
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(KEY_FOR_MESSAGECLICK);
+        editor.commit();
     }
 
     //清空当前的用户信息，用户已经退出登录了

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyDeadCallback;
 import com.flappygo.flappyim.Config.BaseConfig;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -24,6 +25,7 @@ import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.NetTool;
@@ -46,10 +48,10 @@ public class FlappyService extends Service {
     private static FlappyService instance;
 
     //被踢下线的监听
-    private static KnickedOutListener knickedOutListener;
+    private KnickedOutListener knickedOutListener;
 
     //监听
-    private static NotificationClickListener notificationClickListener;
+    private NotificationClickListener notificationClickListener;
 
 
     private byte[] lock = new byte[1];
@@ -68,7 +70,7 @@ public class FlappyService extends Service {
 
 
     //设置踢下线的监听
-    public static void setKnickedOutListener(KnickedOutListener listener) {
+    public void setKnickedOutListener(KnickedOutListener listener) {
         //监听
         knickedOutListener = listener;
         //获取用户数据
@@ -82,12 +84,23 @@ public class FlappyService extends Service {
         }
     }
 
-    public static void setNotificationClickListener(NotificationClickListener listener) {
+    public void setNotificationClickListener(NotificationClickListener listener) {
         notificationClickListener = listener;
+        notifyClicked();
     }
 
-    public static NotificationClickListener getNotificationClickListener() {
+    public NotificationClickListener getNotificationClickListener() {
         return notificationClickListener;
+    }
+
+    public void notifyClicked() {
+        String str = DataManager.getInstance().getNotificationClick();
+        if (notificationClickListener != null && str != null) {
+            //消息
+            ChatMessage message = GsonTool.jsonObjectToModel(str, ChatMessage.class);
+            notificationClickListener.notificationClicked(message);
+            DataManager.getInstance().removeNotificationClick();
+        }
     }
 
     @Nullable

@@ -740,12 +740,16 @@ public class FlappyImService {
 
     //设置被踢下线的监听
     public void setKnickedOutListener(KnickedOutListener listener) {
-        FlappyService.setKnickedOutListener(listener);
+        if(FlappyService.getInstance()!=null){
+            FlappyService.getInstance().setKnickedOutListener(listener);
+        }
     }
 
     //设置通知消息被点击的监听
     public void setNotificationClickListener(NotificationClickListener listener) {
-        FlappyService.setNotificationClickListener(listener);
+        if(FlappyService.getInstance()!=null){
+            FlappyService.getInstance().setNotificationClickListener(listener);
+        }
     }
 
     //判断当前是否是登录的状态

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
@@ -25,13 +26,14 @@ public class ActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
+            //获取到相应的
             Bundle bundle = intent.getExtras();
+            //消息
             String msg = bundle.getString("msg");
-            ChatMessage chatMessage = GsonTool.jsonObjectToModel(msg, ChatMessage.class);
-            NotificationClickListener listener = FlappyService.getNotificationClickListener();
-            if (listener != null) {
-                listener.notificationClicked(chatMessage);
-            }
+            //消息通
+            DataManager.getInstance().saveNotificationClick(msg);
+            //保存这个消息，直到设置回调或则其他
+            FlappyService.getInstance().notifyClicked();
         } catch (Exception e) {
             //打印消息
             System.out.println(e.getMessage());
