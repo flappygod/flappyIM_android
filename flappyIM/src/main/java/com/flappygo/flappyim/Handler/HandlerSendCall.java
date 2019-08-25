@@ -4,7 +4,8 @@ package com.flappygo.flappyim.Handler;
 import android.os.Handler;
 import android.os.Message;
 
-import com.flappygo.flappyim.Callback.FlappyIMCallback;
+import com.flappygo.flappyim.Callback.FlappySendCallback;
+import com.flappygo.flappyim.Models.Server.ChatMessage;
 
 //用户发送消息时候的handler
 public class HandlerSendCall extends Handler {
@@ -18,35 +19,36 @@ public class HandlerSendCall extends Handler {
 
 
     //真实的回调
-    FlappyIMCallback<String> callback;
+    FlappySendCallback<ChatMessage> callback;
 
-    private String messageID;
+    private ChatMessage chatMessage;
 
     //构造器
-    public HandlerSendCall(FlappyIMCallback<String> callback,String messageID) {
+    public HandlerSendCall(FlappySendCallback<ChatMessage> callback, ChatMessage message) {
         this.callback = callback;
-        this.messageID=messageID;
+        this.chatMessage =message;
     }
 
-    public String getMessageID() {
-        return messageID;
+
+    public ChatMessage getChatMessage() {
+        return chatMessage;
     }
 
-    public void setMessageID(String messageID) {
-        this.messageID = messageID;
+    public void setChatMessage(ChatMessage chatMessage) {
+        this.chatMessage = chatMessage;
     }
 
     //执行消息
-    public void handleMessage(Message message) {
-        if (message.what == SEND_SUCCESS) {
+    public void handleMessage(Message msg) {
+        if (msg.what == SEND_SUCCESS) {
             //成功
             if (callback != null) {
-                callback.success((String) message.obj);
+                callback.success((ChatMessage) msg.obj);
             }
         } else {
             //失败
             if (callback != null) {
-                callback.failure((Exception) message.obj, message.what);
+                callback.failure(chatMessage,(Exception) msg.obj, msg.what);
             }
         }
     }

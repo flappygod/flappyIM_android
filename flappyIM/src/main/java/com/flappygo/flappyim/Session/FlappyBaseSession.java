@@ -17,6 +17,7 @@ import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Service.FlappyService;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.StringTool;
@@ -44,10 +45,16 @@ public class FlappyBaseSession {
     protected void insertMessage(ChatMessage msg) {
         //已经发送了
         msg.setMessageSended(new BigDecimal(SEND_STATE_CREATE));
+        //获取当前用户
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
         //当前最后一条
-        BigDecimal bigDecimal = StringTool.strToDecimal(DataManager.getInstance().getLoginUser().getLatest());
+        BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
         //+1
         bigDecimal = bigDecimal.add(new BigDecimal(1));
+        //增加一
+        chatUser.setLatest(bigDecimal.toString());
+        //保存最近
+        DataManager.getInstance().saveLoginUser(chatUser);
         //放到最后
         msg.setMessageTableSeq(bigDecimal);
         //插入数据
@@ -72,7 +79,7 @@ public class FlappyBaseSession {
     }
 
     //发送消息
-    protected void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
+    protected void sendMessage(ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
         FlappyService flappyService = FlappyService.getInstance();
 
@@ -100,16 +107,16 @@ public class FlappyBaseSession {
         }
 
         //取得了handler,再发送消息
-        handler.sendMessage(chatMessage, new FlappyIMCallback<String>() {
+        handler.sendMessage(chatMessage, new FlappySendCallback<ChatMessage>() {
             @Override
-            public void success(String data) {
-                callback.success(chatMessage);
+            public void success(ChatMessage data) {
+                callback.success(data);
             }
 
             @Override
-            public void failure(Exception ex, int code) {
-                updateMsgFailure(chatMessage);
-                callback.failure(chatMessage, ex, code);
+            public void failure(ChatMessage msg, Exception ex, int code) {
+                updateMsgFailure(msg);
+                callback.failure(msg, ex, code);
             }
         });
     }

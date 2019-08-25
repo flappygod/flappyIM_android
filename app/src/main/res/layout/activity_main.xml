@@ -50,7 +50,7 @@
 
     <EditText
         android:layout_margin="20dp"
-        android:id="@+id/message"
+        android:id="@+id/chatMessage"
         android:layout_width="match_parent"
         android:layout_height="45dp" />
 
