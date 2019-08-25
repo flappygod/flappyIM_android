@@ -27,7 +27,7 @@ public final class Flappy {
 
     /**
      * <pre>
-     *时间
+     *最近一条消息的offset
      * </pre>
      *
      * <code>string latest = 2;</code>
@@ -35,7 +35,7 @@ public final class Flappy {
     String getLatest();
     /**
      * <pre>
-     *时间
+     *最近一条消息的offset
      * </pre>
      *
      * <code>string latest = 2;</code>
@@ -229,7 +229,7 @@ public final class Flappy {
     private volatile Object latest_;
     /**
      * <pre>
-     *时间
+     *最近一条消息的offset
      * </pre>
      *
      * <code>string latest = 2;</code>
@@ -248,7 +248,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     *时间
+     *最近一条消息的offset
      * </pre>
      *
      * <code>string latest = 2;</code>
@@ -757,7 +757,7 @@ public final class Flappy {
       private Object latest_ = "";
       /**
        * <pre>
-       *时间
+       *最近一条消息的offset
        * </pre>
        *
        * <code>string latest = 2;</code>
@@ -776,7 +776,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *时间
+       *最近一条消息的offset
        * </pre>
        *
        * <code>string latest = 2;</code>
@@ -796,7 +796,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *时间
+       *最近一条消息的offset
        * </pre>
        *
        * <code>string latest = 2;</code>
@@ -813,7 +813,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *时间
+       *最近一条消息的offset
        * </pre>
        *
        * <code>string latest = 2;</code>
@@ -826,7 +826,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *时间
+       *最近一条消息的offset
        * </pre>
        *
        * <code>string latest = 2;</code>
@@ -4581,14 +4581,9 @@ public final class Flappy {
     int getMessageSessionOffset();
 
     /**
-     * <code>string messageTableSeq = 5;</code>
+     * <code>int32 messageTableSeq = 5;</code>
      */
-    String getMessageTableSeq();
-    /**
-     * <code>string messageTableSeq = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getMessageTableSeqBytes();
+    int getMessageTableSeq();
 
     /**
      * <code>int32 messageType = 6;</code>
@@ -4699,7 +4694,6 @@ public final class Flappy {
     private Message() {
       messageId_ = "";
       messageSession_ = "";
-      messageTableSeq_ = "";
       messageSend_ = "";
       messageSendExtendid_ = "";
       messageRecieve_ = "";
@@ -4761,10 +4755,9 @@ public final class Flappy {
               messageSessionOffset_ = input.readInt32();
               break;
             }
-            case 42: {
-              String s = input.readStringRequireUtf8();
+            case 40: {
 
-              messageTableSeq_ = s;
+              messageTableSeq_ = input.readInt32();
               break;
             }
             case 48: {
@@ -4948,37 +4941,12 @@ public final class Flappy {
     }
 
     public static final int MESSAGETABLESEQ_FIELD_NUMBER = 5;
-    private volatile Object messageTableSeq_;
+    private int messageTableSeq_;
     /**
-     * <code>string messageTableSeq = 5;</code>
+     * <code>int32 messageTableSeq = 5;</code>
      */
-    public String getMessageTableSeq() {
-      Object ref = messageTableSeq_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        messageTableSeq_ = s;
-        return s;
-      }
-    }
-    /**
-     * <code>string messageTableSeq = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getMessageTableSeqBytes() {
-      Object ref = messageTableSeq_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        messageTableSeq_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getMessageTableSeq() {
+      return messageTableSeq_;
     }
 
     public static final int MESSAGETYPE_FIELD_NUMBER = 6;
@@ -5281,8 +5249,8 @@ public final class Flappy {
       if (messageSessionOffset_ != 0) {
         output.writeInt32(4, messageSessionOffset_);
       }
-      if (!getMessageTableSeqBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 5, messageTableSeq_);
+      if (messageTableSeq_ != 0) {
+        output.writeInt32(5, messageTableSeq_);
       }
       if (messageType_ != 0) {
         output.writeInt32(6, messageType_);
@@ -5340,8 +5308,9 @@ public final class Flappy {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, messageSessionOffset_);
       }
-      if (!getMessageTableSeqBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, messageTableSeq_);
+      if (messageTableSeq_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, messageTableSeq_);
       }
       if (messageType_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -5403,8 +5372,8 @@ public final class Flappy {
           != other.getMessageSessionType()) return false;
       if (getMessageSessionOffset()
           != other.getMessageSessionOffset()) return false;
-      if (!getMessageTableSeq()
-          .equals(other.getMessageTableSeq())) return false;
+      if (getMessageTableSeq()
+          != other.getMessageTableSeq()) return false;
       if (getMessageType()
           != other.getMessageType()) return false;
       if (!getMessageSend()
@@ -5447,7 +5416,7 @@ public final class Flappy {
       hash = (37 * hash) + MESSAGESESSIONOFFSET_FIELD_NUMBER;
       hash = (53 * hash) + getMessageSessionOffset();
       hash = (37 * hash) + MESSAGETABLESEQ_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageTableSeq().hashCode();
+      hash = (53 * hash) + getMessageTableSeq();
       hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageType();
       hash = (37 * hash) + MESSAGESEND_FIELD_NUMBER;
@@ -5615,7 +5584,7 @@ public final class Flappy {
 
         messageSessionOffset_ = 0;
 
-        messageTableSeq_ = "";
+        messageTableSeq_ = 0;
 
         messageType_ = 0;
 
@@ -5743,9 +5712,8 @@ public final class Flappy {
         if (other.getMessageSessionOffset() != 0) {
           setMessageSessionOffset(other.getMessageSessionOffset());
         }
-        if (!other.getMessageTableSeq().isEmpty()) {
-          messageTableSeq_ = other.messageTableSeq_;
-          onChanged();
+        if (other.getMessageTableSeq() != 0) {
+          setMessageTableSeq(other.getMessageTableSeq());
         }
         if (other.getMessageType() != 0) {
           setMessageType(other.getMessageType());
@@ -6006,71 +5974,28 @@ public final class Flappy {
         return this;
       }
 
-      private Object messageTableSeq_ = "";
+      private int messageTableSeq_ ;
       /**
-       * <code>string messageTableSeq = 5;</code>
+       * <code>int32 messageTableSeq = 5;</code>
        */
-      public String getMessageTableSeq() {
-        Object ref = messageTableSeq_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          messageTableSeq_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public int getMessageTableSeq() {
+        return messageTableSeq_;
       }
       /**
-       * <code>string messageTableSeq = 5;</code>
+       * <code>int32 messageTableSeq = 5;</code>
        */
-      public com.google.protobuf.ByteString
-          getMessageTableSeqBytes() {
-        Object ref = messageTableSeq_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          messageTableSeq_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>string messageTableSeq = 5;</code>
-       */
-      public Builder setMessageTableSeq(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setMessageTableSeq(int value) {
+        
         messageTableSeq_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string messageTableSeq = 5;</code>
+       * <code>int32 messageTableSeq = 5;</code>
        */
       public Builder clearMessageTableSeq() {
         
-        messageTableSeq_ = getDefaultInstance().getMessageTableSeq();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>string messageTableSeq = 5;</code>
-       */
-      public Builder setMessageTableSeqBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        messageTableSeq_ = value;
+        messageTableSeq_ = 0;
         onChanged();
         return this;
       }
@@ -7601,7 +7526,7 @@ public final class Flappy {
       "e\030\005 \001(\t\"\225\003\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\026" +
       "\n\016messageSession\030\002 \001(\t\022\032\n\022messageSession" +
       "Type\030\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\005" +
-      "\022\027\n\017messageTableSeq\030\005 \001(\t\022\023\n\013messageType" +
+      "\022\027\n\017messageTableSeq\030\005 \001(\005\022\023\n\013messageType" +
       "\030\006 \001(\005\022\023\n\013messageSend\030\007 \001(\t\022\033\n\023messageSe" +
       "ndExtendid\030\010 \001(\t\022\026\n\016messageRecieve\030\t \001(\t" +
       "\022\036\n\026messageRecieveExtendid\030\n \001(\t\022\026\n\016mess" +
