@@ -210,6 +210,12 @@ public class MainActivity extends Activity {
     }
 
 
+    public void onNewIntent(Intent intent){
+        System.out.println("testtstststs");
+        super.onNewIntent(intent);
+    }
+
+
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             Toast.makeText(getBaseContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();

@@ -36,7 +36,7 @@ public class ActionReceiver extends BroadcastReceiver {
                 Intent main = new Intent();
                 main.setClassName(activitys.get(0).activityInfo.packageName,
                         activitys.get(0).activityInfo.name);
-                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(main);
             }
         } catch (Exception ex) {
