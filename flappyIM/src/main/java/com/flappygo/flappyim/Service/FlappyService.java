@@ -283,7 +283,7 @@ public class FlappyService extends Service {
 
     @Override
     public void onDestroy() {
-        stopForeground(true);
+        //stopForeground(true);
         //注销广播的监听
         if (netReceiver != null) {
             unregisterReceiver(netReceiver);
