@@ -214,7 +214,7 @@ public class ChatMessage {
         messageSession = msg.getMessageSession();
         messageSessionType = new BigDecimal(msg.getMessageSessionType());
         messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
-        messageTableSeq = StringTool.strToDecimal(msg.getMessageTableSeq());
+        messageTableSeq = new BigDecimal(msg.getMessageTableSeq());
         messageType = new BigDecimal(msg.getMessageType());
         messageSend = msg.getMessageSend();
         messageSendExtendid = msg.getMessageSendExtendid();
@@ -240,7 +240,7 @@ public class ChatMessage {
         if (getMessageSessionOffset() != null)
             msgBuilder.setMessageSessionOffset(StringTool.decimalToInt(getMessageSessionOffset()));
         if (getMessageTableSeq() != null)
-            msgBuilder.setMessageTableSeq(StringTool.decimalToStr(getMessageTableSeq()));
+            msgBuilder.setMessageTableSeq(StringTool.decimalToInt(getMessageTableSeq()));
         if (getMessageType() != null)
             msgBuilder.setMessageType(StringTool.decimalToInt(getMessageType()));
         if (getMessageSend() != null)
