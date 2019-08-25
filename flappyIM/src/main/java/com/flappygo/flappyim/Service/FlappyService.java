@@ -133,8 +133,8 @@ public class FlappyService extends Service {
         instance = this;
         //接收
         initReceiver();
-        //开启前台服务
-        setForegroundService();
+        //不适用前台服务
+        //setForegroundService();
     }
 
 

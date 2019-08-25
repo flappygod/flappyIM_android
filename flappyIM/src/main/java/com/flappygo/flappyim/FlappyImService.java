@@ -79,7 +79,7 @@ public class FlappyImService {
         //设置服务名称
         intent.setClass(getAppContext(), FlappyService.class);
         //开启服务
-        getAppContext().startService(intent);
+        startFlappyService(intent);
         //添加总体的监听
         HolderMessageRecieve.getInstance().addGloableMessageListener(new MessageListener() {
             @Override
@@ -132,7 +132,7 @@ public class FlappyImService {
         //设置服务名称
         intent.setClass(getAppContext(), FlappyService.class);
         //开启服务
-        getAppContext().startService(intent);
+        startFlappyService(intent);
         //添加总体的监听
         HolderMessageRecieve.getInstance().addGloableMessageListener(new MessageListener() {
             @Override
@@ -262,12 +262,7 @@ public class FlappyImService {
                         //保存设置
                         DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            getAppContext().startForegroundService(intent);
-                        } else {
-                            //开启服务
-                            getAppContext().startService(intent);
-                        }
+                        startFlappyService(intent);
                         //设置登录的回调
                         if (callback != null) {
                             HolderLoginCallback.getInstance().addLoginCallBack(uuid, callback);
@@ -281,6 +276,17 @@ public class FlappyImService {
                     }
                 }, null);
     }
+
+    //开启后台IM服务
+    private void startFlappyService(Intent intent){
+        //开启服务
+        try{
+            getAppContext().startService(intent);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+
 
 
     //创建会话
