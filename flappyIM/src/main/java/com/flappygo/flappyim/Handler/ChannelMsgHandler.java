@@ -20,7 +20,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -28,13 +30,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleStateEvent;
 
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_PUSHED;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_REACHED;
-
 
 //登录的handler
 public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.FlappyResponse> {
 
+    //回调
+    private ConcurrentHashMap<String, HandlerSendCall> handlers = new ConcurrentHashMap<>();
 
     //登录的回调
     private HandlerLoginCallback handlerLogin;
@@ -53,6 +54,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //回调
     private FlappyDeadCallback deadCallback;
+
+    //用于加锁
+    private Byte[] lock = new Byte[1];
 
     //回调
     public ChannelMsgHandler(HandlerLoginCallback handler, FlappyDeadCallback deadCallback, ChatUser user) {
@@ -149,7 +153,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 for (int s = 0; s < response.getMsgCount(); s++) {
                     //得到真正的消息对象
                     ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
+                    //添加
                     messages.add(chatMessage);
+                    //有可能是发送成功的
+                    messageSendSuccess(chatMessage.getMessageId());
                 }
 
                 //对消息进行排序，然后在插入数据库
@@ -169,7 +176,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //获取单个消息
                     ChatMessage chatMessage = messages.get(s);
                     //已经送达
-                    chatMessage.setMessageSended(new BigDecimal(SEND_STATE_PUSHED));
+                    chatMessage.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
                     //如果插入成功
                     boolean flag = Database.getInstance().insertMessage(chatMessage);
                     //如果插入成功
@@ -194,7 +201,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //更新数据信息
                     DataManager.getInstance().saveLoginUser(user);
                     //到达
-                    sendMessageArrive(messages.get(messages.size() - 1));
+                    messageArrived(messages.get(messages.size() - 1));
                 }
                 //发送成功消息
                 Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
@@ -212,8 +219,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             for (int s = 0; s < response.getMsgCount(); s++) {
                 //得到真正的消息对象
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
+                //有可能是发送成功的
+                messageSendSuccess(chatMessage.getMessageId());
                 //已经送达
-                chatMessage.setMessageSended(new BigDecimal(SEND_STATE_PUSHED));
+                chatMessage.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
                 //判断数据库是否存在
                 boolean flag = Database.getInstance().insertMessage(chatMessage);
                 //插入成功
@@ -236,7 +245,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //成功
                     this.handlerMessage.sendMessage(msg);
 
-                    sendMessageArrive(chatMessage);
+                    messageArrived(chatMessage);
                 }
             }
         }
@@ -255,6 +264,25 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //用户下线
     private void closeChannel(ChannelHandlerContext context) {
+
+        synchronized (lock) {
+            for (String key : handlers.keySet()) {
+                //获取
+                HandlerSendCall call = handlers.get(key);
+                //不为空
+                if (call != null) {
+                    //发送失败的消息
+                    Message message = call.obtainMessage(HandlerSendCall.SEND_FAILURE);
+                    message.obj = new Exception("消息通道已关闭");
+                    call.sendMessage(message);
+                    //移除这个消息
+                    handlers.remove(call.getMessageID());
+                }
+            }
+        }
+        //清空
+        handlers.clear();
+
         //如果这里还没有回调成功，那么就是登录失败
         if (this.handlerLogin != null) {
             //创建消息
@@ -280,26 +308,37 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     //消息已经到达
-    private void sendMessageArrive(ChatMessage chatMessage) {
+    private void messageArrived(ChatMessage chatMessage) {
         //返回
         if (!chatMessage.getMessageSend().equals(DataManager.getInstance().getLoginUser().getUserId())) {
 
-            //创建登录请求消息
+            //创建消息到达回执
             Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
                     .setLatest(chatMessage.getMessageTableSeq().toString())
                     .setType(FlappyRequest.REQ_RECIEVE);
 
-            //发送收到消息的回执
+            //发送回执，发送回执后，所有之前的消息都会被列为已经收到，因为端口是阻塞的
             channelHandlerContext.writeAndFlush(builder.build());
         }
     }
 
     //发送消息
     public void sendMessage(ChatMessage chatMessage, final FlappyIMCallback<String> callback) {
+
+        //创建key
+        final String messageID = chatMessage.getMessageId();
+        //之前是否存在
+        HandlerSendCall former = getHandlerSendCall(chatMessage.getMessageId());
+        //如果存在，则之前的失败
+        if (former != null) {
+            messageSendFailure(messageID, new Exception("消息重新发送"));
+        }
+
         //发送
-        final HandlerSendCall handlerSendCall = new HandlerSendCall(callback);
-        //发送
-        try {
+        try {//发送
+            HandlerSendCall handlerSendCall = new HandlerSendCall(callback, messageID);
+            //插入其中
+            addHandlerSendCall(messageID, handlerSendCall);
             //创建登录消息
             Flappy.Message message = chatMessage.toProtocMessage(Flappy.Message.newBuilder());
             //创建请求消息
@@ -313,26 +352,58 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 @Override
                 public void operationComplete(ChannelFuture future) throws Exception {
                     //发送成功
-                    if (future.isSuccess()) {
-                        //发送成功
-                        Message message = handlerSendCall.obtainMessage(HandlerSendCall.SEND_SUCCESS);
-                        message.obj = "发送成功";
-                        handlerSendCall.sendMessage(message);
-
-                    } else {
-                        //发送失败
-                        Message message = handlerSendCall.obtainMessage(HandlerSendCall.SEND_FAILURE);
-                        message.obj = new Exception("连接已经断开");
-                        handlerSendCall.sendMessage(message);
+                    if (!future.isSuccess()) {
+                        messageSendFailure(messageID, new Exception("连接已经断开"));
                     }
                 }
             });
+            //暂时不能确认发送状态，等收到回传的消息后才能真正确定发送已经成功，这个future,不一定成功
         } catch (Exception ex) {
-            //发送失败
-            Message message = handlerSendCall.obtainMessage(HandlerSendCall.SEND_FAILURE);
-            message.obj = ex;
-            handlerSendCall.sendMessage(message);
+            messageSendFailure(messageID, ex);
         }
     }
+
+    private synchronized HandlerSendCall getHandlerSendCall(String messageID) {
+        synchronized (lock) {
+            return handlers.get(messageID);
+        }
+    }
+
+    private void addHandlerSendCall(String messageID, HandlerSendCall call) {
+        synchronized (lock) {
+            handlers.put(messageID, call);
+        }
+    }
+
+    //发送成功
+    private synchronized void messageSendSuccess(String messageID) {
+        synchronized (lock) {
+            HandlerSendCall call = handlers.get(messageID);
+            if (call != null) {
+                //发送失败的消息
+                Message message = call.obtainMessage(HandlerSendCall.SEND_SUCCESS);
+                message.obj = "发送成功";
+                call.sendMessage(message);
+                //移除这个消息
+                handlers.remove(messageID);
+            }
+        }
+    }
+
+    //发送失败
+    private void messageSendFailure(String messageID, Exception ex) {
+        synchronized (lock) {
+            HandlerSendCall call = handlers.get(messageID);
+            if (call != null) {
+                //发送失败的消息
+                Message message = call.obtainMessage(HandlerSendCall.SEND_FAILURE);
+                message.obj = ex;
+                call.sendMessage(message);
+                //移除这个消息
+                handlers.remove(messageID);
+            }
+        }
+    }
+
 
 }

@@ -20,9 +20,20 @@ public class HandlerSendCall extends Handler {
     //真实的回调
     FlappyIMCallback<String> callback;
 
+    private String messageID;
+
     //构造器
-    public HandlerSendCall(FlappyIMCallback<String> callback) {
+    public HandlerSendCall(FlappyIMCallback<String> callback,String messageID) {
         this.callback = callback;
+        this.messageID=messageID;
+    }
+
+    public String getMessageID() {
+        return messageID;
+    }
+
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
     }
 
     //执行消息

@@ -38,6 +38,10 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_KNICKED;
 //应用的服务
 public class FlappyService extends Service {
 
+
+    //线程
+    private NettyThread clientThread;
+
     //当前的服务实例
     private static FlappyService instance;
 
@@ -47,6 +51,9 @@ public class FlappyService extends Service {
     //监听
     private static NotificationClickListener notificationClickListener;
 
+
+    private byte[] lock = new byte[1];
+
     //返回
     public static FlappyService getInstance() {
         return instance;
@@ -54,11 +61,10 @@ public class FlappyService extends Service {
 
     //获取当前服务的线程
     public NettyThread getClientThread() {
-        return clientThread;
+        synchronized (lock) {
+            return clientThread;
+        }
     }
-
-    //线程
-    private NettyThread clientThread;
 
 
     //设置踢下线的监听
@@ -77,7 +83,7 @@ public class FlappyService extends Service {
     }
 
     public static void setNotificationClickListener(NotificationClickListener listener) {
-        notificationClickListener=listener;
+        notificationClickListener = listener;
     }
 
     public static NotificationClickListener getNotificationClickListener() {
@@ -148,7 +154,7 @@ public class FlappyService extends Service {
         //如果不是新登录查看旧的是否登录了
         ChatUser user = DataManager.getInstance().getLoginUser();
         //之前已经登录了，那么我们开始断线重连
-        if (user != null && user.isLogin()==1) {
+        if (user != null && user.isLogin() == 1) {
             if (NetTool.isConnected(getApplicationContext())) {
                 handler.removeMessages(1);
                 handler.sendEmptyMessageDelayed(1, delauMilis);
@@ -191,24 +197,18 @@ public class FlappyService extends Service {
             unregisterReceiver(netReceiver);
             netReceiver = null;
         }
-        //假如之前存在连接
-        if (clientThread != null) {
-            //之前的账号下线
-            clientThread.offline();
-            //清空
-            clientThread = null;
-        }
+        offline();
         super.onDestroy();
     }
 
     //根据当前的信息重新连接
-    private synchronized void startConnect(ChatUser user, String serverIP, String serverPort, long uuid, ResponseLogin loginResponse) {
+    private synchronized void startConnect(ChatUser user,
+                                           String serverIP,
+                                           String serverPort,
+                                           long uuid,
+                                           ResponseLogin loginResponse) {
 
-        //假如之前存在连接
-        if (clientThread != null) {
-            //之前的账号下线
-            clientThread.offline();
-        }
+        offline();
 
         //创建新的线程
         clientThread = new NettyThread(
@@ -229,6 +229,8 @@ public class FlappyService extends Service {
                 });
         //开始这个线程
         clientThread.start();
+
+
     }
 
     //用于检测
@@ -304,18 +306,20 @@ public class FlappyService extends Service {
                     protected void netError(Exception e, String tag) {
                         testAutoLogin(5 * 1000);
                     }
-                    
+
                 }, null);
     }
 
     //下线了
     public void offline() {
-        //假如之前存在连接
-        if (clientThread != null) {
-            //之前的账号下线
-            clientThread.offline();
-            //清空
-            clientThread = null;
+        synchronized (lock) {
+            //假如之前存在连接
+            if (clientThread != null) {
+                //之前的账号下线
+                clientThread.offline();
+                //清空
+                clientThread = null;
+            }
         }
     }
 

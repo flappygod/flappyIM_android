@@ -22,8 +22,6 @@ public class ChatMessage {
     public final static int SEND_STATE_CREATE = 0;
     //消息已经送达服务器
     public final static int SEND_STATE_SENDED = 1;
-    //消息已经推送给客户端
-    public final static int SEND_STATE_PUSHED = 2;
     //消息已经到达
     public final static int SEND_STATE_REACHED = 3;
     //消息发送失败
