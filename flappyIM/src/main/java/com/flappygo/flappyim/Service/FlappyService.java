@@ -156,7 +156,7 @@ public class FlappyService extends Service {
         intent.setClass(this, ActionReceiver.class);
         //设置通知图标
         builder.setSmallIcon(R.drawable.nothing)
-                .setContentIntent(PendingIntent.getActivity(this, 1, intent, 0))
+                .setContentIntent(PendingIntent.getBroadcast(this, 1, intent, 0))
                 //设置大图
                 .setLargeIcon(NotificationUtil.getBitmap(getApplicationContext()))
                 //设置通知标题
