@@ -1,7 +1,9 @@
 package com.flappygo.flappyim.Service;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,6 +33,7 @@ import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.R;
+import com.flappygo.flappyim.Reciver.ActionReceiver;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.NetTool;
 import com.flappygo.flappyim.Tools.NotificationUtil;
@@ -136,26 +139,43 @@ public class FlappyService extends Service {
 
 
     private void setForegroundService() {
+
         //设定的通知渠道名称
-        //设置通知的重要程度
         createNotificationChannel();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelID);
+        //创建消息通知
+        Notification.Builder builder = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder = new Notification.Builder(this, channelID);
+        } else {
+            builder = new Notification.Builder(this);
+        }
+
+        //跳转
+        Intent intent = new Intent();
+        intent.setClass(this, ActionReceiver.class);
         //设置通知图标
         builder.setSmallIcon(R.drawable.nothing)
+                .setContentIntent(PendingIntent.getActivity(this, 1, intent, 0))
                 //设置大图
                 .setLargeIcon(NotificationUtil.getBitmap(getApplicationContext()))
                 //设置通知标题
                 .setContentTitle(channelTitle)
                 //设置通知内容
                 .setContentText(channelContent)
+                //设置通知内容
+                .setContentInfo(channelContent)
                 //用户触摸时，自动关闭
                 .setAutoCancel(false)
                 //设置处于运行状态
                 .setOngoing(true);
 
         //将服务置于启动状态 NOTIFICATION_ID指的是创建的通知的ID
-        startForeground(100, builder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            startForeground(100, builder.build());
+        } else {
+            startForeground(100, builder.getNotification());
+        }
     }
 
     /**
