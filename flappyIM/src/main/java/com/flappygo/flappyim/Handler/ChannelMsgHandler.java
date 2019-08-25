@@ -224,17 +224,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 messageArrivedState(chatMessage);
                 //判断数据库是否存在
                 boolean flag = Database.getInstance().insertMessage(chatMessage);
+
+                //更新最近一条信息
+                ChatUser user = DataManager.getInstance().getLoginUser();
+                //设置最近的世界
+                user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
+                //更新最近消息的世界
+                DataManager.getInstance().saveLoginUser(user);
+
                 //插入成功
                 if (flag) {
-
-                    //更新最近一条信息
-                    ChatUser user = DataManager.getInstance().getLoginUser();
-                    //设置最近的世界
-                    user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
-                    //更新最近消息的世界
-                    DataManager.getInstance().saveLoginUser(user);
-
-
                     //发送成功消息
                     Message msg = new Message();
                     //收到新的消息

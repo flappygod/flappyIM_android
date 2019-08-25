@@ -103,7 +103,6 @@ public class FlappyBaseSession {
         handler.sendMessage(chatMessage, new FlappyIMCallback<String>() {
             @Override
             public void success(String data) {
-                updateMsgSended(chatMessage);
                 callback.success(chatMessage);
             }
 
