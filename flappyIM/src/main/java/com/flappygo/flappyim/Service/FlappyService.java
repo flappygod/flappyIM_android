@@ -53,7 +53,7 @@ public class FlappyService extends Service {
 
     private String channelContent = "正在接收推送消息";
 
-    private String channelID = "com.appname.notification.channel";
+    private String channelID = "com.flappygo.flappyim.channel";
 
     //线程
     private NettyThread clientThread;
