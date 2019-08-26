@@ -145,6 +145,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void success(FlappyChatSession data) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
+
                         mySession = data;
 
                         mySession.addMessageListener(new MessageListener() {
@@ -153,6 +154,12 @@ public class MainActivity extends Activity {
                                 rect.setText(chatMessage.getChatText());
                             }
                         });
+
+                       ChatMessage chatMessage= mySession.getLatestMessage();
+
+                       List<ChatMessage> messages= mySession.getMessagesByOffset(chatMessage.getMessageTableSeq().toString(),10);
+
+                       System.out.println(messages.size()+"");
 
                     }
 
