@@ -12,7 +12,6 @@ import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Response.ResponseSession;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
 
@@ -411,13 +410,13 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取最后一条消息
     public ChatMessage getLatestMessage() {
-        return Database.getInstance().getLatestMessage(getSession().getSessionId());
+        return Database.getInstance().getSessionLatestMessage(getSession().getSessionId());
     }
 
     //获取这条消息之前的消息
-    public List<ChatMessage> getFormerMessages(ChatMessage msg, int size) {
-        return Database.getInstance().getLatestMessage(getSession().getSessionId(),
-                msg.getMessageTableSeq().toString(),
+    public List<ChatMessage> getFormerMessages(String  messageId, int size) {
+        return Database.getInstance().getSessionLatestMessage(getSession().getSessionId(),
+                messageId,
                 size);
     }
 

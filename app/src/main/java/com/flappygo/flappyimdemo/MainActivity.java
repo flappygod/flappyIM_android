@@ -157,7 +157,7 @@ public class MainActivity extends Activity {
 
                         ChatMessage chatMessage = mySession.getLatestMessage();
 
-                        List<ChatMessage> messages = mySession.getFormerMessages(chatMessage, 10);
+                        List<ChatMessage> messages = mySession.getFormerMessages(chatMessage.getMessageId(), 10);
 
                         List<ChatMessage> newMsgs = new ArrayList<>();
                         newMsgs.add(chatMessage);
