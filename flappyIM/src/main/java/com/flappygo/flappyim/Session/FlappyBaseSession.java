@@ -51,10 +51,6 @@ public class FlappyBaseSession {
         BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
         //+1
         bigDecimal = bigDecimal.add(new BigDecimal(1));
-        //增加一
-        chatUser.setLatest(bigDecimal.toString());
-        //保存最近
-        DataManager.getInstance().saveLoginUser(chatUser);
         //放到最后
         msg.setMessageTableSeq(bigDecimal);
         //插入数据

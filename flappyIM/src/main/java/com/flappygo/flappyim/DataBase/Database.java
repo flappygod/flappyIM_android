@@ -124,6 +124,9 @@ public class Database {
                 values.put("messageDate", DateTimeTool.dateToStr(chatMessage.getMessageDate()));
             if (chatMessage.getMessageDeletedDate() != null)
                 values.put("messageDeletedDate", DateTimeTool.dateToStr(chatMessage.getMessageDeletedDate()));
+            {
+                values.put("messageStamp",System.currentTimeMillis());
+            }
             long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
                     null,
                     values);
@@ -201,6 +204,9 @@ public class Database {
                         values.put("messageDate", DateTimeTool.dateToStr(chatMessage.getMessageDate()));
                     if (chatMessage.getMessageDeletedDate() != null)
                         values.put("messageDeletedDate", DateTimeTool.dateToStr(chatMessage.getMessageDeletedDate()));
+                    {
+                        values.put("messageStamp",System.currentTimeMillis());
+                    }
                     long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
                             null,
                             values);
@@ -274,7 +280,7 @@ public class Database {
                 null,
                 null,
                 null,
-                "messageTableSeq DESC");
+                "messageTableSeq,messageStamp DESC");
         //获取数据
         if (cursor.moveToFirst())
             while (!cursor.isAfterLast()) {
@@ -324,11 +330,11 @@ public class Database {
         //消息更新
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                 null,
-                "messageSession = ? and messageTableSeq < ?",
+                "messageSession = ? and messageTableSeq <= ?",
                 new String[]{messageSession, messageTableSeq},
                 null,
                 null,
-                "messageTableSeq DESC LIMIT " + size);
+                "messageTableSeq,messageStamp DESC LIMIT " + size);
         //获取数据
         if (cursor.moveToFirst())
             while (!cursor.isAfterLast()) {

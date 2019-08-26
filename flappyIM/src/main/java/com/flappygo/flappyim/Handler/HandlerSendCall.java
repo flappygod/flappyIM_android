@@ -21,6 +21,7 @@ public class HandlerSendCall extends Handler {
     //真实的回调
     FlappySendCallback<ChatMessage> callback;
 
+    //消息内容
     private ChatMessage chatMessage;
 
     //构造器
@@ -43,6 +44,7 @@ public class HandlerSendCall extends Handler {
         if (msg.what == SEND_SUCCESS) {
             //成功
             if (callback != null) {
+                //消息状态更新了
                 callback.success((ChatMessage) msg.obj);
             }
         } else {

@@ -345,7 +345,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         if (former != null) {
             messageSendFailure(chatMessage, new Exception("消息重新发送"));
         }
-
         //发送
         try {//发送
             HandlerSendCall handlerSendCall = new HandlerSendCall(callback, chatMessage);
@@ -397,7 +396,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             if (call != null) {
                 //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_SUCCESS);
+                //消息
                 message.obj = chatMessage;
+                //成功的消息
                 call.sendMessage(message);
                 //移除这个消息
                 sendhandlers.remove(chatMessage.getMessageId());
@@ -412,7 +413,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             if (call != null) {
                 //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_FAILURE);
-                message.obj = chatMessage;
+                //发送失败的原因
+                message.obj = ex;
+                //发送消息
                 call.sendMessage(message);
                 //移除这个消息
                 sendhandlers.remove(chatMessage.getMessageId());

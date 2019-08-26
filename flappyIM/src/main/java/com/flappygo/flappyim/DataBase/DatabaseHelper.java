@@ -21,50 +21,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // 创建数据库表
         db.execSQL("CREATE TABLE " + DataBaseConfig.TABLE_MESSAGE + "("
                 +
-                // 消息的类型
+                // 消息ID
                 "messageId" + " varchar ,"
                 +
-                //当前登录用户的id
+                //消息的会话
                 "messageSession" + " varchar,"
                 +
-                // 消息内容
+                // 消息的会话类型
                 "messageSessionType" + " integer,"
                 +
-                // 消息类型
+                //会话的offset
                 "messageSessionOffset" + " integer,"
                 +
-                // 来自用户
+                // 当前消息的offset
                 "messageTableSeq" + " integer,"
                 +
-                // 本地时间
+                // 消息类型
                 "messageType" + " integer,"
                 +
-                // 消息id
+                // 发送ID
                 "messageSend" + " varchar,"
                 +
-                // 消息id
+                // 发送者外部ID
                 "messageSendExtendid" + " varchar,"
                 +
-                // 消息类型
+                // 消息接收者ID
                 "messageRecieve" + " varchar,"
                 +
-                // 消息类型
+                // 消息接收外部ID
                 "messageRecieveExtendid" + " varchar,"
                 +
-                // 发送flag
+                // 发送内容
                 "messageContent" + " varchar,"
                 +
-                // 发送类型
+                // 发送状态
                 "messageSended" + " integer,"
                 +
-                // 发送类型
+                // 是否已读
                 "messageReaded" + " integer,"
                 +
-                // 发送类型
+                // 是否被删除
                 "messageDeleted" + " integer,"
                 +
-                // 发送类型
+                // 发送日期
                 "messageDate" + " varchar,"
+                +
+                // 时间戳
+                "messageStamp" + " integer,"
                 +
                 // 发送类型
                 "messageDeletedDate" + " varchar,"
@@ -127,6 +130,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         +
                         // 发送类型
                         "messageDate" + " varchar,"
+                        +
+                        // 时间戳
+                        "messageStamp" + " integer,"
                         +
                         // 发送类型
                         "messageDeletedDate" + " varchar,"
