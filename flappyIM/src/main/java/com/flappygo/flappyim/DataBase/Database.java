@@ -408,7 +408,7 @@ public class Database {
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                 null,
                 "messageSession = ? and messageTableSeq < ? ",
-                new String[]{messageSession, messageID, chatMessage.getMessageTableSeq().toString()},
+                new String[]{messageSession, chatMessage.getMessageTableSeq().toString()},
                 null,
                 null,
                 "messageTableSeq DESC,messageStamp DESC LIMIT " + size);
