@@ -155,12 +155,16 @@ public class MainActivity extends Activity {
                             }
                         });
 
-                       ChatMessage chatMessage= mySession.getLatestMessage();
+                        ChatMessage chatMessage = mySession.getLatestMessage();
 
-                       List<ChatMessage> messages= mySession.getFormerMessages(chatMessage,10);
+                        List<ChatMessage> messages = mySession.getFormerMessages(chatMessage, 10);
 
-                       System.out.println(messages.size()+"");
-
+                        List<ChatMessage> newMsgs = new ArrayList<>();
+                        newMsgs.add(chatMessage);
+                        newMsgs.addAll(messages);
+                        for (int w = 0; w < newMsgs.size(); w++) {
+                            System.out.println(newMsgs.get(w).getMessageTableSeq().toString());
+                        }
                     }
 
                     @Override
@@ -217,7 +221,7 @@ public class MainActivity extends Activity {
     }
 
 
-    public void onNewIntent(Intent intent){
+    public void onNewIntent(Intent intent) {
         System.out.println("testtstststs");
         super.onNewIntent(intent);
     }

@@ -125,7 +125,7 @@ public class Database {
             if (chatMessage.getMessageDeletedDate() != null)
                 values.put("messageDeletedDate", DateTimeTool.dateToStr(chatMessage.getMessageDeletedDate()));
             {
-                values.put("messageStamp",System.currentTimeMillis());
+                values.put("messageStamp", System.currentTimeMillis());
             }
             long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -205,7 +205,7 @@ public class Database {
                     if (chatMessage.getMessageDeletedDate() != null)
                         values.put("messageDeletedDate", DateTimeTool.dateToStr(chatMessage.getMessageDeletedDate()));
                     {
-                        values.put("messageStamp",System.currentTimeMillis());
+                        values.put("messageStamp", System.currentTimeMillis());
                     }
                     long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
                             null,
@@ -327,13 +327,13 @@ public class Database {
     }
 
     //获取最近的一条消息
-    public List<ChatMessage> getLatestMessage(String messageSession, String messageTableSeq,String messageStamp, int size) {
+    public List<ChatMessage> getLatestMessage(String messageSession, String messageID, String messageTableSeq, int size) {
         List<ChatMessage> list = new ArrayList<ChatMessage>();
-        //消息更新
+        //获取这条消息之前的消息，并且不包含自身
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                 null,
-                "messageSession = ? and messageTableSeq <= ? and messageStamp<?",
-                new String[]{messageSession, messageTableSeq , messageStamp},
+                "messageSession = ? and messageId !=? and messageTableSeq <= ? ",
+                new String[]{messageSession, messageID, messageTableSeq},
                 null,
                 null,
                 "messageTableSeq DESC,messageStamp DESC LIMIT " + size);
