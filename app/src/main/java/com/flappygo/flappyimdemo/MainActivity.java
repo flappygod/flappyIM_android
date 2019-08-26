@@ -157,7 +157,7 @@ public class MainActivity extends Activity {
 
                        ChatMessage chatMessage= mySession.getLatestMessage();
 
-                       List<ChatMessage> messages= mySession.getMessagesByOffset(chatMessage.getMessageTableSeq().toString(),10);
+                       List<ChatMessage> messages= mySession.getFormerMessages(chatMessage,10);
 
                        System.out.println(messages.size()+"");
 

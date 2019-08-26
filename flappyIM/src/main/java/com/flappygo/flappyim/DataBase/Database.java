@@ -280,7 +280,7 @@ public class Database {
                 null,
                 null,
                 null,
-                "messageTableSeq,messageStamp DESC");
+                "messageTableSeq DESC,messageStamp DESC");
         //获取数据
         if (cursor.moveToFirst())
             while (!cursor.isAfterLast()) {
@@ -313,6 +313,8 @@ public class Database {
                         .getColumnIndex("messageReaded"))));
                 info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("messageDeleted"))));
+                info.setMessageStamp(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageStamp"))));
                 info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("messageDate"))));
                 info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
@@ -325,16 +327,16 @@ public class Database {
     }
 
     //获取最近的一条消息
-    public List<ChatMessage> getLatestMessage(String messageSession, String messageTableSeq, int size) {
+    public List<ChatMessage> getLatestMessage(String messageSession, String messageTableSeq,String messageStamp, int size) {
         List<ChatMessage> list = new ArrayList<ChatMessage>();
         //消息更新
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                 null,
-                "messageSession = ? and messageTableSeq <= ?",
-                new String[]{messageSession, messageTableSeq},
+                "messageSession = ? and messageTableSeq <= ? and messageStamp<?",
+                new String[]{messageSession, messageTableSeq , messageStamp},
                 null,
                 null,
-                "messageTableSeq,messageStamp DESC LIMIT " + size);
+                "messageTableSeq DESC,messageStamp DESC LIMIT " + size);
         //获取数据
         if (cursor.moveToFirst())
             while (!cursor.isAfterLast()) {
@@ -367,6 +369,8 @@ public class Database {
                         .getColumnIndex("messageReaded"))));
                 info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("messageDeleted"))));
+                info.setMessageStamp(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageStamp"))));
                 info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("messageDate"))));
                 info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
@@ -388,7 +392,7 @@ public class Database {
                 null,
                 null,
                 null,
-                "messageTableSeq DESC LIMIT 1");
+                "messageTableSeq DESC,messageStamp DESC LIMIT 1");
 
         //获取数据
         if (cursor.moveToFirst()) {
@@ -421,6 +425,8 @@ public class Database {
                     .getColumnIndex("messageReaded"))));
             info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
                     .getColumnIndex("messageDeleted"))));
+            info.setMessageStamp(new BigDecimal(cursor.getInt(cursor
+                    .getColumnIndex("messageStamp"))));
             info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                     .getColumnIndex("messageDate"))));
             info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
@@ -443,7 +449,7 @@ public class Database {
                 new String[]{messageSession},
                 null,
                 null,
-                "messageTableSeq DESC LIMIT 1");
+                "messageTableSeq DESC,messageStamp DESC LIMIT 1");
 
         //获取数据
         if (cursor.moveToFirst()) {
@@ -476,6 +482,8 @@ public class Database {
                     .getColumnIndex("messageReaded"))));
             info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
                     .getColumnIndex("messageDeleted"))));
+            info.setMessageStamp(new BigDecimal(cursor.getInt(cursor
+                    .getColumnIndex("messageStamp"))));
             info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                     .getColumnIndex("messageDate"))));
             info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
@@ -530,6 +538,8 @@ public class Database {
                     .getColumnIndex("messageReaded"))));
             info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
                     .getColumnIndex("messageDeleted"))));
+            info.setMessageStamp(new BigDecimal(cursor.getInt(cursor
+                    .getColumnIndex("messageStamp"))));
             info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                     .getColumnIndex("messageDate"))));
             info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor

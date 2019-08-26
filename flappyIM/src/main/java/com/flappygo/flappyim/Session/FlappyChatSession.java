@@ -414,9 +414,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return Database.getInstance().getLatestMessage(getSession().getSessionId());
     }
 
-    //获取列表
-    public List<ChatMessage> getMessagesByOffset(String offset, int size) {
-        return Database.getInstance().getLatestMessage(getSession().getSessionId(), offset, size);
+    //获取这条消息之前的消息
+    public List<ChatMessage> getFormerMessages(ChatMessage msg, int size) {
+        return Database.getInstance().getLatestMessage(getSession().getSessionId(),
+                msg.getMessageTableSeq().toString(),
+                msg.getMessageStamp().toString(),
+                size);
     }
 
 }

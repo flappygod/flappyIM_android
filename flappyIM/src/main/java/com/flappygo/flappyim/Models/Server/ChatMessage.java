@@ -76,6 +76,8 @@ public class ChatMessage {
 
     private BigDecimal messageDeleted;
 
+    private BigDecimal messageStamp;
+
     private Date messageDeletedDate;
 
     public String getMessageId() {
@@ -206,6 +208,13 @@ public class ChatMessage {
         this.messageDeletedDate = messageDeletedDate;
     }
 
+    public BigDecimal getMessageStamp() {
+        return messageStamp;
+    }
+
+    public void setMessageStamp(BigDecimal messageStamp) {
+        this.messageStamp = messageStamp;
+    }
 
     //消息
     public ChatMessage(Flappy.Message msg) {
