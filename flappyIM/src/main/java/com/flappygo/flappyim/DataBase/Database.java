@@ -158,6 +158,11 @@ public class Database {
 
     //插入一个列表的消息
     public boolean insertMessages(List<ChatMessage> messages) {
+
+        if(messages==null||messages.size()==0){
+            return true;
+        }
+
         db.beginTransaction();
         boolean totalSuccess = true;
         for (int s = 0; s < messages.size(); s++) {
@@ -267,6 +272,11 @@ public class Database {
 
     //插入多个会话
     public boolean insertSessions(List<SessionData> sessionData) {
+
+        if(sessionData==null||sessionData.size()==0){
+            return true;
+        }
+
         db.beginTransaction();
         boolean totalSuccess = true;
         for (int s = 0; s < sessionData.size(); s++) {
@@ -288,7 +298,7 @@ public class Database {
 
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionExtendId=? and sessionInsertUser=? ",
-                    new String[]{sessionExtendID, DataManager.getInstance().getLoginUser().getUserId()}, null, null, null);
+                    new String[]{sessionExtendID, DataManager.getInstance().getLoginUser().getUserExtendId()}, null, null, null);
 
             //获取数据
             if (cursor.moveToFirst()) {

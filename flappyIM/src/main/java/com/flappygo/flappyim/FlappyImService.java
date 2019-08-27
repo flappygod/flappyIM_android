@@ -385,7 +385,7 @@ public class FlappyImService {
         SessionData data = database.getUserSessionsByExtend(extendID);
         database.close();
 
-        if (data == null) {
+        if (data != null) {
             chatSession.setSession(data);
             callback.success(chatSession);
         } else {
