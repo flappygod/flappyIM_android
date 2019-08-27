@@ -382,7 +382,7 @@ public class FlappyImService {
         String extendID = user.get(0) + "-" + user.get(1);
         //数据库
         Database database = new Database();
-        SessionData data = database.getUserSessionsByExtend(extendID);
+        SessionData data = database.getUserSessionByExtendID(extendID);
         database.close();
 
         if (data != null) {
@@ -522,7 +522,7 @@ public class FlappyImService {
         FlappyChatSession chatSession = new FlappyChatSession();
         //数据库
         Database database = new Database();
-        SessionData data = database.getUserSessionsByExtend(extendID);
+        SessionData data = database.getUserSessionByExtendID(extendID);
         database.close();
 
         if (data == null) {

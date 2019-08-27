@@ -15,7 +15,6 @@ import com.flappygo.flappyim.Tools.StringTool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**************************
@@ -293,7 +292,7 @@ public class Database {
     }
 
     //获取当前用户的会话
-    public SessionData getUserSessionsByExtend(String sessionExtendID) {
+    public SessionData getUserSessionByExtendID(String sessionExtendID) {
         synchronized (lock) {
 
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
@@ -337,7 +336,7 @@ public class Database {
         }
     }
 
-
+    //获取用户的所有会话列表
     public List<SessionData> getUserSessions() {
         synchronized (lock) {
 
@@ -372,7 +371,6 @@ public class Database {
                             .getColumnIndex("sessionDeleted"))));
                     info.setSessionDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("sessionDeletedDate"))));
-
                     info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor
                             .getColumnIndex("users")), ChatUser.class));
                     sessions.add(info);
@@ -447,7 +445,7 @@ public class Database {
     }
 
     //获取当前这个messageTableSeq 的所有消息
-    private List<ChatMessage> getSessionSequeceMessages(String messageSession, String messageTableSeq) {
+    private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableSeq) {
         List<ChatMessage> list = new ArrayList<ChatMessage>();
         //获取这条消息之前的消息，并且不包含自身
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
@@ -504,19 +502,19 @@ public class Database {
     }
 
 
-    //获取最近的一条消息
+    //获取会话之前的消息列表
     public List<ChatMessage> getSessionLatestMessage(String messageSession, String messageID, int size) {
 
         //首先查询到这个消息
         ChatMessage chatMessage = getMessageByID(messageID);
 
-
+        //加锁
         synchronized (lock) {
             //返回的列表
             List<ChatMessage> retMsgs = new ArrayList<>();
 
             //然后查询出与它相同的数据
-            List<ChatMessage> sequenceMsgs = getSessionSequeceMessages(messageSession, chatMessage.getMessageTableSeq().toString());
+            List<ChatMessage> sequenceMsgs = getSessionSeqMessages(messageSession, chatMessage.getMessageTableSeq().toString());
 
             //之前的消息
             for (int s = 0; s < sequenceMsgs.size(); s++) {
@@ -593,64 +591,6 @@ public class Database {
 
     }
 
-    //获取最近的一条消息
-    public ChatMessage getSessionLatestMessage() {
-
-        synchronized (lock) {
-            //查询最近一条消息
-            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    "messageTableSeq DESC,messageStamp DESC LIMIT 1");
-
-            //获取数据
-            if (cursor.moveToFirst()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor
-                        .getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor
-                        .getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageTableSeq"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageType"))));
-                info.setMessageSend(cursor.getString(cursor
-                        .getColumnIndex("messageSend")));
-                info.setMessageSendExtendid(cursor.getString(cursor
-                        .getColumnIndex("messageSendExtendid")));
-                info.setMessageRecieve(cursor.getString(cursor
-                        .getColumnIndex("messageRecieve")));
-                info.setMessageRecieveExtendid(cursor.getString(cursor
-                        .getColumnIndex("messageRecieveExtendid")));
-                info.setMessageContent(cursor.getString(cursor
-                        .getColumnIndex("messageContent")));
-                info.setMessageSended(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageSended"))));
-                info.setMessageReaded(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageReaded"))));
-                info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("messageDeleted"))));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
-                        .getColumnIndex("messageStamp"))));
-                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
-                        .getColumnIndex("messageDate"))));
-                info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
-                        .getColumnIndex("messageDeletedDate"))));
-                cursor.close();
-                return info;
-            }
-            cursor.close();
-            return null;
-        }
-    }
-
 
     //获取最近的一条消息
     public ChatMessage getSessionLatestMessage(String messageSession) {
@@ -709,6 +649,65 @@ public class Database {
             return null;
         }
 
+    }
+
+
+    //获取所有的消息中最近的一条消息
+    public ChatMessage getLatestMessage() {
+
+        synchronized (lock) {
+            //查询最近一条消息
+            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "messageTableSeq DESC,messageStamp DESC LIMIT 1");
+
+            //获取数据
+            if (cursor.moveToFirst()) {
+                ChatMessage info = new ChatMessage();
+                info.setMessageId(cursor.getString(cursor
+                        .getColumnIndex("messageId")));
+                info.setMessageSession(cursor.getString(cursor
+                        .getColumnIndex("messageSession")));
+                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageSessionType"))));
+                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageSessionOffset"))));
+                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageTableSeq"))));
+                info.setMessageType(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageType"))));
+                info.setMessageSend(cursor.getString(cursor
+                        .getColumnIndex("messageSend")));
+                info.setMessageSendExtendid(cursor.getString(cursor
+                        .getColumnIndex("messageSendExtendid")));
+                info.setMessageRecieve(cursor.getString(cursor
+                        .getColumnIndex("messageRecieve")));
+                info.setMessageRecieveExtendid(cursor.getString(cursor
+                        .getColumnIndex("messageRecieveExtendid")));
+                info.setMessageContent(cursor.getString(cursor
+                        .getColumnIndex("messageContent")));
+                info.setMessageSended(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageSended"))));
+                info.setMessageReaded(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageReaded"))));
+                info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("messageDeleted"))));
+                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
+                        .getColumnIndex("messageStamp"))));
+                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
+                        .getColumnIndex("messageDate"))));
+                info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
+                        .getColumnIndex("messageDeletedDate"))));
+                cursor.close();
+                return info;
+            }
+            cursor.close();
+            return null;
+        }
     }
 
 
