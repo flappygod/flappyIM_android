@@ -1,6 +1,8 @@
 package com.flappygo.flappyim.Models.Request;
 
-public class ChatVideo {
+import java.io.Serializable;
+
+public class ChatVideo implements Serializable {
 
     //发送的本地地址
     private String sendPath;

@@ -6,6 +6,7 @@ import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
+import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Tools.DateTimeTool;
@@ -29,6 +30,8 @@ public class ChatMessage {
 
 
 
+    //系统消息
+    public final static int MSG_TYPE_SYSTEM = 0;
     //文本消息
     public final static int MSG_TYPE_TEXT = 1;
     //图片消息
@@ -278,6 +281,7 @@ public class ChatMessage {
 
     //设置文本
     public void setChatText(String text) {
+        //设置文本消息
         if (getMessageType().intValue() == MSG_TYPE_TEXT) {
             String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
@@ -286,6 +290,7 @@ public class ChatMessage {
 
     //获取聊天文本
     public String getChatText() {
+        //获取文本消息
         if (getMessageType().intValue() == MSG_TYPE_TEXT) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -297,6 +302,7 @@ public class ChatMessage {
 
     //获取聊天图片
     public ChatImage getChatImage() {
+        //获取图片消息
         if (getMessageType().intValue() == MSG_TYPE_IMG) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -308,6 +314,7 @@ public class ChatMessage {
 
     //获取聊天语音
     public ChatVoice getChatVoice() {
+        //获取语音消息
         if (getMessageType().intValue() == MSG_TYPE_VOICE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -319,6 +326,7 @@ public class ChatMessage {
 
     //获取定位信息
     public ChatLocation getChatLocation() {
+        //获取位置消息
         if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -330,10 +338,23 @@ public class ChatMessage {
 
     //获取视频信息
     public ChatVideo getChatVideo() {
+        //获取视频消息
         if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
                 return GsonTool.jsonObjectToModel(str, ChatVideo.class);
+            }
+        }
+        return null;
+    }
+
+    //获取系统消息
+    public ChatSystem getChatSystem(){
+        //获取视频消息
+        if (getMessageType().intValue() == MSG_TYPE_SYSTEM) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(str, ChatSystem.class);
             }
         }
         return null;

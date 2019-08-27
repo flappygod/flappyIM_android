@@ -1,6 +1,8 @@
 package com.flappygo.flappyim.Models.Request;
 
-public class ChatLocation {
+import java.io.Serializable;
+
+public class ChatLocation implements Serializable {
 
 
     public String getLat() {
