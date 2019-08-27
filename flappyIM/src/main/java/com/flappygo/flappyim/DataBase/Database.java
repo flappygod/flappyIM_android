@@ -216,7 +216,7 @@ public class Database {
                 //插入者
                 values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
 
-                long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
+                long ret = db.insert(DataBaseConfig.TABLE_SESSION,
                         null,
                         values);
                 if (ret > 0) {
@@ -251,7 +251,7 @@ public class Database {
                 values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
 
                 //更新消息信息
-                long ret = db.update(DataBaseConfig.TABLE_MESSAGE,
+                long ret = db.update(DataBaseConfig.TABLE_SESSION,
                         values,
                         "sessionId=? and sessionInsertUser=? ",
                         new String[]{session.getSessionId(), nowerUserID}
