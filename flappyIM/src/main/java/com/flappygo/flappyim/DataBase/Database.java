@@ -79,7 +79,7 @@ public class Database {
                     values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
                 if (chatMessage.getMessageSend() != null)
                     values.put("messageSend", chatMessage.getMessageSend());
-                if (chatMessage.getMessageSend() != null)
+                if (chatMessage.getMessageSendExtendid() != null)
                     values.put("messageSendExtendid", chatMessage.getMessageSendExtendid());
                 if (chatMessage.getMessageRecieve() != null)
                     values.put("messageRecieve", chatMessage.getMessageRecieve());
@@ -124,7 +124,7 @@ public class Database {
                     values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
                 if (chatMessage.getMessageSend() != null)
                     values.put("messageSend", chatMessage.getMessageSend());
-                if (chatMessage.getMessageSend() != null)
+                if (chatMessage.getMessageSendExtendid() != null)
                     values.put("messageSendExtendid", chatMessage.getMessageSendExtendid());
                 if (chatMessage.getMessageRecieve() != null)
                     values.put("messageRecieve", chatMessage.getMessageRecieve());
@@ -159,7 +159,7 @@ public class Database {
     //插入一个列表的消息
     public boolean insertMessages(List<ChatMessage> messages) {
 
-        if(messages==null||messages.size()==0){
+        if (messages == null || messages.size() == 0) {
             return true;
         }
 
@@ -273,7 +273,7 @@ public class Database {
     //插入多个会话
     public boolean insertSessions(List<SessionData> sessionData) {
 
-        if(sessionData==null||sessionData.size()==0){
+        if (sessionData == null || sessionData.size() == 0) {
             return true;
         }
 
@@ -347,7 +347,7 @@ public class Database {
                     "sessionInsertUser=? ",
                     new String[]{DataManager.getInstance().getLoginUser().getUserId()}, null, null, null);
             //获取数据
-            if (cursor.moveToFirst())
+            if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     SessionData info = new SessionData();
                     info.setSessionId(cursor.getString(cursor
@@ -378,6 +378,8 @@ public class Database {
                     sessions.add(info);
                     cursor.moveToNext();
                 }
+            }
+
             cursor.close();
 
             return sessions;
@@ -398,7 +400,7 @@ public class Database {
                     null,
                     "messageTableSeq DESC,messageStamp DESC");
             //获取数据
-            if (cursor.moveToFirst())
+            if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     ChatMessage info = new ChatMessage();
                     info.setMessageId(cursor.getString(cursor
@@ -438,6 +440,7 @@ public class Database {
                     list.add(info);
                     cursor.moveToNext();
                 }
+            }
             cursor.close();
             return list;
         }
@@ -455,7 +458,7 @@ public class Database {
                 null,
                 "messageStamp DESC");
         //获取数据
-        if (cursor.moveToFirst())
+        if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor
@@ -495,6 +498,7 @@ public class Database {
                 list.add(info);
                 cursor.moveToNext();
             }
+        }
         cursor.close();
         return list;
     }
@@ -503,12 +507,13 @@ public class Database {
     //获取最近的一条消息
     public List<ChatMessage> getSessionLatestMessage(String messageSession, String messageID, int size) {
 
+        //首先查询到这个消息
+        ChatMessage chatMessage = getMessageByID(messageID);
+
+
         synchronized (lock) {
             //返回的列表
             List<ChatMessage> retMsgs = new ArrayList<>();
-
-            //首先查询到这个消息
-            ChatMessage chatMessage = getMessageByID(messageID);
 
             //然后查询出与它相同的数据
             List<ChatMessage> sequenceMsgs = getSessionSequeceMessages(messageSession, chatMessage.getMessageTableSeq().toString());
@@ -650,7 +655,7 @@ public class Database {
     //获取最近的一条消息
     public ChatMessage getSessionLatestMessage(String messageSession) {
 
-        synchronized (this) {
+        synchronized (lock) {
             //查询最近一条消息
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -709,7 +714,7 @@ public class Database {
 
     //通过消息ID获取消息
     public ChatMessage getMessageByID(String messageID) {
-        synchronized (this) {
+        synchronized (lock) {
             ChatMessage info = null;
             //消息更新
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
