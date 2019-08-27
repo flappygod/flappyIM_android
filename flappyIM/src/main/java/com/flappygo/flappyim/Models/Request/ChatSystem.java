@@ -5,10 +5,13 @@ import java.io.Serializable;
 //系统消息
 public class ChatSystem implements Serializable {
 
-    //需要更新单个会话
+    //什么也不做
+    public static final int ACTION_UPDATE_DONOTHING=0;
+
+    //当前会话需要更新至版本
     public static final int ACTION_UPDATE_ONESESSION=1;
 
-    //需要更新全部会话
+    //所有会话都需要更新
     public static final int ACTION_UPDATE_ALLSESSION=2;
 
     //用于会话展示的文本
