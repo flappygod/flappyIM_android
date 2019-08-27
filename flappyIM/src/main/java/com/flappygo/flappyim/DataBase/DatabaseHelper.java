@@ -74,6 +74,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + " primary key (messageId)" + ")");
 
 
+        // 创建数据库表
+        db.execSQL("CREATE TABLE " + DataBaseConfig.TABLE_SESSION + "("
+                +
+                // 会话ID
+                "sessionId" + " varchar ,"
+                +
+                //会话外部ID
+                "sessionExtendId" + " varchar,"
+                +
+                // 会话类型
+                "sessionType" + " integer,"
+                +
+                //会话名称
+                "sessionName" + " varchar,"
+                +
+                // 会话图片
+                "sessionImage" + " varchar,"
+                +
+                // 会话当前offset
+                "sessionOffset" + " varchar,"
+                +
+                // 会话更新时间戳
+                "sessionStamp" + " integer,"
+                +
+                // 会话创建者
+                "sessionCreateDate" + " varchar,"
+                +
+                // 会话创建者
+                "sessionCreateUser" + " varchar,"
+                +
+                // 是否删除
+                "sessionDeleted" + " integer,"
+                +
+                // 删除时间
+                "sessionDeletedDate" + " varchar,"
+                +
+                // 会话用户列表
+                "users" + " varchar,"
+                +
+                // 当前插入的用户
+                "sessionInsertUser" + " varchar,"
+                + " primary key (sessionId,sessionInsertUser)" + ")");
+
+
     }
 
     @Override
@@ -83,6 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             try {
                 db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_MESSAGE + ";");
+                db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_SESSION + ";");
                 // 创建数据库表
                 db.execSQL("CREATE TABLE " + DataBaseConfig.TABLE_MESSAGE + "("
                         +
@@ -137,6 +182,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         // 发送类型
                         "messageDeletedDate" + " varchar,"
                         + " primary key (messageId)" + ")");
+
+                // 创建数据库表
+                db.execSQL("CREATE TABLE " + DataBaseConfig.TABLE_SESSION + "("
+                        +
+                        // 会话ID
+                        "sessionId" + " varchar ,"
+                        +
+                        //会话外部ID
+                        "sessionExtendId" + " varchar,"
+                        +
+                        // 会话类型
+                        "sessionType" + " integer,"
+                        +
+                        //会话名称
+                        "sessionName" + " varchar,"
+                        +
+                        // 会话图片
+                        "sessionImage" + " varchar,"
+                        +
+                        // 会话当前offset
+                        "sessionOffset" + " varchar,"
+                        +
+                        // 会话更新时间戳
+                        "sessionStamp" + " integer,"
+                        +
+                        // 会话创建者
+                        "sessionCreateDate" + " varchar,"
+                        +
+                        // 会话创建者
+                        "sessionCreateUser" + " varchar,"
+                        +
+                        // 是否删除
+                        "sessionDeleted" + " integer,"
+                        +
+                        // 删除时间
+                        "sessionDeletedDate" + " varchar,"
+                        +
+                        // 会话用户列表
+                        "users" + " varchar,"
+                        +
+                        // 当前插入的用户
+                        "sessionInsertUser" + " varchar,"
+                        + " primary key (sessionId,sessionInsertUser)" + ")");
 
 
                 db.setVersion(newVersion);

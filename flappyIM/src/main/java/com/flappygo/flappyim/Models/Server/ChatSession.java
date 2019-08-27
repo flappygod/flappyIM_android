@@ -1,9 +1,10 @@
 package com.flappygo.flappyim.Models.Server;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ChatSession {
+public class ChatSession implements Serializable {
 
 
 
@@ -24,6 +25,8 @@ public class ChatSession {
     private String sessionImage;
 
     private String sessionOffset;
+
+    private BigDecimal sessionStamp;
 
     private Date sessionCreateDate;
 
@@ -79,6 +82,14 @@ public class ChatSession {
 
     public void setSessionOffset(String sessionOffset) {
         this.sessionOffset = sessionOffset == null ? null : sessionOffset.trim();
+    }
+
+    public BigDecimal getSessionStamp() {
+        return sessionStamp;
+    }
+
+    public void setSessionStamp(BigDecimal sessionStamp) {
+        this.sessionStamp = sessionStamp;
     }
 
     public Date getSessionCreateDate() {

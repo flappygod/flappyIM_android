@@ -3,7 +3,6 @@ package com.flappygo.flappyim.Handler;
 import android.os.Message;
 
 import com.flappygo.flappyim.Callback.FlappyDeadCallback;
-import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Config.BaseConfig;
 import com.flappygo.flappyim.DataBase.Database;
@@ -172,16 +171,18 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     }
                 });
 
+                //如果插入成功
+                Database database=new Database();
                 //遍历消息进行通知
                 for (int s = 0; s < messages.size(); s++) {
                     //获取单个消息
                     ChatMessage chatMessage = messages.get(s);
                     //修改收到的状态
                     messageArrivedState(chatMessage);
+                    //查看之前是否存在这个消息
+                    ChatMessage message =database.getMessageByID(chatMessage.getMessageId());
                     //如果插入成功
-                    boolean flag = Database.getInstance().insertMessage(chatMessage);
-                    //如果插入成功
-                    if (flag) {
+                    if (message==null) {
                         //收到了新的消息
                         Message msg = new Message();
                         //收到新的消息
@@ -204,6 +205,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //到达
                     messageArrivedReciept(messages.get(messages.size() - 1));
                 }
+
+
+                //所有消息更新
+                database.insertMessages(messages);
+                //更新所有会话
+                database.insertSessions(handlerLogin.getLoginResponse().getSessions());
+                //关闭数据库
+                database.close();
+
+
                 //发送成功消息
                 Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
                 //数据
@@ -216,6 +227,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //发送消息
         else if (response.getType() == FlappyResponse.RES_MSG) {
+
+            Database database=new Database();
+
             //设置
             for (int s = 0; s < response.getMsgCount(); s++) {
                 //得到真正的消息对象
@@ -224,8 +238,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 messageSendSuccess(chatMessage);
                 //修改收到的状态
                 messageArrivedState(chatMessage);
+
                 //判断数据库是否存在
-                boolean flag = Database.getInstance().insertMessage(chatMessage);
+                ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
 
                 //更新最近一条信息
                 ChatUser user = DataManager.getInstance().getLoginUser();
@@ -235,7 +250,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 DataManager.getInstance().saveLoginUser(user);
 
                 //插入成功
-                if (flag) {
+                if (former==null) {
                     //发送成功消息
                     Message msg = new Message();
                     //收到新的消息
@@ -244,10 +259,15 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     msg.obj = chatMessage;
                     //成功
                     this.handlerMessage.sendMessage(msg);
-
+                    //消息送达的回执
                     messageArrivedReciept(chatMessage);
+                    //插入消息
+                    database.insertMessage(chatMessage);
                 }
             }
+
+            database.close();
+
         }
     }
 

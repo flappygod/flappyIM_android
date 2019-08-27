@@ -54,7 +54,9 @@ public class FlappyBaseSession {
         //放到最后
         msg.setMessageTableSeq(bigDecimal);
         //插入数据
-        Database.getInstance().insertMessage(msg);
+        Database database=new Database();
+        database.insertMessage(msg);
+        database.close();
     }
 
     //将消息的状态更新为已经发送
@@ -62,16 +64,20 @@ public class FlappyBaseSession {
         //已经发送了
         msg.setMessageSended(new BigDecimal(SEND_STATE_SENDED));
         //插入数据
-        Database.getInstance().insertMessage(msg);
+        Database database=new Database();
+        database.insertMessage(msg);
+        database.close();
     }
 
 
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
-        //已经发送了
+        //发送失败了
         msg.setMessageSended(new BigDecimal(SEND_STATE_FAILURE));
         //插入数据
-        Database.getInstance().insertMessage(msg);
+        Database database=new Database();
+        database.insertMessage(msg);
+        database.close();
     }
 
     //发送消息

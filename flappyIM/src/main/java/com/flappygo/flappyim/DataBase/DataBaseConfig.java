@@ -17,4 +17,6 @@ public class DataBaseConfig {
 	public static int DB_VERSION = 1;
 	//消息表
 	public static String TABLE_MESSAGE = "message";
+	//会话表
+	public static String TABLE_SESSION = "session";
 }

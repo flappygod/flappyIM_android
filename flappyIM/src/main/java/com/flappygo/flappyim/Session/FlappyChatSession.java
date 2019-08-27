@@ -10,7 +10,7 @@ import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
-import com.flappygo.flappyim.Models.Response.ResponseSession;
+import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
@@ -53,15 +53,15 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //会话
-    private ResponseSession session;
+    private SessionData session;
 
     //获取会话数据
-    public ResponseSession getSession() {
+    public SessionData getSession() {
         return session;
     }
 
     //设置会话数据
-    public void setSession(ResponseSession session) {
+    public void setSession(SessionData session) {
         this.session = session;
     }
 
@@ -73,11 +73,11 @@ public class FlappyChatSession extends FlappyBaseSession {
     //获取要发送的ID
     private String getPeerID() {
         //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == ResponseSession.TYPE_GROUP) {
+        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
             return getSession().getSessionId();
         }
         //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == ResponseSession.TYPE_SINGLE) {
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
             for (int s = 0; s < getSession().getUsers().size(); s++) {
                 if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
                     return getSession().getUsers().get(s).getUserId();
@@ -90,11 +90,11 @@ public class FlappyChatSession extends FlappyBaseSession {
     //获取对方的extendID
     private String getPeerExtendID() {
         //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == ResponseSession.TYPE_GROUP) {
+        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
             return getSession().getSessionExtendId();
         }
         //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == ResponseSession.TYPE_SINGLE) {
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
             for (int s = 0; s < getSession().getUsers().size(); s++) {
                 if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
                     return getSession().getUsers().get(s).getUserExtendId();
@@ -410,14 +410,20 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取最后一条消息
     public ChatMessage getLatestMessage() {
-        return Database.getInstance().getSessionLatestMessage(getSession().getSessionId());
+        Database database=new Database();
+        ChatMessage chatMessage=database.getSessionLatestMessage(getSession().getSessionId());
+        database.close();
+        return chatMessage;
     }
 
     //获取这条消息之前的消息
     public List<ChatMessage> getFormerMessages(String  messageId, int size) {
-        return Database.getInstance().getSessionLatestMessage(getSession().getSessionId(),
+        Database database=new Database();
+        List<ChatMessage> chatMessages=database.getSessionLatestMessage(getSession().getSessionId(),
                 messageId,
                 size);
+        database.close();
+        return chatMessages;
     }
 
 }

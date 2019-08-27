@@ -25,6 +25,11 @@ public class HandlerLoginCallback extends Handler {
     //登录信息
     private ResponseLogin loginResponse;
 
+
+    public ResponseLogin getLoginResponse() {
+        return loginResponse;
+    }
+
     //返回
     public HandlerLoginCallback(FlappyIMCallback callback, ResponseLogin loginResponse) {
         this.callback = callback;
