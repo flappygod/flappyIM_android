@@ -591,6 +591,131 @@ public class Database {
 
     }
 
+    //更新还未处理的消息
+    public List<ChatMessage>  getNotActionSystemMessage(String sessionID){
+
+        synchronized (lock){
+
+            List<ChatMessage> list = new ArrayList<ChatMessage>();
+
+            //获取这条消息之前的消息，并且不包含自身
+            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageType = 0 and messageReaded = 0 and messageSession=?",
+                    new String[]{sessionID},
+                    null,
+                    null,
+                    "messageTableSeq DESC");
+
+            //获取数据
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage();
+                    info.setMessageId(cursor.getString(cursor
+                            .getColumnIndex("messageId")));
+                    info.setMessageSession(cursor.getString(cursor
+                            .getColumnIndex("messageSession")));
+                    info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageSessionType"))));
+                    info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageSessionOffset"))));
+                    info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageTableSeq"))));
+                    info.setMessageType(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageType"))));
+                    info.setMessageSend(cursor.getString(cursor
+                            .getColumnIndex("messageSend")));
+                    info.setMessageSendExtendid(cursor.getString(cursor
+                            .getColumnIndex("messageSendExtendid")));
+                    info.setMessageRecieve(cursor.getString(cursor
+                            .getColumnIndex("messageRecieve")));
+                    info.setMessageRecieveExtendid(cursor.getString(cursor
+                            .getColumnIndex("messageRecieveExtendid")));
+                    info.setMessageContent(cursor.getString(cursor
+                            .getColumnIndex("messageContent")));
+                    info.setMessageSended(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageSended"))));
+                    info.setMessageReaded(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageReaded"))));
+                    info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageDeleted"))));
+                    info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
+                            .getColumnIndex("messageStamp"))));
+                    info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
+                            .getColumnIndex("messageDate"))));
+                    info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
+                            .getColumnIndex("messageDeletedDate"))));
+                    list.add(info);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            return list;
+        }
+    }
+
+    //获取所有还未做处理的系统消息
+    public List<ChatMessage>  getNotActionSystemMessage(){
+
+        synchronized (lock){
+            List<ChatMessage> list = new ArrayList<ChatMessage>();
+
+            //获取这条消息之前的消息，并且不包含自身
+            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageType = 0 and messageReaded = 0 ",
+                    null,
+                    null,
+                    null,
+                    "messageTableSeq DESC");
+
+            //获取数据
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage();
+                    info.setMessageId(cursor.getString(cursor
+                            .getColumnIndex("messageId")));
+                    info.setMessageSession(cursor.getString(cursor
+                            .getColumnIndex("messageSession")));
+                    info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageSessionType"))));
+                    info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageSessionOffset"))));
+                    info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageTableSeq"))));
+                    info.setMessageType(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageType"))));
+                    info.setMessageSend(cursor.getString(cursor
+                            .getColumnIndex("messageSend")));
+                    info.setMessageSendExtendid(cursor.getString(cursor
+                            .getColumnIndex("messageSendExtendid")));
+                    info.setMessageRecieve(cursor.getString(cursor
+                            .getColumnIndex("messageRecieve")));
+                    info.setMessageRecieveExtendid(cursor.getString(cursor
+                            .getColumnIndex("messageRecieveExtendid")));
+                    info.setMessageContent(cursor.getString(cursor
+                            .getColumnIndex("messageContent")));
+                    info.setMessageSended(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageSended"))));
+                    info.setMessageReaded(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageReaded"))));
+                    info.setMessageDeleted(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("messageDeleted"))));
+                    info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
+                            .getColumnIndex("messageStamp"))));
+                    info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
+                            .getColumnIndex("messageDate"))));
+                    info.setMessageDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
+                            .getColumnIndex("messageDeletedDate"))));
+                    list.add(info);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            return list;
+        }
+    }
+
 
     //获取最近的一条消息
     public ChatMessage getSessionLatestMessage(String messageSession) {

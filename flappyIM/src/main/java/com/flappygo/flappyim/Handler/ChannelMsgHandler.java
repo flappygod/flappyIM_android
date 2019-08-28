@@ -11,6 +11,7 @@ import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
+import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.NettyAttrUtil;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -228,12 +230,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //清空引用
                 handlerLogin = null;
             }
+            checkSessionNeedUpdate();
         }
         //发送消息
         else if (response.getType() == FlappyResponse.RES_MSG) {
 
             Database database=new Database();
-
             //设置
             for (int s = 0; s < response.getMsgCount(); s++) {
                 //得到真正的消息对象
@@ -242,17 +244,14 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 messageSendSuccess(chatMessage);
                 //修改收到的状态
                 messageArrivedState(chatMessage);
-
                 //判断数据库是否存在
                 ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
-
                 //更新最近一条信息
                 ChatUser user = DataManager.getInstance().getLoginUser();
                 //设置最近的世界
                 user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
                 //更新最近消息的世界
                 DataManager.getInstance().saveLoginUser(user);
-
                 //插入成功
                 if (former==null) {
                     //发送成功消息
@@ -269,9 +268,37 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     database.insertMessage(chatMessage);
                 }
             }
-
             database.close();
+            //检查会话是否需要更新
+            checkSessionNeedUpdate();
 
+        }
+        //更新数据
+        else if(response.getType() == FlappyResponse.RES_UPDATE){
+            //进行会话更新
+            List<Flappy.Session> session=response.getSessionsList();
+            //设置
+            Database database=new Database();
+            //数据开始
+            if(session!=null&&session.size()>0){
+                for(int s=0;s<session.size();s++){
+                    //更新数据
+                    SessionData data=new SessionData(session.get(s));
+                    //插入数据
+                    database.insertSession(data);
+                    //消息标记为已经处理
+                    List<ChatMessage>  messages=database.getNotActionSystemMessage();
+                    //将系统消息标记成为已经处理，不再需要重复处理
+                    for(int w=0;w<messages.size();w++){
+                        //更新消息
+                        if(data.getSessionStamp().longValue()>=StringTool.strToDecimal(messages.get(w).getChatSystem().getSysActionData()).longValue()){
+                            messages.get(w).setMessageReaded(new BigDecimal(1));
+                            database.insertMessage(messages.get(w));
+                        }
+                    }
+                }
+            }
+            database.close();
         }
     }
 
@@ -329,6 +356,50 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //关闭与服务器的连接
         context.close();
+    }
+
+
+    //检查会话是否需要更新
+    private void checkSessionNeedUpdate(){
+        //获取所有数据
+        Database database=new Database();
+        //获取系统消息
+        List<ChatMessage>  latestMessages=database.getNotActionSystemMessage();
+        //开始处理
+        database.close();
+
+        HashMap<String,String> needUpdate=new HashMap<>();
+        //遍历
+        for(int s=0;s<latestMessages.size();s++){
+            String former=needUpdate.get(latestMessages.get(s).getMessageSession());
+            if(former==null){
+                needUpdate.put(latestMessages.get(s).getMessageSession(),latestMessages.get(s).getChatSystem().getSysActionData());
+            }else{
+                //获取会话
+                long stamp=StringTool.strToDecimal(former).longValue();
+                long newStamp=StringTool.strToDecimal(latestMessages.get(s).getChatSystem().getSysActionData()).longValue();
+                if(newStamp>stamp){
+                    needUpdate.put(latestMessages.get(s).getMessageSession(),latestMessages.get(s).getChatSystem().getSysActionData());
+                }
+            }
+        }
+        //遍历
+        for(String key:needUpdate.keySet()){
+
+            //更新消息
+            Flappy.ReqUpdate reqUpdate=Flappy.ReqUpdate.newBuilder()
+                    .setUpdateID(key)
+                    .setUpdateType(FlappyRequest.UPDATE_SESSION_SGINGLE)
+                    .build();
+
+            //创建登录请求消息
+            Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                    .setUpdate(reqUpdate)
+                    .setType(FlappyRequest.REQ_UPDATE);
+
+            //发送需要更新的消息
+            channelHandlerContext.writeAndFlush(builder.build());
+        }
     }
 
 
