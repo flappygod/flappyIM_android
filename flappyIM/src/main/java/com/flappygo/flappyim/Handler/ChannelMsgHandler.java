@@ -288,7 +288,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //插入数据
                     database.insertSession(data);
                     //消息标记为已经处理
-                    List<ChatMessage> messages = database.getNotActionSystemMessage();
+                    List<ChatMessage> messages = database.getNotActionSystemMessage(data.getSessionId());
                     //将系统消息标记成为已经处理，不再需要重复处理
                     for (int w = 0; w < messages.size(); w++) {
                         //更新消息
