@@ -76,22 +76,26 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        //创建登录消息
-        Flappy.LoginInfo loginInfo = Flappy.LoginInfo.newBuilder()
+        //创建builder
+        Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
                 .setDevice(BaseConfig.device)
                 .setUserID(this.user.getUserId())
-                .setPushid(StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext())).build();
+                .setPushid(StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
+
+        //获取最近latest
+        ChatUser user = DataManager.getInstance().getLoginUser();
+        //消息
+        if (user != null && user.getLatest() != null) {
+            loginInfoBuilder.setLatest(user.getLatest());
+        }
+        //登录信息创建
+        Flappy.ReqLogin  loginInfo=loginInfoBuilder.build();
 
         //创建登录请求消息
         Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
                 .setLogin(loginInfo)
                 .setType(FlappyRequest.REQ_LOGIN);
-        //消息
-        ChatUser user = DataManager.getInstance().getLoginUser();
-        //消息
-        if (user != null && user.getLatest() != null) {
-            builder.setLatest(user.getLatest());
-        }
+
         //发送登录消息
         ctx.writeAndFlush(builder.build());
         //context
@@ -346,10 +350,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //返回
         if (!chatMessage.getMessageSend().equals(DataManager.getInstance().getLoginUser().getUserId())) {
 
-            //创建消息到达回执
+            //创建消息到达的回执
+            Flappy.ReqReceipt receipt=Flappy.ReqReceipt.newBuilder()
+                    .setReceiptID(chatMessage.getMessageTableSeq().toString())
+                    .setReceiptType(FlappyRequest.RECEIPT_MSG_ARRIVE)
+                    .build();
+
+            //创建回执消息
             Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
-                    .setLatest(chatMessage.getMessageTableSeq().toString())
-                    .setType(FlappyRequest.REQ_RECIEVE);
+                    .setReceipt(receipt)
+                    .setType(FlappyRequest.REQ_RECEIPT);
 
             //发送回执，发送回执后，所有之前的消息都会被列为已经收到，因为端口是阻塞的
             channelHandlerContext.writeAndFlush(builder.build());
