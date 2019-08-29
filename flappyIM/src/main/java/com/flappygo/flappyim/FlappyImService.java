@@ -834,10 +834,12 @@ public class FlappyImService {
         HolderMessageSession.getInstance().removeGloableMessageListener(listener);
     }
 
+    //添加会话监听
     public void addSessionListener(SessionListener listener){
         HolderMessageSession.getInstance().addSessionListener(listener);
     }
 
+    //移除会话监听
     public void removeSessionListener(SessionListener listener){
         HolderMessageSession.getInstance().removeSessionListener(listener);
     }
