@@ -187,9 +187,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //修改收到的状态
                     messageArrivedState(chatMessage);
                     //查看之前是否存在这个消息
-                    ChatMessage message = database.getMessageByID(chatMessage.getMessageId());
+                    ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
                     //如果插入成功
-                    if (message == null) {
+                    if (former == null) {
+                        //保留是否已读的状态
+                        chatMessage.setMessageReaded(former.getMessageReaded());
                         //收到了新的消息
                         Message msg = new Message();
                         //收到新的消息
@@ -259,6 +261,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 DataManager.getInstance().saveLoginUser(user);
                 //插入成功
                 if (former == null) {
+                    chatMessage.setMessageReaded(former.getMessageReaded());
                     //发送成功消息
                     Message msg = new Message();
                     //收到新的消息
