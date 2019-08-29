@@ -4,7 +4,7 @@ import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Holder.HolderMessageRecieve;
+import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
@@ -29,13 +29,13 @@ public class FlappyChatSession extends FlappyBaseSession {
     //设置消息的监听,新收到消息都会在这里
     public void addMessageListener(MessageListener messageListener) {
         //添加监听
-        HolderMessageRecieve.getInstance().addMessageListener(messageListener, session.getSessionId());
+        HolderMessageSession.getInstance().addMessageListener(messageListener, session.getSessionId());
         listenerList.add(messageListener);
     }
 
     //移除当前会话的监听
     public void removeListener(MessageListener messageListener) {
-        HolderMessageRecieve.getInstance().removeMessageListener(messageListener, session.getSessionId());
+        HolderMessageSession.getInstance().removeMessageListener(messageListener, session.getSessionId());
         listenerList.remove(messageListener);
     }
 
@@ -47,7 +47,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     //session使用完成之后，请务必关闭防止内存泄漏
     public void close() {
         for (int s = 0; s < listenerList.size(); s++) {
-            HolderMessageRecieve.getInstance().removeMessageListener(listenerList.get(s), session.getSessionId());
+            HolderMessageSession.getInstance().removeMessageListener(listenerList.get(s), session.getSessionId());
         }
         listenerList.clear();
     }

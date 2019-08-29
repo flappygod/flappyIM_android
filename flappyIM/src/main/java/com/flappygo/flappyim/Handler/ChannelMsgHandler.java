@@ -44,6 +44,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //消息的handler
     private HandlerMessage handlerMessage;
 
+    //会话的handler
+    private HandlerSession handlerSession;
+
     //用户数据
     private ChatUser user;
 
@@ -67,6 +70,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         this.heart = Flappy.FlappyRequest.newBuilder().setType(FlappyRequest.REQ_PING).build();
         //消息接收监听
         this.handlerMessage = new HandlerMessage();
+        //会话的handler
+        this.handlerSession=new HandlerSession();
         //handler
         this.handlerLogin = handler;
         //回调
@@ -291,8 +296,21 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //数据开始
             if (session != null && session.size() > 0) {
                 for (int s = 0; s < session.size(); s++) {
+
                     //更新数据
                     SessionData data = new SessionData(session.get(s));
+
+                    
+                    //数据更新了
+                    Message msg = new Message();
+                    //收到新的消息
+                    msg.what = HandlerSession.SESSION_UPDATE;
+                    //消息数据体
+                    msg.obj = data;
+                    //成功
+                    this.handlerSession.sendMessage(msg);
+
+
                     //插入数据
                     database.insertSession(data);
                     //消息标记为已经处理

@@ -13,7 +13,7 @@ import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.Config.BaseConfig;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
-import com.flappygo.flappyim.Holder.HolderMessageRecieve;
+import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
@@ -80,7 +80,7 @@ public class FlappyImService {
         //开启服务
         startFlappyService(intent);
         //添加总体的监听
-        HolderMessageRecieve.getInstance().addGloableMessageListener(new MessageListener() {
+        HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
             @Override
             public void messageRecieved(ChatMessage chatMessage) {
                 //发送本地通知
@@ -133,7 +133,7 @@ public class FlappyImService {
         //开启服务
         startFlappyService(intent);
         //添加总体的监听
-        HolderMessageRecieve.getInstance().addGloableMessageListener(new MessageListener() {
+        HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
             @Override
             public void messageRecieved(ChatMessage chatMessage) {
                 sendNotificaiton(chatMessage);
@@ -825,12 +825,12 @@ public class FlappyImService {
 
     //添加全局的监听
     public void addGloableMessageListener(MessageListener listener) {
-        HolderMessageRecieve.getInstance().addGloableMessageListener(listener);
+        HolderMessageSession.getInstance().addGloableMessageListener(listener);
     }
 
     //移除全局的监听
     public void removeGloableMessageListener(MessageListener listener) {
-        HolderMessageRecieve.getInstance().removeGloableMessageListener(listener);
+        HolderMessageSession.getInstance().removeGloableMessageListener(listener);
     }
 
     //设置被踢下线的监听
