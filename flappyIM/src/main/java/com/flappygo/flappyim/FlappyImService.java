@@ -833,7 +833,7 @@ public class FlappyImService {
     public void removeGloableMessageListener(MessageListener listener) {
         HolderMessageSession.getInstance().removeGloableMessageListener(listener);
     }
-    
+
     public void addSessionListener(SessionListener listener){
         HolderMessageSession.getInstance().addSessionListener(listener);
     }
