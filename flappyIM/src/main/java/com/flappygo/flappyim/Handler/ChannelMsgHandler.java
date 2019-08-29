@@ -59,6 +59,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //用于加锁
     private Byte[] lock = new Byte[1];
 
+    private List<String>  updateSessions=new ArrayList<>();
 
     //回调
     public ChannelMsgHandler(HandlerLoginCallback handler, FlappyDeadCallback deadCallback, ChatUser user) {
@@ -304,6 +305,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                             database.insertMessage(messages.get(w));
                         }
                     }
+                    //移除正在更新
+                    updateSessions.remove(data.getSessionId());
                 }
             }
             database.close();
@@ -393,19 +396,27 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //遍历
         for (String key : needUpdate.keySet()) {
-            //更新消息
-            Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
-                    .setUpdateID(key)
-                    .setUpdateType(FlappyRequest.UPDATE_SESSION_SGINGLE)
-                    .build();
 
-            //创建登录请求消息
-            Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
-                    .setUpdate(reqUpdate)
-                    .setType(FlappyRequest.REQ_UPDATE);
+            if(!updateSessions.contains(key)){
 
-            //发送需要更新的消息
-            channelHandlerContext.writeAndFlush(builder.build());
+                updateSessions.add(key);
+
+                //更新消息
+                Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
+                        .setUpdateID(key)
+                        .setUpdateType(FlappyRequest.UPDATE_SESSION_SGINGLE)
+                        .build();
+
+                //创建登录请求消息
+                Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                        .setUpdate(reqUpdate)
+                        .setType(FlappyRequest.REQ_UPDATE);
+
+                //发送需要更新的消息
+                channelHandlerContext.writeAndFlush(builder.build());
+            }
+
+
 
         }
     }
