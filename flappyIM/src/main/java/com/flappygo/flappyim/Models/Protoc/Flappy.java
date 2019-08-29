@@ -6789,9 +6789,9 @@ public final class Flappy {
         getSessionOffsetBytes();
 
     /**
-     * <code>int32 sessionStamp = 7;</code>
+     * <code>int64 sessionStamp = 7;</code>
      */
-    int getSessionStamp();
+    long getSessionStamp();
 
     /**
      * <code>string sessionCreateDate = 8;</code>
@@ -6933,7 +6933,7 @@ public final class Flappy {
             }
             case 56: {
 
-              sessionStamp_ = input.readInt32();
+              sessionStamp_ = input.readInt64();
               break;
             }
             case 66: {
@@ -7177,11 +7177,11 @@ public final class Flappy {
     }
 
     public static final int SESSIONSTAMP_FIELD_NUMBER = 7;
-    private int sessionStamp_;
+    private long sessionStamp_;
     /**
-     * <code>int32 sessionStamp = 7;</code>
+     * <code>int64 sessionStamp = 7;</code>
      */
-    public int getSessionStamp() {
+    public long getSessionStamp() {
       return sessionStamp_;
     }
 
@@ -7362,8 +7362,8 @@ public final class Flappy {
       if (!getSessionOffsetBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, sessionOffset_);
       }
-      if (sessionStamp_ != 0) {
-        output.writeInt32(7, sessionStamp_);
+      if (sessionStamp_ != 0L) {
+        output.writeInt64(7, sessionStamp_);
       }
       if (!getSessionCreateDateBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 8, sessionCreateDate_);
@@ -7408,9 +7408,9 @@ public final class Flappy {
       if (!getSessionOffsetBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, sessionOffset_);
       }
-      if (sessionStamp_ != 0) {
+      if (sessionStamp_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, sessionStamp_);
+          .computeInt64Size(7, sessionStamp_);
       }
       if (!getSessionCreateDateBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, sessionCreateDate_);
@@ -7491,7 +7491,8 @@ public final class Flappy {
       hash = (37 * hash) + SESSIONOFFSET_FIELD_NUMBER;
       hash = (53 * hash) + getSessionOffset().hashCode();
       hash = (37 * hash) + SESSIONSTAMP_FIELD_NUMBER;
-      hash = (53 * hash) + getSessionStamp();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getSessionStamp());
       hash = (37 * hash) + SESSIONCREATEDATE_FIELD_NUMBER;
       hash = (53 * hash) + getSessionCreateDate().hashCode();
       hash = (37 * hash) + SESSIONCREATEUSER_FIELD_NUMBER;
@@ -7651,7 +7652,7 @@ public final class Flappy {
 
         sessionOffset_ = "";
 
-        sessionStamp_ = 0;
+        sessionStamp_ = 0L;
 
         sessionCreateDate_ = "";
 
@@ -7772,7 +7773,7 @@ public final class Flappy {
           sessionOffset_ = other.sessionOffset_;
           onChanged();
         }
-        if (other.getSessionStamp() != 0) {
+        if (other.getSessionStamp() != 0L) {
           setSessionStamp(other.getSessionStamp());
         }
         if (!other.getSessionCreateDate().isEmpty()) {
@@ -8194,28 +8195,28 @@ public final class Flappy {
         return this;
       }
 
-      private int sessionStamp_ ;
+      private long sessionStamp_ ;
       /**
-       * <code>int32 sessionStamp = 7;</code>
+       * <code>int64 sessionStamp = 7;</code>
        */
-      public int getSessionStamp() {
+      public long getSessionStamp() {
         return sessionStamp_;
       }
       /**
-       * <code>int32 sessionStamp = 7;</code>
+       * <code>int64 sessionStamp = 7;</code>
        */
-      public Builder setSessionStamp(int value) {
+      public Builder setSessionStamp(long value) {
         
         sessionStamp_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>int32 sessionStamp = 7;</code>
+       * <code>int64 sessionStamp = 7;</code>
        */
       public Builder clearSessionStamp() {
         
-        sessionStamp_ = 0;
+        sessionStamp_ = 0L;
         onChanged();
         return this;
       }
@@ -12028,7 +12029,7 @@ public final class Flappy {
       "\001(\t\022\027\n\017sessionExtendId\030\002 \001(\t\022\023\n\013sessionT" +
       "ype\030\003 \001(\005\022\023\n\013sessionName\030\004 \001(\t\022\024\n\014sessio" +
       "nImage\030\005 \001(\t\022\025\n\rsessionOffset\030\006 \001(\t\022\024\n\014s" +
-      "essionStamp\030\007 \001(\005\022\031\n\021sessionCreateDate\030\010" +
+      "essionStamp\030\007 \001(\003\022\031\n\021sessionCreateDate\030\010" +
       " \001(\t\022\031\n\021sessionCreateUser\030\t \001(\t\022\026\n\016sessi" +
       "onDeleted\030\n \001(\005\022\032\n\022sessionDeletedDate\030\013 " +
       "\001(\t\022\r\n\005users\030\014 \001(\t\"W\n\005Route\022\016\n\006userID\030\001 " +

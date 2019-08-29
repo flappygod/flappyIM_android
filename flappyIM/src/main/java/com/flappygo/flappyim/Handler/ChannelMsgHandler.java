@@ -215,9 +215,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
 
                 //所有消息更新
-                database.insertMessages(messages);
+                if(messages!=null&&messages.size()!=0){
+                    database.insertMessages(messages);
+                }
                 //更新所有会话
-                database.insertSessions(handlerLogin.getLoginResponse().getSessions());
+                if(handlerLogin.getLoginResponse().getSessions()!=null&&handlerLogin.getLoginResponse().getSessions().size()!=0){
+                    database.insertSessions(handlerLogin.getLoginResponse().getSessions());
+                }
                 //关闭数据库
                 database.close();
 

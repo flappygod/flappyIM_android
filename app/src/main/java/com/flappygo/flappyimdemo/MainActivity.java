@@ -157,14 +157,16 @@ public class MainActivity extends Activity {
 
                         ChatMessage chatMessage = mySession.getLatestMessage();
 
-                        List<ChatMessage> messages = mySession.getFormerMessages(chatMessage.getMessageId(), 10);
-
-                        List<ChatMessage> newMsgs = new ArrayList<>();
-                        newMsgs.add(chatMessage);
-                        newMsgs.addAll(messages);
-                        for (int w = 0; w < newMsgs.size(); w++) {
-                            System.out.println(newMsgs.get(w).getMessageTableSeq().toString());
+                        if(chatMessage!=null){
+                            List<ChatMessage> messages = mySession.getFormerMessages(chatMessage.getMessageId(), 10);
+                            List<ChatMessage> newMsgs = new ArrayList<>();
+                            newMsgs.add(chatMessage);
+                            newMsgs.addAll(messages);
+                            for (int w = 0; w < newMsgs.size(); w++) {
+                                System.out.println(newMsgs.get(w).getMessageTableSeq().toString());
+                            }
                         }
+
                     }
 
                     @Override
