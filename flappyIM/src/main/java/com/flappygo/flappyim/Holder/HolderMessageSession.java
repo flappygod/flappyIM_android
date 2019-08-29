@@ -41,6 +41,14 @@ public class HolderMessageSession {
         return sessionListeners;
     }
 
+    public void addSessionListener(SessionListener sessionListener){
+        sessionListeners.add(sessionListener);
+    }
+
+    public boolean removeSessionListener(SessionListener sessionListener){
+       return sessionListeners.remove(sessionListener);
+    }
+
     //添加总的监听
     public void addGloableMessageListener(MessageListener listener) {
         //获取统一的监听

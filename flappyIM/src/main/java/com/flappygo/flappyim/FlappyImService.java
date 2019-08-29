@@ -17,6 +17,7 @@ import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
+import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Response.SessionData;
@@ -831,6 +832,14 @@ public class FlappyImService {
     //移除全局的监听
     public void removeGloableMessageListener(MessageListener listener) {
         HolderMessageSession.getInstance().removeGloableMessageListener(listener);
+    }
+    
+    public void addSessionListener(SessionListener listener){
+        HolderMessageSession.getInstance().addSessionListener(listener);
+    }
+
+    public void removeSessionListener(SessionListener listener){
+        HolderMessageSession.getInstance().removeSessionListener(listener);
     }
 
     //设置被踢下线的监听
