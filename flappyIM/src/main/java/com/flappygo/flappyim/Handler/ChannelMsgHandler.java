@@ -309,8 +309,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
         closeChannel(ctx);
+        super.exceptionCaught(ctx, cause);
     }
 
     //清空回调
