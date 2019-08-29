@@ -300,7 +300,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //更新数据
                     SessionData data = new SessionData(session.get(s));
 
-                    
+
                     //数据更新了
                     Message msg = new Message();
                     //收到新的消息
