@@ -133,8 +133,6 @@ public class Database {
                     values.put("messageContent", chatMessage.getMessageContent());
                 if (chatMessage.getMessageSended() != null)
                     values.put("messageSended", StringTool.decimalToInt(chatMessage.getMessageSended()));
-                if (chatMessage.getMessageReaded() != null)
-                    values.put("messageReaded", StringTool.decimalToInt(chatMessage.getMessageReaded()));
                 if (chatMessage.getMessageDeleted() != null)
                     values.put("messageDeleted", StringTool.decimalToInt(chatMessage.getMessageDeleted()));
                 if (chatMessage.getMessageDate() != null)
