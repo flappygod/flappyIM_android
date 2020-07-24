@@ -267,7 +267,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 DataManager.getInstance().saveLoginUser(user);
                 //插入成功
                 if (former == null) {
-                    chatMessage.setMessageReaded(former.getMessageReaded());
+                    //chatMessage.setMessageReaded(former.getMessageReaded());
                     //发送成功消息
                     Message msg = new Message();
                     //收到新的消息
