@@ -197,7 +197,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //如果插入成功
                     if (former == null) {
                         //保留是否已读的状态
-                        chatMessage.setMessageReaded(former.getMessageReaded());
+                        //chatMessage.setMessageReaded(former.getMessageReaded());
                         //收到了新的消息
                         Message msg = new Message();
                         //收到新的消息
