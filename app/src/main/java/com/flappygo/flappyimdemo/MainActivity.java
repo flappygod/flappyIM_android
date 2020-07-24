@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //shez
-        FlappyConfig.getInstance().setServerUrl("http://49.233.131.151","http://49.233.131.151");
+        FlappyConfig.getInstance().setServerUrl("http://49.233.131.151", "http://49.233.131.151");
         //服务初始
         FlappyImService.getInstance().init(getBaseContext());
 
@@ -95,6 +95,16 @@ public class MainActivity extends Activity {
 
                 Toast.makeText(getBaseContext(), "当前设备已经被踢下线了", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        FlappyImService.getInstance().addGloableMessageListener(new MessageListener() {
+            @Override
+            public void messageRecieved(ChatMessage chatMessage) {
+
+                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
+                    Toast.makeText(getBaseContext(), chatMessage.getChatText(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -160,7 +170,7 @@ public class MainActivity extends Activity {
 
                         ChatMessage chatMessage = mySession.getLatestMessage();
 
-                        if(chatMessage!=null){
+                        if (chatMessage != null) {
                             List<ChatMessage> messages = mySession.getFormerMessages(chatMessage.getMessageId(), 10);
                             List<ChatMessage> newMsgs = new ArrayList<>();
                             newMsgs.add(chatMessage);
