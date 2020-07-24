@@ -4,7 +4,7 @@ import android.os.Message;
 
 import com.flappygo.flappyim.Callback.FlappyDeadCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.Config.BaseConfig;
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
@@ -87,7 +87,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //创建builder
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
-                .setDevice(BaseConfig.device)
+                .setDevice(FlappyConfig.device)
                 .setUserID(this.user.getUserId())
                 .setPushid(StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
 

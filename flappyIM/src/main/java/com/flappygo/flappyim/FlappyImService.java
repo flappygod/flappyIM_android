@@ -10,7 +10,7 @@ import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.FlappyIMCode;
-import com.flappygo.flappyim.Config.BaseConfig;
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
@@ -126,7 +126,7 @@ public class FlappyImService {
         //获取application
         this.appContext = appContext.getApplicationContext();
         //更新服务器地址和资源文件上传地址
-        BaseConfig.getInstance().setServerUrl(serverPath, uploadPath);
+        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
         //创建intent
         Intent intent = new Intent();
         //设置服务名称
@@ -169,7 +169,7 @@ public class FlappyImService {
         //用户头像
         hashMap.put("userHead", userHead);
         //进行callBack
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().register,
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().register,
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override
@@ -212,13 +212,13 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userExtendID", StringTool.ToNotNullStr(userExtendID));
         //设备ID
-        hashMap.put("device", BaseConfig.device);
+        hashMap.put("device", FlappyConfig.device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
 
 
         //进行callBack
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().login,
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().login,
                 hashMap,
                 new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                     @Override
@@ -311,7 +311,7 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userTwo", userTwo);
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().createSingleSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createSingleSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
@@ -419,7 +419,7 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userTwo", userTwo);
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().getSingleSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getSingleSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
@@ -479,7 +479,7 @@ public class FlappyImService {
         hashMap.put("sessionName", groupName);
 
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().createGroupSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createGroupSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
@@ -550,7 +550,7 @@ public class FlappyImService {
         //用户ID
         hashMap.put("extendID", extendID);
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().getSessionByExtendID, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getSessionByExtendID, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
@@ -622,7 +622,7 @@ public class FlappyImService {
         //用户ID
         hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().getUserSessions, hashMap, new BaseListParseCallBack<SessionData>(SessionData.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getUserSessions, hashMap, new BaseListParseCallBack<SessionData>(SessionData.class) {
 
             @Override
             public void stateFalse(String message, String tag) {
@@ -684,7 +684,7 @@ public class FlappyImService {
         //群组的ID
         hashMap.put("extendID", groupID);
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().addUserToSession, hashMap, new BaseParseCallback<String>(String.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().addUserToSession, hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
@@ -733,7 +733,7 @@ public class FlappyImService {
         //群组的ID
         hashMap.put("extendID", groupID);
         //调用
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().delUserInSession, hashMap, new BaseParseCallback<String>(String.class) {
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().delUserInSession, hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel model, String tag) {
                 //失败
@@ -784,12 +784,12 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
         //设备ID
-        hashMap.put("device", BaseConfig.device);
+        hashMap.put("device", FlappyConfig.device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
 
         //进行callBack
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().logout,
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().logout,
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override

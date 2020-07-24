@@ -17,13 +17,12 @@ import android.os.IBinder;
 import android.os.Message;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappyDeadCallback;
-import com.flappygo.flappyim.Config.BaseConfig;
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Handler.HandlerLoginCallback;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
@@ -344,12 +343,12 @@ public class FlappyService extends Service {
         //用户ID
         hashMap.put("userID", DataManager.getInstance().getLoginUser().getUserId());
         //设备ID
-        hashMap.put("device", BaseConfig.device);
+        hashMap.put("device", FlappyConfig.device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getApplicationContext()));
 
         //进行callBack
-        LXHttpClient.getInstacne().postParam(BaseConfig.getInstance().autoLogin,
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
                 hashMap,
                 new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                     @Override

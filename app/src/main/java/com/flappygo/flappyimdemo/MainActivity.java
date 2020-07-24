@@ -15,13 +15,13 @@ import android.widget.Toast;
 
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TakePicTool;
@@ -42,8 +42,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //shez
+        FlappyConfig.getInstance().setServerUrl("http://49.233.131.151","http://49.233.131.151");
         //服务初始
         FlappyImService.getInstance().init(getBaseContext());
+
 
         //用户text
         final EditText editText = findViewById(R.id.userid);

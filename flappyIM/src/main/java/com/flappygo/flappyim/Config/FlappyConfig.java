@@ -1,16 +1,16 @@
 package com.flappygo.flappyim.Config;
 
-public class BaseConfig {
+public class FlappyConfig {
 
 
     //单例模式
-    private static BaseConfig instacne;
+    private static FlappyConfig instacne;
 
-    public static BaseConfig getInstance() {
+    public static FlappyConfig getInstance() {
         if (instacne == null) {
-            synchronized (BaseConfig.class) {
+            synchronized (FlappyConfig.class) {
                 if (instacne == null) {
-                    instacne = new BaseConfig();
+                    instacne = new FlappyConfig();
                 }
             }
         }
