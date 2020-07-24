@@ -56,7 +56,7 @@ public class BaseConfig {
     public String createGroupSession = serverUrl + "/api/createGroupSession";
 
     //获取群组会话
-    public String getSessionByID = serverUrl + "/api/getSessionByID";
+    public String getSessionByExtendID = serverUrl + "/api/getSessionByExtendID";
 
     //获取用户的所有会话
     public String getUserSessions = serverUrl + "/api/getUserSessions";
@@ -109,7 +109,7 @@ public class BaseConfig {
         createGroupSession = serverUrl + "/api/createGroupSession";
 
         //获取群组会话
-        getSessionByID = serverUrl + "/api/getSessionByID";
+        getSessionByExtendID = serverUrl + "/api/getSessionByID";
 
         //获取用户的所有会话
         getUserSessions = serverUrl + "/api/getUserSessions";

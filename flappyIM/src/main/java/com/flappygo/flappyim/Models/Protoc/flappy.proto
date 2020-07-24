@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+message FlappyRequest
+{
+//类型
+int32 type = 1;
+//聊天消息
+Message msg = 2;
+//登录信息
+ReqLogin login = 3;
+//更新信息
+ReqUpdate update = 4;
+//信息回执
+ReqReceipt receipt = 5;
+}
+
+message FlappyResponse{
+//类型
+int32 type = 1;
+//消息
+Message msg = 2;
+//会话
+Session sessions = 3;
+}
+
+message FlappyKafka{
+//类型
+int32 type = 1;
+//路由
+Route route = 2;
+//消息
+Message msg = 3;
+}
+
+message ReqLogin{
+//用户ID
+string userID = 1;
+//设备信息
+string device = 2;
+//推送ID
+string pushid = 3;
+//最后的tableSequece
+string latest = 4;
+}
+
+message ReqUpdate{
+//更新的类型
+int32 updateType = 1;
+//更新的ID
+string updateID = 2;
+
+}
+
+message ReqReceipt{
+//回执类型
+int32 receiptType = 1;
+//回执的ID
+string receiptID = 2;
+}
+
+message Message{
+//消息ID
+string messageId = 1;
+//消息会话
+string messageSession = 2;
+//消息会话类型
+int32 messageSessionType = 3;
+//消息会话偏移量
+int32 messageSessionOffset = 4;
+//消息序列
+int32 messageTableSeq = 5;
+//消息类型
+int32 messageType = 6;
+//消息发送者ID
+string messageSend = 7;
+//消息发送者外部ID
+string messageSendExtendid = 8;
+//消息接受者
+string messageRecieve = 9;
+//消息接收外部ID
+string messageRecieveExtendid = 10;
+//消息内容
+string messageContent = 11;
+//消息是否已发送
+int32 messageSended = 12;
+//消息是否已经被阅读
+int32 messageReaded = 13;
+//消息时间
+string messageDate = 14;
+//消息是否被删除
+int32 messageDeleted = 15;
+//消息删除日期
+string messageDeletedDate = 16;
+}
+
+message Session{
+//会话ID
+string sessionId = 1;
+//会话扩展ID
+string sessionExtendId = 2;
+//会话类型
+int32 sessionType = 3;
+//会话名称
+string sessionName = 4;
+//会话图片
+string sessionImage = 5;
+//会话当前最大偏移
+string sessionOffset = 6;
+//会话时间戳
+int64 sessionStamp = 7;
+//会话创建时间
+string sessionCreateDate = 8;
+//会话创建用户
+string sessionCreateUser = 9;
+//是否删除
+int32 sessionDeleted = 10;
+//删除日期
+string sessionDeletedDate = 11;
+//会话用户
+string users = 12;
+}
+
+
+message Route{
+//用户ID
+string userID = 1;
+//用户设备
+string device = 2;
+//推送ID
+string pushid = 3;
+//推送类型
+string pushType = 4;
+//时间
+string time = 5;
+}
+
