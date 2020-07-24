@@ -42,8 +42,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //shez
-        FlappyConfig.getInstance().setServerUrl("http://49.233.131.151", "http://49.233.131.151");
+        //设置服务器地址
+        FlappyImService.getInstance().setServerUrl("http://49.233.131.151", "http://49.233.131.151");
+
         //服务初始
         FlappyImService.getInstance().init(getBaseContext());
 

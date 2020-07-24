@@ -70,6 +70,11 @@ public class FlappyImService {
         return instacne;
     }
 
+    //设置服务器URL
+    public void setServerUrl(String serverUrl, String serverUploadUrl){
+        FlappyConfig.getInstance().setServerUrl(serverUrl,serverUploadUrl);
+    }
+
     //初始化
     public void init(Context appContext) {
         //初始化上下文
@@ -212,7 +217,7 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userExtendID", StringTool.ToNotNullStr(userExtendID));
         //设备ID
-        hashMap.put("device", FlappyConfig.device);
+        hashMap.put("device", FlappyConfig.getInstance().device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
 
@@ -784,7 +789,7 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
         //设备ID
-        hashMap.put("device", FlappyConfig.device);
+        hashMap.put("device", FlappyConfig.getInstance().device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
 

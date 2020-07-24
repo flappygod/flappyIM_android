@@ -343,7 +343,7 @@ public class FlappyService extends Service {
         //用户ID
         hashMap.put("userID", DataManager.getInstance().getLoginUser().getUserId());
         //设备ID
-        hashMap.put("device", FlappyConfig.device);
+        hashMap.put("device", FlappyConfig.getInstance().device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getApplicationContext()));
 

@@ -18,7 +18,7 @@ public class FlappyConfig {
     }
 
     //安卓设备
-    public static String device = "android";
+    public String device = "android";
 
 
     //链接的http服务器器的地址192.168.124.105
@@ -120,5 +120,10 @@ public class FlappyConfig {
         //向会话中移除人员
         delUserInSession = serverUrl + "/api/delUserInSession";
 
+    }
+
+    //设置设备
+    public  void setDevice(String device){
+        this.device=device;
     }
 }
