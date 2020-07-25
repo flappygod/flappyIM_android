@@ -54,6 +54,9 @@ public class FlappyImService {
     //上下文
     private Context appContext;
 
+    //是否显示notification
+    private boolean showNotification;
+
     /********
      * 单例manager
      * @return
@@ -108,8 +111,16 @@ public class FlappyImService {
         });
     }
 
+    //设置notification
+    public void setNotification(boolean flag) {
+        this.showNotification = flag;
+    }
+
     //发送本地通知
     private void sendNotificaiton(ChatMessage chatMessage) {
+        if(!showNotification){
+            return;
+        }
         //正在后台
         if (RunninTool.isBackground(FlappyImService.this.appContext)) {
             //上下文
