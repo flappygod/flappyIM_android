@@ -250,20 +250,22 @@ public class FlappyImService {
                         //callback.success(s);
                         //生成一个时间戳，用户保证多次重复请求的情况
                         long uuid = System.currentTimeMillis();
+                        //转换
+                        String str=Long.toString(uuid);
                         //保存设置
                         DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+                        //设置登录的回调
+                        if (callback != null) {
+                            //添加登录回调
+                            HolderLoginCallback.getInstance().addLoginCallBack(str, callback);
+                        }
                         //开启服务
                         FlappyService.startService(getAppContext(),
                                 response.getUser(),
                                 response.getServerIP(),
                                 response.getServerPort(),
-                                Long.toString(uuid),
+                                str,
                                 response);
-                        //设置登录的回调
-                        if (callback != null) {
-                            //添加登录回调
-                            HolderLoginCallback.getInstance().addLoginCallBack(uuid, callback);
-                        }
                     }
 
                     @Override

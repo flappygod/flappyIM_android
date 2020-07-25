@@ -280,7 +280,7 @@ public class FlappyService extends Object {
                 //端口
                 Integer.parseInt(serverPort),
                 //装饰下吧，难得
-                new HandlerLoginCallback(HolderLoginCallback.getInstance().getLoginCallBack(Long.parseLong(uuid)), loginResponse),
+                new HandlerLoginCallback(HolderLoginCallback.getInstance().getLoginCallBack(uuid), loginResponse),
                 //回调
                 new FlappyDeadCallback() {
                     @Override
