@@ -11,6 +11,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
@@ -20,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.R;
 import com.flappygo.flappyim.Reciver.ActionReceiver;
@@ -78,9 +81,27 @@ public class NotificationUtil extends ContextWrapper {
         }
         //xxx根据自己的情况获取drawable
         Drawable d = packageManager.getApplicationIcon(applicationInfo);
-        BitmapDrawable bd = (BitmapDrawable) d;
-        Bitmap bm = bd.getBitmap();
+        Bitmap bm = drawableToBitmap(d);
         return bm;
+    }
+
+    //drawable转成bitmap
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        // 取 drawable 的长宽
+        int w = drawable.getIntrinsicWidth();
+        int h = drawable.getIntrinsicHeight();
+        // 取 drawable 的颜色格式
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565;
+        // 建立对应 bitmap
+        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+        // 建立对应 bitmap 的画布
+        Canvas canvas = new Canvas(bitmap);
+        //设置bounds
+        drawable.setBounds(0, 0, w, h);
+        // 把 drawable 内容画到画布中
+        drawable.draw(canvas);
+        return bitmap;
     }
 
     public NotificationCompat.Builder getNotification_25(ChatMessage chatMessage, String title, String content) {
@@ -111,7 +132,7 @@ public class NotificationUtil extends ContextWrapper {
     public PendingIntent getPendingIntent(ChatMessage chatMessage) {
         Intent openintent = new Intent(this, ActionReceiver.class);
         openintent.putExtra("msg", GsonTool.modelToString(chatMessage, ChatMessage.class));
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(FlappyService.getInstance().getApplicationContext(),
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(FlappyImService.getInstance().getAppContext(),
                 0, openintent, PendingIntent.FLAG_CANCEL_CURRENT);
         return pendingIntent;
     }

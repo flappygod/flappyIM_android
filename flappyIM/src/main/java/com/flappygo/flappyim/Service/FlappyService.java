@@ -1,22 +1,13 @@
 package com.flappygo.flappyim.Service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
-
-import androidx.annotation.Nullable;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
@@ -28,14 +19,12 @@ import com.flappygo.flappyim.Handler.HandlerLoginCallback;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
+import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.R;
-import com.flappygo.flappyim.Reciver.ActionReceiver;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.NetTool;
-import com.flappygo.flappyim.Tools.NotificationUtil;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
 
@@ -45,16 +34,12 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_KNICKED;
 
 
 //应用的服务
-public class FlappyService extends Service {
+public class FlappyService extends Object {
 
-    //Channel ID 必须保证唯一
-
+    //Channel NAME IM通知服务
     private String channelName = "IM通知服务";
 
-    private String channelTitle = "IM通知服务";
-
-    private String channelContent = "正在接收推送消息";
-
+    //Channel ID 必须保证唯一
     private String channelID = "com.flappygo.flappyim.channel";
 
     //线程
@@ -69,11 +54,86 @@ public class FlappyService extends Service {
     //监听
     private NotificationClickListener notificationClickListener;
 
-
+    //加锁
     private byte[] lock = new byte[1];
 
-    //返回
+    //上下文
+    private Context mContext;
+
+    //当前服务是否注册
+    private boolean recieverRegistered = false;
+
+    //上下文
+    private FlappyService(Context context) {
+        mContext = context;
+    }
+
+
+    //开启服务
+    public static FlappyService startService(Context context) {
+        //单例模式
+        if (instance == null) {
+            synchronized (FlappyService.class) {
+                if (instance == null) {
+                    instance = new FlappyService(context.getApplicationContext());
+                }
+            }
+        }
+        //初始化接收器
+        instance.initReceiver();
+        //开始服务
+        instance.startServer(null,
+                null,
+                null,
+                null,
+                null);
+        return instance;
+    }
+
+    //开启服务
+    public static FlappyService startService(Context context,
+                                             ChatUser user,
+                                             String serverAddress,
+                                             String serverPort,
+                                             String uuid,
+                                             ResponseLogin response) {
+        //单例模式
+        if (instance == null) {
+            synchronized (FlappyService.class) {
+                if (instance == null) {
+                    instance = new FlappyService(context);
+                }
+            }
+        }
+        //初始化接收器
+        instance.initReceiver();
+        //开始服务
+        instance.startServer(user,
+                serverAddress,
+                serverPort,
+                uuid,
+                response);
+        return instance;
+    }
+
+    //销毁
+    public void stopService() {
+        //下线
+        offline();
+        //释放
+        synchronized (this) {
+            if (recieverRegistered) {
+                mContext.unregisterReceiver(netReceiver);
+                recieverRegistered = false;
+            }
+        }
+    }
+
+    //获取当前开启的服务
     public static FlappyService getInstance() {
+        if (instance == null) {
+            throw new RuntimeException("服务未初始化");
+        }
         return instance;
     }
 
@@ -100,141 +160,57 @@ public class FlappyService extends Service {
         }
     }
 
+    //设置消息被点击的监听
     public void setNotificationClickListener(NotificationClickListener listener) {
         notificationClickListener = listener;
         notifyClicked();
     }
 
+    //获取消息被点击的监听
     public NotificationClickListener getNotificationClickListener() {
         return notificationClickListener;
     }
 
+    //通知被点击
     public void notifyClicked() {
+        //消息
         String str = DataManager.getInstance().getNotificationClick();
         if (notificationClickListener != null && str != null) {
-            //消息
             ChatMessage message = GsonTool.jsonObjectToModel(str, ChatMessage.class);
             notificationClickListener.notificationClicked(message);
             DataManager.getInstance().removeNotificationClick();
         }
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //当前
-        instance = this;
-        //接收
-        initReceiver();
-        //不适用前台服务
-        //setForegroundService();
-    }
-
-
-    private void setForegroundService() {
-
-        //设定的通知渠道名称
-        createNotificationChannel();
-
-        //创建消息通知
-        Notification.Builder builder = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder = new Notification.Builder(this, channelID);
-        } else {
-            builder = new Notification.Builder(this);
-        }
-
-        //跳转
-        Intent intent = new Intent();
-        intent.setClass(this, ActionReceiver.class);
-        //设置通知图标
-        builder.setSmallIcon(R.drawable.nothing)
-                .setContentIntent(PendingIntent.getBroadcast(this, 1, intent, 0))
-                //设置大图
-                .setLargeIcon(NotificationUtil.getBitmap(getApplicationContext()))
-                //设置通知标题
-                .setContentTitle(channelTitle)
-                //设置通知内容
-                .setContentText(channelContent)
-                //设置通知内容
-                .setContentInfo(channelContent)
-                //用户触摸时，自动关闭
-                .setAutoCancel(false)
-                //设置处于运行状态
-                .setOngoing(true);
-
-        //将服务置于启动状态 NOTIFICATION_ID指的是创建的通知的ID
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            startForeground(100, builder.build());
-        } else {
-            startForeground(100, builder.getNotification());
-        }
-    }
-
-    /**
-     * 创建通知渠道
-     */
-    private void createNotificationChannel() {
-        // 在API>=26的时候创建通知渠道
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //设置通知的重要程度
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            //构建通知渠道
-            NotificationChannel channel = new NotificationChannel(channelID, channelName, importance);
-            //设置
-            channel.setDescription("IM消息接收通知，请勿关闭!");
-            //向系统注册通知渠道，注册后不能改变重要性以及其他通知行为
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            //创建channle
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-
-    @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
+    //开始
+    private void startServer(ChatUser user,
+                             String serverAddress,
+                             String serverPort,
+                             String uuid,
+                             ResponseLogin response) {
         //判断是否是新登录
-        boolean flag = testNewLogin(intent);
+        boolean flag = testNewLogin(user,
+                serverAddress,
+                serverPort,
+                uuid,
+                response);
         //不是新登录
         if (!flag) {
             //检查是否需要自动登录并登陆
             testAutoLogin(0);
         }
-        //默认
-        return super.onStartCommand(intent, flags, startId);
     }
 
-
     //检查当前是否是新登录，如果是
-    private boolean testNewLogin(Intent intent) {
-        if (intent != null) {
-            //获取传递过来的服务器地址
-            String serverAddress = intent.getStringExtra("serverAddress");
-            //获取传递过来的端口号码
-            String serverPort = intent.getStringExtra("serverPort");
-            //获取数据
-            ResponseLogin response = (ResponseLogin) intent.getSerializableExtra("data");
-            //用户
-            ChatUser user = (ChatUser) intent.getSerializableExtra("user");
-            //获取回调的uuid
-            long uuid = intent.getLongExtra("uuid", 0);
-            //重新发起链接
-            if (serverAddress != null && serverPort != null && response != null) {
-                startConnect(user, serverAddress, serverPort, uuid, response);
-                return true;
-            }
+    private boolean testNewLogin(ChatUser user,
+                                 String serverAddress,
+                                 String serverPort,
+                                 String uuid,
+                                 ResponseLogin response) {
+        //重新发起链接
+        if (user != null && serverAddress != null && serverPort != null && uuid != null && response != null) {
+            startConnect(user, serverAddress, serverPort, uuid, response);
+            return true;
         }
         return false;
     }
@@ -245,13 +221,15 @@ public class FlappyService extends Service {
         ChatUser user = DataManager.getInstance().getLoginUser();
         //之前已经登录了，那么我们开始断线重连
         if (user != null && user.isLogin() == 1) {
-            if (NetTool.isConnected(getApplicationContext())) {
+            //当前网络在线
+            if (NetTool.isConnected(mContext)) {
+                //移除消息
                 handler.removeMessages(1);
+                //等待一秒后继续连接
                 handler.sendEmptyMessageDelayed(1, delauMilis);
             }
         }
     }
-
 
     //判断当前是否连接
     BroadcastReceiver netReceiver = new BroadcastReceiver() {
@@ -269,36 +247,29 @@ public class FlappyService extends Service {
      * 注册网络监听的广播
      */
     private void initReceiver() {
-        IntentFilter timeFilter = new IntentFilter();
-        timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
-        timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
-        timeFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-        timeFilter.addAction("android.net.wifi.STATE_CHANGE");
-        timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        registerReceiver(netReceiver, timeFilter);
-    }
-
-
-    @Override
-    public void onDestroy() {
-        //stopForeground(true);
-        //注销广播的监听
-        if (netReceiver != null) {
-            unregisterReceiver(netReceiver);
-            netReceiver = null;
+        //新增
+        synchronized (this) {
+            if (!recieverRegistered) {
+                IntentFilter timeFilter = new IntentFilter();
+                timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
+                timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
+                timeFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+                timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+                timeFilter.addAction("android.net.wifi.STATE_CHANGE");
+                timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+                mContext.registerReceiver(netReceiver, timeFilter);
+                recieverRegistered = true;
+            }
         }
-        offline();
-        super.onDestroy();
     }
 
     //根据当前的信息重新连接
     private synchronized void startConnect(ChatUser user,
                                            String serverIP,
                                            String serverPort,
-                                           long uuid,
+                                           String uuid,
                                            ResponseLogin loginResponse) {
-
+        //之前的先下线
         offline();
 
         //创建新的线程
@@ -309,7 +280,7 @@ public class FlappyService extends Service {
                 //端口
                 Integer.parseInt(serverPort),
                 //装饰下吧，难得
-                new HandlerLoginCallback(HolderLoginCallback.getInstance().getLoginCallBack(uuid), loginResponse),
+                new HandlerLoginCallback(HolderLoginCallback.getInstance().getLoginCallBack(Long.parseLong(uuid)), loginResponse),
                 //回调
                 new FlappyDeadCallback() {
                     @Override
@@ -320,21 +291,18 @@ public class FlappyService extends Service {
                 });
         //开始这个线程
         clientThread.start();
-
-
     }
 
     //用于检测
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             //如果当前的网络是连接上了的
-            if (NetTool.isConnected(getApplicationContext())) {
+            if (NetTool.isConnected(mContext)) {
                 //自动登录
                 autoLogin();
             }
         }
     };
-
 
     //重新自动登录
     private void autoLogin() {
@@ -345,7 +313,7 @@ public class FlappyService extends Service {
         //设备ID
         hashMap.put("device", FlappyConfig.getInstance().device);
         //设备ID
-        hashMap.put("pushid", StringTool.getDeviceUnicNumber(getApplicationContext()));
+        hashMap.put("pushid", StringTool.getDeviceUnicNumber(mContext));
 
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
@@ -389,7 +357,7 @@ public class FlappyService extends Service {
                         startConnect(response.getUser(),
                                 response.getServerIP(),
                                 response.getServerPort(),
-                                0,
+                                Long.toString(System.currentTimeMillis()),
                                 response);
                     }
 

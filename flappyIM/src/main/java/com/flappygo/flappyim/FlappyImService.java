@@ -1,8 +1,5 @@
 package com.flappygo.flappyim;
 
-import android.content.Context;
-import android.content.Intent;
-
 import com.flappygo.flappyim.ApiServer.Base.BaseListParseCallBack;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
@@ -28,6 +25,8 @@ import com.flappygo.flappyim.Tools.NotificationUtil;
 import com.flappygo.flappyim.Tools.RunninTool;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
+
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -71,25 +70,39 @@ public class FlappyImService {
     }
 
     //设置服务器URL
-    public void setServerUrl(String serverUrl, String serverUploadUrl){
-        FlappyConfig.getInstance().setServerUrl(serverUrl,serverUploadUrl);
+    public void setServerUrl(String serverUrl, String serverUploadUrl) {
+        FlappyConfig.getInstance().setServerUrl(serverUrl, serverUploadUrl);
     }
 
     //初始化
     public void init(Context appContext) {
         //初始化上下文
         this.appContext = appContext.getApplicationContext();
-        //创建intent
-        Intent intent = new Intent();
-        //设置服务名称
-        intent.setClass(getAppContext(), FlappyService.class);
         //开启服务
-        startFlappyService(intent);
+        FlappyService.startService(getAppContext());
         //添加总体的监听
         HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
             @Override
             public void messageRecieved(ChatMessage chatMessage) {
                 //发送本地通知
+                sendNotificaiton(chatMessage);
+            }
+        });
+    }
+
+
+    //初始化
+    public void init(Context appContext, String serverPath, String uploadPath) {
+        //获取application
+        this.appContext = appContext.getApplicationContext();
+        //更新服务器地址和资源文件上传地址
+        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
+        //开启服务
+        FlappyService.startService(getAppContext());
+        //添加总体的监听
+        HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
+            @Override
+            public void messageRecieved(ChatMessage chatMessage) {
                 sendNotificaiton(chatMessage);
             }
         });
@@ -124,27 +137,6 @@ public class FlappyImService {
                 util.sendNotification(chatMessage, "消息提醒", "您有一条新的消息");
             }
         }
-    }
-
-    //初始化
-    public void init(Context appContext, String serverPath, String uploadPath) {
-        //获取application
-        this.appContext = appContext.getApplicationContext();
-        //更新服务器地址和资源文件上传地址
-        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
-        //创建intent
-        Intent intent = new Intent();
-        //设置服务名称
-        intent.setClass(getAppContext(), FlappyService.class);
-        //开启服务
-        startFlappyService(intent);
-        //添加总体的监听
-        HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
-            @Override
-            public void messageRecieved(ChatMessage chatMessage) {
-                sendNotificaiton(chatMessage);
-            }
-        });
     }
 
 
@@ -245,31 +237,20 @@ public class FlappyImService {
                     public void stateTrue(ResponseLogin response, String tag) {
                         //这里代表注册账户成功,但是我们还没有登录IM,所以不能够返回登录成功
                         //callback.success(s);
-                        //创建intent
-                        Intent intent = new Intent();
-
                         //生成一个时间戳，用户保证多次重复请求的情况
                         long uuid = System.currentTimeMillis();
-
-                        //设置服务名称
-                        intent.setClass(getAppContext(), FlappyService.class);
-                        //设置服务器的地址
-                        intent.putExtra("serverAddress", response.getServerIP());
-                        //设置服务器的端口
-                        intent.putExtra("serverPort", response.getServerPort());
-                        //设置id
-                        intent.putExtra("uuid", uuid);
-                        //返回的数据
-                        intent.putExtra("data", response);
-                        //用户数据传递
-                        intent.putExtra("user", response.getUser());
-
                         //保存设置
                         DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
-
-                        startFlappyService(intent);
+                        //开启服务
+                        FlappyService.startService(getAppContext(),
+                                response.getUser(),
+                                response.getServerIP(),
+                                response.getServerPort(),
+                                Long.toString(uuid),
+                                response);
                         //设置登录的回调
                         if (callback != null) {
+                            //添加登录回调
                             HolderLoginCallback.getInstance().addLoginCallBack(uuid, callback);
                         }
                     }
@@ -280,16 +261,6 @@ public class FlappyImService {
                             callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NETERROR));
                     }
                 }, null);
-    }
-
-    //开启后台IM服务
-    private void startFlappyService(Intent intent) {
-        //开启服务
-        try {
-            getAppContext().startService(intent);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
     }
 
 
@@ -770,13 +741,11 @@ public class FlappyImService {
 
     //注销当前的登录
     public void logout(final FlappyIMCallback<String> callback) {
-
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null)
                 callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOTLOGIN));
             return;
         }
-
         //先关闭当前的长连接
         if (FlappyService.getInstance() != null) {
             //关闭长连接下线
@@ -872,6 +841,11 @@ public class FlappyImService {
             return false;
         }
         return true;
+    }
+
+    //停止服务
+    public void stopServer() {
+        FlappyService.getInstance().stopService();
     }
 
 }
