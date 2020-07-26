@@ -184,7 +184,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     }
                 });
 
-                //如果插入成功
+                //创建database
                 Database database = new Database();
                 //遍历消息进行通知
                 for (int s = 0; s < messages.size(); s++) {
