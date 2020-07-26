@@ -36,6 +36,7 @@ allprojects {
 dependencies {
     implementation  group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
     implementation 'com.google.protobuf:protobuf-java:3.9.0'
-    implementation 'com.github.flappygod:LXHttpClient:2.8'
-    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.github.flappygod:LXHttpClient:2.7'
+    implementation 'androidx.core:core:1.0.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
