@@ -54,8 +54,6 @@ public class FlappyService extends Object {
     //监听
     private NotificationClickListener notificationClickListener;
 
-    //加锁
-    private byte[] lock = new byte[1];
 
     //上下文
     private Context mContext;
@@ -71,7 +69,6 @@ public class FlappyService extends Object {
 
     //开启服务
     public static FlappyService startService(Context context) {
-        //单例模式
         if (instance == null) {
             synchronized (FlappyService.class) {
                 if (instance == null) {
@@ -97,11 +94,10 @@ public class FlappyService extends Object {
                                              String serverPort,
                                              String uuid,
                                              ResponseLogin response) {
-        //单例模式
         if (instance == null) {
             synchronized (FlappyService.class) {
                 if (instance == null) {
-                    instance = new FlappyService(context);
+                    instance = new FlappyService(context.getApplicationContext());
                 }
             }
         }
@@ -139,7 +135,7 @@ public class FlappyService extends Object {
 
     //获取当前服务的线程
     public NettyThread getClientThread() {
-        synchronized (lock) {
+        synchronized (this) {
             return clientThread;
         }
     }
@@ -264,11 +260,11 @@ public class FlappyService extends Object {
     }
 
     //根据当前的信息重新连接
-    private synchronized void startConnect(ChatUser user,
-                                           String serverIP,
-                                           String serverPort,
-                                           String uuid,
-                                           ResponseLogin loginResponse) {
+    private void startConnect(ChatUser user,
+                              String serverIP,
+                              String serverPort,
+                              String uuid,
+                              ResponseLogin loginResponse) {
         //之前的先下线
         offline();
 
@@ -371,7 +367,7 @@ public class FlappyService extends Object {
 
     //下线了
     public void offline() {
-        synchronized (lock) {
+        synchronized (this) {
             //假如之前存在连接
             if (clientThread != null) {
                 //之前的账号下线
