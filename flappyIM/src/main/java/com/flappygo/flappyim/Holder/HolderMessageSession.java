@@ -15,7 +15,7 @@ public class HolderMessageSession {
     private HashMap<String, List<MessageListener>> msgListeners = new HashMap<>();
 
     //会话更新的监听
-    private List<SessionListener>  sessionListeners=new ArrayList<>();
+    private List<SessionListener> sessionListeners = new ArrayList<>();
 
     //单例模式
     private static HolderMessageSession instacne;
@@ -37,16 +37,21 @@ public class HolderMessageSession {
         return msgListeners;
     }
 
+    //获取监听
     public List<SessionListener> getSessionListeners() {
         return sessionListeners;
     }
 
-    public void addSessionListener(SessionListener sessionListener){
-        sessionListeners.add(sessionListener);
+    //添加监听
+    public void addSessionListener(SessionListener sessionListener) {
+        if (!sessionListeners.contains(sessionListener)) {
+            sessionListeners.add(sessionListener);
+        }
     }
 
-    public boolean removeSessionListener(SessionListener sessionListener){
-       return sessionListeners.remove(sessionListener);
+    //移除监听
+    public boolean removeSessionListener(SessionListener sessionListener) {
+        return sessionListeners.remove(sessionListener);
     }
 
     //添加总的监听
@@ -62,7 +67,10 @@ public class HolderMessageSession {
         }
         //当前的
         if (listener != null) {
-            messageListeners.add(listener);
+            //不包含，添加
+            if (!messageListeners.contains(listener)) {
+                messageListeners.add(listener);
+            }
         }
     }
 
@@ -96,7 +104,9 @@ public class HolderMessageSession {
         }
         //不为空
         if (listener != null) {
-            messageListeners.add(listener);
+            if(!messageListeners.contains(listener)){
+                messageListeners.add(listener);
+            }
         }
     }
 

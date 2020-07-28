@@ -57,6 +57,44 @@ public class FlappyImService {
     //是否显示notification
     private boolean showNotification;
 
+    //消息的监听
+    private MessageListener messageListener=new MessageListener() {
+        @Override
+        public void messageRecieved(ChatMessage chatMessage) {
+            //发送本地通知
+            sendNotificaiton(chatMessage);
+        }
+    };
+
+
+    //获取上下文
+    public Context getAppContext() {
+        //没有初始化就报错
+        if (appContext == null) {
+            throw new RuntimeException("flappyim not init,call init first");
+        }
+        //返回
+        return appContext;
+    }
+
+    //初始化
+    public void init(Context appContext) {
+        //初始化上下文
+        this.appContext = appContext.getApplicationContext();
+        //添加总体的监听
+        HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
+    }
+
+    //初始化
+    public void init(Context appContext, String serverPath, String uploadPath) {
+        //获取application
+        this.appContext = appContext.getApplicationContext();
+        //更新服务器地址和资源文件上传地址
+        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
+        //添加总体的监听,定义全局防止多次重复添加这个监听
+        HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
+    }
+
     /********
      * 单例manager
      * @return
@@ -72,43 +110,15 @@ public class FlappyImService {
         return instacne;
     }
 
-    //设置服务器URL
-    public void setServerUrl(String serverUrl, String serverUploadUrl) {
-        FlappyConfig.getInstance().setServerUrl(serverUrl, serverUploadUrl);
-    }
-
-    //初始化
-    public void init(Context appContext) {
-        //初始化上下文
-        this.appContext = appContext.getApplicationContext();
+    //正式开启服务
+    public void startServer() {
         //开启服务
         FlappyService.startService(getAppContext());
-        //添加总体的监听
-        HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
-            @Override
-            public void messageRecieved(ChatMessage chatMessage) {
-                //发送本地通知
-                sendNotificaiton(chatMessage);
-            }
-        });
     }
 
-
-    //初始化
-    public void init(Context appContext, String serverPath, String uploadPath) {
-        //获取application
-        this.appContext = appContext.getApplicationContext();
-        //更新服务器地址和资源文件上传地址
-        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
-        //开启服务
-        FlappyService.startService(getAppContext());
-        //添加总体的监听
-        HolderMessageSession.getInstance().addGloableMessageListener(new MessageListener() {
-            @Override
-            public void messageRecieved(ChatMessage chatMessage) {
-                sendNotificaiton(chatMessage);
-            }
-        });
+    //停止服务
+    public void stopServer() {
+        FlappyService.getInstance().stopService();
     }
 
     //设置notification
@@ -118,7 +128,7 @@ public class FlappyImService {
 
     //发送本地通知
     private void sendNotificaiton(ChatMessage chatMessage) {
-        if(!showNotification){
+        if (!showNotification) {
             return;
         }
         //正在后台
@@ -150,16 +160,6 @@ public class FlappyImService {
         }
     }
 
-
-    //获取上下文
-    public Context getAppContext() {
-        //没有初始化就报错
-        if (appContext == null) {
-            throw new RuntimeException("flappyim not init,call init first");
-        }
-        //返回
-        return appContext;
-    }
 
 
     //创建用户账户
@@ -251,7 +251,7 @@ public class FlappyImService {
                         //生成一个时间戳，用户保证多次重复请求的情况
                         long uuid = System.currentTimeMillis();
                         //转换
-                        String str=Long.toString(uuid);
+                        String str = Long.toString(uuid);
                         //保存设置
                         DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
                         //设置登录的回调
@@ -856,9 +856,5 @@ public class FlappyImService {
         return true;
     }
 
-    //停止服务
-    public void stopServer() {
-        FlappyService.getInstance().stopService();
-    }
 
 }
