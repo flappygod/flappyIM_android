@@ -45,8 +45,10 @@ public class MainActivity extends Activity {
 
         //服务初始
         FlappyImService.getInstance().init(getBaseContext(),"http://49.233.131.151", "http://49.233.131.151");
-
+        //设置顶部不弹出默认通知
         FlappyImService.getInstance().setNotification(false);
+        //开启服务
+        FlappyImService.getInstance().startServer();
 
         //用户text
         final EditText editText = findViewById(R.id.userid);
