@@ -18,16 +18,16 @@ message FlappyResponse{
 //类型
 int32 type = 1;
 //消息
-Message msg = 2;
+repeated Message msg = 2;
 //会话
-Session sessions = 3;
+repeated Session sessions = 3;
 }
 
 message FlappyKafka{
 //类型
 int32 type = 1;
 //路由
-Route route = 2;
+repeated Route route = 2;
 //消息
 Message msg = 3;
 }
@@ -132,5 +132,7 @@ string pushid = 3;
 string pushType = 4;
 //时间
 string time = 5;
+//推送平台类型
+string pushPlat = 6;
 }
 
