@@ -58,7 +58,7 @@ public class FlappyImService {
     private boolean showNotification;
 
     //消息的监听
-    private MessageListener messageListener=new MessageListener() {
+    private MessageListener messageListener = new MessageListener() {
         @Override
         public void messageRecieved(ChatMessage chatMessage) {
             //发送本地通知
@@ -81,6 +81,8 @@ public class FlappyImService {
     public void init(Context appContext) {
         //初始化上下文
         this.appContext = appContext.getApplicationContext();
+        //初始化context
+        FlappyService.getInstance().init(appContext);
         //添加总体的监听
         HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
     }
@@ -89,6 +91,8 @@ public class FlappyImService {
     public void init(Context appContext, String serverPath, String uploadPath) {
         //获取application
         this.appContext = appContext.getApplicationContext();
+        //初始化context
+        FlappyService.getInstance().init(appContext);
         //更新服务器地址和资源文件上传地址
         FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
         //添加总体的监听,定义全局防止多次重复添加这个监听
@@ -96,8 +100,8 @@ public class FlappyImService {
     }
 
     //推送的平台
-    public void setPlatfrom(String paltfrom){
-        FlappyConfig.getInstance().pushPlat=paltfrom;
+    public void setPlatfrom(String paltfrom) {
+        FlappyConfig.getInstance().pushPlat = paltfrom;
     }
 
     /********
@@ -118,7 +122,7 @@ public class FlappyImService {
     //正式开启服务
     public void startServer() {
         //开启服务
-        FlappyService.startService(getAppContext());
+        FlappyService.getInstance().startService();
     }
 
     //停止服务
@@ -164,7 +168,6 @@ public class FlappyImService {
             }
         }
     }
-
 
 
     //创建用户账户
@@ -267,7 +270,7 @@ public class FlappyImService {
                             HolderLoginCallback.getInstance().addLoginCallBack(str, callback);
                         }
                         //开启服务
-                        FlappyService.startService(getAppContext(),
+                        FlappyService.getInstance().startService(
                                 response.getUser(),
                                 response.getServerIP(),
                                 response.getServerPort(),

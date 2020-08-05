@@ -62,54 +62,48 @@ public class FlappyService extends Object {
     private boolean recieverRegistered = false;
 
     //上下文
-    private FlappyService(Context context) {
-        mContext = context;
+    private FlappyService() {
     }
 
-
-    //开启服务
-    public static FlappyService startService(Context context) {
-        if (instance == null) {
-            synchronized (FlappyService.class) {
-                if (instance == null) {
-                    instance = new FlappyService(context.getApplicationContext());
-                }
-            }
-        }
-        //初始化接收器
-        instance.initReceiver();
-        //开始服务
-        instance.startServer(null,
-                null,
-                null,
-                null,
-                null);
-        return instance;
+    //赋值上下文
+    public void init(Context context) {
+        this.mContext = context;
     }
 
     //开启服务
-    public static FlappyService startService(Context context,
-                                             ChatUser user,
-                                             String serverAddress,
-                                             String serverPort,
-                                             String uuid,
-                                             ResponseLogin response) {
-        if (instance == null) {
-            synchronized (FlappyService.class) {
-                if (instance == null) {
-                    instance = new FlappyService(context.getApplicationContext());
-                }
-            }
+    public boolean startService() {
+        if (instance != null) {
+            //初始化接收器
+            instance.initReceiver();
+            //开始服务
+            instance.startServer(null,
+                    null,
+                    null,
+                    null,
+                    null);
+            return true;
         }
-        //初始化接收器
-        instance.initReceiver();
-        //开始服务
-        instance.startServer(user,
-                serverAddress,
-                serverPort,
-                uuid,
-                response);
-        return instance;
+        return false;
+    }
+
+    //开启服务
+    public boolean startService(ChatUser user,
+                                String serverAddress,
+                                String serverPort,
+                                String uuid,
+                                ResponseLogin response) {
+        if (instance != null) {
+            //初始化接收器
+            instance.initReceiver();
+            //开始服务
+            instance.startServer(user,
+                    serverAddress,
+                    serverPort,
+                    uuid,
+                    response);
+            return true;
+        }
+        return false;
     }
 
     //销毁
@@ -128,7 +122,11 @@ public class FlappyService extends Object {
     //获取当前开启的服务
     public static FlappyService getInstance() {
         if (instance == null) {
-            throw new RuntimeException("服务未初始化");
+            synchronized (FlappyService.class) {
+                if (instance == null) {
+                    instance = new FlappyService();
+                }
+            }
         }
         return instance;
     }
