@@ -20,6 +20,8 @@ public class FlappyConfig {
     //安卓设备
     public String device = "android";
 
+    //当前是正式环境
+    public String pushPlat="release";
 
     //链接的http服务器器的地址192.168.124.105
     //public String serverUrl = "http://192.168.124.127";

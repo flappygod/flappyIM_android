@@ -223,6 +223,8 @@ public class FlappyImService {
         hashMap.put("device", FlappyConfig.getInstance().device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
+        //设备ID
+        hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
 
 
         //进行callBack

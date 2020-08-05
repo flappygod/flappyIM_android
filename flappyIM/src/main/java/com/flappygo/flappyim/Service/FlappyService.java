@@ -310,6 +310,8 @@ public class FlappyService extends Object {
         hashMap.put("device", FlappyConfig.getInstance().device);
         //设备ID
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(mContext));
+        //设备ID
+        hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
 
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
