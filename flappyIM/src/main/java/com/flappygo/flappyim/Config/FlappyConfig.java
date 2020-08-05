@@ -18,7 +18,7 @@ public class FlappyConfig {
     }
 
     //安卓设备
-    public String device = "android";
+    final public String device = "android";
 
     //当前是正式环境
     public String pushPlat="release";
@@ -124,8 +124,4 @@ public class FlappyConfig {
 
     }
 
-    //设置设备
-    public  void setDevice(String device){
-        this.device=device;
-    }
 }
