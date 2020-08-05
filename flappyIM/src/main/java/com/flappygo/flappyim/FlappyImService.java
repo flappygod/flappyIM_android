@@ -82,7 +82,7 @@ public class FlappyImService {
         //初始化上下文
         this.appContext = appContext.getApplicationContext();
         //初始化context
-        FlappyService.getInstance().init(appContext);
+        FlappyService.getInstance().init(appContext.getApplicationContext());
         //添加总体的监听
         HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
     }
@@ -92,7 +92,7 @@ public class FlappyImService {
         //获取application
         this.appContext = appContext.getApplicationContext();
         //初始化context
-        FlappyService.getInstance().init(appContext);
+        FlappyService.getInstance().init(appContext.getApplicationContext());
         //更新服务器地址和资源文件上传地址
         FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
         //添加总体的监听,定义全局防止多次重复添加这个监听
