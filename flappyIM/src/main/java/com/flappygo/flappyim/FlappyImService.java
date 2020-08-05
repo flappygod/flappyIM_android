@@ -95,6 +95,11 @@ public class FlappyImService {
         HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
     }
 
+    //推送的平台
+    public void setPlatfrom(String paltfrom){
+        FlappyConfig.getInstance().pushPlat=paltfrom;
+    }
+
     /********
      * 单例manager
      * @return
