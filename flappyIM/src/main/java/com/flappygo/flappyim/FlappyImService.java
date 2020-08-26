@@ -21,6 +21,7 @@ import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Service.FlappyService;
 import com.flappygo.flappyim.Session.FlappyChatSession;
+import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.NotificationUtil;
 import com.flappygo.flappyim.Tools.RunninTool;
 import com.flappygo.flappyim.Tools.StringTool;
@@ -866,5 +867,11 @@ public class FlappyImService {
         return true;
     }
 
-
+    //当前是否在线
+    public boolean isOnline() {
+        if (FlappyService.getInstance() != null) {
+            FlappyService.getInstance().isOnline();
+        }
+        return false;
+    }
 }

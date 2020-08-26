@@ -138,6 +138,15 @@ public class FlappyService extends Object {
         }
     }
 
+    //当前是否在线
+    public boolean isOnline() {
+        NettyThread thread = getClientThread();
+        if (thread != null && thread.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
 
     //设置踢下线的监听
     public void setKnickedOutListener(KnickedOutListener listener) {
