@@ -133,12 +133,12 @@ public class NettyThread extends Thread {
 
     //关闭连接
     public void closeConnection(Exception ex) {
+        //登录失败
+        loginFaulure(ex);
         //通知死亡
         if (deadCallback != null) {
             deadCallback.dead();
         }
-        //登录失败
-        loginFaulure(ex);
         try {
             //这一步会阻塞住
             if (future != null) {
