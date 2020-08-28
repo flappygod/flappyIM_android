@@ -2,7 +2,6 @@ package com.flappygo.flappyim.Thread;
 
 import android.os.Message;
 
-import com.flappygo.flappyim.Callback.FlappyDeadCallback;
 import com.flappygo.flappyim.Handler.HandlerLoginCallback;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
@@ -12,6 +11,7 @@ import java.net.InetSocketAddress;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
@@ -38,7 +38,7 @@ public class NettyThread extends Thread {
     private HandlerLoginCallback loginHandler;
 
     //线程死亡的回调
-    private FlappyDeadCallback deadCallback;
+    private NettyThreadDead deadCallback;
 
     //获取channel
     public ChannelMsgHandler getChannelMsgHandler() {
@@ -63,7 +63,7 @@ public class NettyThread extends Thread {
             String serverIP,
             int serverPort,
             HandlerLoginCallback loginHandler,
-            FlappyDeadCallback deadCallback) {
+            NettyThreadDead deadCallback) {
         this.user = user;
         this.serverIP = serverIP;
         this.serverPort = serverPort;
@@ -113,32 +113,32 @@ public class NettyThread extends Thread {
                             serverPort)).sync();
         } catch (Exception e) {
             //假如存在登录回调
-            if (loginHandler != null) {
-                Message message = new Message();
-                message.what = HandlerLoginCallback.LOGIN_FAILURE;
-                message.obj = e;
-                this.loginHandler.sendMessage(message);
-                loginHandler = null;
-            }
+            closeConnection(e);
             //设置为空
             future = null;
-            //清空
-            channelMsgHandler.closeRegular();
-            //直接死亡了
-            if (deadCallback != null) {
-                deadCallback.dead();
-            }
             //返回false
             return false;
-        } finally {
-            loginHandler = null;
         }
         //成功连接
         return true;
     }
 
+    //下线
+    public void offline() {
+        //正常退出
+        deadCallback.disable();
+        //关闭连接
+        closeConnection(new Exception("NETTY 线程被关闭"));
+    }
+
     //关闭连接
-    public void closeConnection() {
+    public void closeConnection(Exception ex) {
+        //通知死亡
+        if (deadCallback != null) {
+            deadCallback.dead();
+        }
+        //登录失败
+        loginFaulure(ex);
         try {
             //这一步会阻塞住
             if (future != null) {
@@ -156,13 +156,22 @@ public class NettyThread extends Thread {
         }
     }
 
-
-    //下线
-    public void offline() {
-        //正常退出
-        channelMsgHandler.closeRegular();
-        //关闭连接
-        closeConnection();
+    //登录失败
+    private void loginFaulure(Exception ex) {
+        //假如存在登录回调
+        synchronized (this) {
+            if (loginHandler != null) {
+                Message message = new Message();
+                //失败
+                message.what = HandlerLoginCallback.LOGIN_FAILURE;
+                //失败excepiton
+                message.obj = ex;
+                //发送消息，只执行一次
+                this.loginHandler.sendMessage(message);
+                //清空
+                loginHandler = null;
+            }
+        }
     }
 
     //运行

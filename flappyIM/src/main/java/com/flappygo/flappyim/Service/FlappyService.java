@@ -12,18 +12,17 @@ import android.os.Message;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Callback.FlappyDeadCallback;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Handler.HandlerLoginCallback;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
-import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Thread.NettyThread;
+import com.flappygo.flappyim.Thread.NettyThreadDead;
 import com.flappygo.flappyim.Tools.NetTool;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
@@ -285,9 +284,9 @@ public class FlappyService extends Object {
                 //装饰下吧，难得
                 new HandlerLoginCallback(HolderLoginCallback.getInstance().getLoginCallBack(uuid), loginResponse),
                 //回调
-                new FlappyDeadCallback() {
+                new NettyThreadDead() {
                     @Override
-                    public void dead() {
+                    public void threadDead() {
                         //检查是否需要重新登录
                         testAutoLogin(100);
                     }

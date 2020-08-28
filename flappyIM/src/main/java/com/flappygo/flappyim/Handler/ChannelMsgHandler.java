@@ -14,6 +14,7 @@ import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Thread.NettyThreadDead;
 import com.flappygo.flappyim.Tools.NettyAttrUtil;
 import com.flappygo.flappyim.Tools.StringTool;
 
@@ -57,21 +58,22 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private Flappy.FlappyRequest heart;
 
     //回调
-    private FlappyDeadCallback deadCallback;
+    private NettyThreadDead deadCallback;
 
     //用于加锁
     private Byte[] lock = new Byte[1];
 
-    private List<String>  updateSessions=new ArrayList<>();
+    //更新的sessions
+    private List<String> updateSessions = new ArrayList<>();
 
     //回调
-    public ChannelMsgHandler(HandlerLoginCallback handler, FlappyDeadCallback deadCallback, ChatUser user) {
+    public ChannelMsgHandler(HandlerLoginCallback handler, NettyThreadDead deadCallback, ChatUser user) {
         //心跳
         this.heart = Flappy.FlappyRequest.newBuilder().setType(FlappyRequest.REQ_PING).build();
         //消息接收监听
         this.handlerMessage = new HandlerMessage();
         //会话的handler
-        this.handlerSession=new HandlerSession();
+        this.handlerSession = new HandlerSession();
         //handler
         this.handlerLogin = handler;
         //回调
@@ -221,11 +223,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
 
                 //所有消息更新
-                if(messages!=null&&messages.size()!=0){
+                if (messages != null && messages.size() != 0) {
                     database.insertMessages(messages);
                 }
                 //更新所有会话
-                if(handlerLogin.getLoginResponse().getSessions()!=null&&handlerLogin.getLoginResponse().getSessions().size()!=0){
+                if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
                     database.insertSessions(handlerLogin.getLoginResponse().getSessions());
                 }
                 //关闭数据库
@@ -334,11 +336,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         super.exceptionCaught(ctx, cause);
     }
 
-    //清空回调
-    public void closeRegular() {
-        this.deadCallback = null;
-    }
-
     //用户下线
     private void closeChannel(ChannelHandlerContext context) {
 
@@ -377,8 +374,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         if (deadCallback != null) {
             //死亡
             deadCallback.dead();
-            //清空
-            deadCallback = null;
         }
         //关闭与服务器的连接
         context.close();
@@ -412,7 +407,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //遍历
         for (String key : needUpdate.keySet()) {
 
-            if(!updateSessions.contains(key)){
+            if (!updateSessions.contains(key)) {
 
                 updateSessions.add(key);
 
@@ -430,7 +425,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //发送需要更新的消息
                 channelHandlerContext.writeAndFlush(builder.build());
             }
-
 
 
         }
