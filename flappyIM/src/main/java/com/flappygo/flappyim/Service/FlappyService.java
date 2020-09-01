@@ -35,11 +35,8 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_KNICKED;
 //应用的服务
 public class FlappyService extends Object {
 
-    //Channel NAME IM通知服务
-    private String channelName = "IM通知服务";
-
-    //Channel ID 必须保证唯一
-    private String channelID = "com.flappygo.flappyim.channel";
+    //自动登录间隔时间
+    private final int autoLoginSpace=1000*5;
 
     //线程
     private NettyThread clientThread;
@@ -53,6 +50,8 @@ public class FlappyService extends Object {
     //监听
     private NotificationClickListener notificationClickListener;
 
+    //当前正在登录
+    public boolean isLoading = false;
 
     //上下文
     private Context mContext;
@@ -233,6 +232,90 @@ public class FlappyService extends Object {
         }
     }
 
+    //用于检测
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            //如果当前的网络是连接上了的
+            if (NetTool.isConnected(mContext)) {
+                synchronized (FlappyService.getInstance()) {
+                    //自动登录
+                    if (FlappyService.getInstance().isLoading) {
+                        testAutoLogin(autoLoginSpace);
+                    } else {
+                        autoLogin();
+                    }
+                }
+            }
+        }
+    };
+
+    //重新自动登录
+    private void autoLogin() {
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        //用户ID
+        hashMap.put("userID", DataManager.getInstance().getLoginUser().getUserId());
+        //设备ID
+        hashMap.put("device", FlappyConfig.getInstance().device);
+        //设备ID
+        hashMap.put("pushid", StringTool.getDeviceUnicNumber(mContext));
+        //设备ID
+        hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
+
+        //进行callBack
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
+                hashMap,
+                new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel model, String tag) {
+                        //当前的用户已经被踢下线了
+                        if (model.getResultCode().equals(RESULT_KNICKED)) {
+
+                            //设置登录状态
+                            ChatUser user = DataManager.getInstance().getLoginUser();
+                            //当前没有登录
+                            user.setLogin(0);
+                            //清空用户数据
+                            DataManager.getInstance().saveLoginUser(user);
+                            //当前已经被踢下线了
+                            if (knickedOutListener != null) {
+                                //只执行一次
+                                knickedOutListener.knickedOut();
+                            }
+                        } else {
+                            //重新登录
+                            testAutoLogin(autoLoginSpace);
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        testAutoLogin(autoLoginSpace);
+                    }
+
+                    @Override
+                    public void stateTrue(ResponseLogin response, String tag) {
+
+                        //保存推送设置
+                        DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+
+
+                        //自动登录成功，我们拿到了相应的数据
+                        startConnect(response.getUser(),
+                                response.getServerIP(),
+                                response.getServerPort(),
+                                Long.toString(System.currentTimeMillis()),
+                                response);
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        testAutoLogin(autoLoginSpace);
+                    }
+
+                }, null);
+    }
+
     //判断当前是否连接
     BroadcastReceiver netReceiver = new BroadcastReceiver() {
         @Override
@@ -240,7 +323,7 @@ public class FlappyService extends Object {
             String action = intent.getAction();
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 //检查是否需要重新登录
-                testAutoLogin(100);
+                testAutoLogin(320);
             }
         }
     };
@@ -288,90 +371,13 @@ public class FlappyService extends Object {
                     @Override
                     public void threadDead() {
                         //检查是否需要重新登录
-                        testAutoLogin(100);
+                        testAutoLogin(320);
                     }
                 });
         //开始这个线程
         clientThread.start();
     }
 
-    //用于检测
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            //如果当前的网络是连接上了的
-            if (NetTool.isConnected(mContext)) {
-                //自动登录
-                autoLogin();
-            }
-        }
-    };
-
-    //重新自动登录
-    private void autoLogin() {
-        //创建这个HashMap
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        //用户ID
-        hashMap.put("userID", DataManager.getInstance().getLoginUser().getUserId());
-        //设备ID
-        hashMap.put("device", FlappyConfig.getInstance().device);
-        //设备ID
-        hashMap.put("pushid", StringTool.getDeviceUnicNumber(mContext));
-        //设备ID
-        hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
-
-        //进行callBack
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
-                hashMap,
-                new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel model, String tag) {
-                        //当前的用户已经被踢下线了
-                        if (model.getResultCode().equals(RESULT_KNICKED)) {
-
-                            //设置登录状态
-                            ChatUser user = DataManager.getInstance().getLoginUser();
-                            //当前没有登录
-                            user.setLogin(0);
-                            //清空用户数据
-                            DataManager.getInstance().saveLoginUser(user);
-                            //当前已经被踢下线了
-                            if (knickedOutListener != null) {
-                                //只执行一次
-                                knickedOutListener.knickedOut();
-                            }
-                        } else {
-                            //重新登录
-                            testAutoLogin(5 * 1000);
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        testAutoLogin(5 * 1000);
-                    }
-
-                    @Override
-                    public void stateTrue(ResponseLogin response, String tag) {
-
-                        //保存推送设置
-                        DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
-
-
-                        //自动登录成功，我们拿到了相应的数据
-                        startConnect(response.getUser(),
-                                response.getServerIP(),
-                                response.getServerPort(),
-                                Long.toString(System.currentTimeMillis()),
-                                response);
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        testAutoLogin(5 * 1000);
-                    }
-
-                }, null);
-    }
 
     //下线了
     public void offline() {
