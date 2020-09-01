@@ -933,7 +933,7 @@ public class FlappyImService {
     //当前是否在线
     public boolean isOnline() {
         if (FlappyService.getInstance() != null) {
-            FlappyService.getInstance().isOnline();
+           return FlappyService.getInstance().isOnline();
         }
         return false;
     }
