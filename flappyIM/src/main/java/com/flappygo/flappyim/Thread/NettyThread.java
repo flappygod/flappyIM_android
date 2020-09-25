@@ -2,6 +2,7 @@ package com.flappygo.flappyim.Thread;
 
 import android.os.Message;
 
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Handler.HandlerLoginCallback;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
@@ -96,7 +97,7 @@ public class NettyThread extends Thread {
                     protected void initChannel(SocketChannel channel) throws Exception {
                         ChannelPipeline p = channel.pipeline();
                         //用于心跳,十秒钟没有事件就开始心跳
-                        p.addLast(new IdleStateHandler(0, 10, 0))
+                        p.addLast(new IdleStateHandler(0, FlappyConfig.getInstance().IdleSeconds, 0))
                                 .addLast(new ProtobufVarint32FrameDecoder())
                                 .addLast(new ProtobufDecoder(Flappy.FlappyResponse.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())

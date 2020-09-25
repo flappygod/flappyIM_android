@@ -23,6 +23,9 @@ public class FlappyConfig {
     //当前是正式环境
     public String pushPlat="release";
 
+    //12秒
+    public int IdleSeconds=12;
+
     //链接的http服务器器的地址192.168.124.105
     //public String serverUrl = "http://192.168.124.127";
     public String serverUrl = "http://49.234.106.91";
