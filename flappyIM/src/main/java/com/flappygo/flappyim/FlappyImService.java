@@ -23,6 +23,7 @@ import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Service.FlappyService;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Thread.NettyThread;
+import com.flappygo.flappyim.Thread.NettyThreadDead;
 import com.flappygo.flappyim.Tools.NotificationUtil;
 import com.flappygo.flappyim.Tools.RunninTool;
 import com.flappygo.flappyim.Tools.StringTool;
@@ -227,7 +228,7 @@ public class FlappyImService {
     //这里就代表登录了
     public void login(String userExtendID, final FlappyIMCallback<ResponseLogin> callback) {
 
-        synchronized (FlappyService.getInstance()){
+        synchronized (FlappyService.getInstance()) {
             //正在登录
             FlappyService.getInstance().isLoading = true;
 
@@ -295,13 +296,10 @@ public class FlappyImService {
                                     FlappyService.getInstance().isLoading = false;
                                 }
                             });
+                            //重置
+                            NettyThreadDead.reset();
                             //开启服务
-                            FlappyService.getInstance().startService(
-                                    response.getUser(),
-                                    response.getServerIP(),
-                                    response.getServerPort(),
-                                    str,
-                                    response);
+                            FlappyService.getInstance().startService(str, response);
                         }
 
                         @Override
@@ -933,7 +931,7 @@ public class FlappyImService {
     //当前是否在线
     public boolean isOnline() {
         if (FlappyService.getInstance() != null) {
-           return FlappyService.getInstance().isOnline();
+            return FlappyService.getInstance().isOnline();
         }
         return false;
     }

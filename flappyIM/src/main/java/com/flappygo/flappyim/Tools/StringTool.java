@@ -183,6 +183,14 @@ public class StringTool {
         return str;
     }
 
+    public static int strToInt(String str,int defaultValue){
+        try {
+            return Integer.parseInt(str);
+        }catch (Exception ex){
+            return defaultValue;
+        }
+    }
+
 
     public static List<String> splitStrList(String str, String split){
         List<String> rets=new ArrayList<>();

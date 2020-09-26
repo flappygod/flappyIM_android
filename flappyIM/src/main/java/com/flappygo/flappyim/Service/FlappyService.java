@@ -1,31 +1,31 @@
 package com.flappygo.flappyim.Service;
 
 import android.content.BroadcastReceiver;
+import android.net.ConnectivityManager;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
 
-import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
-import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Handler.HandlerLoginCallback;
-import com.flappygo.flappyim.Holder.HolderLoginCallback;
-import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
+import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
+import com.flappygo.flappyim.Handler.HandlerLoginCallback;
+import com.flappygo.flappyim.Listener.KnickedOutListener;
+import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Thread.NettyThread;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Thread.NettyThreadDead;
-import com.flappygo.flappyim.Tools.NetTool;
-import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
+import com.flappygo.flappyim.Config.FlappyConfig;
+import com.flappygo.flappyim.Thread.NettyThread;
+import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.Tools.NetTool;
 
 import java.util.HashMap;
 
@@ -35,8 +35,11 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_KNICKED;
 //应用的服务
 public class FlappyService extends Object {
 
-    //自动登录间隔时间
-    private final int autoLoginSpace=1000*5;
+    //自动HTTP登录
+    private static int AUTO_LOGIN_HTTP = 1;
+
+    //自动登录Netty
+    private static int AUTO_LOGIN_NETTY = 2;
 
     //线程
     private NettyThread clientThread;
@@ -59,6 +62,7 @@ public class FlappyService extends Object {
     //当前服务是否注册
     private boolean recieverRegistered = false;
 
+
     //上下文
     private FlappyService() {
     }
@@ -74,31 +78,21 @@ public class FlappyService extends Object {
             //初始化接收器
             instance.initReceiver();
             //开始服务
-            instance.startServer(null,
-                    null,
-                    null,
-                    null,
-                    null);
+            instance.startServer();
+            //开启成功
             return true;
         }
         return false;
     }
 
     //开启服务
-    public boolean startService(ChatUser user,
-                                String serverAddress,
-                                String serverPort,
-                                String uuid,
-                                ResponseLogin response) {
+    public boolean startService(String uuid, ResponseLogin response) {
         if (instance != null) {
             //初始化接收器
             instance.initReceiver();
             //开始服务
-            instance.startServer(user,
-                    serverAddress,
-                    serverPort,
-                    uuid,
-                    response);
+            instance.startServer(uuid, response);
+            //开启成功
             return true;
         }
         return false;
@@ -184,40 +178,29 @@ public class FlappyService extends Object {
     }
 
     //开始
-    private void startServer(ChatUser user,
-                             String serverAddress,
-                             String serverPort,
-                             String uuid,
-                             ResponseLogin response) {
-        //判断是否是新登录
-        boolean flag = testNewLogin(user,
-                serverAddress,
-                serverPort,
-                uuid,
-                response);
-        //不是新登录
-        if (!flag) {
-            //检查是否需要自动登录并登陆
-            testAutoLogin(0);
+    private void startServer(String uuid, ResponseLogin response) {
+        //判断数据完全的时候，才执行
+        if (uuid != null &&
+                response != null &&
+                response.getUser() != null &&
+                response.getServerIP() != null &&
+                response.getServerPort() != null) {
+            //开启connect
+            startConnect(uuid, response);
+        } else {
+            //发现不存在就自动登录
+            checkAutoLoginHttp(100);
         }
     }
 
-    //检查当前是否是新登录，如果是
-    private boolean testNewLogin(ChatUser user,
-                                 String serverAddress,
-                                 String serverPort,
-                                 String uuid,
-                                 ResponseLogin response) {
-        //重新发起链接
-        if (user != null && serverAddress != null && serverPort != null && uuid != null && response != null) {
-            startConnect(user, serverAddress, serverPort, uuid, response);
-            return true;
-        }
-        return false;
+    //开启服务
+    private void startServer() {
+        //开启自动登录
+        checkAutoLoginHttp(100);
     }
 
     //检查是否需要重新登录
-    private void testAutoLogin(int delauMilis) {
+    private void checkAutoLoginHttp(int delauMilis) {
         //如果不是新登录查看旧的是否登录了
         ChatUser user = DataManager.getInstance().getLoginUser();
         //之前已经登录了，那么我们开始断线重连
@@ -225,9 +208,27 @@ public class FlappyService extends Object {
             //当前网络在线
             if (NetTool.isConnected(mContext)) {
                 //移除消息
-                handler.removeMessages(1);
+                handler.removeMessages(AUTO_LOGIN_HTTP);
                 //等待一秒后继续连接
-                handler.sendEmptyMessageDelayed(1, delauMilis);
+                handler.sendEmptyMessageDelayed(AUTO_LOGIN_HTTP, delauMilis);
+            }
+        }
+    }
+
+    //检查重新登录netty
+    private void checkAutoLoginNetty(int delauMilis, ResponseLogin responseLogin) {
+        //如果不是新登录查看旧的是否登录了
+        ChatUser user = DataManager.getInstance().getLoginUser();
+        //之前已经登录了，那么我们开始断线重连
+        if (user != null && user.isLogin() == 1) {
+            //当前网络在线
+            if (NetTool.isConnected(mContext)) {
+                //移除消息
+                handler.removeMessages(AUTO_LOGIN_NETTY);
+                //检查并重新登录
+                Message message = handler.obtainMessage(AUTO_LOGIN_NETTY, responseLogin);
+                //等待一秒后继续连接
+                handler.sendMessageDelayed(message, delauMilis);
             }
         }
     }
@@ -239,10 +240,17 @@ public class FlappyService extends Object {
             if (NetTool.isConnected(mContext)) {
                 synchronized (FlappyService.getInstance()) {
                     //自动登录
-                    if (FlappyService.getInstance().isLoading) {
-                        testAutoLogin(autoLoginSpace);
-                    } else {
-                        autoLogin();
+                    if (msg.what == AUTO_LOGIN_HTTP) {
+                        if (!FlappyService.getInstance().isLoading) {
+                            autoLogin();
+                        }
+                    }
+                    //自动登录
+                    else if (msg.what == AUTO_LOGIN_NETTY) {
+                        if (!FlappyService.getInstance().isLoading) {
+                            ResponseLogin responseLogin = (ResponseLogin) msg.obj;
+                            startConnect(Long.toString(System.currentTimeMillis()), responseLogin);
+                        }
                     }
                 }
             }
@@ -261,7 +269,6 @@ public class FlappyService extends Object {
         hashMap.put("pushid", StringTool.getDeviceUnicNumber(mContext));
         //设备ID
         hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
-
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
                 hashMap,
@@ -270,7 +277,6 @@ public class FlappyService extends Object {
                     protected void stateFalse(BaseApiModel model, String tag) {
                         //当前的用户已经被踢下线了
                         if (model.getResultCode().equals(RESULT_KNICKED)) {
-
                             //设置登录状态
                             ChatUser user = DataManager.getInstance().getLoginUser();
                             //当前没有登录
@@ -284,33 +290,30 @@ public class FlappyService extends Object {
                             }
                         } else {
                             //重新登录
-                            testAutoLogin(autoLoginSpace);
+                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                         }
                     }
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
-                        testAutoLogin(autoLoginSpace);
+                        //自动登录
+                        checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                     }
 
                     @Override
                     public void stateTrue(ResponseLogin response, String tag) {
-
+                        //重置
+                        NettyThreadDead.reset();
                         //保存推送设置
                         DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
-
-
                         //自动登录成功，我们拿到了相应的数据
-                        startConnect(response.getUser(),
-                                response.getServerIP(),
-                                response.getServerPort(),
-                                Long.toString(System.currentTimeMillis()),
-                                response);
+                        startConnect(Long.toString(System.currentTimeMillis()), response);
                     }
 
                     @Override
                     protected void netError(Exception e, String tag) {
-                        testAutoLogin(autoLoginSpace);
+                        //测试并自动登录
+                        checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                     }
 
                 }, null);
@@ -323,7 +326,7 @@ public class FlappyService extends Object {
             String action = intent.getAction();
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 //检查是否需要重新登录
-                testAutoLogin(320);
+                checkAutoLoginHttp(100);
             }
         }
     };
@@ -349,31 +352,46 @@ public class FlappyService extends Object {
     }
 
     //根据当前的信息重新连接
-    private void startConnect(ChatUser user,
-                              String serverIP,
-                              String serverPort,
-                              String uuid,
-                              ResponseLogin loginResponse) {
+    private void startConnect(String uuid, final ResponseLogin loginResponse) {
+
         //之前的先下线
         offline();
 
+        //装饰登录
+        HandlerLoginCallback loginCallback = new HandlerLoginCallback(
+                HolderLoginCallback.getInstance().getLoginCallBack(uuid),
+                loginResponse);
+
+        //死亡消息
+        NettyThreadDead nettyThreadDead = new NettyThreadDead() {
+            @Override
+            public void threadDeadRetryHttp() {
+                //再开始
+                checkAutoLoginHttp(100);
+            }
+
+            @Override
+            protected void threadDeadRetryNetty() {
+                //先开始netty重连
+                checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, loginResponse);
+            }
+        };
+
+
+
         //创建新的线程
         clientThread = new NettyThread(
-                user,
+                //获取用户
+                loginResponse.getUser(),
                 //服务端的IP
-                serverIP,
+                loginResponse.getServerIP(),
                 //端口
-                Integer.parseInt(serverPort),
-                //装饰下吧，难得
-                new HandlerLoginCallback(HolderLoginCallback.getInstance().getLoginCallBack(uuid), loginResponse),
+                StringTool.strToInt(loginResponse.getServerPort(),11211),
+                //登录回调
+                loginCallback,
                 //回调
-                new NettyThreadDead() {
-                    @Override
-                    public void threadDead() {
-                        //检查是否需要重新登录
-                        testAutoLogin(320);
-                    }
-                });
+                nettyThreadDead);
+
         //开始这个线程
         clientThread.start();
     }

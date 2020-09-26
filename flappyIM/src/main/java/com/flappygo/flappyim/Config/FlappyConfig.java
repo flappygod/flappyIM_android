@@ -21,10 +21,16 @@ public class FlappyConfig {
     final public String device = "android";
 
     //当前是正式环境
-    public String pushPlat="release";
+    public String pushPlat = "release";
 
     //12秒
-    public int IdleSeconds=12;
+    public int IdleSeconds = 12;
+
+    //自动登录间隔时间
+    public int autoLoginSpace = 1000 * 6;
+
+    //自动重试netty次数
+    public int autoRetryNetty = 6;
 
     //链接的http服务器器的地址192.168.124.105
     //public String serverUrl = "http://192.168.124.127";
