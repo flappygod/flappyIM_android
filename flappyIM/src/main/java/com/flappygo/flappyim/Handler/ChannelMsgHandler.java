@@ -317,7 +317,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //将系统消息标记成为已经处理，不再需要重复处理
                     for (int w = 0; w < messages.size(); w++) {
                         //更新消息
-                        if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(messages.get(w).getChatSystem().getSysActionData()).longValue()) {
+                        if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(messages.get(w).getChatSystem().getSysTime()).longValue()) {
                             messages.get(w).setMessageReaded(new BigDecimal(1));
                             database.insertMessage(messages.get(w));
                         }
@@ -394,13 +394,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         for (int s = 0; s < latestMessages.size(); s++) {
             String former = needUpdate.get(latestMessages.get(s).getMessageSession());
             if (former == null) {
-                needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysActionData());
+                needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysTime());
             } else {
                 //获取会话
                 long stamp = StringTool.strToDecimal(former).longValue();
-                long newStamp = StringTool.strToDecimal(latestMessages.get(s).getChatSystem().getSysActionData()).longValue();
+                long newStamp = StringTool.strToDecimal(latestMessages.get(s).getChatSystem().getSysTime()).longValue();
                 if (newStamp > stamp) {
-                    needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysActionData());
+                    needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysTime());
                 }
             }
         }

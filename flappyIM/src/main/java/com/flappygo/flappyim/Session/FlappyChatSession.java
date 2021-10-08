@@ -165,7 +165,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //发送地址
         chatImage.setSendPath(path);
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(chatImage, ChatImage.class));
+        msg.setChatImage(chatImage);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -200,7 +200,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(image, ChatImage.class));
+        msg.setChatImage(image);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -239,7 +239,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //设置语音的本地地址
         chatVoice.setSendPath(path);
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(chatVoice, ChatVoice.class));
+        msg.setChatVoice(chatVoice);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -252,7 +252,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送语音消息
     public ChatMessage sendVoice(
-            ChatVoice image,
+            ChatVoice chatVoice,
             final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
@@ -273,7 +273,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(image, ChatVoice.class));
+        msg.setChatVoice(chatVoice);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -306,11 +306,11 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VIDEO));
         //创建语音
-        ChatVideo chatVoice = new ChatVideo();
+        ChatVideo chatVideo = new ChatVideo();
         //设置语音的本地地址
-        chatVoice.setSendPath(path);
+        chatVideo.setSendPath(path);
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(chatVoice, ChatVideo.class));
+        msg.setChatVideo(chatVideo);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -342,7 +342,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VIDEO));
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(chatVideo, ChatVideo.class));
+        msg.setChatVideo(chatVideo);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -376,7 +376,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_LOCATE));
         //设置内容
-        msg.setMessageContent(GsonTool.modelToString(loaction, ChatLocation.class));
+        msg.setChatLocation(loaction);
         //时间
         msg.setMessageDate(new Date());
         //插入数据

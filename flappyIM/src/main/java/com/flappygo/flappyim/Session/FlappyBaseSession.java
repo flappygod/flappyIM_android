@@ -181,8 +181,7 @@ public class FlappyBaseSession {
                     //设置宽度
                     voice.setSeconds(duration);
                 }
-                //更新content
-                message.setMessageContent(GsonTool.modelToString(voice, ChatVoice.class));
+                message.setChatVoice(voice);
                 //消息
                 return message;
             }
@@ -255,7 +254,7 @@ public class FlappyBaseSession {
                 //设置数据返回
                 image.setPath(baseApiModel.getResultData().getFilePath());
                 //转换为content
-                message.setMessageContent(GsonTool.modelToString(image, ChatImage.class));
+                message.setChatImage(image);
 
                 return message;
             }
@@ -338,7 +337,7 @@ public class FlappyBaseSession {
                 //简介图片地址
                 video.setCoverPath(baseApiModel.getResultData().getOverFilePath());
                 //转换为content
-                message.setMessageContent(GsonTool.modelToString(video, ChatVideo.class));
+                message.setChatVideo(video);
 
                 return message;
             }
