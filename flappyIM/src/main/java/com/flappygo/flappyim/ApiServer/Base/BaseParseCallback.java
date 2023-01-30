@@ -89,9 +89,9 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback {
         if (parser.isParseSuccess()) {
             //解析成功
             //此处可以对sign进行必要的验证
-            if (parser.getBaseApiModel().getResultCode().equals(RESULT_SUCCESS)) {
+            if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
                 //假如设置了验证，而且
-                stateTrue(parser.getBaseApiModel().getResultData(), tag);
+                stateTrue(parser.getBaseApiModel().getData(), tag);
             }
             //状态错误
             else {

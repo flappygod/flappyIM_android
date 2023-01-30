@@ -29,7 +29,7 @@ import com.flappygo.flappyim.Tools.NetTool;
 
 import java.util.HashMap;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_KNICKED;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
 
 
 //应用的服务
@@ -276,7 +276,7 @@ public class FlappyService extends Object {
                     @Override
                     protected void stateFalse(BaseApiModel model, String tag) {
                         //当前的用户已经被踢下线了
-                        if (model.getResultCode().equals(RESULT_KNICKED)) {
+                        if (model.getCode().equals(RESULT_EXPIRED)) {
                             //设置登录状态
                             ChatUser user = DataManager.getInstance().getLoginUser();
                             //当前没有登录

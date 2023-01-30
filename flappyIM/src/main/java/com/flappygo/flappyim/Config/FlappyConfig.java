@@ -4,17 +4,17 @@ public class FlappyConfig {
 
 
     //单例模式
-    private static FlappyConfig instacne;
+    private static FlappyConfig instance;
 
     public static FlappyConfig getInstance() {
-        if (instacne == null) {
+        if (instance == null) {
             synchronized (FlappyConfig.class) {
-                if (instacne == null) {
-                    instacne = new FlappyConfig();
+                if (instance == null) {
+                    instance = new FlappyConfig();
                 }
             }
         }
-        return instacne;
+        return instance;
     }
 
     //安卓设备

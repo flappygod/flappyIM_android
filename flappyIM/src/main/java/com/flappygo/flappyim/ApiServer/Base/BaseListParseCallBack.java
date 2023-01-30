@@ -2,7 +2,6 @@ package com.flappygo.flappyim.ApiServer.Base;
 
 
 import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
-import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
 
 import java.util.List;
@@ -93,13 +92,13 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback {
         if (parser.isParseSuccess()) {
             //解析成功
             //此处可以对sign进行必要的验证
-            if (parser.getBaseApiModel().getResultCode().equals(RESULT_SUCCESS)) {
+            if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
                 //假如设置了验证，而且
-                stateTrue(parser.getBaseApiModel().getResultData(), tag);
+                stateTrue(parser.getBaseApiModel().getData(), tag);
             }
             //状态错误
             else {
-                stateFalse(parser.getBaseApiModel().getResultMessage(), tag);
+                stateFalse(parser.getBaseApiModel().getMsg(), tag);
             }
         } else {
             //json解析出现异常

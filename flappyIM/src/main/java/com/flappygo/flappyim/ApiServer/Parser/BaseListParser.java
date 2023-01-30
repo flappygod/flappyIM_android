@@ -37,15 +37,15 @@ public class BaseListParser<T> {
             //创建
             JSONObject jb = new JSONObject(dataStr);
             //获取到Array数据
-            String strData = StringTool.ToNotNullStrWithDefault(jb.optString("resultData"),"[]") ;
+            String strData = StringTool.ToNotNullStrWithDefault(jb.optString("data"),"[]") ;
             //返回码
-            baseApiModel.setResultCode(jb.optString("resultCode"));
+            baseApiModel.setCode(jb.optString("code"));
             //解析code
-            baseApiModel.setResultMessage(jb.optString("resultMessage"));
+            baseApiModel.setMsg(jb.optString("msg"));
             //返回的消息
-            baseApiModel.setResultSign(jb.optString("resultSign"));
+            baseApiModel.setSign(jb.optString("sign"));
             //返回的总页码
-            baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
+            baseApiModel.setPageCount(jb.optInt("pageCount"));
 
             signRight = true;
 
@@ -65,7 +65,7 @@ public class BaseListParser<T> {
                     rs.add(t);
                 }
             }
-            baseApiModel.setResultData(rs);
+            baseApiModel.setData(rs);
             parseSuccess = true;
         } catch (Exception e) {
             parseSuccess = false;

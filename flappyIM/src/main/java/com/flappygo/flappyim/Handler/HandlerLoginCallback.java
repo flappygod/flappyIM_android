@@ -6,7 +6,7 @@ import android.os.Message;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NETERROR;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 
 //登陆的回调
 public class HandlerLoginCallback extends Handler {
@@ -53,7 +53,7 @@ public class HandlerLoginCallback extends Handler {
             //失败
             if (callback != null) {
                 //执行失败的回调
-                callback.failure((Exception) message.obj, Integer.parseInt(RESULT_NETERROR));
+                callback.failure((Exception) message.obj, Integer.parseInt(RESULT_NET_ERROR));
                 //同样只执行一次
                 callback = null;
             }

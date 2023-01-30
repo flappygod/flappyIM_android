@@ -9,55 +9,55 @@ public class BaseApiModel<T> implements Serializable {
 
 
     //请求返回的编码
-    private String resultCode;
+    private String code;
     //加密秘钥
-    private String resultMessage;
+    private String msg;
     //加密秘钥
-    private String resultSign;
+    private String sign;
     //总页码
-    private int resultTotalPage;
+    private int pageCount;
     //请求返回的数据内容
-    private T resultData;
+    private T data;
 
 
 
-    public int getResultTotalPage() {
-        return resultTotalPage;
+    public int getPageCount() {
+        return pageCount;
     }
 
-    public void setResultTotalPage(int resultTotalPage) {
-        this.resultTotalPage = resultTotalPage;
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
     }
 
-    public String getResultCode() {
-        return resultCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getResultMessage() {
-        return resultMessage;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setResultMessage(String resultMessage) {
-        this.resultMessage = resultMessage;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getResultSign() {
-        return resultSign;
+    public String getSign() {
+        return sign;
     }
 
-    public void setResultSign(String resultSign) {
-        this.resultSign = resultSign;
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 
-    public T getResultData() {
-        return resultData;
+    public T getData() {
+        return data;
     }
 
-    public void setResultData(T resultData) {
-        this.resultData = resultData;
+    public void setData(T data) {
+        this.data = data;
     }
 }

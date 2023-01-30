@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NETERROR;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
@@ -87,7 +87,7 @@ public class FlappyBaseSession {
         //如果当前服务不在线，错误
         if (flappyService == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("服务已停止"), Integer.parseInt(RESULT_NETERROR));
+            callback.failure(chatMessage, new Exception("服务已停止"), Integer.parseInt(RESULT_NET_ERROR));
             return;
         }
 
@@ -95,7 +95,7 @@ public class FlappyBaseSession {
         NettyThread thread = flappyService.getClientThread();
         if (thread == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("线程已停止"), Integer.parseInt(RESULT_NETERROR));
+            callback.failure(chatMessage, new Exception("线程已停止"), Integer.parseInt(RESULT_NET_ERROR));
             return;
         }
 
@@ -103,7 +103,7 @@ public class FlappyBaseSession {
         ChannelMsgHandler handler = thread.getChannelMsgHandler();
         if (handler == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("Handler不存在"), Integer.parseInt(RESULT_NETERROR));
+            callback.failure(chatMessage, new Exception("Handler不存在"), Integer.parseInt(RESULT_NET_ERROR));
             return;
         }
 
@@ -151,22 +151,22 @@ public class FlappyBaseSession {
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
-                baseApiModel.setResultCode(jb.optString("resultCode"));
+                baseApiModel.setCode(jb.optString("code"));
                 //解析code
-                baseApiModel.setResultMessage(jb.optString("resultMessage"));
+                baseApiModel.setMsg(jb.optString("msg"));
                 //返回的消息
-                baseApiModel.setResultSign(jb.optString("resultSign"));
+                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
-                baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
+                baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setResultData(GsonTool.jsonObjectToModel(jb.optString("resultData"), ResponseUpload.class));
+                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
                 //上传不成功抛出异常
-                if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
-                    throw new Exception(baseApiModel.getResultMessage());
+                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                    throw new Exception(baseApiModel.getMsg());
                 }
 
                 //设置数据返回
-                voice.setPath(baseApiModel.getResultData().getFilePath());
+                voice.setPath(baseApiModel.getData().getFilePath());
 
                 //长度
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -189,7 +189,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String s) {
                 updateMsgFailure(msg);
-                callback.failure(msg, e, Integer.parseInt(RESULT_NETERROR));
+                callback.failure(msg, e, Integer.parseInt(RESULT_NET_ERROR));
             }
 
             @Override
@@ -232,18 +232,18 @@ public class FlappyBaseSession {
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
-                baseApiModel.setResultCode(jb.optString("resultCode"));
+                baseApiModel.setCode(jb.optString("code"));
                 //解析code
-                baseApiModel.setResultMessage(jb.optString("resultMessage"));
+                baseApiModel.setMsg(jb.optString("msg"));
                 //返回的消息
-                baseApiModel.setResultSign(jb.optString("resultSign"));
+                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
-                baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
+                baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setResultData(GsonTool.jsonObjectToModel(jb.optString("resultData"), ResponseUpload.class));
+                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
                 //上传不成功抛出异常
-                if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
-                    throw new Exception(baseApiModel.getResultMessage());
+                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                    throw new Exception(baseApiModel.getMsg());
                 }
 
 
@@ -252,7 +252,7 @@ public class FlappyBaseSession {
                 //设置高度
                 image.setHeight(lxImageWH.getHeight() + "");
                 //设置数据返回
-                image.setPath(baseApiModel.getResultData().getFilePath());
+                image.setPath(baseApiModel.getData().getFilePath());
                 //转换为content
                 message.setChatImage(image);
 
@@ -313,18 +313,18 @@ public class FlappyBaseSession {
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
-                baseApiModel.setResultCode(jb.optString("resultCode"));
+                baseApiModel.setCode(jb.optString("code"));
                 //解析code
-                baseApiModel.setResultMessage(jb.optString("resultMessage"));
+                baseApiModel.setMsg(jb.optString("msg"));
                 //返回的消息
-                baseApiModel.setResultSign(jb.optString("resultSign"));
+                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
-                baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
+                baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setResultData(GsonTool.jsonObjectToModel(jb.optString("resultData"), ResponseUpload.class));
+                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
                 //上传不成功抛出异常
-                if (!baseApiModel.getResultCode().equals(RESULT_SUCCESS)) {
-                    throw new Exception(baseApiModel.getResultMessage());
+                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                    throw new Exception(baseApiModel.getMsg());
                 }
                 //设置时长
                 video.setDuration(info.getDuration());
@@ -333,9 +333,9 @@ public class FlappyBaseSession {
                 //设置高度
                 video.setHeight(info.getHeight());
                 //设置数据返回
-                video.setPath(baseApiModel.getResultData().getFilePath());
+                video.setPath(baseApiModel.getData().getFilePath());
                 //简介图片地址
-                video.setCoverPath(baseApiModel.getResultData().getOverFilePath());
+                video.setCoverPath(baseApiModel.getData().getOverFilePath());
                 //转换为content
                 message.setChatVideo(video);
 

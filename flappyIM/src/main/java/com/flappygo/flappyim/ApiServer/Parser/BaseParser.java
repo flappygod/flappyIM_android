@@ -24,29 +24,29 @@ public class BaseParser<T> {
             //创建
             JSONObject jb = new JSONObject(dataStr);
             //返回码
-            baseApiModel.setResultCode(jb.optString("resultCode"));
+            baseApiModel.setCode(jb.optString("code"));
             //解析code
-            baseApiModel.setResultMessage(jb.optString("resultMessage"));
+            baseApiModel.setMsg(jb.optString("msg"));
             //返回的消息
-            baseApiModel.setResultSign(jb.optString("resultSign"));
+            baseApiModel.setSign(jb.optString("sign"));
             //返回的总页码
-            baseApiModel.setResultTotalPage(jb.optInt("resultTotalPage"));
+            baseApiModel.setPageCount(jb.optInt("pageCount"));
             //获取到Array数据
-            String strData = jb.optString("resultData");
+            String strData = jb.optString("data");
 
             //假如是String
             if (cls == String.class) {
-                baseApiModel.setResultData((T) strData);
+                baseApiModel.setData((T) strData);
             }
             //假如是JSON
             else if (cls == JSONObject.class) {
-                baseApiModel.setResultData((T) new JSONObject(strData));
+                baseApiModel.setData((T) new JSONObject(strData));
             }
             //假如是对象
             else {
                 //解析基本数据
                 T t = GsonTool.jsonObjectToModel(strData, cls);
-                baseApiModel.setResultData(t);
+                baseApiModel.setData(t);
             }
             //解析成功
             parseSuccess = true;
