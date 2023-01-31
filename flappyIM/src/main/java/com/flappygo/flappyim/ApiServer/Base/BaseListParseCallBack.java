@@ -11,7 +11,7 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 /***************************************
  * 基础回调，返回列表类型的数据
  */
-public abstract class BaseListParseCallBack<T> implements LXAsyncCallback {
+public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String> {
     //class
     private Class<T> entityClass;
 
@@ -77,17 +77,9 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback {
      * @param data 数据
      * @param tag  线程tag
      */
-    public void success(Object data, String tag) {
-
+    public void success(String data, String tag) {
         //基础解析器为空
-        BaseListParser<T> parser = null;
-        //进行解析
-        if (data instanceof BaseListParser) {
-            parser = (BaseListParser) data;
-        } else {
-            String dataStr = (String) data;
-            parser = new BaseListParser<T>(dataStr, entityClass);
-        }
+        BaseListParser<T> parser = new BaseListParser<T>(data, entityClass);
         //解析成功
         if (parser.isParseSuccess()) {
             //解析成功
