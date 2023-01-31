@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.DataBase;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -292,6 +293,7 @@ public class Database {
     }
 
     //获取当前用户的会话
+    @SuppressLint("Range")
     public SessionData getUserSessionByExtendID(String sessionExtendID) {
         synchronized (lock) {
 
@@ -337,6 +339,7 @@ public class Database {
     }
 
     //获取用户的所有会话列表
+    @SuppressLint("Range")
     public List<SessionData> getUserSessions() {
         synchronized (lock) {
 
@@ -386,6 +389,7 @@ public class Database {
 
 
     //获取所有的消息
+    @SuppressLint("Range")
     public List<ChatMessage> getAllMessages() {
         synchronized (lock) {
             List<ChatMessage> list = new ArrayList<ChatMessage>();
@@ -445,6 +449,7 @@ public class Database {
     }
 
     //获取当前这个messageTableSeq 的所有消息
+    @SuppressLint("Range")
     private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableSeq) {
         List<ChatMessage> list = new ArrayList<ChatMessage>();
         //获取这条消息之前的消息，并且不包含自身
@@ -503,6 +508,7 @@ public class Database {
 
 
     //获取会话之前的消息列表
+    @SuppressLint("Range")
     public List<ChatMessage> getSessionLatestMessage(String messageSession, String messageID, int size) {
 
         //首先查询到这个消息
@@ -592,6 +598,7 @@ public class Database {
     }
 
     //更新还未处理的消息
+    @SuppressLint("Range")
     public List<ChatMessage>  getNotActionSystemMessage(String sessionID){
 
         synchronized (lock){
@@ -655,6 +662,7 @@ public class Database {
     }
 
     //获取所有还未做处理的系统消息
+    @SuppressLint("Range")
     public List<ChatMessage>  getNotActionSystemMessage(){
 
         synchronized (lock){
@@ -718,6 +726,7 @@ public class Database {
 
 
     //获取最近的一条消息
+    @SuppressLint("Range")
     public ChatMessage getSessionLatestMessage(String messageSession) {
 
         synchronized (lock) {
@@ -778,6 +787,7 @@ public class Database {
 
 
     //获取所有的消息中最近的一条消息
+    @SuppressLint("Range")
     public ChatMessage getLatestMessage() {
 
         synchronized (lock) {
@@ -837,6 +847,7 @@ public class Database {
 
 
     //通过消息ID获取消息
+    @SuppressLint("Range")
     public ChatMessage getMessageByID(String messageID) {
         synchronized (lock) {
             ChatMessage info = null;

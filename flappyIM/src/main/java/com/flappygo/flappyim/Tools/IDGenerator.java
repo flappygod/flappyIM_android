@@ -10,7 +10,7 @@ import java.util.Random;
 public class IDGenerator {
 
 
-    public static String generateCommomID() {
+    public static String generateCommonID() {
         return longTo36(System.currentTimeMillis()) + getRandomString(6);
     }
 
