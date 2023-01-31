@@ -235,18 +235,18 @@ public class MainActivity extends Activity {
      */
     private void gotoGetPicture() {
         try {
+            Intent intent;
             if (Build.VERSION.SDK_INT >= 19) {
-                Intent intent = new Intent(
+                intent = new Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQUEST_GET_PICTURE);
             } else {
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, REQUEST_GET_PICTURE);
             }
+            startActivityForResult(intent, REQUEST_GET_PICTURE);
         } catch (SecurityException e) {
 
         } catch (Exception e) {

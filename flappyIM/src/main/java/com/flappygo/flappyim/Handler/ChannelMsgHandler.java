@@ -124,7 +124,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
-            System.out.println("客户端正在发送心跳包");
+            System.out.println("heat beat");
             //发送心跳包用于检测
             ctx.writeAndFlush(heart).addListeners(new ChannelFutureListener() {
                 @Override

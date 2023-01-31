@@ -238,7 +238,7 @@ public class FlappyImService {
                     hashMap,
                     new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                         @Override
-                        protected void stateFalse(BaseApiModel model, String tag) {
+                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
 
                             FlappyService.getInstance().isLoading = false;
                             //失败

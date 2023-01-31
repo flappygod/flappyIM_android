@@ -134,12 +134,7 @@ public class GsonTool {
         if (gson == null) {
             gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         }
-        try {
-            T t = gson.fromJson(jsonObject, cls);
-            return t;
-        } catch (Exception ex) {
-            return null;
-        }
+        return gson.fromJson(jsonObject, cls);
     }
 
 
@@ -182,8 +177,8 @@ public class GsonTool {
     }
 
 
-    public static <A, B> List<B> listA2B(List<A> data, Class<A> aclass, Class<B> bClass) {
-        return jsonArrayToModels(modelToString(data, aclass), bClass);
+    public static <A, B> List<B> listA2B(List<A> data, Class<A> aClass, Class<B> bClass) {
+        return jsonArrayToModels(modelToString(data, aClass), bClass);
     }
 
     public static <B> B modelA2B(Object modelA, Class<B> bClass) {
