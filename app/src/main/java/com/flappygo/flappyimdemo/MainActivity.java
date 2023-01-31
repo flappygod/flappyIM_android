@@ -42,9 +42,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        FlappyImService.getInstance().setPlatfrom("Google");
         //服务初始
-        FlappyImService.getInstance().init(getBaseContext(),"http://49.233.131.151", "http://49.233.131.151");
+        FlappyImService.getInstance().init(getBaseContext(),"http://192.168.31.10", "http://192.168.31.10");
         //设置顶部不弹出默认通知
         FlappyImService.getInstance().setNotification(false);
         //开启服务

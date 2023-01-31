@@ -18,10 +18,10 @@ public class FlappyConfig {
     }
 
     //安卓设备
-    final public String device = "android";
+    final public String device = "Android";
 
     //当前是正式环境
-    public String pushPlat = "release";
+    public String pushPlat = "Google";
 
     //12秒
     public int IdleSeconds = 12;
