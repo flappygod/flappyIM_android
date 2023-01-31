@@ -12,15 +12,22 @@ public class ChatUser implements Serializable {
 
     private String userName;
 
-    private String userHead;
+    private String userAvatar;
+
+    private String userData;
 
     private Date userCreateDate;
 
-    private BigDecimal userDeleted;
+    private Date userLoginDate;
 
-    private Date userDeletedDate;
+    private BigDecimal isDelete;
 
-    private String userData;
+    private Date deleteDate;
+
+    //最后更新的时间戳
+    private String  latest;
+    //当前的登录信息
+    private int login;
 
     public String getLatest() {
         return latest;
@@ -30,11 +37,7 @@ public class ChatUser implements Serializable {
         this.latest = latest;
     }
 
-    //最后更新的时间戳
-    private String  latest;
 
-    //当前的登录信息
-    private int login;
 
     public int isLogin() {
         return login;
@@ -68,12 +71,12 @@ public class ChatUser implements Serializable {
         this.userName = userName == null ? null : userName.trim();
     }
 
-    public String getUserHead() {
-        return userHead;
+    public String getUserAvatar() {
+        return userAvatar;
     }
 
-    public void setUserHead(String userHead) {
-        this.userHead = userHead == null ? null : userHead.trim();
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar == null ? null : userAvatar.trim();
     }
 
     public Date getUserCreateDate() {
@@ -84,20 +87,20 @@ public class ChatUser implements Serializable {
         this.userCreateDate = userCreateDate;
     }
 
-    public BigDecimal getUserDeleted() {
-        return userDeleted;
+    public BigDecimal getIsDelete() {
+        return isDelete;
     }
 
-    public void setUserDeleted(BigDecimal userDeleted) {
-        this.userDeleted = userDeleted;
+    public void setIsDelete(BigDecimal isDelete) {
+        this.isDelete = isDelete;
     }
 
-    public Date getUserDeletedDate() {
-        return userDeletedDate;
+    public Date getDeleteDate() {
+        return deleteDate;
     }
 
-    public void setUserDeletedDate(Date userDeletedDate) {
-        this.userDeletedDate = userDeletedDate;
+    public void setDeleteDate(Date deleteDate) {
+        this.deleteDate = deleteDate;
     }
 
     public String getUserData() {
@@ -106,5 +109,13 @@ public class ChatUser implements Serializable {
 
     public void setUserData(String userData) {
         this.userData = userData == null ? null : userData.trim();
+    }
+
+    public Date getUserLoginDate() {
+        return userLoginDate;
+    }
+
+    public void setUserLoginDate(Date userLoginDate) {
+        this.userLoginDate = userLoginDate;
     }
 }

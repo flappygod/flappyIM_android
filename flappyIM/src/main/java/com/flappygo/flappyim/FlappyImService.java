@@ -174,7 +174,7 @@ public class FlappyImService {
     //创建用户账户
     public void createAccount(String userID,
                               String userName,
-                              String userHead,
+                              String userAvatar,
                               final FlappyIMCallback<String> callback) {
 
         //创建这个HashMap
@@ -184,7 +184,7 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userName", userName);
         //用户头像
-        hashMap.put("userHead", userHead);
+        hashMap.put("userAvatar", userAvatar);
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().register,
                 hashMap,
