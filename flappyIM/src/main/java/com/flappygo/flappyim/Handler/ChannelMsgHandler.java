@@ -20,7 +20,6 @@ import com.flappygo.flappyim.Tools.StringTool;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -211,7 +210,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //更新数据信息
                     DataManager.getInstance().saveLoginUser(user);
                     //到达
-                    messageArrivedReciept(messages.get(messages.size() - 1));
+                    messageArrivedReceipt(messages.get(messages.size() - 1));
                 }
 
 
@@ -269,7 +268,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //成功
                     this.handlerMessage.sendMessage(msg);
                     //消息送达的回执
-                    messageArrivedReciept(chatMessage);
+                    messageArrivedReceipt(chatMessage);
                     //插入消息
                     database.insertMessage(chatMessage);
                 }
@@ -286,7 +285,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //设置
             Database database = new Database();
             //数据开始
-            if (session != null && session.size() > 0) {
+            if (session.size() > 0) {
                 for (int s = 0; s < session.size(); s++) {
 
                     //更新数据
@@ -438,7 +437,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     //消息已经到达
-    private void messageArrivedReciept(ChatMessage chatMessage) {
+    private void messageArrivedReceipt(ChatMessage chatMessage) {
         //返回
         if (!chatMessage.getMessageSend().equals(DataManager.getInstance().getLoginUser().getUserId())) {
 
@@ -481,13 +480,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //消息发送
             ChannelFuture future = channelHandlerContext.channel().writeAndFlush(builder.build());
             //发送成功
-            future.addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    //发送成功
-                    if (!future.isSuccess()) {
-                        messageSendFailure(chatMessage, new Exception("连接已经断开"));
-                    }
+            future.addListener((ChannelFutureListener) channelFuture -> {
+                //发送成功
+                if (!channelFuture.isSuccess()) {
+                    messageSendFailure(chatMessage, new Exception("连接已经断开"));
                 }
             });
             //暂时不能确认发送状态，等收到回传的消息后才能真正确定发送已经成功，这个future,不一定成功
