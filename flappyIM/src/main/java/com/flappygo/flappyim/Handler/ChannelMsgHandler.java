@@ -36,34 +36,34 @@ import io.netty.handler.timeout.IdleStateEvent;
 public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.FlappyResponse> {
 
     //回调
-    private ConcurrentHashMap<String, HandlerSendCall> sendhandlers = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, HandlerSendCall> sendHandlers = new ConcurrentHashMap<>();
 
     //登录的回调
     private HandlerLoginCallback handlerLogin;
 
     //消息的handler
-    private HandlerMessage handlerMessage;
+    private final HandlerMessage handlerMessage;
 
     //会话的handler
-    private HandlerSession handlerSession;
+    private final HandlerSession handlerSession;
 
     //用户数据
-    private ChatUser user;
+    private final ChatUser user;
 
     //当前的channel
     private ChannelHandlerContext channelHandlerContext;
 
     //心跳包
-    private Flappy.FlappyRequest heart;
+    private final Flappy.FlappyRequest heart;
 
     //回调
-    private NettyThreadDead deadCallback;
+    private final NettyThreadDead deadCallback;
 
     //用于加锁
-    private Byte[] lock = new Byte[1];
+    private final Byte[] lock = new Byte[1];
 
     //更新的sessions
-    private List<String> updateSessions = new ArrayList<>();
+    private final List<String> updateSessions = new ArrayList<>();
 
     //回调
     public ChannelMsgHandler(HandlerLoginCallback handler, NettyThreadDead deadCallback, ChatUser user) {
@@ -126,14 +126,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         if (evt instanceof IdleStateEvent) {
             System.out.println("heat beat");
             //发送心跳包用于检测
-            ctx.writeAndFlush(heart).addListeners(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    //如果发送给服务器是成功的
-                    if (future.isSuccess()) {
-                        //更新时间
-                        NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
-                    }
+            ctx.writeAndFlush(heart).addListeners((ChannelFutureListener) future -> {
+                //如果发送给服务器是成功的
+                if (future.isSuccess()) {
+                    //更新时间
+                    NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
                 }
             });
             Long formerTime = NettyAttrUtil.getReaderTime(ctx.channel());
@@ -148,7 +145,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, Flappy.FlappyResponse response) throws Exception {
+    protected void messageReceived(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
         //转换为字符串
         //登录成功,现在才代表真正的登录成功
         if (response.getType() == FlappyResponse.RES_LOGIN) {
@@ -174,14 +171,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 }
 
                 //对消息进行排序，然后在插入数据库
-                Collections.sort(messages, new Comparator<ChatMessage>() {
-                    @Override
-                    public int compare(ChatMessage chatMessage, ChatMessage t1) {
-                        if (chatMessage.getMessageTableSeq().intValue() > t1.getMessageTableSeq().intValue()) {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
+                Collections.sort(messages, (chatMessage, t1) -> {
+                    if (chatMessage.getMessageTableSeq().intValue() > t1.getMessageTableSeq().intValue()) {
+                        return 1;
+                    } else {
+                        return -1;
                     }
                 });
 
@@ -222,7 +216,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
 
                 //所有消息更新
-                if (messages != null && messages.size() != 0) {
+                if (messages.size() != 0) {
                     database.insertMessages(messages);
                 }
                 //更新所有会话
@@ -339,9 +333,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void closeChannel(ChannelHandlerContext context) {
 
         synchronized (lock) {
-            for (String key : sendhandlers.keySet()) {
+            for (String key : sendHandlers.keySet()) {
                 //获取
-                HandlerSendCall call = sendhandlers.get(key);
+                HandlerSendCall call = sendHandlers.get(key);
                 //不为空
                 if (call != null) {
                     //发送失败的消息
@@ -349,11 +343,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     message.obj = new Exception("消息通道已关闭");
                     call.sendMessage(message);
                     //移除这个消息
-                    sendhandlers.remove(call.getChatMessage().getMessageId());
+                    sendHandlers.remove(call.getChatMessage().getMessageId());
                 }
             }
             //清空
-            sendhandlers.clear();
+            sendHandlers.clear();
         }
 
         //如果这里还没有回调成功，那么就是登录失败
@@ -506,21 +500,21 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //获取某个回调
     private synchronized HandlerSendCall getHandlerSendCall(String messageID) {
         synchronized (lock) {
-            return sendhandlers.get(messageID);
+            return sendHandlers.get(messageID);
         }
     }
 
     //添加回调
     private void addHandlerSendCall(String messageID, HandlerSendCall call) {
         synchronized (lock) {
-            sendhandlers.put(messageID, call);
+            sendHandlers.put(messageID, call);
         }
     }
 
     //发送成功
     private synchronized void messageSendSuccess(ChatMessage chatMessage) {
         synchronized (lock) {
-            HandlerSendCall call = sendhandlers.get(chatMessage.getMessageId());
+            HandlerSendCall call = sendHandlers.get(chatMessage.getMessageId());
             if (call != null) {
                 //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_SUCCESS);
@@ -529,7 +523,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //成功的消息
                 call.sendMessage(message);
                 //移除这个消息
-                sendhandlers.remove(chatMessage.getMessageId());
+                sendHandlers.remove(chatMessage.getMessageId());
             }
         }
     }
@@ -537,7 +531,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //发送失败
     private void messageSendFailure(ChatMessage chatMessage, Exception ex) {
         synchronized (lock) {
-            HandlerSendCall call = sendhandlers.get(chatMessage.getMessageId());
+            HandlerSendCall call = sendHandlers.get(chatMessage.getMessageId());
             if (call != null) {
                 //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_FAILURE);
@@ -546,7 +540,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //发送消息
                 call.sendMessage(message);
                 //移除这个消息
-                sendhandlers.remove(chatMessage.getMessageId());
+                sendHandlers.remove(chatMessage.getMessageId());
             }
         }
     }

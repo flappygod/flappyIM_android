@@ -26,6 +26,7 @@ public class ChatUser implements Serializable {
 
     //最后更新的时间戳
     private String  latest;
+
     //当前的登录信息
     private int login;
 
@@ -36,8 +37,6 @@ public class ChatUser implements Serializable {
     public void setLatest(String latest) {
         this.latest = latest;
     }
-
-
 
     public int isLogin() {
         return login;
