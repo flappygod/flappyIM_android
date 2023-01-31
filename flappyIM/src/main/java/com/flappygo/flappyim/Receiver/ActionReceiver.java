@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.Reciver;
+package com.flappygo.flappyim.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,12 +30,12 @@ public class ActionReceiver extends BroadcastReceiver {
 
         //跳转主界面
         try {
-            List<ResolveInfo> activitys = getActivities(context);
+            List<ResolveInfo> activities = getActivities(context);
             //跳转进入主界面
-            if (activitys.size() > 0) {
+            if (activities.size() > 0) {
                 Intent main = new Intent();
-                main.setClassName(activitys.get(0).activityInfo.packageName,
-                        activitys.get(0).activityInfo.name);
+                main.setClassName(activities.get(0).activityInfo.packageName,
+                        activities.get(0).activityInfo.name);
                 main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(main);
             }
@@ -65,13 +65,11 @@ public class ActionReceiver extends BroadcastReceiver {
 
     //获取所有的Launcher界面
     private ArrayList<ResolveInfo> getActivities(Context ctx) {
-        ArrayList<ResolveInfo> result = new ArrayList<ResolveInfo>();
+        ArrayList<ResolveInfo> result = new ArrayList<>();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.setPackage(ctx.getPackageName());
         intent.addCategory(CATEGORY_LAUNCHER);
-        for (ResolveInfo info : ctx.getPackageManager().queryIntentActivities(intent, 0)) {
-            result.add(info);
-        }
+        result.addAll(ctx.getPackageManager().queryIntentActivities(intent, 0));
         return result;
     }
 

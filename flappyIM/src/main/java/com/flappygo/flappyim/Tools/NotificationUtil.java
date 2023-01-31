@@ -10,10 +10,8 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.os.Build;
@@ -25,8 +23,7 @@ import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.R;
-import com.flappygo.flappyim.Reciver.ActionReceiver;
-import com.flappygo.flappyim.Service.FlappyService;
+import com.flappygo.flappyim.Receiver.ActionReceiver;
 
 public class NotificationUtil extends ContextWrapper {
 

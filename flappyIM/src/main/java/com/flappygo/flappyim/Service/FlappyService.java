@@ -65,7 +65,7 @@ public class FlappyService extends Object {
 
 
     //上下文
-    private FlappyService() {
+    public FlappyService() {
     }
 
     //赋值上下文
@@ -148,7 +148,7 @@ public class FlappyService extends Object {
         if (user != null && user.isLogin() == 0) {
             //如果不为空
             if (knickedOutListener != null) {
-                knickedOutListener.knickedOut();
+                knickedOutListener.kickedOut();
             }
         }
     }
@@ -284,7 +284,7 @@ public class FlappyService extends Object {
                             //当前已经被踢下线了
                             if (knickedOutListener != null) {
                                 //只执行一次
-                                knickedOutListener.knickedOut();
+                                knickedOutListener.kickedOut();
                             }
                         } else {
                             //重新登录

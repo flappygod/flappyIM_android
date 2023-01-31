@@ -18,8 +18,9 @@
 
         <!-- 注册的监听 -->
         <receiver
-            android:name=".Reciver.ActionReceiver"
-            android:enabled="true">
+            android:name=".Receiver.ActionReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
                 <category android:name="com.szieo.foodtable" />
@@ -27,13 +28,13 @@
         </receiver>
 
         <!-- 服务端服务,用于通讯 -->
-        <service
-            android:name="com.flappygo.flappyim.Service.FlappyService"
+        <!--<service
+            android:name=".Service.FlappyService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.flappygo.flappyim.Service.FlappyService" />
             </intent-filter>
-        </service>
+        </service>-->
 
 
     </application>

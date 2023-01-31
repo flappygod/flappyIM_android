@@ -10,7 +10,7 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 /**
  * Created by yang on 2016/5/27.
  */
-public abstract class BaseParseCallback<T> implements LXAsyncCallback {
+public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
 
     //class
     private Class<T> entityClass;
@@ -32,7 +32,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback {
      * @param message 错误消息
      * @param tag     线程tag
      */
-    protected abstract void stateFalse(BaseApiModel message, String tag);
+    protected abstract void stateFalse(BaseApiModel<T> message, String tag);
 
     /****************
      * 返回数据JSon解析出错
@@ -75,16 +75,9 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback {
      * @param data 请求成功后的stringdata
      * @param tag  线程tag
      */
-    public void success(Object data, String tag) {
+    public void success(String data, String tag) {
         //基础解析器为空
-        BaseParser<T> parser = null;
-        //进行解析
-        if (data instanceof BaseParser) {
-            parser = (BaseParser) data;
-        } else {
-            String dataStr = (String) data;
-            parser = new BaseParser<T>(dataStr, entityClass);
-        }
+        BaseParser<T> parser = new BaseParser<T>(data, entityClass);
         //解析成功
         if (parser.isParseSuccess()) {
             //解析成功

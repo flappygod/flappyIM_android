@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FlappyImService.getInstance().setPlatfrom("Google");
+        FlappyImService.getInstance().setPushPlatform("Google");
         //服务初始
         FlappyImService.getInstance().init(getBaseContext(),"http://192.168.31.10", "http://192.168.31.10");
         //设置顶部不弹出默认通知
@@ -77,16 +77,16 @@ public class MainActivity extends Activity {
             }
         });
 
-        FlappyImService.getInstance().setKnickedOutListener(new KnickedOutListener() {
+        FlappyImService.getInstance().setKickedOutListener(new KnickedOutListener() {
             @Override
-            public void knickedOut() {
+            public void kickedOut() {
 
                 Toast.makeText(getBaseContext(), "当前设备已经被踢下线了", Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        FlappyImService.getInstance().addGloableMessageListener(new MessageListener() {
+        FlappyImService.getInstance().addGlobalMessageListener(new MessageListener() {
             @Override
             public void messageReceived(ChatMessage chatMessage) {
 
