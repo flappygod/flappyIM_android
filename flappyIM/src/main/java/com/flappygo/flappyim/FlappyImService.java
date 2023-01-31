@@ -61,7 +61,7 @@ public class FlappyImService {
     //消息的监听
     private MessageListener messageListener = new MessageListener() {
         @Override
-        public void messageRecieved(ChatMessage chatMessage) {
+        public void messageReceived(ChatMessage chatMessage) {
             //发送本地通知
             sendNotificaiton(chatMessage);
         }
@@ -904,7 +904,7 @@ public class FlappyImService {
     //设置被踢下线的监听
     public void setKnickedOutListener(KnickedOutListener listener) {
         if (FlappyService.getInstance() != null) {
-            FlappyService.getInstance().setKnickedOutListener(listener);
+            FlappyService.getInstance().setKickedOutListener(listener);
         }
     }
 

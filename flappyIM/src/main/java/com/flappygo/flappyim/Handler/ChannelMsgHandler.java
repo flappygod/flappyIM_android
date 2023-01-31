@@ -2,7 +2,6 @@ package com.flappygo.flappyim.Handler;
 
 import android.os.Message;
 
-import com.flappygo.flappyim.Callback.FlappyDeadCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.DataBase.Database;
@@ -201,7 +200,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         //收到了新的消息
                         Message msg = new Message();
                         //收到新的消息
-                        msg.what = HandlerMessage.MSG_RECIVE;
+                        msg.what = HandlerMessage.MSG_RECEIVE;
                         //消息数据体
                         msg.obj = chatMessage;
                         //成功
@@ -270,7 +269,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //发送成功消息
                     Message msg = new Message();
                     //收到新的消息
-                    msg.what = HandlerMessage.MSG_RECIVE;
+                    msg.what = HandlerMessage.MSG_RECEIVE;
                     //消息数据体
                     msg.obj = chatMessage;
                     //成功

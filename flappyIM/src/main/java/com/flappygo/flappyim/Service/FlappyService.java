@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import com.flappygo.flappyim.Listener.NotificationClickListener;
@@ -36,10 +37,10 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
 public class FlappyService extends Object {
 
     //自动HTTP登录
-    private static int AUTO_LOGIN_HTTP = 1;
+    private static final int AUTO_LOGIN_HTTP = 1;
 
     //自动登录Netty
-    private static int AUTO_LOGIN_NETTY = 2;
+    private static final int AUTO_LOGIN_NETTY = 2;
 
     //线程
     private NettyThread clientThread;
@@ -60,7 +61,7 @@ public class FlappyService extends Object {
     private Context mContext;
 
     //当前服务是否注册
-    private boolean recieverRegistered = false;
+    private boolean receiverRegistered = false;
 
 
     //上下文
@@ -104,9 +105,9 @@ public class FlappyService extends Object {
         offline();
         //释放
         synchronized (this) {
-            if (recieverRegistered) {
+            if (receiverRegistered) {
                 mContext.unregisterReceiver(netReceiver);
-                recieverRegistered = false;
+                receiverRegistered = false;
             }
         }
     }
@@ -133,15 +134,12 @@ public class FlappyService extends Object {
     //当前是否在线
     public boolean isOnline() {
         NettyThread thread = getClientThread();
-        if (thread != null && thread.isConnected()) {
-            return true;
-        }
-        return false;
+        return thread != null && thread.isConnected();
     }
 
 
     //设置踢下线的监听
-    public void setKnickedOutListener(KnickedOutListener listener) {
+    public void setKickedOutListener(KnickedOutListener listener) {
         //监听
         knickedOutListener = listener;
         //获取用户数据
@@ -216,7 +214,7 @@ public class FlappyService extends Object {
     }
 
     //检查重新登录netty
-    private void checkAutoLoginNetty(int delauMilis, ResponseLogin responseLogin) {
+    private void checkAutoLoginNetty(int delayMillis, ResponseLogin responseLogin) {
         //如果不是新登录查看旧的是否登录了
         ChatUser user = DataManager.getInstance().getLoginUser();
         //之前已经登录了，那么我们开始断线重连
@@ -228,13 +226,13 @@ public class FlappyService extends Object {
                 //检查并重新登录
                 Message message = handler.obtainMessage(AUTO_LOGIN_NETTY, responseLogin);
                 //等待一秒后继续连接
-                handler.sendMessageDelayed(message, delauMilis);
+                handler.sendMessageDelayed(message, delayMillis);
             }
         }
     }
 
     //用于检测
-    private Handler handler = new Handler() {
+    private Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
             //如果当前的网络是连接上了的
             if (NetTool.isConnected(mContext)) {
@@ -260,7 +258,7 @@ public class FlappyService extends Object {
     //重新自动登录
     private void autoLogin() {
         //创建这个HashMap
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //用户ID
         hashMap.put("userID", DataManager.getInstance().getLoginUser().getUserId());
         //设备ID
@@ -337,7 +335,7 @@ public class FlappyService extends Object {
     private void initReceiver() {
         //新增
         synchronized (this) {
-            if (!recieverRegistered) {
+            if (!receiverRegistered) {
                 IntentFilter timeFilter = new IntentFilter();
                 timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
                 timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
@@ -346,7 +344,7 @@ public class FlappyService extends Object {
                 timeFilter.addAction("android.net.wifi.STATE_CHANGE");
                 timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
                 mContext.registerReceiver(netReceiver, timeFilter);
-                recieverRegistered = true;
+                receiverRegistered = true;
             }
         }
     }

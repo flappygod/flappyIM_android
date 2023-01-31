@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
@@ -32,7 +31,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     // 获取相册图片
-    private static final int REQUEST_GETPICTURE = 24;
+    private static final int REQUEST_GET_PICTURE = 24;
 
     private FlappyChatSession mySession;
 
@@ -50,39 +49,26 @@ public class MainActivity extends Activity {
         //开启服务
         FlappyImService.getInstance().startServer();
 
-        //用户text
-        final EditText editText = findViewById(R.id.userid);
         final EditText message = findViewById(R.id.chatMessage);
         final TextView rect = findViewById(R.id.testrect);
 
 
         //创建账号
-        Button create = findViewById(R.id.register);
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        FlappyImService.getInstance().createAccount(
+                "100",
+                "李俊霖",
+                "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1183057007,4270556535&fm=26&gp=0.jpg",
+                new FlappyIMCallback<String>() {
+                    @Override
+                    public void success(String data) {
+                        Toast.makeText(getBaseContext(), "账号创建成功", Toast.LENGTH_SHORT).show();
+                    }
 
-                if (editText.getText().toString().equals("")) {
-                    return;
-                }
-
-                //创建账号
-                FlappyImService.getInstance().createAccount(editText.getText().toString(),
-                        "李俊霖",
-                        "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1183057007,4270556535&fm=26&gp=0.jpg",
-                        new FlappyIMCallback<String>() {
-                            @Override
-                            public void success(String data) {
-                                Toast.makeText(getBaseContext(), "账号创建成功", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void failure(Exception ex, int code) {
-                                Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }
-        });
+                    @Override
+                    public void failure(Exception ex, int code) {
+                        Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         FlappyImService.getInstance().setNotificationClickListener(new NotificationClickListener() {
             @Override
@@ -102,7 +88,7 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().addGloableMessageListener(new MessageListener() {
             @Override
-            public void messageRecieved(ChatMessage chatMessage) {
+            public void messageReceived(ChatMessage chatMessage) {
 
                 if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatText(), Toast.LENGTH_SHORT).show();
@@ -115,14 +101,9 @@ public class MainActivity extends Activity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (editText.getText().toString().equals("")) {
-                    return;
-                }
-
                 //创建账号
                 FlappyImService.getInstance().login(
-                        editText.getText().toString(),
+                        "100",
                         new FlappyIMCallback<ResponseLogin>() {
                             @Override
                             public void success(ResponseLogin data) {
@@ -165,7 +146,7 @@ public class MainActivity extends Activity {
 
                         mySession.addMessageListener(new MessageListener() {
                             @Override
-                            public void messageRecieved(ChatMessage chatMessage) {
+                            public void messageReceived(ChatMessage chatMessage) {
                                 rect.setText(chatMessage.getChatText());
                             }
                         });
@@ -258,13 +239,13 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQUEST_GETPICTURE);
+                startActivityForResult(intent, REQUEST_GET_PICTURE);
             } else {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, REQUEST_GETPICTURE);
+                startActivityForResult(intent, REQUEST_GET_PICTURE);
             }
         } catch (SecurityException e) {
 
@@ -279,7 +260,7 @@ public class MainActivity extends Activity {
         //成功
         if (resultCode == RESULT_OK) {
             //如果是获取图片，返回回来之后得到图片的地址
-            if (requestCode == REQUEST_GETPICTURE) {
+            if (requestCode == REQUEST_GET_PICTURE) {
                 //地址
                 String path = TakePicTool.getPicAnalyze(this, data);
                 //地址

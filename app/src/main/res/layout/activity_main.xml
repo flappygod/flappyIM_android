@@ -14,20 +14,6 @@
         android:gravity="center"
         android:layout_height="50dp" />
 
-    <EditText
-        android:layout_margin="20dp"
-        android:id="@+id/userid"
-        android:layout_width="match_parent"
-        android:layout_height="45dp" />
-
-    <Button
-        android:id="@+id/register"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_margin="20dp"
-        android:background="@color/colorAccent"
-        android:text="注册账号"
-        android:textColor="#ffffff" />
 
     <Button
         android:id="@+id/login"
