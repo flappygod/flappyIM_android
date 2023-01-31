@@ -25,7 +25,7 @@ public class FlappyRequest {
 
 
     //更新信息
-    public final static int UPDATE_SESSION_SGINGLE=1;
+    public final static int UPDATE_SESSION_SINGLE =1;
 
 
 }

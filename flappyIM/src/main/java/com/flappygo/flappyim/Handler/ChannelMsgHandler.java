@@ -406,7 +406,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //更新消息
                 Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
                         .setUpdateID(key)
-                        .setUpdateType(FlappyRequest.UPDATE_SESSION_SGINGLE)
+                        .setUpdateType(FlappyRequest.UPDATE_SESSION_SINGLE)
                         .build();
 
                 //创建登录请求消息
