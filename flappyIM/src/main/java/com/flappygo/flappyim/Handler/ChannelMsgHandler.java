@@ -285,33 +285,31 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //设置
             Database database = new Database();
             //数据开始
-            if (session.size() > 0) {
-                for (int s = 0; s < session.size(); s++) {
-                    //更新数据
-                    SessionData data = new SessionData(session.get(s));
-                    //数据更新了
-                    Message msg = new Message();
-                    //收到新的消息
-                    msg.what = HandlerSession.SESSION_UPDATE;
-                    //消息数据体
-                    msg.obj = data;
-                    //成功
-                    this.handlerSession.sendMessage(msg);
-                    //插入数据
-                    database.insertSession(data);
-                    //消息标记为已经处理
-                    List<ChatMessage> messages = database.getNotActionSystemMessage(data.getSessionId());
-                    //将系统消息标记成为已经处理，不再需要重复处理
-                    for (ChatMessage message : messages) {
-                        //更新消息
-                        if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(message.getChatSystem().getSysTime()).longValue()) {
-                            message.setMessageReadState(new BigDecimal(1));
-                            database.insertMessage(message);
-                        }
+            for (int s = 0; s < session.size(); s++) {
+                //更新数据
+                SessionData data = new SessionData(session.get(s));
+                //数据更新了
+                Message msg = new Message();
+                //收到新的消息
+                msg.what = HandlerSession.SESSION_UPDATE;
+                //消息数据体
+                msg.obj = data;
+                //成功
+                this.handlerSession.sendMessage(msg);
+                //插入数据
+                database.insertSession(data);
+                //消息标记为已经处理
+                List<ChatMessage> messages = database.getNotActionSystemMessage(data.getSessionId());
+                //将系统消息标记成为已经处理，不再需要重复处理
+                for (ChatMessage message : messages) {
+                    //更新消息
+                    if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(message.getChatSystem().getSysTime()).longValue()) {
+                        message.setMessageReadState(new BigDecimal(1));
+                        database.insertMessage(message);
                     }
-                    //移除正在更新
-                    updateSessions.remove(data.getSessionId());
                 }
+                //移除正在更新
+                updateSessions.remove(data.getSessionId());
             }
             database.close();
         }
