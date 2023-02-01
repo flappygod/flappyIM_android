@@ -6,34 +6,29 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.DateTimeTool;
+import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.StringTool;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**************************
- * Title: EtongDatabase Package:  Description: 数据库
- *
- * @author:李俊霖
- * @version:2014-10-28下午
- * @since 1.0
- */
+//数据库操作
 public class Database {
 
     // 数据库db
     private SQLiteDatabase db;
     // 数据库helper
     public DatabaseHelper dbHelper;
-
+    // 数据库操作锁
     private static final byte[] lock = new byte[1];
 
+    //Database
     public Database() {
         dbHelper = new DatabaseHelper(FlappyImService.getInstance().getAppContext(),
                 DataBaseConfig.DB_NAME,
@@ -42,10 +37,7 @@ public class Database {
         db = dbHelper.getWritableDatabase();
     }
 
-
-    /********************************
-     * 关闭的时候关闭helper和数据库，并置空
-     ********************************/
+    //关闭的时候关闭helper和数据库，并置空
     public void close() {
         db.close();
         dbHelper.close();
@@ -53,14 +45,16 @@ public class Database {
         dbHelper = null;
     }
 
-
     //插入单条消息
     public boolean insertMessage(ChatMessage chatMessage) {
         synchronized (lock) {
             //检查是否有记录
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE, null,
                     "messageId=?",
-                    new String[]{chatMessage.getMessageId()}, null, null, null);
+                    new String[]{chatMessage.getMessageId()},
+                    null,
+                    null,
+                    null);
             //没有记录
             if (!cursor.moveToFirst()) {
                 cursor.close();
@@ -100,9 +94,7 @@ public class Database {
                 {
                     values.put("messageStamp", System.currentTimeMillis());
                 }
-                long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
-                        null,
-                        values);
+                long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,null, values);
                 return ret > 0;
             } else {
                 cursor.close();
@@ -141,11 +133,7 @@ public class Database {
                 if (chatMessage.getDeleteDate() != null)
                     values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
                 //更新消息信息
-                long ret = db.update(DataBaseConfig.TABLE_MESSAGE,
-                        values,
-                        "messageId=?",
-                        new String[]{chatMessage.getMessageId()}
-                );
+                long ret = db.update(DataBaseConfig.TABLE_MESSAGE,values,"messageId=?", new String[]{chatMessage.getMessageId()});
                 return ret > 0;
             }
         }
@@ -153,11 +141,9 @@ public class Database {
 
     //插入一个列表的消息
     public boolean insertMessages(List<ChatMessage> messages) {
-
         if (messages == null || messages.size() == 0) {
             return true;
         }
-
         db.beginTransaction();
         boolean totalSuccess = true;
         for (int s = 0; s < messages.size(); s++) {
@@ -183,7 +169,10 @@ public class Database {
             //检查是否有记录
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionId=? and sessionInsertUser=? ",
-                    new String[]{session.getSessionId(), currentUserID}, null, null, null);
+                    new String[]{session.getSessionId(), currentUserID},
+                    null,
+                    null,
+                    null);
 
             //没有记录
             if (!cursor.moveToFirst()) {
@@ -218,7 +207,7 @@ public class Database {
                 //插入者
                 values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
 
-                long ret = db.insert(DataBaseConfig.TABLE_SESSION,null,values);
+                long ret = db.insert(DataBaseConfig.TABLE_SESSION, null, values);
                 return ret > 0;
             } else {
                 cursor.close();
@@ -598,9 +587,9 @@ public class Database {
 
     //更新还未处理的消息
     @SuppressLint("Range")
-    public List<ChatMessage>  getNotActionSystemMessage(String sessionID){
+    public List<ChatMessage> getNotActionSystemMessage(String sessionID) {
 
-        synchronized (lock){
+        synchronized (lock) {
 
             List<ChatMessage> list = new ArrayList<>();
 
@@ -662,9 +651,9 @@ public class Database {
 
     //获取所有还未做处理的系统消息
     @SuppressLint("Range")
-    public List<ChatMessage>  getNotActionSystemMessage(){
+    public List<ChatMessage> getNotActionSystemMessage() {
 
-        synchronized (lock){
+        synchronized (lock) {
             List<ChatMessage> list = new ArrayList<>();
 
             //获取这条消息之前的消息，并且不包含自身
