@@ -85,10 +85,10 @@ public class Database {
                     values.put("messageSendState", StringTool.decimalToInt(chatMessage.getMessageSendState()));
                 if (chatMessage.getMessageReadState() != null)
                     values.put("messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
-                if (chatMessage.getIsDelete() != null)
-                    values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
                 if (chatMessage.getMessageDate() != null)
                     values.put("messageDate", DateTimeTool.dateToStr(chatMessage.getMessageDate()));
+                if (chatMessage.getIsDelete() != null)
+                    values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
                 if (chatMessage.getDeleteDate() != null)
                     values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
                 {
@@ -126,10 +126,10 @@ public class Database {
                     values.put("messageSendState", StringTool.decimalToInt(chatMessage.getMessageSendState()));
                 if (chatMessage.getMessageReadState() != null)
                     values.put("messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
-                if (chatMessage.getIsDelete() != null)
-                    values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
                 if (chatMessage.getMessageDate() != null)
                     values.put("messageDate", DateTimeTool.dateToStr(chatMessage.getMessageDate()));
+                if (chatMessage.getIsDelete() != null)
+                    values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
                 if (chatMessage.getDeleteDate() != null)
                     values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
                 //更新消息信息
@@ -482,12 +482,12 @@ public class Database {
                         .getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("messageReadState"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("isDelete"))));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                         .getColumnIndex("messageStamp"))));
                 info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("messageDate"))));
+                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("isDelete"))));
                 info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("deleteDate"))));
                 list.add(info);
@@ -561,12 +561,12 @@ public class Database {
                             .getColumnIndex("messageSendState"))));
                     info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                             .getColumnIndex("messageReadState"))));
-                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                            .getColumnIndex("isDelete"))));
                     info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                             .getColumnIndex("messageStamp"))));
                     info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("messageDate"))));
+                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("isDelete"))));
                     info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("deleteDate"))));
                     list.add(info);
@@ -636,12 +636,12 @@ public class Database {
                             .getColumnIndex("messageSendState"))));
                     info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                             .getColumnIndex("messageReadState"))));
-                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                            .getColumnIndex("isDelete"))));
                     info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                             .getColumnIndex("messageStamp"))));
                     info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("messageDate"))));
+                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("isDelete"))));
                     info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("deleteDate"))));
                     list.add(info);
@@ -699,12 +699,12 @@ public class Database {
                             .getColumnIndex("messageSendState"))));
                     info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                             .getColumnIndex("messageReadState"))));
-                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                            .getColumnIndex("isDelete"))));
                     info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                             .getColumnIndex("messageStamp"))));
                     info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("messageDate"))));
+                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                            .getColumnIndex("isDelete"))));
                     info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("deleteDate"))));
                     list.add(info);
@@ -760,12 +760,12 @@ public class Database {
                         .getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("messageReadState"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("isDelete"))));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                         .getColumnIndex("messageStamp"))));
                 info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("messageDate"))));
+                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("isDelete"))));
                 info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("deleteDate"))));
                 cursor.close();
@@ -821,12 +821,12 @@ public class Database {
                         .getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("messageReadState"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("isDelete"))));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                         .getColumnIndex("messageStamp"))));
                 info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("messageDate"))));
+                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("isDelete"))));
                 info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("deleteDate"))));
                 cursor.close();
@@ -879,12 +879,12 @@ public class Database {
                         .getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("messageReadState"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
-                        .getColumnIndex("isDelete"))));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor
                         .getColumnIndex("messageStamp"))));
                 info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("messageDate"))));
+                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
+                        .getColumnIndex("isDelete"))));
                 info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("deleteDate"))));
                 cursor.close();
