@@ -19,6 +19,7 @@ import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
+import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Session.FlappyChatSession;
@@ -74,6 +75,13 @@ public class MainActivity extends Activity {
             @Override
             public void notificationClicked(ChatMessage chatMessage) {
                 System.out.println(chatMessage.getChatText());
+            }
+        });
+
+        FlappyImService.getInstance().addSessionListener(new SessionListener() {
+            @Override
+            public void sessionUpdate(FlappyChatSession session) {
+                System.out.println(session.getSession());
             }
         });
 

@@ -22,7 +22,7 @@ import java.util.List;
 public class FlappyChatSession extends FlappyBaseSession {
 
     //保留的监听列表
-    private List<MessageListener> listenerList = new ArrayList<>();
+    private final List<MessageListener> listenerList = new ArrayList<>();
 
     //设置消息的监听,新收到消息都会在这里
     public void addMessageListener(MessageListener messageListener) {
@@ -38,7 +38,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //始终都要移除它，防止内存泄漏
-    public void finalize() {
+    protected void finalize() {
         close();
     }
 
