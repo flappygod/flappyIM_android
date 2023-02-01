@@ -280,7 +280,11 @@ public class Database {
 
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionExtendId=? and sessionInsertUser=? ",
-                    new String[]{sessionExtendID, DataManager.getInstance().getLoginUser().getUserExtendId()}, null, null, null);
+                    new String[]{sessionExtendID,
+                            DataManager.getInstance().getLoginUser().getUserExtendId()},
+                    null,
+                    null,
+                    null);
 
             //获取数据
             if (cursor.moveToFirst()) {
