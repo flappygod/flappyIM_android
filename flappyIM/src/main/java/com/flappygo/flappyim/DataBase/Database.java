@@ -195,6 +195,8 @@ public class Database {
                     values.put("sessionExtendId", session.getSessionExtendId());
                 if (session.getSessionType() != null)
                     values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
+                if (session.getSessionInfo() != null)
+                    values.put("sessionInfo", session.getSessionInfo());
                 if (session.getSessionName() != null)
                     values.put("sessionName", session.getSessionName());
                 if (session.getSessionImage() != null)
@@ -225,6 +227,8 @@ public class Database {
 
                 if (session.getSessionType() != null)
                     values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
+                if (session.getSessionInfo() != null)
+                    values.put("sessionInfo", session.getSessionInfo());
                 if (session.getSessionName() != null)
                     values.put("sessionName", session.getSessionName());
                 if (session.getSessionImage() != null)
@@ -298,6 +302,8 @@ public class Database {
                         .getColumnIndex("sessionExtendId")));
                 info.setSessionType(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("sessionType"))));
+                info.setSessionInfo(cursor.getString(cursor
+                        .getColumnIndex("sessionInfo")));
                 info.setSessionName(cursor.getString(cursor
                         .getColumnIndex("sessionName")));
                 info.setSessionImage(cursor.getString(cursor
@@ -349,6 +355,8 @@ public class Database {
                             .getColumnIndex("sessionExtendId")));
                     info.setSessionType(new BigDecimal(cursor.getInt(cursor
                             .getColumnIndex("sessionType"))));
+                    info.setSessionInfo(cursor.getString(cursor
+                            .getColumnIndex("sessionInfo")));
                     info.setSessionName(cursor.getString(cursor
                             .getColumnIndex("sessionName")));
                     info.setSessionImage(cursor.getString(cursor
@@ -508,15 +516,15 @@ public class Database {
         //加锁
         synchronized (lock) {
             //返回的列表
-            List<ChatMessage> retMsgs = new ArrayList<>();
+            List<ChatMessage> chatMessages = new ArrayList<>();
 
             //然后查询出与它相同的数据
-            List<ChatMessage> sequenceMsgs = getSessionSeqMessages(messageSession, chatMessage.getMessageTableSeq().toString());
+            List<ChatMessage> sessionSeqMessages = getSessionSeqMessages(messageSession, chatMessage.getMessageTableSeq().toString());
 
             //之前的消息
-            for (int s = 0; s < sequenceMsgs.size(); s++) {
-                if (sequenceMsgs.get(s).getMessageStamp().intValue() < chatMessage.getMessageStamp().intValue()) {
-                    retMsgs.add(sequenceMsgs.get(s));
+            for (int s = 0; s < sessionSeqMessages.size(); s++) {
+                if (sessionSeqMessages.get(s).getMessageStamp().intValue() < chatMessage.getMessageStamp().intValue()) {
+                    chatMessages.add(sessionSeqMessages.get(s));
                 }
             }
 
@@ -573,17 +581,17 @@ public class Database {
                 }
             cursor.close();
             //消息列表
-            retMsgs.addAll(list);
+            chatMessages.addAll(list);
 
-            if (retMsgs.size() > size) {
+            if (chatMessages.size() > size) {
                 List<ChatMessage> memList = new ArrayList<>();
                 for (int s = 0; s < size; s++) {
-                    memList.add(retMsgs.get(s));
+                    memList.add(chatMessages.get(s));
                 }
-                retMsgs = memList;
+                chatMessages = memList;
             }
 
-            return retMsgs;
+            return chatMessages;
         }
 
     }
@@ -599,7 +607,7 @@ public class Database {
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageType = 0 and messageReaded = 0 and messageSession=?",
+                    "messageType = 0 and messageReadState = 0 and messageSession=?",
                     new String[]{sessionID},
                     null,
                     null,
