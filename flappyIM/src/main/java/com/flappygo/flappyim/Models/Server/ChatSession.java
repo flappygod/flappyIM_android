@@ -20,6 +20,8 @@ public class ChatSession implements Serializable {
 
     private BigDecimal sessionType;
 
+    private String sessionInfo;
+
     private String sessionName;
 
     private String sessionImage;
@@ -32,9 +34,9 @@ public class ChatSession implements Serializable {
 
     private String sessionCreateUser;
 
-    private BigDecimal sessionDeleted;
+    private BigDecimal isDelete;
 
-    private Date sessionDeletedDate;
+    private Date deleteDate;
 
     public String getSessionId() {
         return sessionId;
@@ -108,19 +110,27 @@ public class ChatSession implements Serializable {
         this.sessionCreateUser = sessionCreateUser == null ? null : sessionCreateUser.trim();
     }
 
-    public BigDecimal getSessionDeleted() {
-        return sessionDeleted;
+    public BigDecimal getIsDelete() {
+        return isDelete;
     }
 
-    public void setSessionDeleted(BigDecimal sessionDeleted) {
-        this.sessionDeleted = sessionDeleted;
+    public void setIsDelete(BigDecimal isDelete) {
+        this.isDelete = isDelete;
     }
 
-    public Date getSessionDeletedDate() {
-        return sessionDeletedDate;
+    public Date getDeleteDate() {
+        return deleteDate;
     }
 
-    public void setSessionDeletedDate(Date sessionDeletedDate) {
-        this.sessionDeletedDate = sessionDeletedDate;
+    public void setDeleteDate(Date deleteDate) {
+        this.deleteDate = deleteDate;
+    }
+
+    public String getSessionInfo() {
+        return sessionInfo;
+    }
+
+    public void setSessionInfo(String sessionInfo) {
+        this.sessionInfo = sessionInfo;
     }
 }

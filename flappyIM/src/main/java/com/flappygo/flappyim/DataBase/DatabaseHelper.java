@@ -86,6 +86,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // 会话类型
                 "sessionType" + " integer,"
                 +
+                // 会话信息
+                "sessionInfo" + " varchar,"
+                +
                 //会话名称
                 "sessionName" + " varchar,"
                 +
@@ -195,6 +198,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         // 会话类型
                         "sessionType" + " integer,"
                         +
+                        // 会话信息
+                        "sessionInfo" + " varchar,"
+                        +
                         //会话名称
                         "sessionName" + " varchar,"
                         +
@@ -231,7 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             } catch (Exception ex) {
 
-                System.out.println(ex.getCause());
+                System.out.println(ex.getMessage());
             }
 
 

@@ -398,11 +398,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //遍历
         for (String key : needUpdate.keySet()) {
-
+            //包含
             if (!updateSessions.contains(key)) {
-
+                //添加sessions
                 updateSessions.add(key);
-
                 //更新消息
                 Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
                         .setUpdateID(key)
@@ -417,8 +416,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //发送需要更新的消息
                 channelHandlerContext.writeAndFlush(builder.build());
             }
-
-
         }
     }
 

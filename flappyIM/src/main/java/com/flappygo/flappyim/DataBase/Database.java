@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**************************
- * Title: EtongDatabase Package: com.etong.mall.database Description: 数据库
+ * Title: EtongDatabase Package:  Description: 数据库
  *
  * @author:李俊霖
  * @version:2014-10-28下午
@@ -103,9 +103,7 @@ public class Database {
                 long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,
                         null,
                         values);
-                if (ret > 0) {
-                    return true;
-                }
+                return ret > 0;
             } else {
                 cursor.close();
                 //代表消息已经发送了
@@ -148,11 +146,8 @@ public class Database {
                         "messageId=?",
                         new String[]{chatMessage.getMessageId()}
                 );
-                if (ret > 0) {
-                    return true;
-                }
+                return ret > 0;
             }
-            return false;
         }
     }
 
@@ -167,7 +162,7 @@ public class Database {
         boolean totalSuccess = true;
         for (int s = 0; s < messages.size(); s++) {
             boolean flag = insertMessage(messages.get(s));
-            if (flag == false) {
+            if (!flag) {
                 totalSuccess = false;
             }
         }
@@ -183,12 +178,12 @@ public class Database {
         synchronized (lock) {
 
             //当前的ID
-            String nowerUserID = DataManager.getInstance().getLoginUser().getUserExtendId();
+            String currentUserID = DataManager.getInstance().getLoginUser().getUserExtendId();
 
             //检查是否有记录
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionId=? and sessionInsertUser=? ",
-                    new String[]{session.getSessionId(), nowerUserID}, null, null, null);
+                    new String[]{session.getSessionId(), currentUserID}, null, null, null);
 
             //没有记录
             if (!cursor.moveToFirst()) {
@@ -212,21 +207,17 @@ public class Database {
                     values.put("sessionCreateDate", DateTimeTool.dateToStr(session.getSessionCreateDate()));
                 if (session.getSessionCreateUser() != null)
                     values.put("sessionCreateUser", session.getSessionCreateUser());
-                if (session.getSessionDeleted() != null)
-                    values.put("sessionDeleted", StringTool.decimalToInt(session.getSessionDeleted()));
-                if (session.getSessionDeletedDate() != null)
-                    values.put("sessionDeletedDate", DateTimeTool.dateToStr(session.getSessionDeletedDate()));
+                if (session.getIsDelete() != null)
+                    values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
+                if (session.getDeleteDate() != null)
+                    values.put("sessionDeletedDate", DateTimeTool.dateToStr(session.getDeleteDate()));
                 if (session.getUsers() != null)
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 //插入者
                 values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
 
-                long ret = db.insert(DataBaseConfig.TABLE_SESSION,
-                        null,
-                        values);
-                if (ret > 0) {
-                    return true;
-                }
+                long ret = db.insert(DataBaseConfig.TABLE_SESSION,null,values);
+                return ret > 0;
             } else {
                 cursor.close();
 
@@ -246,10 +237,10 @@ public class Database {
                     values.put("sessionCreateDate", DateTimeTool.dateToStr(session.getSessionCreateDate()));
                 if (session.getSessionCreateUser() != null)
                     values.put("sessionCreateUser", session.getSessionCreateUser());
-                if (session.getSessionDeleted() != null)
-                    values.put("sessionDeleted", StringTool.decimalToInt(session.getSessionDeleted()));
-                if (session.getSessionDeletedDate() != null)
-                    values.put("sessionDeletedDate", DateTimeTool.dateToStr(session.getSessionDeletedDate()));
+                if (session.getIsDelete() != null)
+                    values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
+                if (session.getDeleteDate() != null)
+                    values.put("sessionDeletedDate", DateTimeTool.dateToStr(session.getDeleteDate()));
                 if (session.getUsers() != null)
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 //插入者
@@ -259,14 +250,11 @@ public class Database {
                 long ret = db.update(DataBaseConfig.TABLE_SESSION,
                         values,
                         "sessionId=? and sessionInsertUser=? ",
-                        new String[]{session.getSessionId(), nowerUserID}
+                        new String[]{session.getSessionId(), currentUserID}
                 );
 
-                if (ret > 0) {
-                    return true;
-                }
+                return ret > 0;
             }
-            return false;
         }
     }
 
@@ -281,7 +269,7 @@ public class Database {
         boolean totalSuccess = true;
         for (int s = 0; s < sessionData.size(); s++) {
             boolean flag = insertSession(sessionData.get(s));
-            if (flag == false) {
+            if (!flag) {
                 totalSuccess = false;
             }
         }
@@ -322,9 +310,9 @@ public class Database {
                         .getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor
                         .getColumnIndex("sessionCreateUser")));
-                info.setSessionDeleted(new BigDecimal(cursor.getInt(cursor
+                info.setIsDelete(new BigDecimal(cursor.getInt(cursor
                         .getColumnIndex("sessionDeleted"))));
-                info.setSessionDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
+                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("sessionDeletedDate"))));
 
                 info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor
@@ -347,7 +335,10 @@ public class Database {
 
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionInsertUser=? ",
-                    new String[]{DataManager.getInstance().getLoginUser().getUserId()}, null, null, null);
+                    new String[]{DataManager.getInstance().getLoginUser().getUserId()},
+                    null,
+                    null,
+                    null);
             //获取数据
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
@@ -370,9 +361,9 @@ public class Database {
                             .getColumnIndex("sessionCreateDate"))));
                     info.setSessionCreateUser(cursor.getString(cursor
                             .getColumnIndex("sessionCreateUser")));
-                    info.setSessionDeleted(new BigDecimal(cursor.getInt(cursor
+                    info.setIsDelete(new BigDecimal(cursor.getInt(cursor
                             .getColumnIndex("sessionDeleted"))));
-                    info.setSessionDeletedDate(DateTimeTool.strToDate(cursor.getString(cursor
+                    info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("sessionDeletedDate"))));
                     info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor
                             .getColumnIndex("users")), ChatUser.class));
@@ -392,7 +383,7 @@ public class Database {
     @SuppressLint("Range")
     public List<ChatMessage> getAllMessages() {
         synchronized (lock) {
-            List<ChatMessage> list = new ArrayList<ChatMessage>();
+            List<ChatMessage> list = new ArrayList<>();
             //消息更新
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -451,7 +442,7 @@ public class Database {
     //获取当前这个messageTableSeq 的所有消息
     @SuppressLint("Range")
     private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableSeq) {
-        List<ChatMessage> list = new ArrayList<ChatMessage>();
+        List<ChatMessage> list = new ArrayList<>();
         //获取这条消息之前的消息，并且不包含自身
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                 null,
@@ -530,7 +521,7 @@ public class Database {
             }
 
             //获取此数据之前的数据列表集
-            List<ChatMessage> list = new ArrayList<ChatMessage>();
+            List<ChatMessage> list = new ArrayList<>();
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -603,7 +594,7 @@ public class Database {
 
         synchronized (lock){
 
-            List<ChatMessage> list = new ArrayList<ChatMessage>();
+            List<ChatMessage> list = new ArrayList<>();
 
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
@@ -666,12 +657,12 @@ public class Database {
     public List<ChatMessage>  getNotActionSystemMessage(){
 
         synchronized (lock){
-            List<ChatMessage> list = new ArrayList<ChatMessage>();
+            List<ChatMessage> list = new ArrayList<>();
 
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageType = 0 and messageReaded = 0 ",
+                    "messageType = 0 and messageReadState = 0 ",
                     null,
                     null,
                     null,
