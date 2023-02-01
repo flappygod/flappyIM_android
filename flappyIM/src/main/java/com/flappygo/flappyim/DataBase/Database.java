@@ -1,18 +1,18 @@
 package com.flappygo.flappyim.DataBase;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.FlappyImService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -597,7 +597,7 @@ public class Database {
 
             List<ChatMessage> list = new ArrayList<>();
 
-            //获取这条消息之前的消息，并且不包含自身
+            //获取session中未读的系统消息
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
                     "messageType = 0 and messageReadState = 0 and messageSession=?",
