@@ -94,6 +94,7 @@ public class MainActivity extends Activity {
             }
         });
 
+
         FlappyImService.getInstance().addGlobalMessageListener(new MessageListener() {
             @Override
             public void messageReceived(ChatMessage chatMessage) {

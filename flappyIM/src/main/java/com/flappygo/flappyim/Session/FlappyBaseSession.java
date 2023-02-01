@@ -43,7 +43,7 @@ public class FlappyBaseSession {
     //我们姑且认为是最后一条
     protected void insertMessage(ChatMessage msg) {
         //已经发送了
-        msg.setMessageSended(new BigDecimal(SEND_STATE_CREATE));
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
         //获取当前用户
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         //当前最后一条
@@ -61,7 +61,7 @@ public class FlappyBaseSession {
     //将消息的状态更新为已经发送
     private void updateMsgSended(ChatMessage msg) {
         //已经发送了
-        msg.setMessageSended(new BigDecimal(SEND_STATE_SENDED));
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENDED));
         //插入数据
         Database database=new Database();
         database.insertMessage(msg);
@@ -72,7 +72,7 @@ public class FlappyBaseSession {
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
         //发送失败了
-        msg.setMessageSended(new BigDecimal(SEND_STATE_FAILURE));
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
         //插入数据
         Database database=new Database();
         database.insertMessage(msg);

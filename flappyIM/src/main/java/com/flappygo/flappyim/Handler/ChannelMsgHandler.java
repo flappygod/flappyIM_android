@@ -310,7 +310,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     for (int w = 0; w < messages.size(); w++) {
                         //更新消息
                         if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(messages.get(w).getChatSystem().getSysTime()).longValue()) {
-                            messages.get(w).setMessageReaded(new BigDecimal(1));
+                            messages.get(w).setMessageReadState(new BigDecimal(1));
                             database.insertMessage(messages.get(w));
                         }
                     }
@@ -427,19 +427,19 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void messageArrivedState(ChatMessage msg) {
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         //自己发送的，已经发送
-        if (chatUser.getUserId().equals(msg.getMessageSend())) {
-            msg.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
+        if (chatUser.getUserId().equals(msg.getMessageSendId())) {
+            msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
         }
         //其他人发送的，已经到达
         else {
-            msg.setMessageSended(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
+            msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
         }
     }
 
     //消息已经到达
     private void messageArrivedReceipt(ChatMessage chatMessage) {
         //返回
-        if (!chatMessage.getMessageSend().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+        if (!chatMessage.getMessageSendId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
 
             //创建消息到达的回执
             Flappy.ReqReceipt receipt = Flappy.ReqReceipt.newBuilder()

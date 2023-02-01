@@ -78,7 +78,7 @@ string messageSendExtendid = 8;
 //消息接受者
 string messageRecieve = 9;
 //消息接收外部ID
-string messageRecieveExtendid = 10;
+string messageReceiveExtendId = 10;
 //消息内容
 string messageContent = 11;
 //消息是否已发送

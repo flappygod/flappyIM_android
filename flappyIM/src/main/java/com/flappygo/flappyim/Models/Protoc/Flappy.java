@@ -6817,7 +6817,7 @@ public final class Flappy {
      *消息接收外部ID
      * </pre>
      *
-     * <code>string messageRecieveExtendid = 10;</code>
+     * <code>string messageReceiveExtendId = 10;</code>
      */
     java.lang.String getMessageRecieveExtendid();
     /**
@@ -6825,7 +6825,7 @@ public final class Flappy {
      *消息接收外部ID
      * </pre>
      *
-     * <code>string messageRecieveExtendid = 10;</code>
+     * <code>string messageReceiveExtendId = 10;</code>
      */
     com.google.protobuf.ByteString
     getMessageRecieveExtendidBytes();
@@ -7355,7 +7355,7 @@ public final class Flappy {
      *消息接收外部ID
      * </pre>
      *
-     * <code>string messageRecieveExtendid = 10;</code>
+     * <code>string messageReceiveExtendId = 10;</code>
      */
     public java.lang.String getMessageRecieveExtendid() {
       java.lang.Object ref = messageRecieveExtendid_;
@@ -7374,7 +7374,7 @@ public final class Flappy {
      *消息接收外部ID
      * </pre>
      *
-     * <code>string messageRecieveExtendid = 10;</code>
+     * <code>string messageReceiveExtendId = 10;</code>
      */
     public com.google.protobuf.ByteString
     getMessageRecieveExtendidBytes() {
@@ -8715,7 +8715,7 @@ public final class Flappy {
        *消息接收外部ID
        * </pre>
        *
-       * <code>string messageRecieveExtendid = 10;</code>
+       * <code>string messageReceiveExtendId = 10;</code>
        */
       public java.lang.String getMessageRecieveExtendid() {
         java.lang.Object ref = messageRecieveExtendid_;
@@ -8734,7 +8734,7 @@ public final class Flappy {
        *消息接收外部ID
        * </pre>
        *
-       * <code>string messageRecieveExtendid = 10;</code>
+       * <code>string messageReceiveExtendId = 10;</code>
        */
       public com.google.protobuf.ByteString
       getMessageRecieveExtendidBytes() {
@@ -8754,7 +8754,7 @@ public final class Flappy {
        *消息接收外部ID
        * </pre>
        *
-       * <code>string messageRecieveExtendid = 10;</code>
+       * <code>string messageReceiveExtendId = 10;</code>
        */
       public Builder setMessageRecieveExtendid(
               java.lang.String value) {
@@ -8771,7 +8771,7 @@ public final class Flappy {
        *消息接收外部ID
        * </pre>
        *
-       * <code>string messageRecieveExtendid = 10;</code>
+       * <code>string messageReceiveExtendId = 10;</code>
        */
       public Builder clearMessageRecieveExtendid() {
 
@@ -8784,7 +8784,7 @@ public final class Flappy {
        *消息接收外部ID
        * </pre>
        *
-       * <code>string messageRecieveExtendid = 10;</code>
+       * <code>string messageReceiveExtendId = 10;</code>
        */
       public Builder setMessageRecieveExtendidBytes(
               com.google.protobuf.ByteString value) {
@@ -13042,7 +13042,7 @@ public final class Flappy {
     internal_static_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_Message_descriptor,
-            new java.lang.String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "MessageSend", "MessageSendExtendid", "MessageRecieve", "MessageRecieveExtendid", "MessageContent", "MessageSended", "MessageReaded", "MessageDate", "MessageDeleted", "MessageDeletedDate", });
+            new java.lang.String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "messageSendId", "messageSendExtendId", "messageReceiveId", "messageReceiveExtendId", "MessageContent", "messageSendState", "messageReadState", "MessageDate", "isDelete", "deleteDate", });
     internal_static_Session_descriptor =
             getDescriptor().getMessageTypes().get(7);
     internal_static_Session_fieldAccessorTable = new

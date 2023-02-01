@@ -40,28 +40,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "messageType" + " integer,"
                 +
                 // 发送ID
-                "messageSend" + " varchar,"
+                "messageSendId" + " varchar,"
                 +
                 // 发送者外部ID
-                "messageSendExtendid" + " varchar,"
+                "messageSendExtendId" + " varchar,"
                 +
                 // 消息接收者ID
-                "messageRecieve" + " varchar,"
+                "messageReceiveId" + " varchar,"
                 +
                 // 消息接收外部ID
-                "messageRecieveExtendid" + " varchar,"
+                "messageReceiveExtendId" + " varchar,"
                 +
                 // 发送内容
                 "messageContent" + " varchar,"
                 +
                 // 发送状态
-                "messageSended" + " integer,"
+                "messageSendState" + " integer,"
                 +
                 // 是否已读
-                "messageReaded" + " integer,"
+                "messageReadState" + " integer,"
                 +
                 // 是否被删除
-                "messageDeleted" + " integer,"
+                "isDelete" + " integer,"
                 +
                 // 发送日期
                 "messageDate" + " varchar,"
@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "messageStamp" + " integer,"
                 +
                 // 发送类型
-                "messageDeletedDate" + " varchar,"
+                "deleteDate" + " varchar,"
                 + " primary key (messageId)" + ")");
 
 
@@ -150,28 +150,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "messageType" + " integer,"
                         +
                         // 消息id
-                        "messageSend" + " varchar,"
+                        "messageSendId" + " varchar,"
                         +
                         // 消息id
-                        "messageSendExtendid" + " varchar,"
+                        "messageSendExtendId" + " varchar,"
                         +
                         // 消息类型
-                        "messageRecieve" + " varchar,"
+                        "messageReceiveId" + " varchar,"
                         +
                         // 消息类型
-                        "messageRecieveExtendid" + " varchar,"
+                        "messageReceiveExtendId" + " varchar,"
                         +
                         // 发送flag
                         "messageContent" + " varchar,"
                         +
                         // 发送类型
-                        "messageSended" + " integer,"
+                        "messageSendState" + " integer,"
                         +
                         // 发送类型
-                        "messageReaded" + " integer,"
+                        "messageReadState" + " integer,"
                         +
                         // 发送类型
-                        "messageDeleted" + " integer,"
+                        "isDelete" + " integer,"
                         +
                         // 发送类型
                         "messageDate" + " varchar,"
@@ -180,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "messageStamp" + " integer,"
                         +
                         // 发送类型
-                        "messageDeletedDate" + " varchar,"
+                        "deleteDate" + " varchar,"
                         + " primary key (messageId)" + ")");
 
                 // 创建数据库表

@@ -59,27 +59,27 @@ public class ChatMessage {
 
     private BigDecimal messageType;
 
-    private String messageSend;
+    private String messageSendId;
 
-    private String messageSendExtendid;
+    private String messageSendExtendId;
 
-    private String messageRecieve;
+    private String messageReceiveId;
 
-    private String messageRecieveExtendid;
+    private String messageReceiveExtendId;
 
     private String messageContent;
 
-    private BigDecimal messageSended;
+    private BigDecimal messageSendState;
 
-    private BigDecimal messageReaded;
+    private BigDecimal messageReadState;
 
     private Date messageDate;
 
-    private BigDecimal messageDeleted;
+    private BigDecimal isDelete;
 
     private BigDecimal messageStamp;
 
-    private Date messageDeletedDate;
+    private Date deleteDate;
 
     public String getMessageId() {
         return messageId;
@@ -129,36 +129,36 @@ public class ChatMessage {
         this.messageType = messageType;
     }
 
-    public String getMessageSend() {
-        return messageSend;
+    public String getMessageSendId() {
+        return messageSendId;
     }
 
-    public void setMessageSend(String messageSend) {
-        this.messageSend = messageSend == null ? null : messageSend.trim();
+    public void setMessageSendId(String messageSendId) {
+        this.messageSendId = messageSendId == null ? null : messageSendId.trim();
     }
 
-    public String getMessageSendExtendid() {
-        return messageSendExtendid;
+    public String getMessageSendExtendId() {
+        return messageSendExtendId;
     }
 
-    public void setMessageSendExtendid(String messageSendExtendid) {
-        this.messageSendExtendid = messageSendExtendid == null ? null : messageSendExtendid.trim();
+    public void setMessageSendExtendId(String messageSendExtendId) {
+        this.messageSendExtendId = messageSendExtendId == null ? null : messageSendExtendId.trim();
     }
 
-    public String getMessageRecieve() {
-        return messageRecieve;
+    public String getMessageReceiveId() {
+        return messageReceiveId;
     }
 
-    public void setMessageRecieve(String messageRecieve) {
-        this.messageRecieve = messageRecieve == null ? null : messageRecieve.trim();
+    public void setMessageReceiveId(String messageReceiveId) {
+        this.messageReceiveId = messageReceiveId == null ? null : messageReceiveId.trim();
     }
 
-    public String getMessageRecieveExtendid() {
-        return messageRecieveExtendid;
+    public String getMessageReceiveExtendId() {
+        return messageReceiveExtendId;
     }
 
-    public void setMessageRecieveExtendid(String messageRecieveExtendid) {
-        this.messageRecieveExtendid = messageRecieveExtendid == null ? null : messageRecieveExtendid.trim();
+    public void setMessageReceiveExtendId(String messageReceiveExtendId) {
+        this.messageReceiveExtendId = messageReceiveExtendId == null ? null : messageReceiveExtendId.trim();
     }
 
     public String getMessageContent() {
@@ -169,20 +169,20 @@ public class ChatMessage {
         this.messageContent = messageContent == null ? null : messageContent.trim();
     }
 
-    public BigDecimal getMessageSended() {
-        return messageSended;
+    public BigDecimal getMessageSendState() {
+        return messageSendState;
     }
 
-    public void setMessageSended(BigDecimal messageSended) {
-        this.messageSended = messageSended;
+    public void setMessageSendState(BigDecimal messageSendState) {
+        this.messageSendState = messageSendState;
     }
 
-    public BigDecimal getMessageReaded() {
-        return messageReaded;
+    public BigDecimal getMessageReadState() {
+        return messageReadState;
     }
 
-    public void setMessageReaded(BigDecimal messageReaded) {
-        this.messageReaded = messageReaded;
+    public void setMessageReadState(BigDecimal messageReadState) {
+        this.messageReadState = messageReadState;
     }
 
     public Date getMessageDate() {
@@ -193,20 +193,20 @@ public class ChatMessage {
         this.messageDate = messageDate;
     }
 
-    public BigDecimal getMessageDeleted() {
-        return messageDeleted;
+    public BigDecimal getIsDelete() {
+        return isDelete;
     }
 
-    public void setMessageDeleted(BigDecimal messageDeleted) {
-        this.messageDeleted = messageDeleted;
+    public void setIsDelete(BigDecimal isDelete) {
+        this.isDelete = isDelete;
     }
 
-    public Date getMessageDeletedDate() {
-        return messageDeletedDate;
+    public Date getDeleteDate() {
+        return deleteDate;
     }
 
-    public void setMessageDeletedDate(Date messageDeletedDate) {
-        this.messageDeletedDate = messageDeletedDate;
+    public void setDeleteDate(Date deleteDate) {
+        this.deleteDate = deleteDate;
     }
 
     public BigDecimal getMessageStamp() {
@@ -226,16 +226,16 @@ public class ChatMessage {
         messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
         messageTableSeq = new BigDecimal(msg.getMessageTableSeq());
         messageType = new BigDecimal(msg.getMessageType());
-        messageSend = msg.getMessageSend();
-        messageSendExtendid = msg.getMessageSendExtendid();
-        messageRecieve = msg.getMessageRecieve();
-        messageRecieveExtendid = msg.getMessageRecieveExtendid();
+        messageSendId = msg.getMessageSend();
+        messageSendExtendId = msg.getMessageSendExtendid();
+        messageReceiveId = msg.getMessageRecieve();
+        messageReceiveExtendId = msg.getMessageRecieveExtendid();
         messageContent = msg.getMessageContent();
-        messageSended = new BigDecimal(msg.getMessageSended());
-        messageReaded = new BigDecimal(msg.getMessageReaded());
-        messageDeleted = new BigDecimal(msg.getMessageDeleted());
+        messageSendState = new BigDecimal(msg.getMessageSended());
+        messageReadState = new BigDecimal(msg.getMessageReaded());
+        isDelete = new BigDecimal(msg.getMessageDeleted());
         messageDate = DateTimeTool.strToDate(msg.getMessageDate());
-        messageDeletedDate = DateTimeTool.strToDate(msg.getMessageDeletedDate());
+        deleteDate = DateTimeTool.strToDate(msg.getMessageDeletedDate());
     }
 
     //转换为protoc消息
@@ -253,26 +253,26 @@ public class ChatMessage {
             msgBuilder.setMessageTableSeq(StringTool.decimalToInt(getMessageTableSeq()));
         if (getMessageType() != null)
             msgBuilder.setMessageType(StringTool.decimalToInt(getMessageType()));
-        if (getMessageSend() != null)
-            msgBuilder.setMessageSend(getMessageSend());
-        if (getMessageSendExtendid() != null)
-            msgBuilder.setMessageSendExtendid(getMessageSendExtendid());
-        if (getMessageRecieve() != null)
-            msgBuilder.setMessageRecieve(getMessageRecieve());
-        if (getMessageRecieveExtendid() != null)
-            msgBuilder.setMessageRecieveExtendid(getMessageRecieveExtendid());
+        if (getMessageSendId() != null)
+            msgBuilder.setMessageSend(getMessageSendId());
+        if (getMessageSendExtendId() != null)
+            msgBuilder.setMessageSendExtendid(getMessageSendExtendId());
+        if (getMessageReceiveId() != null)
+            msgBuilder.setMessageRecieve(getMessageReceiveId());
+        if (getMessageReceiveExtendId() != null)
+            msgBuilder.setMessageRecieveExtendid(getMessageReceiveExtendId());
         if (getMessageContent() != null)
             msgBuilder.setMessageContent(getMessageContent());
-        if (getMessageSended() != null)
-            msgBuilder.setMessageSended(StringTool.decimalToInt(getMessageSended()));
-        if (getMessageReaded() != null)
-            msgBuilder.setMessageReaded(StringTool.decimalToInt(getMessageReaded()));
+        if (getMessageSendState() != null)
+            msgBuilder.setMessageSended(StringTool.decimalToInt(getMessageSendState()));
+        if (getMessageReadState() != null)
+            msgBuilder.setMessageReaded(StringTool.decimalToInt(getMessageReadState()));
         if (getMessageDate() != null)
             msgBuilder.setMessageDate(DateTimeTool.dateToStr(getMessageDate()));
-        if (getMessageDeleted() != null)
-            msgBuilder.setMessageDeleted(StringTool.decimalToInt(getMessageDeleted()));
-        if (getMessageDeletedDate() != null)
-            msgBuilder.setMessageDeletedDate(DateTimeTool.dateToStr(getMessageDeletedDate()));
+        if (getIsDelete() != null)
+            msgBuilder.setMessageDeleted(StringTool.decimalToInt(getIsDelete()));
+        if (getDeleteDate() != null)
+            msgBuilder.setMessageDeletedDate(DateTimeTool.dateToStr(getDeleteDate()));
 
         return msgBuilder.build();
     }
