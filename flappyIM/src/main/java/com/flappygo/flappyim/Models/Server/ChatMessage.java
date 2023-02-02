@@ -226,16 +226,16 @@ public class ChatMessage {
         messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
         messageTableSeq = new BigDecimal(msg.getMessageTableSeq());
         messageType = new BigDecimal(msg.getMessageType());
-        messageSendId = msg.getMessageSend();
-        messageSendExtendId = msg.getMessageSendExtendid();
-        messageReceiveId = msg.getMessageRecieve();
-        messageReceiveExtendId = msg.getMessageRecieveExtendid();
+        messageSendId = Long.toString(msg.getMessageSendId());
+        messageSendExtendId = msg.getMessageSendExtendId();
+        messageReceiveId = Long.toString(msg.getMessageReceiveId());
+        messageReceiveExtendId = msg.getMessageReceiveExtendId();
         messageContent = msg.getMessageContent();
-        messageSendState = new BigDecimal(msg.getMessageSended());
-        messageReadState = new BigDecimal(msg.getMessageReaded());
-        isDelete = new BigDecimal(msg.getMessageDeleted());
+        messageSendState = new BigDecimal(msg.getMessageSendState());
+        messageReadState = new BigDecimal(msg.getMessageReadState());
+        isDelete = new BigDecimal(msg.getIsDelete());
         messageDate = DateTimeTool.strToDate(msg.getMessageDate());
-        deleteDate = DateTimeTool.strToDate(msg.getMessageDeletedDate());
+        deleteDate = DateTimeTool.strToDate(msg.getDeleteDate());
     }
 
     //转换为protoc消息
@@ -254,25 +254,25 @@ public class ChatMessage {
         if (getMessageType() != null)
             msgBuilder.setMessageType(StringTool.decimalToInt(getMessageType()));
         if (getMessageSendId() != null)
-            msgBuilder.setMessageSend(getMessageSendId());
+            msgBuilder.setMessageSendId(StringTool.strToLong(getMessageSendId()));
         if (getMessageSendExtendId() != null)
-            msgBuilder.setMessageSendExtendid(getMessageSendExtendId());
+            msgBuilder.setMessageSendExtendId(getMessageSendExtendId());
         if (getMessageReceiveId() != null)
-            msgBuilder.setMessageRecieve(getMessageReceiveId());
+            msgBuilder.setMessageReceiveId(StringTool.strToLong(getMessageReceiveId()));
         if (getMessageReceiveExtendId() != null)
-            msgBuilder.setMessageRecieveExtendid(getMessageReceiveExtendId());
+            msgBuilder.setMessageReceiveExtendId(getMessageReceiveExtendId());
         if (getMessageContent() != null)
             msgBuilder.setMessageContent(getMessageContent());
         if (getMessageSendState() != null)
-            msgBuilder.setMessageSended(StringTool.decimalToInt(getMessageSendState()));
+            msgBuilder.setMessageSendState(StringTool.decimalToInt(getMessageSendState()));
         if (getMessageReadState() != null)
-            msgBuilder.setMessageReaded(StringTool.decimalToInt(getMessageReadState()));
+            msgBuilder.setMessageReadState(StringTool.decimalToInt(getMessageReadState()));
         if (getMessageDate() != null)
             msgBuilder.setMessageDate(DateTimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
-            msgBuilder.setMessageDeleted(StringTool.decimalToInt(getIsDelete()));
+            msgBuilder.setIsDelete(StringTool.decimalToInt(getIsDelete()));
         if (getDeleteDate() != null)
-            msgBuilder.setMessageDeletedDate(DateTimeTool.dateToStr(getDeleteDate()));
+            msgBuilder.setDeleteDate(DateTimeTool.dateToStr(getDeleteDate()));
 
         return msgBuilder.build();
     }

@@ -20,17 +20,18 @@ public class SessionData extends ChatSession implements Serializable {
 
     public SessionData(Flappy.Session session) {
 
-        setSessionId(session.getSessionId());
+        setSessionId(Long.toString(session.getSessionId()));
         setSessionExtendId(session.getSessionExtendId());
         setSessionType(new BigDecimal(session.getSessionType()));
+        setSessionInfo(session.getSessionInfo());
         setSessionName(session.getSessionName());
         setSessionImage(session.getSessionImage());
         setSessionOffset(session.getSessionOffset());
         setSessionStamp(new BigDecimal(session.getSessionStamp()));
-        setSessionCreateDate(DateTimeTool.strToDate(session.getSessionCreateDate()));
         setSessionCreateUser(session.getSessionCreateUser());
-        setIsDelete(new BigDecimal(session.getSessionDeleted()));
-        setDeleteDate(DateTimeTool.strToDate(session.getSessionDeletedDate()));
+        setSessionCreateDate(DateTimeTool.strToDate(session.getSessionCreateDate()));
+        setIsDelete(new BigDecimal(session.getIsDelete()));
+        setDeleteDate(DateTimeTool.strToDate(session.getDeleteDate()));
         setUsers(GsonTool.jsonArrayToModels(session.getUsers(),ChatUser.class));
 
     }

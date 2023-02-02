@@ -1,6 +1,7 @@
 package com.flappygo.flappyim.Models.Server;
 
 import com.flappygo.flappyim.Models.Protoc.Flappy;
+import com.flappygo.flappyim.Tools.StringTool;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -147,7 +148,7 @@ public class ChatRoute implements Serializable {
     //创建
     public Flappy.Route toProtocRoute(Flappy.Route.Builder builder){
         if(getRouteUser()!=null){
-            builder.setUserID(getRouteUser());
+            builder.setUserID(StringTool.strToLong(getRouteUser()));
         }
         if(getRouteDevice()!=null){
             builder.setDevice(getRouteDevice());

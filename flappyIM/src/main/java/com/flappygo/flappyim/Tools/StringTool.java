@@ -40,6 +40,17 @@ public class StringTool {
         }
     }
 
+    public static long strToLong(String data) {
+        try {
+            if (data != null && !data.isEmpty()) {
+                return Long.parseLong(data);
+            }
+            return 0;
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
+
     /**********
      * 判断字符串是否为空的
      *
@@ -130,6 +141,7 @@ public class StringTool {
 
     /**
      * 判断邮箱是否合法
+     *
      * @param email
      * @return
      */
@@ -165,7 +177,7 @@ public class StringTool {
         return c / k == 0 ? true : false;
     }
 
-    public static String getLimitString(String str,int length){
+    public static String getLimitString(String str, int length) {
         if (str == null)
             return str;
         char[] c = str.toCharArray();
@@ -175,42 +187,42 @@ public class StringTool {
             if (!isLetter(c[i])) {
                 len++;
             }
-            if(len>length&&i>1){
-                String ret=str.substring(0, i);
+            if (len > length && i > 1) {
+                String ret = str.substring(0, i);
                 return ret;
             }
         }
         return str;
     }
 
-    public static int strToInt(String str,int defaultValue){
+    public static int strToInt(String str, int defaultValue) {
         try {
             return Integer.parseInt(str);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return defaultValue;
         }
     }
 
 
-    public static List<String> splitStrList(String str, String split){
-        List<String> rets=new ArrayList<>();
-        if(str!=null&&split!=null){
-            String[] strs=str.split(split);
-            for(int s=0;s<strs.length;s++){
+    public static List<String> splitStrList(String str, String split) {
+        List<String> rets = new ArrayList<>();
+        if (str != null && split != null) {
+            String[] strs = str.split(split);
+            for (int s = 0; s < strs.length; s++) {
                 rets.add(strs[s]);
             }
         }
         return rets;
     }
 
-    public static String strListToStr(List<String> strs,String split){
-        if(strs!=null&&split!=null){
-            String retStr="";
-            for(int s=0;s<strs.size();s++){
-                if(s==strs.size()-1){
-                    retStr=retStr+strs.get(s);
-                }else{
-                    retStr=retStr+strs.get(s)+split;
+    public static String strListToStr(List<String> strs, String split) {
+        if (strs != null && split != null) {
+            String retStr = "";
+            for (int s = 0; s < strs.size(); s++) {
+                if (s == strs.size() - 1) {
+                    retStr = retStr + strs.get(s);
+                } else {
+                    retStr = retStr + strs.get(s) + split;
                 }
             }
             return retStr;
@@ -219,7 +231,7 @@ public class StringTool {
     }
 
     //获取当前设备的唯一ID
-    public  static  String  getDeviceUnicNumber(Context context){
+    public static String getDeviceUnicNumber(Context context) {
         String ANDROID_ID = Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
         return ANDROID_ID;
     }
