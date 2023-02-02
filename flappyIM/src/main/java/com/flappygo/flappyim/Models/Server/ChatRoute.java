@@ -28,7 +28,7 @@ public class ChatRoute implements Serializable {
 
     private BigDecimal routePushType;
 
-    private BigDecimal routePushPlat;
+    private String routePushPlat;
 
     private String routeServerIp;
 
@@ -146,11 +146,11 @@ public class ChatRoute implements Serializable {
         this.routeIsLogin = routeIsLogin;
     }
 
-    public BigDecimal getRoutePushPlat() {
+    public String getRoutePushPlat() {
         return routePushPlat;
     }
 
-    public void setRoutePushPlat(BigDecimal routePushPlat) {
+    public void setRoutePushPlat(String routePushPlat) {
         this.routePushPlat = routePushPlat;
     }
 
