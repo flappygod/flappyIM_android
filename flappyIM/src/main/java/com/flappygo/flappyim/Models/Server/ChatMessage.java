@@ -40,6 +40,10 @@ public class ChatMessage {
     public final static int MSG_TYPE_LOCATE = 4;
     //小视频消息
     public final static int MSG_TYPE_VIDEO = 5;
+    //短视频消息
+    public final static int MSG_TYPE_FILE = 6;
+    //自定义消息
+    public final static int MSG_TYPE_CUSTOM = 7;
 
 
     public ChatMessage() {
