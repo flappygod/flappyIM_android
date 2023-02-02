@@ -173,9 +173,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 Collections.sort(messages, (chatMessage, t1) -> {
                     if (chatMessage.getMessageTableSeq().intValue() > t1.getMessageTableSeq().intValue()) {
                         return 1;
-                    } else {
+                    } else if(chatMessage.getMessageTableSeq().intValue() < t1.getMessageTableSeq().intValue()){
                         return -1;
                     }
+                    return  0;
                 });
 
                 //创建database
