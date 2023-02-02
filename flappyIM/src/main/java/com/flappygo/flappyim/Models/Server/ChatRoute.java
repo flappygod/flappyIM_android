@@ -18,15 +18,17 @@ public class ChatRoute implements Serializable {
 
     private String routeTime;
 
-    private String routeUser;
+    private String routeUserId;
 
-    private String routeUserExtendid;
+    private String routeUserExtendId;
 
     private String routeDevice;
 
     private String routePushId;
 
     private BigDecimal routePushType;
+
+    private BigDecimal routePushPlat;
 
     private String routeServerIp;
 
@@ -38,7 +40,7 @@ public class ChatRoute implements Serializable {
 
     private BigDecimal routeOnline;
 
-    private BigDecimal routeIslogin;
+    private BigDecimal routeIsLogin;
 
     public String getRouteId() {
         return routeId;
@@ -56,20 +58,20 @@ public class ChatRoute implements Serializable {
         this.routeTime = routeTime == null ? null : routeTime.trim();
     }
 
-    public String getRouteUser() {
-        return routeUser;
+    public String getRouteUserId() {
+        return routeUserId;
     }
 
-    public void setRouteUser(String routeUser) {
-        this.routeUser = routeUser == null ? null : routeUser.trim();
+    public void setRouteUserId(String routeUserId) {
+        this.routeUserId = routeUserId == null ? null : routeUserId.trim();
     }
 
-    public String getRouteUserExtendid() {
-        return routeUserExtendid;
+    public String getRouteUserExtendId() {
+        return routeUserExtendId;
     }
 
-    public void setRouteUserExtendid(String routeUserExtendid) {
-        this.routeUserExtendid = routeUserExtendid == null ? null : routeUserExtendid.trim();
+    public void setRouteUserExtendId(String routeUserExtendId) {
+        this.routeUserExtendId = routeUserExtendId == null ? null : routeUserExtendId.trim();
     }
 
     public String getRouteDevice() {
@@ -136,19 +138,26 @@ public class ChatRoute implements Serializable {
         this.routeOnline = routeOnline;
     }
 
-    public BigDecimal getRouteIslogin() {
-        return routeIslogin;
+    public BigDecimal getRouteIsLogin() {
+        return routeIsLogin;
     }
 
-    public void setRouteIslogin(BigDecimal routeIslogin) {
-        this.routeIslogin = routeIslogin;
+    public void setRouteIsLogin(BigDecimal routeIsLogin) {
+        this.routeIsLogin = routeIsLogin;
     }
 
+    public BigDecimal getRoutePushPlat() {
+        return routePushPlat;
+    }
+
+    public void setRoutePushPlat(BigDecimal routePushPlat) {
+        this.routePushPlat = routePushPlat;
+    }
 
     //创建
     public Flappy.Route toProtocRoute(Flappy.Route.Builder builder){
-        if(getRouteUser()!=null){
-            builder.setUserID(StringTool.strToLong(getRouteUser()));
+        if(getRouteUserId()!=null){
+            builder.setUserID(StringTool.strToLong(getRouteUserId()));
         }
         if(getRouteDevice()!=null){
             builder.setDevice(getRouteDevice());
