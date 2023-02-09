@@ -45,9 +45,6 @@ public class FlappyService extends Object {
     //线程
     private NettyThread clientThread;
 
-    //当前的服务实例
-    private static FlappyService instance;
-
     //被踢下线的监听
     private KnickedOutListener knickedOutListener;
 
@@ -75,28 +72,22 @@ public class FlappyService extends Object {
 
     //开启服务
     public boolean startService() {
-        if (instance != null) {
-            //初始化接收器
-            instance.initReceiver();
-            //开始服务
-            instance.startServer();
-            //开启成功
-            return true;
-        }
-        return false;
+        //初始化接收器
+        InstanceHolder.instance.initReceiver();
+        //开始服务
+        InstanceHolder.instance.startServer();
+        //开启成功
+        return true;
     }
 
     //开启服务
     public boolean startService(String uuid, ResponseLogin response) {
-        if (instance != null) {
-            //初始化接收器
-            instance.initReceiver();
-            //开始服务
-            instance.startServer(uuid, response);
-            //开启成功
-            return true;
-        }
-        return false;
+        //初始化接收器
+        InstanceHolder.instance.initReceiver();
+        //开始服务
+        InstanceHolder.instance.startServer(uuid, response);
+        //开启成功
+        return true;
     }
 
     //销毁
@@ -112,16 +103,14 @@ public class FlappyService extends Object {
         }
     }
 
+    private static final class InstanceHolder {
+        //当前的服务实例
+        static final FlappyService instance = new FlappyService();
+    }
+
     //获取当前开启的服务
     public static FlappyService getInstance() {
-        if (instance == null) {
-            synchronized (FlappyService.class) {
-                if (instance == null) {
-                    instance = new FlappyService();
-                }
-            }
-        }
-        return instance;
+        return InstanceHolder.instance;
     }
 
     //获取当前服务的线程
@@ -198,7 +187,7 @@ public class FlappyService extends Object {
     }
 
     //检查是否需要重新登录
-    private void checkAutoLoginHttp(int delauMilis) {
+    private void checkAutoLoginHttp(int delayMillis) {
         //如果不是新登录查看旧的是否登录了
         ChatUser user = DataManager.getInstance().getLoginUser();
         //之前已经登录了，那么我们开始断线重连
@@ -208,7 +197,7 @@ public class FlappyService extends Object {
                 //移除消息
                 handler.removeMessages(AUTO_LOGIN_HTTP);
                 //等待一秒后继续连接
-                handler.sendEmptyMessageDelayed(AUTO_LOGIN_HTTP, delauMilis);
+                handler.sendEmptyMessageDelayed(AUTO_LOGIN_HTTP, delayMillis);
             }
         }
     }
@@ -272,7 +261,7 @@ public class FlappyService extends Object {
                 hashMap,
                 new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                     @Override
-                    protected void stateFalse(BaseApiModel model, String tag) {
+                    protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
                         //当前的用户已经被踢下线了
                         if (model.getCode().equals(RESULT_EXPIRED)) {
                             //设置登录状态
