@@ -1,7 +1,5 @@
 package com.flappygo.flappyim.Session;
 
-import android.media.MediaMetadataRetriever;
-import android.text.TextUtils;
 
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
@@ -11,10 +9,11 @@ import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Models.Request.ChatFile;
+import com.flappygo.flappyim.Tools.Upload.UploadModel;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
+import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Tools.Upload.UploadTool;
 import com.flappygo.flappyim.Tools.Upload.LXImageWH;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -27,9 +26,14 @@ import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.VideoTool;
 
-import org.json.JSONObject;
+import android.media.MediaMetadataRetriever;
+import android.text.TextUtils;
 
 import java.math.BigDecimal;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
@@ -168,9 +172,9 @@ public class FlappyBaseSession {
 
 
                 //设置宽度
-                image.setWidth(lxImageWH.getWidth() + "");
+                image.setWidth(Integer.toString(lxImageWH.getWidth()));
                 //设置高度
-                image.setHeight(lxImageWH.getHeight() + "");
+                image.setHeight(Integer.toString(lxImageWH.getHeight()));
                 //设置数据返回
                 image.setPath(baseApiModel.getData().getFilePath());
                 //转换为content
@@ -208,12 +212,14 @@ public class FlappyBaseSession {
 
                 //构建文件参数
                 HashMap<String, Object> getParamMap = new HashMap<>();
+
                 //构建文件参数
-                HashMap<String, String> fileMap = new HashMap<>();
-                //地址
-                fileMap.put("file", voice.getSendPath());
-                //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, getParamMap, fileMap);
+                UploadModel uploadModel = new UploadModel();
+                uploadModel.setName("file");
+                uploadModel.setPath(voice.getSendPath());
+                ArrayList<UploadModel> files = new ArrayList<>();
+                files.add(uploadModel);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, getParamMap, files);
 
 
                 //返回数据
@@ -284,23 +290,27 @@ public class FlappyBaseSession {
                 //取得图片信息
                 ChatVideo video = data.getChatVideo();
 
-                //构建文件参数
-                HashMap<String, Object> paramMap = new HashMap<>();
-                //构建文件参数
-                HashMap<String, String> fileMap = new HashMap<>();
-                //地址
-                fileMap.put("file", video.getSendPath());
+                ArrayList<UploadModel> files = new ArrayList<>();
 
+                //视频
+                UploadModel videoModel = new UploadModel();
+                videoModel.setName("file");
+                videoModel.setPath(video.getSendPath());
+                files.add(videoModel);
 
                 //获取到图片的bitmap
                 VideoTool.VideoInfo info = VideoTool.getVideoInfo(FlappyImService.getInstance().getAppContext(),
                         512,
                         video.getSendPath());
 
-                //本地地址
-                fileMap.put("overFile", info.getOverPath());
+                //封面
+                UploadModel overFileModel = new UploadModel();
+                overFileModel.setName("file");
+                overFileModel.setPath(info.getOverPath());
+                files.add(overFileModel);
+
                 //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload, paramMap, fileMap);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload, new HashMap<>(), files);
                 //返回数据
                 BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
                 //创建
@@ -367,8 +377,14 @@ public class FlappyBaseSession {
                 HashMap<String, String> fileMap = new HashMap<>();
                 //地址
                 fileMap.put("file", chatFile.getSendPath());
-                //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, paramMap, fileMap);
+
+
+                ArrayList<UploadModel> files = new ArrayList<>();
+                UploadModel uploadModel = new UploadModel();
+                uploadModel.setName("file");
+                uploadModel.setPath(chatFile.getSendPath());
+                files.add(uploadModel);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, paramMap, files);
 
 
                 //返回数据
