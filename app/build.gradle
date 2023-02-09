@@ -4,7 +4,7 @@ android {
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.flappygo.flappyim"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -21,4 +21,5 @@ android {
 
 dependencies {
     implementation project(path: ':flappyIM')
+    implementation 'com.lcw.library:imagepicker:2.2.7'
 }

@@ -3,45 +3,46 @@ package com.flappygo.flappyim.Session;
 import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 
+import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
+import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
+import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.DataBase.Database;
-import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
+import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
-import com.flappygo.flappyim.Models.Response.ResponseUpload;
-import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Tools.Upload.UploadTool;
+import com.flappygo.flappyim.Tools.Upload.LXImageWH;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Service.FlappyService;
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
+import com.flappygo.flappyim.DataBase.Database;
+import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.StringTool;
-import com.flappygo.flappyim.Tools.Upload.LXImageWH;
-import com.flappygo.flappyim.Tools.Upload.UploadTool;
 import com.flappygo.flappyim.Tools.VideoTool;
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDED;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
 public class FlappyBaseSession {
 
 
     //我们姑且认为是最后一条
-    protected void insertMessage(ChatMessage msg) {
+    public void insertMessage(ChatMessage msg) {
         //已经发送了
         msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
         //获取当前用户
@@ -53,17 +54,17 @@ public class FlappyBaseSession {
         //放到最后
         msg.setMessageTableSeq(bigDecimal);
         //插入数据
-        Database database=new Database();
+        Database database = new Database();
         database.insertMessage(msg);
         database.close();
     }
 
     //将消息的状态更新为已经发送
-    private void updateMsgSended(ChatMessage msg) {
+    private void updateMsgSent(ChatMessage msg) {
         //已经发送了
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENDED));
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
         //插入数据
-        Database database=new Database();
+        Database database = new Database();
         database.insertMessage(msg);
         database.close();
     }
@@ -74,7 +75,7 @@ public class FlappyBaseSession {
         //发送失败了
         msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
         //插入数据
-        Database database=new Database();
+        Database database = new Database();
         database.insertMessage(msg);
         database.close();
     }
@@ -122,32 +123,101 @@ public class FlappyBaseSession {
         });
     }
 
-    //上传音频文件并发送
-    protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback callback) {
+
+    //上传图片并发送
+    protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //client
         LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
-        client.excute(new LXAsyncTask() {
+        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
-            public Object run(Object data, String s) throws Exception {
-
-                //获取数据
-                ChatMessage message = (ChatMessage) data;
-                //转换出image对象
-                ChatVoice voice = GsonTool.jsonObjectToModel(message.getMessageContent(), ChatVoice.class);
+            public ChatMessage run(ChatMessage data, String s) throws Exception {
+                //取得消息体
+                ChatImage image = data.getChatImage();
 
                 //构建文件参数
-                HashMap<String, Object> parmap = new HashMap<String, Object>();
+                HashMap<String, Object> paramMap = new HashMap<>();
                 //构建文件参数
-                HashMap<String, String> fileMap = new HashMap<String, String>();
+                HashMap<String, String> fileMap = new HashMap<>();
                 //地址
-                fileMap.put("file", voice.getSendPath());
+                fileMap.put("file", image.getSendPath());
+                //保存宽高
+                LXImageWH lxImageWH = new LXImageWH();
                 //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, parmap, fileMap);
+                String str = UploadTool.postImage(FlappyConfig.getInstance().fileUpload, paramMap, fileMap, lxImageWH);
 
 
                 //返回数据
-                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
+                //创建
+                JSONObject jb = new JSONObject(str);
+                //返回码
+                baseApiModel.setCode(jb.optString("code"));
+                //解析code
+                baseApiModel.setMsg(jb.optString("msg"));
+                //返回的消息
+                baseApiModel.setSign(jb.optString("sign"));
+                //返回的总页码
+                baseApiModel.setPageCount(jb.optInt("pageCount"));
+                //设置返回的数据
+                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
+                //上传不成功抛出异常
+                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                    throw new Exception(baseApiModel.getMsg());
+                }
+
+
+                //设置宽度
+                image.setWidth(lxImageWH.getWidth() + "");
+                //设置高度
+                image.setHeight(lxImageWH.getHeight() + "");
+                //设置数据返回
+                image.setPath(baseApiModel.getData().getFilePath());
+                //转换为content
+                data.setChatImage(image);
+
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String s) {
+                updateMsgFailure(msg);
+                callback.failure(msg, e, StringTool.strToDecimal(s).intValue());
+            }
+
+            @Override
+            public void success(ChatMessage msg, String s) {
+                //消息
+                sendMessage(msg, callback);
+            }
+        }, msg, null);
+    }
+
+
+    //上传音频文件并发送
+    protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //client
+        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
+        //发送
+        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+            @Override
+            public ChatMessage run(ChatMessage data, String s) throws Exception {
+
+                //转换出image对象
+                ChatVoice voice = data.getChatVoice();
+
+                //构建文件参数
+                HashMap<String, Object> getParamMap = new HashMap<>();
+                //构建文件参数
+                HashMap<String, String> fileMap = new HashMap<>();
+                //地址
+                fileMap.put("file", voice.getSendPath());
+                //返回的字符串
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, getParamMap, fileMap);
+
+
+                //返回数据
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
@@ -181,9 +251,9 @@ public class FlappyBaseSession {
                     //设置宽度
                     voice.setSeconds(duration);
                 }
-                message.setChatVoice(voice);
+                data.setChatVoice(voice);
                 //消息
-                return message;
+                return data;
             }
 
             @Override
@@ -193,84 +263,10 @@ public class FlappyBaseSession {
             }
 
             @Override
-            public void success(Object msg, String s) {
+            public void success(ChatMessage msg, String s) {
                 //得到上传后的消息实体
-                ChatMessage message = (ChatMessage) msg;
                 //设置真实的信息
-                sendMessage(message, callback);
-            }
-        }, msg, null);
-    }
-
-    //上传图片并发送
-    protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback callback) {
-        //client
-        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
-        //发送
-        client.excute(new LXAsyncTask() {
-            @Override
-            public Object run(Object data, String s) throws Exception {
-                //取得消息体
-                ChatMessage message = (ChatMessage) data;
-                //取得图片信息
-                ChatImage image = GsonTool.jsonObjectToModel(message.getMessageContent(), ChatImage.class);
-
-                //构建文件参数
-                HashMap<String, Object> parmap = new HashMap<String, Object>();
-                //构建文件参数
-                HashMap<String, String> fileMap = new HashMap<String, String>();
-                //地址
-                fileMap.put("file", image.getSendPath());
-                //保存宽高
-                LXImageWH lxImageWH = new LXImageWH();
-                //返回的字符串
-                String str = UploadTool.postImage(FlappyConfig.getInstance().fileUpload, parmap, fileMap, lxImageWH);
-
-
-                //返回数据
-                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
-                //创建
-                JSONObject jb = new JSONObject(str);
-                //返回码
-                baseApiModel.setCode(jb.optString("code"));
-                //解析code
-                baseApiModel.setMsg(jb.optString("msg"));
-                //返回的消息
-                baseApiModel.setSign(jb.optString("sign"));
-                //返回的总页码
-                baseApiModel.setPageCount(jb.optInt("pageCount"));
-                //设置返回的数据
-                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
-                //上传不成功抛出异常
-                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
-                    throw new Exception(baseApiModel.getMsg());
-                }
-
-
-                //设置宽度
-                image.setWidth(lxImageWH.getWidth() + "");
-                //设置高度
-                image.setHeight(lxImageWH.getHeight() + "");
-                //设置数据返回
-                image.setPath(baseApiModel.getData().getFilePath());
-                //转换为content
-                message.setChatImage(image);
-
-                return message;
-            }
-
-            @Override
-            public void failure(Exception e, String s) {
-                updateMsgFailure(msg);
-                callback.failure(msg, e, StringTool.strToDecimal(s).intValue());
-            }
-
-            @Override
-            public void success(Object msg, String s) {
-                //消息
-                ChatMessage message = (ChatMessage) msg;
-                //发送消息
-                sendMessage(message, callback);
+                sendMessage(msg, callback);
             }
         }, msg, null);
     }
@@ -281,20 +277,17 @@ public class FlappyBaseSession {
         //client
         LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
-        client.excute(new LXAsyncTask() {
+        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
-            public Object run(Object data, String s) throws Exception {
+            public ChatMessage run(ChatMessage data, String s) throws Exception {
 
-                //取得消息体
-                ChatMessage message = (ChatMessage) data;
                 //取得图片信息
-                ChatVideo video = GsonTool.jsonObjectToModel(message.getMessageContent(), ChatVideo.class);
-
+                ChatVideo video = data.getChatVideo();
 
                 //构建文件参数
-                HashMap<String, Object> parmap = new HashMap<String, Object>();
+                HashMap<String, Object> paramMap = new HashMap<>();
                 //构建文件参数
-                HashMap<String, String> fileMap = new HashMap<String, String>();
+                HashMap<String, String> fileMap = new HashMap<>();
                 //地址
                 fileMap.put("file", video.getSendPath());
 
@@ -307,9 +300,9 @@ public class FlappyBaseSession {
                 //本地地址
                 fileMap.put("overFile", info.getOverPath());
                 //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload, parmap, fileMap);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload, paramMap, fileMap);
                 //返回数据
-                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<ResponseUpload>();
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
@@ -337,9 +330,8 @@ public class FlappyBaseSession {
                 //简介图片地址
                 video.setCoverPath(baseApiModel.getData().getOverFilePath());
                 //转换为content
-                message.setChatVideo(video);
-
-                return message;
+                data.setChatVideo(video);
+                return data;
             }
 
             @Override
@@ -349,11 +341,73 @@ public class FlappyBaseSession {
             }
 
             @Override
-            public void success(Object msg, String s) {
-                //消息
-                ChatMessage message = (ChatMessage) msg;
+            public void success(ChatMessage msg, String s) {
                 //发送消息
-                sendMessage(message, callback);
+                sendMessage(msg, callback);
+            }
+        }, msg, null);
+    }
+
+
+    //上传音频文件并发送
+    protected void uploadFileAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //client
+        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
+        //发送
+        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+            @Override
+            public ChatMessage run(ChatMessage data, String s) throws Exception {
+
+                //转换出image对象
+                ChatFile chatFile = msg.getChatFile();
+
+                //构建文件参数
+                HashMap<String, Object> paramMap = new HashMap<>();
+                //构建文件参数
+                HashMap<String, String> fileMap = new HashMap<>();
+                //地址
+                fileMap.put("file", chatFile.getSendPath());
+                //返回的字符串
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, paramMap, fileMap);
+
+
+                //返回数据
+                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
+                //创建
+                JSONObject jb = new JSONObject(str);
+                //返回码
+                baseApiModel.setCode(jb.optString("code"));
+                //解析code
+                baseApiModel.setMsg(jb.optString("msg"));
+                //返回的消息
+                baseApiModel.setSign(jb.optString("sign"));
+                //返回的总页码
+                baseApiModel.setPageCount(jb.optInt("pageCount"));
+                //设置返回的数据
+                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
+                //上传不成功抛出异常
+                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                    throw new Exception(baseApiModel.getMsg());
+                }
+
+                //设置数据返回
+                chatFile.setPath(baseApiModel.getData().getFilePath());
+
+                data.setChatFile(chatFile);
+                //消息
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String s) {
+                updateMsgFailure(msg);
+                callback.failure(msg, e, Integer.parseInt(RESULT_NET_ERROR));
+            }
+
+            @Override
+            public void success(ChatMessage msg, String s) {
+                //发送消息
+                sendMessage(msg, callback);
             }
         }, msg, null);
     }

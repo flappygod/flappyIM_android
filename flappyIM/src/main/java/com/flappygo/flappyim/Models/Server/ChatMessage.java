@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
+import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
@@ -21,7 +22,7 @@ public class ChatMessage {
     //消息被创建
     public final static int SEND_STATE_CREATE = 0;
     //消息已经送达服务器
-    public final static int SEND_STATE_SENDED = 1;
+    public final static int SEND_STATE_SENT = 1;
     //消息已经到达
     public final static int SEND_STATE_REACHED = 3;
     //消息发送失败
@@ -281,18 +282,17 @@ public class ChatMessage {
         return msgBuilder.build();
     }
 
-    //设置文本
+    //设置文本消息
     public void setChatText(String text) {
-        //设置文本消息
         if (text != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_TEXT);
             String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
     }
 
-    //获取聊天文本
+    //获取文本消息
     public String getChatText() {
-        //获取文本消息
         if (getMessageType().intValue() == MSG_TYPE_TEXT) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -303,10 +303,10 @@ public class ChatMessage {
     }
 
 
-    //设置聊天视频信息
+    //设置系统消息
     public void setChatSystem(ChatSystem chatSystem) {
-        //设置文本消息
         if (chatSystem != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_SYSTEM);
             String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatSystem, ChatSystem.class).getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
@@ -314,7 +314,6 @@ public class ChatMessage {
 
     //获取系统消息
     public ChatSystem getChatSystem() {
-        //获取视频消息
         if (getMessageType().intValue() == MSG_TYPE_SYSTEM) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -324,18 +323,17 @@ public class ChatMessage {
         return null;
     }
 
-    //设置聊天图片
+    //设置图片消息
     public void setChatImage(ChatImage chatImage) {
-        //设置文本消息
         if (chatImage != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_IMG);
             String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatImage, ChatImage.class).getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
     }
 
-    //获取聊天图片
+    //获取图片消息
     public ChatImage getChatImage() {
-        //获取图片消息
         if (getMessageType().intValue() == MSG_TYPE_IMG) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -345,18 +343,17 @@ public class ChatMessage {
         return null;
     }
 
-    //设置聊天语音
+    //设置语音消息
     public void setChatVoice(ChatVoice chatVoice) {
-        //设置文本消息
         if (chatVoice != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_VOICE);
             String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatVoice, ChatVoice.class).getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
     }
 
-    //获取聊天语音
+    //获取语音消息
     public ChatVoice getChatVoice() {
-        //获取语音消息
         if (getMessageType().intValue() == MSG_TYPE_VOICE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -367,18 +364,41 @@ public class ChatMessage {
     }
 
 
-    //设置聊天视频信息
+    //设置定位消息
+    public void setChatLocation(ChatLocation chatLocation) {
+        //设置文本消息
+        if (chatLocation != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_LOCATE);
+            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatLocation, ChatLocation.class).getBytes(), Base64.DEFAULT);
+            setMessageContent(strBase64);
+        }
+    }
+
+    //获取定位消息
+    public ChatLocation getChatLocation() {
+        //获取位置消息
+        if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatLocation.class);
+            }
+        }
+        return null;
+    }
+
+
+    //设置视频消息
     public void setChatVideo(ChatVideo chatVideo) {
         //设置文本消息
         if (chatVideo != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_VIDEO);
             String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatVideo, ChatVideo.class).getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
     }
 
-    //获取视频信息
+    //获取视频消息
     public ChatVideo getChatVideo() {
-        //获取视频消息
         if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
@@ -389,22 +409,42 @@ public class ChatMessage {
     }
 
 
-    //设置聊天语音
-    public void setChatLocation(ChatLocation chatLocation) {
-        //设置文本消息
-        if (chatLocation != null) {
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatLocation, ChatLocation.class).getBytes(), Base64.DEFAULT);
+    //设置文件消息
+    public void setChatFile(ChatFile chatFile) {
+        if (chatFile != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_FILE);
+            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatFile, ChatFile.class).getBytes(), Base64.DEFAULT);
             setMessageContent(strBase64);
         }
     }
 
-    //获取定位信息
-    public ChatLocation getChatLocation() {
-        //获取位置消息
-        if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
+    //获取文件消息
+    public ChatFile getChatFile() {
+        if (getMessageType().intValue() == MSG_TYPE_FILE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatLocation.class);
+                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatFile.class);
+            }
+        }
+        return null;
+    }
+
+
+    //设置自定义消息
+    public void setChatCustom(String text) {
+        if (text != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_CUSTOM);
+            String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
+            setMessageContent(strBase64);
+        }
+    }
+
+    //获取自定义消息
+    public String getChatCustom() {
+        if (getMessageType().intValue() == MSG_TYPE_CUSTOM) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return new String(Base64.decode(str.getBytes(), Base64.DEFAULT));
             }
         }
         return null;

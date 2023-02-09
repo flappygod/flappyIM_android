@@ -1,9 +1,11 @@
 package com.flappygo.flappyim.Session;
+
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Listener.MessageListener;
+import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
@@ -122,8 +124,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_TEXT));
         //设置内容
         msg.setChatText(text);
         //时间
@@ -156,8 +156,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //消息
         ChatImage chatImage = new ChatImage();
         //发送地址
@@ -170,9 +168,8 @@ public class FlappyChatSession extends FlappyBaseSession {
         insertMessage(msg);
         //上传图片并发送信息
         uploadImageAndSend(msg, callback);
-
+        //send image
         return msg;
-
     }
 
 
@@ -195,8 +192,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_IMG));
         //设置内容
         msg.setChatImage(image);
         //时间
@@ -230,8 +225,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //创建语音
         ChatVoice chatVoice = new ChatVoice();
         //设置语音的本地地址
@@ -268,8 +261,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VOICE));
         //设置内容
         msg.setChatVoice(chatVoice);
         //时间
@@ -282,6 +273,37 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
+
+    //发送定位信息
+    public ChatMessage sendLocation(ChatLocation location,
+                                    final FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        final ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommonID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+        //设置内容
+        msg.setChatLocation(location);
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //发送消息
+        sendMessage(msg, callback);
+
+        return msg;
+    }
 
     //发送短视频
     public ChatMessage senLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
@@ -301,8 +323,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VIDEO));
         //创建语音
         ChatVideo chatVideo = new ChatVideo();
         //设置语音的本地地址
@@ -337,8 +357,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_VIDEO));
         //设置内容
         msg.setChatVideo(chatVideo);
         //时间
@@ -352,9 +370,47 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //发送定位信息
-    public ChatMessage sendLocation(ChatLocation loaction,
-                                    final FlappySendCallback<ChatMessage> callback) {
+    //发送本地的音频
+    public ChatMessage sendLocalFile(String path,
+                                     final FlappySendCallback<ChatMessage> callback) {
+
+
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommonID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+        //创建语音
+        ChatFile chatFile = new ChatFile();
+        //设置语音的本地地址
+        chatFile.setSendPath(path);
+        //设置内容
+        msg.setChatFile(chatFile);
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //上传并发送
+        uploadFileAndSend(msg, callback);
+        //返回消息体
+        return msg;
+    }
+
+    //发送语音消息
+    public ChatMessage sendFile(
+            ChatFile chatFile,
+            final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -371,10 +427,8 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
-        //类型
-        msg.setMessageType(new BigDecimal(ChatMessage.MSG_TYPE_LOCATE));
         //设置内容
-        msg.setChatLocation(loaction);
+        msg.setChatFile(chatFile);
         //时间
         msg.setMessageDate(new Date());
         //插入数据
@@ -385,39 +439,51 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
+
     //重发消息
     public void resendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
-        //重新发送
+        //文本消息
         if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
-            //发送消息
             sendMessage(chatMessage, callback);
-        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_IMG) {
-            //上传文件并发送
+        }
+        //图片消息
+        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_IMG) {
             uploadImageAndSend(chatMessage, callback);
-        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VOICE) {
-            //上传语音并发送
+        }
+        //语音消息
+        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VOICE) {
             uploadVoiceAndSend(chatMessage, callback);
-        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
-            //上传短视频并发送
+        }
+        //定位消息
+        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
+            sendMessage(chatMessage, callback);
+        }
+        //视频消息
+        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
             uploadVideoAndSend(chatMessage, callback);
-        } else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
-            //上传语音并发送
+        }
+        //文件消息
+        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_FILE) {
+            uploadFileAndSend(chatMessage, callback);
+        }
+        //自定义消息
+        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_CUSTOM) {
             sendMessage(chatMessage, callback);
         }
     }
 
     //获取最后一条消息
     public ChatMessage getLatestMessage() {
-        Database database=new Database();
-        ChatMessage chatMessage=database.getSessionLatestMessage(getSession().getSessionId());
+        Database database = new Database();
+        ChatMessage chatMessage = database.getSessionLatestMessage(getSession().getSessionId());
         database.close();
         return chatMessage;
     }
 
     //获取这条消息之前的消息
-    public List<ChatMessage> getFormerMessages(String  messageId, int size) {
-        Database database=new Database();
-        List<ChatMessage> chatMessages=database.getSessionLatestMessage(getSession().getSessionId(),
+    public List<ChatMessage> getFormerMessages(String messageId, int size) {
+        Database database = new Database();
+        List<ChatMessage> chatMessages = database.getSessionLatestMessage(getSession().getSessionId(),
                 messageId,
                 size);
         database.close();

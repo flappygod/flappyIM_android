@@ -154,7 +154,7 @@ public class UploadTool {
                     //判断是否存在
                     File file = new File(filePath);
                     //不存在则报错
-                    if (file.exists() == false) {
+                    if (!file.exists()) {
                         throw new FileNotFoundException();
                     }
                     // 设置边界标示，设置 Content-Disposition头传入文件流
@@ -174,15 +174,15 @@ public class UploadTool {
                     //对上传的图片进行压缩处理
                     Bitmap bitmap = ImageReadTool.readFileBitmap(filePath, new LXImageReadOption(1024, 1024, false));
                     //图片数据转换
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     //压缩图片，防止过大
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
                     //宽度
                     lxImageWH.setWidth(bitmap.getWidth());
                     //高度
                     lxImageWH.setHeight(bitmap.getHeight());
                     //转换为流数据
-                    InputStream is = new ByteArrayInputStream(baos.toByteArray());
+                    InputStream is = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 
 
                     //mem
@@ -192,7 +192,7 @@ public class UploadTool {
                     //整个写入
                     long totalWrite = 0;
                     //长度
-                    long filelength = baos.size();
+                    long filelength = byteArrayOutputStream.size();
                     //写
                     while ((len = is.read(bytes)) != -1) {
                         //写输入

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.FlappyImService;
@@ -23,11 +24,11 @@ import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Session.FlappyChatSession;
-import com.flappygo.flappyim.Tools.StringTool;
-import com.flappygo.flappyim.Tools.TakePicTool;
+import com.lcw.library.imagepicker.ImagePicker;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends Activity {
 
@@ -44,7 +45,7 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().setPushPlatform("Google");
         //服务初始
-        FlappyImService.getInstance().init(getBaseContext(),"http://192.168.31.10", "http://192.168.31.10");
+        FlappyImService.getInstance().init(getBaseContext(), "http://192.168.31.11", "http://192.168.31.11");
         //设置顶部不弹出默认通知
         FlappyImService.getInstance().setNotification(false);
         //开启服务
@@ -101,6 +102,15 @@ public class MainActivity extends Activity {
 
                 if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatText(), Toast.LENGTH_SHORT).show();
+                }
+                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_IMG) {
+                    Toast.makeText(getBaseContext(), chatMessage.getChatImage().getPath(), Toast.LENGTH_SHORT).show();
+                }
+                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
+                    Toast.makeText(getBaseContext(), chatMessage.getChatLocation().getAddress(), Toast.LENGTH_SHORT).show();
+                }
+                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
+                    Toast.makeText(getBaseContext(), chatMessage.getChatVideo().getPath(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -243,27 +253,39 @@ public class MainActivity extends Activity {
      * 获取相册图片
      */
     private void gotoGetPicture() {
-        try {
-            Intent intent;
-            if (Build.VERSION.SDK_INT >= 19) {
-                intent = new Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-            } else {
-                intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-            }
-            startActivityForResult(intent, REQUEST_GET_PICTURE);
-        } catch (SecurityException e) {
+        ImagePicker.getInstance()
+                .setTitle("标题")//设置标题
+                .showCamera(true)//设置是否显示拍照按钮
+                .showImage(true)//设置是否展示图片
+                .showVideo(true)//设置是否展示视频
+                .setSingleType(true)//设置图片视频不能同时选择
+                .setMaxCount(9)//设置最大选择图片数目(默认为1，单选)
+                .start(MainActivity.this, 100);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode
+    }
 
-        } catch (Exception e) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && data != null) {
+            List<String> imagePaths = data.getStringArrayListExtra(ImagePicker.EXTRA_SELECT_IMAGES);
 
+            mySession.sendLocalImage(imagePaths.get(0), new FlappySendCallback<ChatMessage>() {
+
+                @Override
+                public void success(ChatMessage data) {
+                    Toast.makeText(getBaseContext(), "消息已经发送", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(ChatMessage data, Exception ex, int code) {
+                    Toast.makeText(getBaseContext(), "消息发送失败", Toast.LENGTH_SHORT).show();
+                }
+
+            });
         }
     }
 
-    @SuppressWarnings("deprecation")
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //成功
@@ -274,7 +296,7 @@ public class MainActivity extends Activity {
                 String path = TakePicTool.getPicAnalyze(this, data);
                 //地址
                 if (!StringTool.isEmpty(path)) {
-                    //发送本地图片
+
                     mySession.senLocalVideo(path, new FlappySendCallback<ChatMessage>() {
 
                         @Override
@@ -292,5 +314,5 @@ public class MainActivity extends Activity {
                 }
             }
         }
-    }
+    }*/
 }

@@ -419,7 +419,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         //自己发送的，已经发送
         if (chatUser.getUserId().equals(msg.getMessageSendId())) {
-            msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENDED));
+            msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENT));
         }
         //其他人发送的，已经到达
         else {
