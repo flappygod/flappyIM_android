@@ -75,11 +75,7 @@ public class NettyThread extends Thread {
 
     //当前是否已经连接
     public boolean isConnected() {
-        if (future != null && future.channel() != null && future.channel().isActive()) {
-            return true;
-        } else {
-            return false;
-        }
+        return future != null && future.channel() != null && future.channel().isActive();
     }
 
     //连接服务器
