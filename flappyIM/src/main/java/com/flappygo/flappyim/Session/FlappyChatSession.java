@@ -306,7 +306,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //发送短视频
-    public ChatMessage senLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -372,6 +372,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送本地的音频
     public ChatMessage sendLocalFile(String path,
+                                     String name,
                                      final FlappySendCallback<ChatMessage> callback) {
 
 
@@ -393,8 +394,10 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveExtendId(getPeerExtendID());
         //创建语音
         ChatFile chatFile = new ChatFile();
-        //设置语音的本地地址
+        //设置文件的本地地址
         chatFile.setSendPath(path);
+        //设置文件的名称
+        chatFile.setFileName(name);
         //设置内容
         msg.setChatFile(chatFile);
         //时间
