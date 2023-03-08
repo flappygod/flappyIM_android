@@ -442,6 +442,37 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
+    //发送消息
+    public ChatMessage sendCustom(String text,
+                                  FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommonID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+        //设置内容
+        msg.setChatCustom(text);
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
+    }
+
 
     //重发消息
     public void resendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
