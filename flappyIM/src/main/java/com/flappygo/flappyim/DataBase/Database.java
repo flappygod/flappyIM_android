@@ -334,7 +334,7 @@ public class Database {
 
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionInsertUser=? ",
-                    new String[]{DataManager.getInstance().getLoginUser().getUserId()},
+                    new String[]{DataManager.getInstance().getLoginUser().getUserExtendId()},
                     null,
                     null,
                     null);
