@@ -28,6 +28,13 @@ public class StringTool {
         return 0;
     }
 
+    public static long decimalToLong(BigDecimal decimal) {
+        if (decimal != null) {
+            return decimal.longValue();
+        }
+        return 0;
+    }
+
     public static BigDecimal strToDecimal(String str) {
         if (str != null) {
             try {

@@ -193,7 +193,7 @@ public class Database {
                 if (session.getSessionOffset() != null)
                     values.put("sessionOffset", session.getSessionOffset());
                 if (session.getSessionStamp() != null)
-                    values.put("sessionStamp", StringTool.decimalToInt(session.getSessionStamp()));
+                    values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
                 if (session.getSessionCreateDate() != null)
                     values.put("sessionCreateDate", DateTimeTool.dateToStr(session.getSessionCreateDate()));
                 if (session.getSessionCreateUser() != null)
@@ -225,7 +225,7 @@ public class Database {
                 if (session.getSessionOffset() != null)
                     values.put("sessionOffset", session.getSessionOffset());
                 if (session.getSessionStamp() != null)
-                    values.put("sessionStamp", StringTool.decimalToInt(session.getSessionStamp()));
+                    values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
                 if (session.getSessionCreateDate() != null)
                     values.put("sessionCreateDate", DateTimeTool.dateToStr(session.getSessionCreateDate()));
                 if (session.getSessionCreateUser() != null)
@@ -303,7 +303,7 @@ public class Database {
                         .getColumnIndex("sessionImage")));
                 info.setSessionOffset(cursor.getString(cursor
                         .getColumnIndex("sessionOffset")));
-                info.setSessionStamp(new BigDecimal(cursor.getInt(cursor
+                info.setSessionStamp(new BigDecimal(cursor.getLong(cursor
                         .getColumnIndex("sessionStamp"))));
                 info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor
                         .getColumnIndex("sessionCreateDate"))));
@@ -356,7 +356,7 @@ public class Database {
                             .getColumnIndex("sessionImage")));
                     info.setSessionOffset(cursor.getString(cursor
                             .getColumnIndex("sessionOffset")));
-                    info.setSessionStamp(new BigDecimal(cursor.getInt(cursor
+                    info.setSessionStamp(new BigDecimal(cursor.getLong(cursor
                             .getColumnIndex("sessionStamp"))));
                     info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor
                             .getColumnIndex("sessionCreateDate"))));
