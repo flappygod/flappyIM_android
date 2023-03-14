@@ -653,7 +653,7 @@ public class FlappyImService {
         List<SessionData> data = database.getUserSessions();
         database.close();
         //获取所有会话
-        if (data == null) {
+        if (data != null && !data.isEmpty()) {
             List<FlappyChatSession> sessions = new ArrayList<>();
             for (int s = 0; s < data.size(); s++) {
                 FlappyChatSession chatSession = new FlappyChatSession();
