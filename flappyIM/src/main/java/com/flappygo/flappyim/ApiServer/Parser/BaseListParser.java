@@ -3,6 +3,7 @@ package com.flappygo.flappyim.ApiServer.Parser;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,7 +53,7 @@ public class BaseListParser<T> {
             //解析数组
             JSONArray data = new JSONArray(strData);
             //列表解析
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
             List<T> rs = new ArrayList<T>();
             for (int s = 0; s < data.length(); s++) {
                 if (cls == String.class) {
