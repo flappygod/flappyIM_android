@@ -4,7 +4,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.Message;
 
+import com.flappygo.flappyim.Handler.HandlerSession;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
@@ -94,7 +96,7 @@ public class Database {
                 {
                     values.put("messageStamp", System.currentTimeMillis());
                 }
-                long ret = db.insert(DataBaseConfig.TABLE_MESSAGE,null, values);
+                long ret = db.insert(DataBaseConfig.TABLE_MESSAGE, null, values);
                 return ret > 0;
             } else {
                 cursor.close();
@@ -133,7 +135,7 @@ public class Database {
                 if (chatMessage.getDeleteDate() != null)
                     values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
                 //更新消息信息
-                long ret = db.update(DataBaseConfig.TABLE_MESSAGE,values,"messageId=?", new String[]{chatMessage.getMessageId()});
+                long ret = db.update(DataBaseConfig.TABLE_MESSAGE, values, "messageId=?", new String[]{chatMessage.getMessageId()});
                 return ret > 0;
             }
         }
@@ -160,7 +162,7 @@ public class Database {
     }
 
     //插入数据
-    public boolean insertSession(SessionData session) {
+    public boolean insertSession(SessionData session, HandlerSession handlerSession) {
         synchronized (lock) {
 
             //当前的ID
@@ -208,12 +210,17 @@ public class Database {
                 values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
 
                 long ret = db.insert(DataBaseConfig.TABLE_SESSION, null, values);
+
+                //发送更新消息的handler
+                Message msg = new Message();
+                msg.what = HandlerSession.SESSION_CREATE;
+                msg.obj = session;
+                handlerSession.sendMessage(msg);
                 return ret > 0;
             } else {
                 cursor.close();
 
                 ContentValues values = new ContentValues();
-
                 if (session.getSessionType() != null)
                     values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
                 if (session.getSessionInfo() != null)
@@ -238,13 +245,17 @@ public class Database {
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 //插入者
                 values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
-
                 //更新消息信息
                 long ret = db.update(DataBaseConfig.TABLE_SESSION,
                         values,
                         "sessionId=? and sessionInsertUser=? ",
                         new String[]{session.getSessionId(), currentUserID}
                 );
+                //发送更新消息的handler
+                Message msg = new Message();
+                msg.what = HandlerSession.SESSION_UPDATE;
+                msg.obj = session;
+                handlerSession.sendMessage(msg);
 
                 return ret > 0;
             }
@@ -252,16 +263,14 @@ public class Database {
     }
 
     //插入多个会话
-    public boolean insertSessions(List<SessionData> sessionData) {
-
+    public boolean insertSessions(List<SessionData> sessionData, HandlerSession handlerSession) {
         if (sessionData == null || sessionData.size() == 0) {
             return true;
         }
-
         db.beginTransaction();
         boolean totalSuccess = true;
         for (int s = 0; s < sessionData.size(); s++) {
-            boolean flag = insertSession(sessionData.get(s));
+            boolean flag = insertSession(sessionData.get(s), handlerSession);
             if (!flag) {
                 totalSuccess = false;
             }
@@ -277,7 +286,6 @@ public class Database {
     @SuppressLint("Range")
     public SessionData getUserSessionByExtendID(String sessionExtendID) {
         synchronized (lock) {
-
             Cursor cursor = db.query(DataBaseConfig.TABLE_SESSION, null,
                     "sessionExtendId=? and sessionInsertUser=? ",
                     new String[]{sessionExtendID,

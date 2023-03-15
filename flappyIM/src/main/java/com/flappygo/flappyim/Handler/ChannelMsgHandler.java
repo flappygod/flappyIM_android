@@ -168,17 +168,15 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //消息发送成功
                     messageSendSuccess(chatMessage);
                 }
-
                 //对消息进行排序，然后在插入数据库
                 Collections.sort(messages, (chatMessage, t1) -> {
                     if (chatMessage.getMessageTableSeq().intValue() > t1.getMessageTableSeq().intValue()) {
                         return 1;
-                    } else if(chatMessage.getMessageTableSeq().intValue() < t1.getMessageTableSeq().intValue()){
+                    } else if (chatMessage.getMessageTableSeq().intValue() < t1.getMessageTableSeq().intValue()) {
                         return -1;
                     }
-                    return  0;
+                    return 0;
                 });
-
                 //创建database
                 Database database = new Database();
                 //遍历消息进行通知
@@ -201,7 +199,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         this.handlerMessage.sendMessage(msg);
                     }
                 }
-
                 //保存最后的offset
                 if (messages.size() > 0) {
                     //用户信息
@@ -213,20 +210,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //到达
                     messageArrivedReceipt(messages.get(messages.size() - 1));
                 }
-
-
                 //所有消息更新
                 if (messages.size() != 0) {
                     database.insertMessages(messages);
                 }
                 //更新所有会话
                 if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
-                    database.insertSessions(handlerLogin.getLoginResponse().getSessions());
+                    database.insertSessions(handlerLogin.getLoginResponse().getSessions(),handlerSession);
                 }
                 //关闭数据库
                 database.close();
-
-
                 //发送成功消息
                 Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
                 //数据
@@ -289,16 +282,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             for (int s = 0; s < session.size(); s++) {
                 //更新数据
                 SessionData data = new SessionData(session.get(s));
-                //数据更新了
-                Message msg = new Message();
-                //收到新的消息
-                msg.what = HandlerSession.SESSION_UPDATE;
-                //消息数据体
-                msg.obj = data;
-                //成功
-                this.handlerSession.sendMessage(msg);
                 //插入数据
-                database.insertSession(data);
+                database.insertSession(data,handlerSession);
                 //消息标记为已经处理
                 List<ChatMessage> messages = database.getNotActionSystemMessage(data.getSessionId());
                 //将系统消息标记成为已经处理，不再需要重复处理

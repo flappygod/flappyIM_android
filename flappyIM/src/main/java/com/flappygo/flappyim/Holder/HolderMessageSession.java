@@ -18,18 +18,18 @@ public class HolderMessageSession {
     private List<SessionListener> sessionListeners = new ArrayList<>();
 
     //单例模式
-    private static HolderMessageSession instacne;
+    private static HolderMessageSession instance;
 
     //单例manager
     public static HolderMessageSession getInstance() {
-        if (instacne == null) {
+        if (instance == null) {
             synchronized (HolderMessageSession.class) {
-                if (instacne == null) {
-                    instacne = new HolderMessageSession();
+                if (instance == null) {
+                    instance = new HolderMessageSession();
                 }
             }
         }
-        return instacne;
+        return instance;
     }
 
     //监听
@@ -55,7 +55,7 @@ public class HolderMessageSession {
     }
 
     //添加总的监听
-    public void addGloableMessageListener(MessageListener listener) {
+    public void addGlobalMessageListener(MessageListener listener) {
         //获取统一的监听
         List<MessageListener> messageListeners = msgListeners.get("");
         //如果为空
@@ -75,7 +75,7 @@ public class HolderMessageSession {
     }
 
     //添加总的监听
-    public void removeGloableMessageListener(MessageListener listener) {
+    public void removeGlobalMessageListener(MessageListener listener) {
         //获取所有
         List<MessageListener> messageListeners = msgListeners.get("");
         //为空创建

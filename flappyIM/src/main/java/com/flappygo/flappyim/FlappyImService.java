@@ -1,31 +1,31 @@
 package com.flappygo.flappyim;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseListParseCallBack;
+import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Callback.FlappyIMCallback;
-import com.flappygo.flappyim.DataBase.Database;
-import com.flappygo.flappyim.Datas.FlappyIMCode;
-import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Holder.HolderLoginCallback;
+import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Listener.KnickedOutListener;
-import com.flappygo.flappyim.Listener.MessageListener;
-import com.flappygo.flappyim.Listener.NotificationClickListener;
-import com.flappygo.flappyim.Listener.SessionListener;
-import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Models.Response.SessionData;
-import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Service.FlappyService;
+import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Session.FlappyChatSession;
+import com.flappygo.flappyim.Listener.MessageListener;
+import com.flappygo.flappyim.Listener.SessionListener;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Thread.NettyThreadDead;
 import com.flappygo.flappyim.Tools.NotificationUtil;
+import com.flappygo.lilin.lxhttpclient.LXHttpClient;
+import com.flappygo.flappyim.Service.FlappyService;
+import com.flappygo.flappyim.Config.FlappyConfig;
+import com.flappygo.flappyim.Datas.FlappyIMCode;
+import com.flappygo.flappyim.DataBase.Database;
+import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.RunninTool;
 import com.flappygo.flappyim.Tools.StringTool;
-import com.flappygo.lilin.lxhttpclient.LXHttpClient;
 
 import android.content.Context;
 
@@ -55,11 +55,8 @@ public class FlappyImService {
     //是否显示notification
     private boolean showNotification;
 
-    //消息的监听
-    private MessageListener messageListener = chatMessage -> {
-        //发送本地通知
-        sendNotification(chatMessage);
-    };
+    //发送本地通知
+    private final MessageListener messageListener = this::sendNotification;
 
 
     //获取上下文
@@ -79,7 +76,7 @@ public class FlappyImService {
         //初始化context
         FlappyService.getInstance().init(appContext.getApplicationContext());
         //添加总体的监听
-        HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
+        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
     }
 
     //初始化
@@ -91,7 +88,7 @@ public class FlappyImService {
         //更新服务器地址和资源文件上传地址
         FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
         //添加总体的监听,定义全局防止多次重复添加这个监听
-        HolderMessageSession.getInstance().addGloableMessageListener(messageListener);
+        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
     }
 
     //推送的平台
@@ -111,7 +108,6 @@ public class FlappyImService {
 
     //正式开启服务
     public void startServer() {
-        //开启服务
         FlappyService.getInstance().startService();
     }
 
@@ -302,7 +298,7 @@ public class FlappyImService {
 
 
     //创建会话
-    public void createSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void createSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null) {
@@ -312,7 +308,7 @@ public class FlappyImService {
             return;
         }
         //判断是否为空
-        if (StringTool.isEmpty(userTwo)) {
+        if (StringTool.isEmpty(peerUser)) {
             if (callback != null) {
                 callback.failure(new Exception("账户ID不能为空"),
                         Integer.parseInt(RESULT_NOT_LOGIN));
@@ -320,7 +316,7 @@ public class FlappyImService {
             return;
         }
         //创建extend id
-        if (userTwo.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
+        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
             if (callback != null) {
                 callback.failure(new Exception("创建session账户不能是当前账户"),
                         Integer.parseInt(RESULT_NOT_LOGIN));
@@ -332,7 +328,7 @@ public class FlappyImService {
         //用户ID
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         //外部用户ID
-        hashMap.put("userTwo", userTwo);
+        hashMap.put("userTwo", peerUser);
         //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createSingleSession, hashMap,
                 new BaseParseCallback<SessionData>(SessionData.class) {
@@ -382,7 +378,7 @@ public class FlappyImService {
 
 
     //获取单聊会话
-    public void getSingleSession(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null) {
@@ -391,14 +387,14 @@ public class FlappyImService {
             return;
         }
         //判断是否为空
-        if (StringTool.isEmpty(userTwo)) {
+        if (StringTool.isEmpty(peerUser)) {
             if (callback != null) {
                 callback.failure(new Exception("账户ID不能为空"), Integer.parseInt(RESULT_NOT_LOGIN));
             }
             return;
         }
         //创建extend id
-        if (userTwo.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
+        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
             if (callback != null) {
                 callback.failure(new Exception("获取的session不能是自己"), Integer.parseInt(RESULT_NOT_LOGIN));
             }
@@ -409,7 +405,7 @@ public class FlappyImService {
         //用户
         List<String> user = new ArrayList<>();
         //用户
-        user.add(userTwo);
+        user.add(peerUser);
         //添加
         user.add(DataManager.getInstance().getLoginUser().getUserExtendId());
         //排序
@@ -428,7 +424,7 @@ public class FlappyImService {
             callback.success(chatSession);
         } else {
             //从网络获取数据
-            getSingleSessionHttp(userTwo, callback);
+            getSingleSessionHttp(peerUser, callback);
         }
     }
 
@@ -904,12 +900,12 @@ public class FlappyImService {
 
     //添加全局的监听
     public void addGlobalMessageListener(MessageListener listener) {
-        HolderMessageSession.getInstance().addGloableMessageListener(listener);
+        HolderMessageSession.getInstance().addGlobalMessageListener(listener);
     }
 
     //移除全局的监听
     public void removeGlobalMessageListener(MessageListener listener) {
-        HolderMessageSession.getInstance().removeGloableMessageListener(listener);
+        HolderMessageSession.getInstance().removeGlobalMessageListener(listener);
     }
 
     //添加会话监听
