@@ -5,9 +5,6 @@ import com.flappygo.flappyim.Session.FlappyChatSession;
 
 public interface SessionListener {
 
-    //创建
-    void sessionCreate(FlappyChatSession session);
-
     //更新
     void sessionUpdate(FlappyChatSession session);
 

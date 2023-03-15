@@ -10,26 +10,12 @@ import android.os.Message;
 //会话更新的监听
 public class HandlerSession extends Handler {
 
-    //收到新的消息了
-    public static final int SESSION_CREATE = 1;
-
     //消息更新了
-    public static final int SESSION_UPDATE = 2;
+    public static final int SESSION_UPDATE = 1;
 
 
     //执行消息
     public void handleMessage(Message message) {
-        //会话被创建
-        if (message.what == SESSION_CREATE) {
-            SessionData sessionData = (SessionData) message.obj;
-            for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
-                SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
-                FlappyChatSession chatSession = new FlappyChatSession();
-                chatSession.setSession(sessionData);
-                listener.sessionCreate(chatSession);
-            }
-        }
-        //会话被更新
         if (message.what == SESSION_UPDATE) {
             SessionData sessionData = (SessionData) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {

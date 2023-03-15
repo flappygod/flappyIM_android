@@ -81,11 +81,6 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().addSessionListener(new SessionListener() {
             @Override
-            public void sessionCreate(FlappyChatSession session) {
-                System.out.println(session.getSession());
-            }
-
-            @Override
             public void sessionUpdate(FlappyChatSession session) {
                 System.out.println(session.getSession());
             }

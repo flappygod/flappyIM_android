@@ -211,15 +211,16 @@ public class Database {
 
                 long ret = db.insert(DataBaseConfig.TABLE_SESSION, null, values);
 
-                //发送更新消息的handler
-                Message msg = new Message();
-                msg.what = HandlerSession.SESSION_CREATE;
-                msg.obj = session;
-                handlerSession.sendMessage(msg);
-                return ret > 0;
+                if (ret > 0) {
+                    Message msg = new Message();
+                    msg.what = HandlerSession.SESSION_UPDATE;
+                    msg.obj = session;
+                    handlerSession.sendMessage(msg);
+                    return true;
+                }
+                return false;
             } else {
                 cursor.close();
-
                 ContentValues values = new ContentValues();
                 if (session.getSessionType() != null)
                     values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
@@ -251,13 +252,15 @@ public class Database {
                         "sessionId=? and sessionInsertUser=? ",
                         new String[]{session.getSessionId(), currentUserID}
                 );
-                //发送更新消息的handler
-                Message msg = new Message();
-                msg.what = HandlerSession.SESSION_UPDATE;
-                msg.obj = session;
-                handlerSession.sendMessage(msg);
-
-                return ret > 0;
+                //更新成功
+                if (ret > 0) {
+                    Message msg = new Message();
+                    msg.what = HandlerSession.SESSION_UPDATE;
+                    msg.obj = session;
+                    handlerSession.sendMessage(msg);
+                    return true;
+                }
+                return false;
             }
         }
     }
