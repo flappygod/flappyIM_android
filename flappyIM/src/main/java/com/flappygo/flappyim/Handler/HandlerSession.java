@@ -20,9 +20,7 @@ public class HandlerSession extends Handler {
             SessionData sessionData = (SessionData) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
                 SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
-                FlappyChatSession chatSession = new FlappyChatSession();
-                chatSession.setSession(sessionData);
-                listener.sessionUpdate(chatSession);
+                listener.sessionUpdate(sessionData);
             }
         }
     }
