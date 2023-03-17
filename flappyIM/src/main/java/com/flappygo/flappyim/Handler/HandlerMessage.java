@@ -14,10 +14,13 @@ public class HandlerMessage extends Handler {
     //收到新的消息了
     public static final int MSG_RECEIVE = 1;
 
+    //消息的状态更新
+    public static final int MSG_UPDATE = 2;
 
     //执行消息
     public void handleMessage(Message message) {
-        if (message.what == MSG_RECEIVE) {
+        //暂时我们都统一处理了他
+        if (message.what == MSG_RECEIVE || message.what == MSG_UPDATE) {
             ChatMessage chatMessage = (ChatMessage) message.obj;
             //遍历
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {

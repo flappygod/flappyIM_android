@@ -145,7 +145,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
-        //转换为字符串
         //登录成功,现在才代表真正的登录成功
         if (response.getType() == FlappyResponse.RES_LOGIN) {
 
@@ -154,20 +153,15 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
                 //保存用户成功的登录信息
                 user.setLogin(1);
-
-                //保存用户数据
                 DataManager.getInstance().saveLoginUser(user);
-                //消息
+
+                //消息转发
                 List<ChatMessage> messages = new ArrayList<>();
-                //每条消息进行插入
                 for (int s = 0; s < response.getMsgCount(); s++) {
-                    //得到真正的消息对象
                     ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
-                    //添加
                     messages.add(chatMessage);
-                    //消息发送成功
-                    messageSendSuccess(chatMessage);
                 }
+
                 //对消息进行排序，然后在插入数据库
                 Collections.sort(messages, (chatMessage, t1) -> {
                     if (chatMessage.getMessageTableSeq().intValue() > t1.getMessageTableSeq().intValue()) {
@@ -177,56 +171,50 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     }
                     return 0;
                 });
-                //创建database
-                Database database = new Database();
+
                 //遍历消息进行通知
+                Database database = new Database();
                 for (int s = 0; s < messages.size(); s++) {
-                    //获取单个消息
                     ChatMessage chatMessage = messages.get(s);
-                    //修改收到的状态
                     messageArrivedState(chatMessage);
-                    //查看之前是否存在这个消息
+                    messageSendSuccess(chatMessage);
+                    //通知接收成功或者发送成功
                     ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
-                    //如果插入成功
+                    Message msg = new Message();
                     if (former == null) {
-                        //收到了新的消息
-                        Message msg = new Message();
-                        //收到新的消息
                         msg.what = HandlerMessage.MSG_RECEIVE;
-                        //消息数据体
-                        msg.obj = chatMessage;
-                        //成功
-                        this.handlerMessage.sendMessage(msg);
+                    } else {
+                        msg.what = HandlerMessage.MSG_UPDATE;
                     }
+                    msg.obj = chatMessage;
+                    this.handlerMessage.sendMessage(msg);
                 }
+
                 //保存最后的offset
                 if (messages.size() > 0) {
-                    //用户信息
                     ChatUser user = DataManager.getInstance().getLoginUser();
-                    //设置最近的一条
                     user.setLatest(StringTool.decimalToStr(messages.get(messages.size() - 1).getMessageTableSeq()));
-                    //更新数据信息
                     DataManager.getInstance().saveLoginUser(user);
-                    //到达
                     messageArrivedReceipt(messages.get(messages.size() - 1));
                 }
-                //所有消息更新
+
+                //所有消息更新状态等
                 if (messages.size() != 0) {
                     database.insertMessages(messages);
                 }
+
                 //更新所有会话
                 if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
-                    database.insertSessions(handlerLogin.getLoginResponse().getSessions(),handlerSession);
+                    database.insertSessions(handlerLogin.getLoginResponse().getSessions(), handlerSession);
                 }
+
                 //关闭数据库
                 database.close();
+
                 //发送成功消息
                 Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
-                //数据
                 msg.obj = response.getMsgList();
-                //成功
                 handlerLogin.sendMessage(msg);
-                //清空引用
                 handlerLogin = null;
             }
             checkSessionNeedUpdate();
@@ -239,33 +227,35 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             for (int s = 0; s < response.getMsgCount(); s++) {
                 //得到真正的消息对象
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
-                //有可能是发送成功的
                 messageSendSuccess(chatMessage);
-                //修改收到的状态
                 messageArrivedState(chatMessage);
+
                 //判断数据库是否存在
                 ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
+
                 //更新最近一条信息
                 ChatUser user = DataManager.getInstance().getLoginUser();
-                //设置最近的世界
                 user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
-                //更新最近消息的世界
                 DataManager.getInstance().saveLoginUser(user);
+
                 //插入成功
+                Message msg = new Message();
+
+                //接收成功，插入消息，返回回执
                 if (former == null) {
-                    //发送成功消息
-                    Message msg = new Message();
-                    //收到新的消息
                     msg.what = HandlerMessage.MSG_RECEIVE;
-                    //消息数据体
                     msg.obj = chatMessage;
-                    //成功
                     this.handlerMessage.sendMessage(msg);
-                    //消息送达的回执
                     messageArrivedReceipt(chatMessage);
-                    //插入消息
-                    database.insertMessage(chatMessage);
                 }
+                //更新消息
+                else {
+                    msg.what = HandlerMessage.MSG_UPDATE;
+                    msg.obj = chatMessage;
+                    this.handlerMessage.sendMessage(msg);
+                }
+                //插入消息
+                database.insertMessage(chatMessage);
             }
             database.close();
             //检查会话是否需要更新
@@ -283,7 +273,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //更新数据
                 SessionData data = new SessionData(session.get(s));
                 //插入数据
-                database.insertSession(data,handlerSession);
+                database.insertSession(data, handlerSession);
                 //消息标记为已经处理
                 List<ChatMessage> messages = database.getNotActionSystemMessage(data.getSessionId());
                 //将系统消息标记成为已经处理，不再需要重复处理
@@ -402,12 +392,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //修改收到的状态
     private void messageArrivedState(ChatMessage msg) {
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        //自己发送的，已经发送
         if (chatUser.getUserId().equals(msg.getMessageSendId())) {
+            //自己发送的，已经发送
             msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENT));
-        }
-        //其他人发送的，已经到达
-        else {
+        } else {
+            //其他人发送的，已经到达
             msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
         }
     }
@@ -490,11 +479,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             if (call != null) {
                 //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_SUCCESS);
-                //消息
                 message.obj = chatMessage;
-                //成功的消息
                 call.sendMessage(message);
-                //移除这个消息
                 sendHandlers.remove(chatMessage.getMessageId());
             }
         }
@@ -507,11 +493,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             if (call != null) {
                 //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_FAILURE);
-                //发送失败的原因
                 message.obj = ex;
-                //发送消息
                 call.sendMessage(message);
-                //移除这个消息
                 sendHandlers.remove(chatMessage.getMessageId());
             }
         }
