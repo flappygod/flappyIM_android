@@ -184,10 +184,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     if (former == null) {
                         msg.what = HandlerMessage.MSG_RECEIVE;
                     } else {
+                        chatMessage.setMessageReadState(former.getMessageReadState());
                         msg.what = HandlerMessage.MSG_UPDATE;
                     }
                     msg.obj = chatMessage;
                     this.handlerMessage.sendMessage(msg);
+                }
+
+                //所有消息更新状态等
+                if (messages.size() != 0) {
+                    database.insertMessages(messages);
                 }
 
                 //保存最后的offset
@@ -196,11 +202,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     user.setLatest(StringTool.decimalToStr(messages.get(messages.size() - 1).getMessageTableSeq()));
                     DataManager.getInstance().saveLoginUser(user);
                     messageArrivedReceipt(messages.get(messages.size() - 1));
-                }
-
-                //所有消息更新状态等
-                if (messages.size() != 0) {
-                    database.insertMessages(messages);
                 }
 
                 //更新所有会话
@@ -243,6 +244,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
                 //接收成功，插入消息，返回回执
                 if (former == null) {
+                    database.insertMessage(chatMessage);
                     msg.what = HandlerMessage.MSG_RECEIVE;
                     msg.obj = chatMessage;
                     this.handlerMessage.sendMessage(msg);
@@ -250,12 +252,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 }
                 //更新消息
                 else {
+                    chatMessage.setMessageReadState(former.getMessageReadState());
+                    database.insertMessage(chatMessage);
                     msg.what = HandlerMessage.MSG_UPDATE;
                     msg.obj = chatMessage;
                     this.handlerMessage.sendMessage(msg);
                 }
-                //插入消息
-                database.insertMessage(chatMessage);
             }
             database.close();
             //检查会话是否需要更新
