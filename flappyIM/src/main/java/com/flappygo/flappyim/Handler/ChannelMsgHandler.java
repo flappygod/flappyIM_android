@@ -395,10 +395,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void messageArrivedState(ChatMessage msg) {
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser.getUserId().equals(msg.getMessageSendId())) {
-            //自己发送的，已经发送
             msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENT));
         } else {
-            //其他人发送的，已经到达
             msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
         }
     }
@@ -427,33 +425,33 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //发送消息
     public void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
+
+        //消息被创建进行发送
+        Message msg=new Message();
+        msg.what = HandlerMessage.MSG_CREATE;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
+
+
         //之前是否存在
         HandlerSendCall former = getHandlerSendCall(chatMessage.getMessageId());
-        //如果存在，则之前的失败
         if (former != null) {
             messageSendFailure(chatMessage, new Exception("消息重新发送"));
         }
         //发送
-        try {//发送
+        try {
             HandlerSendCall handlerSendCall = new HandlerSendCall(callback, chatMessage);
-            //插入其中
             addHandlerSendCall(chatMessage.getMessageId(), handlerSendCall);
-            //创建登录消息
             Flappy.Message message = chatMessage.toProtocMessage(Flappy.Message.newBuilder());
-            //创建请求消息
             Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
                     .setMsg(message)
                     .setType(FlappyRequest.REQ_MSG);
-            //消息发送
             ChannelFuture future = channelHandlerContext.channel().writeAndFlush(builder.build());
-            //发送成功
             future.addListener((ChannelFutureListener) channelFuture -> {
-                //发送成功
                 if (!channelFuture.isSuccess()) {
                     messageSendFailure(chatMessage, new Exception("连接已经断开"));
                 }
             });
-            //暂时不能确认发送状态，等收到回传的消息后才能真正确定发送已经成功，这个future,不一定成功
         } catch (Exception ex) {
             messageSendFailure(chatMessage, ex);
         }
@@ -479,7 +477,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         synchronized (lock) {
             HandlerSendCall call = sendHandlers.get(chatMessage.getMessageId());
             if (call != null) {
-                //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_SUCCESS);
                 message.obj = chatMessage;
                 call.sendMessage(message);
@@ -493,7 +490,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         synchronized (lock) {
             HandlerSendCall call = sendHandlers.get(chatMessage.getMessageId());
             if (call != null) {
-                //发送失败的消息
                 Message message = call.obtainMessage(HandlerSendCall.SEND_FAILURE);
                 message.obj = ex;
                 call.sendMessage(message);

@@ -56,7 +56,22 @@ public class FlappyImService {
     private boolean showNotification;
 
     //发送本地通知
-    private final MessageListener messageListener = this::sendNotification;
+    private final MessageListener messageListener = new MessageListener() {
+        @Override
+        public void messageCreate(ChatMessage chatMessage) {
+
+        }
+
+        @Override
+        public void messageUpdate(ChatMessage chatMessage) {
+
+        }
+
+        @Override
+        public void messageReceived(ChatMessage chatMessage) {
+            sendNotification(chatMessage);
+        }
+    };
 
 
     //获取上下文

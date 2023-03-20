@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 //收到消息的
 public class HolderMessageSession {
+
+    public static String globalMsgTag = "HolderMessageSession";
 
 
     //接收消息的监听列表
@@ -57,13 +60,13 @@ public class HolderMessageSession {
     //添加总的监听
     public void addGlobalMessageListener(MessageListener listener) {
         //获取统一的监听
-        List<MessageListener> messageListeners = msgListeners.get("");
+        List<MessageListener> messageListeners = msgListeners.get(globalMsgTag);
         //如果为空
         if (messageListeners == null) {
             //则创建
             messageListeners = new ArrayList<>();
             //并设置监听列表
-            msgListeners.put("", messageListeners);
+            msgListeners.put(globalMsgTag, messageListeners);
         }
         //当前的
         if (listener != null) {
@@ -77,13 +80,13 @@ public class HolderMessageSession {
     //添加总的监听
     public void removeGlobalMessageListener(MessageListener listener) {
         //获取所有
-        List<MessageListener> messageListeners = msgListeners.get("");
+        List<MessageListener> messageListeners = msgListeners.get(globalMsgTag);
         //为空创建
         if (messageListeners == null) {
             //设置
             messageListeners = new ArrayList<>();
             //空的
-            msgListeners.put("", messageListeners);
+            msgListeners.put(globalMsgTag, messageListeners);
         }
         //监听移除
         if (listener != null) {
@@ -104,7 +107,7 @@ public class HolderMessageSession {
         }
         //不为空
         if (listener != null) {
-            if(!messageListeners.contains(listener)){
+            if (!messageListeners.contains(listener)) {
                 messageListeners.add(listener);
             }
         }

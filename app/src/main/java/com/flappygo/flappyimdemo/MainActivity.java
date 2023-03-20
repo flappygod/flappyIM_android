@@ -22,6 +22,7 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.lcw.library.imagepicker.ImagePicker;
@@ -81,8 +82,8 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().addSessionListener(new SessionListener() {
             @Override
-            public void sessionUpdate(FlappyChatSession session) {
-                System.out.println(session.getSession());
+            public void sessionUpdate(SessionData session) {
+
             }
         });
 
@@ -97,6 +98,16 @@ public class MainActivity extends Activity {
 
 
         FlappyImService.getInstance().addGlobalMessageListener(new MessageListener() {
+            @Override
+            public void messageCreate(ChatMessage chatMessage) {
+
+            }
+
+            @Override
+            public void messageUpdate(ChatMessage chatMessage) {
+
+            }
+
             @Override
             public void messageReceived(ChatMessage chatMessage) {
 
@@ -164,6 +175,16 @@ public class MainActivity extends Activity {
                         mySession = data;
 
                         mySession.addMessageListener(new MessageListener() {
+                            @Override
+                            public void messageCreate(ChatMessage chatMessage) {
+
+                            }
+
+                            @Override
+                            public void messageUpdate(ChatMessage chatMessage) {
+
+                            }
+
                             @Override
                             public void messageReceived(ChatMessage chatMessage) {
                                 rect.setText(chatMessage.getChatText());
