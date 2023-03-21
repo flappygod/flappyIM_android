@@ -58,7 +58,7 @@ public class FlappyImService {
     //发送本地通知
     private final MessageListener messageListener = new MessageListener() {
         @Override
-        public void messageCreate(ChatMessage chatMessage) {
+        public void messageSend(ChatMessage chatMessage) {
 
         }
 

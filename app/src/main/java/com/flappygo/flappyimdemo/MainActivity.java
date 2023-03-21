@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().addGlobalMessageListener(new MessageListener() {
             @Override
-            public void messageCreate(ChatMessage chatMessage) {
+            public void messageSend(ChatMessage chatMessage) {
 
             }
 
@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
 
                         mySession.addMessageListener(new MessageListener() {
                             @Override
-                            public void messageCreate(ChatMessage chatMessage) {
+                            public void messageSend(ChatMessage chatMessage) {
 
                             }
 

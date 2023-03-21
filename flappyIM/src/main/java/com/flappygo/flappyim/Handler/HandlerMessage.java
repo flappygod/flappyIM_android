@@ -31,13 +31,13 @@ public class HandlerMessage extends Handler {
                 if (chatMessage.getMessageSession().equals(key)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageCreate(chatMessage);
+                        messageListeners.get(x).messageSend(chatMessage);
                     }
                 }
                 if (key.equals(globalMsgTag)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageCreate(chatMessage);
+                        messageListeners.get(x).messageSend(chatMessage);
                     }
                 }
             }
