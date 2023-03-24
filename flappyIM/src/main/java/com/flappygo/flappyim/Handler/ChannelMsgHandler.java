@@ -174,8 +174,20 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //保存用户成功的登录信息
         synchronized (this) {
+
+            //设置登录
             user.setLogin(1);
+
+            //保存用户
             DataManager.getInstance().saveLoginUser(user);
+
+            //遍历消息进行通知
+            Database database = new Database();
+
+            //更新所有会话
+            if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
+                database.insertSessions(handlerLogin.getLoginResponse().getSessions(), handlerSession);
+            }
 
             //消息转发
             List<ChatMessage> messages = new ArrayList<>();
@@ -194,8 +206,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 return 0;
             });
 
-            //遍历消息进行通知
-            Database database = new Database();
+            //处理消息
             for (int s = 0; s < messages.size(); s++) {
                 ChatMessage chatMessage = messages.get(s);
                 //通知接收成功或者发送成功
@@ -210,16 +221,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 notifyMessageReceive(chatMessage, former);
 
                 //保存最后的offset
-                if (s == messages.size() - 1) {
+                if (s == (messages.size() - 1)) {
                     messageArrivedReceipt(chatMessage, former);
                 }
-
-            }
-
-
-            //更新所有会话
-            if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
-                database.insertSessions(handlerLogin.getLoginResponse().getSessions(), handlerSession);
             }
 
             //关闭数据库
