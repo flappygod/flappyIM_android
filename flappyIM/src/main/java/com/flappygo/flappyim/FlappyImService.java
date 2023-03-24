@@ -63,6 +63,11 @@ public class FlappyImService {
         }
 
         @Override
+        public void messageFailed(ChatMessage chatMessage) {
+
+        }
+
+        @Override
         public void messageUpdate(ChatMessage chatMessage) {
 
         }

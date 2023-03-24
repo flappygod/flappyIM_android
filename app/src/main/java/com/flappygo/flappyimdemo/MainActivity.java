@@ -104,6 +104,11 @@ public class MainActivity extends Activity {
             }
 
             @Override
+            public void messageFailed(ChatMessage chatMessage) {
+
+            }
+
+            @Override
             public void messageUpdate(ChatMessage chatMessage) {
 
             }
@@ -172,11 +177,16 @@ public class MainActivity extends Activity {
                     public void success(FlappyChatSession data) {
                         Toast.makeText(getBaseContext(), "会话创建成功", Toast.LENGTH_SHORT).show();
 
+                        //set session and add listener
                         mySession = data;
-
                         mySession.addMessageListener(new MessageListener() {
                             @Override
                             public void messageSend(ChatMessage chatMessage) {
+
+                            }
+
+                            @Override
+                            public void messageFailed(ChatMessage chatMessage) {
 
                             }
 
@@ -195,11 +205,11 @@ public class MainActivity extends Activity {
 
                         if (chatMessage != null) {
                             List<ChatMessage> messages = mySession.getFormerMessages(chatMessage.getMessageId(), 10);
-                            List<ChatMessage> newMsgs = new ArrayList<>();
-                            newMsgs.add(chatMessage);
-                            newMsgs.addAll(messages);
-                            for (int w = 0; w < newMsgs.size(); w++) {
-                                System.out.println(newMsgs.get(w).getMessageTableSeq().toString());
+                            List<ChatMessage> messageArrayList = new ArrayList<>();
+                            messageArrayList.add(chatMessage);
+                            messageArrayList.addAll(messages);
+                            for (int w = 0; w < messageArrayList.size(); w++) {
+                                System.out.println(messageArrayList.get(w).getMessageTableSeq().toString());
                             }
                         }
 

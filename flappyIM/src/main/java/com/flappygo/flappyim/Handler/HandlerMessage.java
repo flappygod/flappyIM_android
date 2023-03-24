@@ -1,7 +1,6 @@
 package com.flappygo.flappyim.Handler;
 
 import static com.flappygo.flappyim.Holder.HolderMessageSession.globalMsgTag;
-
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Listener.MessageListener;
@@ -13,8 +12,11 @@ import java.util.List;
 
 public class HandlerMessage extends Handler {
 
-    //收到新的消息了
-    public static final int MSG_CREATE = 0;
+    //消息发送失败
+    public static final int MSG_FAILED = 9;
+
+    //消息开始发送
+    public static final int MSG_SEND = 0;
 
     //收到新的消息了
     public static final int MSG_RECEIVE = 1;
@@ -25,7 +27,7 @@ public class HandlerMessage extends Handler {
     //执行消息
     public void handleMessage(Message message) {
         //消息被创建
-        if (message.what == MSG_CREATE) {
+        if (message.what == MSG_SEND) {
             ChatMessage chatMessage = (ChatMessage) message.obj;
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
                 if (chatMessage.getMessageSession().equals(key)) {
@@ -38,6 +40,24 @@ public class HandlerMessage extends Handler {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
                         messageListeners.get(x).messageSend(chatMessage);
+                    }
+                }
+            }
+        }
+        //消息接收
+        if (message.what == MSG_FAILED) {
+            ChatMessage chatMessage = (ChatMessage) message.obj;
+            for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
+                if (chatMessage.getMessageSession().equals(key)) {
+                    List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
+                    for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
+                        messageListeners.get(x).messageFailed(chatMessage);
+                    }
+                }
+                if (key.equals(globalMsgTag)) {
+                    List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
+                    for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
+                        messageListeners.get(x).messageFailed(chatMessage);
                     }
                 }
             }

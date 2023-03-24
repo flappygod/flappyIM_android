@@ -7,6 +7,9 @@ public interface MessageListener {
     //发送消息
     void messageSend(ChatMessage chatMessage);
 
+    //发送消息
+    void messageFailed(ChatMessage chatMessage);
+
     //消息更新
     void messageUpdate(ChatMessage chatMessage);
 
