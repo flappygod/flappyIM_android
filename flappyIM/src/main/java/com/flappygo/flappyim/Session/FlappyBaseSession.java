@@ -45,78 +45,82 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 public class FlappyBaseSession {
 
 
-    //我们姑且认为是最后一条
-    public void insertMessage(ChatMessage msg) {
-        //已经发送了
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
-        //获取当前用户
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        //当前最后一条
-        BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
-        //+1
-        bigDecimal = bigDecimal.add(new BigDecimal(1));
-        //放到最后
-        msg.setMessageTableSeq(bigDecimal);
-        //插入数据
-        Database database = new Database();
-        database.insertMessage(msg);
-        database.close();
+    ///获取当前的消息handler
+    ChannelMsgHandler getCurrentChannelMessageHandler() {
+        FlappyService flappyService = FlappyService.getInstance();
+        //如果当前服务不在线，错误
+        if (flappyService == null) {
+            return null;
+        }
+        //服务中的线程没有运行
+        NettyThread thread = flappyService.getClientThread();
+        if (thread == null) {
+            return null;
+        }
+        //线程中的handler不存在
+        ChannelMsgHandler handler = thread.getChannelMsgHandler();
+        return handler;
     }
 
-    //将消息的状态更新为已经发送
-    private void updateMsgSent(ChatMessage msg) {
-        //已经发送了
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
-        //插入数据
+    //我们姑且认为是最后一条
+    public void insertMessage(ChatMessage msg) {
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
+        bigDecimal = bigDecimal.add(new BigDecimal(1));
+        msg.setMessageTableSeq(bigDecimal);
         Database database = new Database();
         database.insertMessage(msg);
         database.close();
+
+        //线程中的handler不存在
+        ChannelMsgHandler handler = getCurrentChannelMessageHandler();
+        if (handler != null) {
+            handler.notifyMessageSend(msg);
+        }
     }
 
 
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
-        //发送失败了
         msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
-        //插入数据
+        Database database = new Database();
+        database.insertMessage(msg);
+        database.close();
+        //线程中的handler不存在
+        ChannelMsgHandler handler = getCurrentChannelMessageHandler();
+        if (handler != null) {
+            handler.notifyMessageFailure(msg);
+        }
+    }
+
+
+    //将消息的状态更新为已经发送
+    private void updateMsgSent(ChatMessage msg) {
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
         Database database = new Database();
         database.insertMessage(msg);
         database.close();
     }
 
+
     //发送消息
     protected void sendMessage(ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
-        FlappyService flappyService = FlappyService.getInstance();
-
-        //如果当前服务不在线，错误
-        if (flappyService == null) {
-            updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("服务已停止"), Integer.parseInt(RESULT_NET_ERROR));
-            return;
-        }
-
-        //服务中的线程没有运行
-        NettyThread thread = flappyService.getClientThread();
-        if (thread == null) {
-            updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("线程已停止"), Integer.parseInt(RESULT_NET_ERROR));
-            return;
-        }
-
         //线程中的handler不存在
-        ChannelMsgHandler handler = thread.getChannelMsgHandler();
+        ChannelMsgHandler handler = getCurrentChannelMessageHandler();
         if (handler == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("Handler不存在"), Integer.parseInt(RESULT_NET_ERROR));
+            callback.failure(chatMessage, new Exception("Channel error"), Integer.parseInt(RESULT_NET_ERROR));
             return;
         }
 
         //取得了handler,再发送消息
         handler.sendMessage(chatMessage, new FlappySendCallback<ChatMessage>() {
             @Override
-            public void success(ChatMessage data) {
-                callback.success(data);
+            public void success(ChatMessage msg) {
+                updateMsgSent(msg);
+                callback.success(msg);
             }
 
             @Override
@@ -191,7 +195,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                //消息
+                updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
         }, msg, null);
@@ -352,7 +356,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                //发送消息
+                updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
         }, msg, null);
@@ -408,7 +412,7 @@ public class FlappyBaseSession {
 
                 //设置数据返回
                 chatFile.setPath(baseApiModel.getData().getFilePath());
-
+                //设置文件
                 data.setChatFile(chatFile);
                 //消息
                 return data;
@@ -422,7 +426,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                //发送消息
+                updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
         }, msg, null);

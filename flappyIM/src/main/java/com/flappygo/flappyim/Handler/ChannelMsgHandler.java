@@ -419,16 +419,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //发送消息
     public void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
-
-        //消息被创建进行发送
-        notifyMessageSend(chatMessage);
-
         //多次发送，之前的发送默认失败
         HandlerSendCall former = getHandlerSendCall(chatMessage.getMessageId());
         if (former != null) {
             messageSendFailure(chatMessage, new Exception("消息重新发送"));
         }
-
         //发送
         try {
             HandlerSendCall handlerSendCall = new HandlerSendCall(callback, chatMessage);
@@ -448,16 +443,15 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
-    /**************
-     * 消息发送监听
-     **************/
-    private void notifyMessageSend(ChatMessage chatMessage) {
+    //消息发送监听
+    public void notifyMessageSend(ChatMessage chatMessage) {
         Message msg = new Message();
         msg.what = HandlerMessage.MSG_SEND;
         msg.obj = chatMessage;
         this.handlerMessage.sendMessage(msg);
     }
 
+    //消息接收监听
     private void notifyMessageReceive(ChatMessage chatMessage, ChatMessage formerMessage) {
         Message msg = new Message();
         if (formerMessage == null) {
@@ -469,7 +463,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         this.handlerMessage.sendMessage(msg);
     }
 
-    private void notifyMessageFailure(ChatMessage chatMessage) {
+    //消息错误监听
+    public void notifyMessageFailure(ChatMessage chatMessage) {
         Message msg = new Message();
         msg.what = HandlerMessage.MSG_FAILED;
         msg.obj = chatMessage;
@@ -477,17 +472,14 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
 
-    /**************
-     * 消息发送回调
-     **************/
-    //获取
+    //消息发送回调
     private synchronized HandlerSendCall getHandlerSendCall(String messageID) {
         synchronized (lock) {
             return sendHandlers.get(messageID);
         }
     }
 
-    //添加
+    //添加消息发送回调
     private void addHandlerSendCall(String messageID, HandlerSendCall call) {
         synchronized (lock) {
             sendHandlers.put(messageID, call);
