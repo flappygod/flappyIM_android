@@ -1,34 +1,43 @@
 package com.flappygo.flappyim.Handler;
 
-import android.os.Message;
 
-import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.DataBase.Database;
-import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.FlappyImService;
-import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
+import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
+import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Thread.NettyThreadDead;
+
+import io.netty.channel.SimpleChannelInboundHandler;
+
+import com.flappygo.flappyim.Models.Protoc.Flappy;
+import com.flappygo.flappyim.Config.FlappyConfig;
+import com.flappygo.flappyim.DataBase.Database;
+import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.FlappyImService;
+
+
 import com.flappygo.flappyim.Tools.NettyAttrUtil;
-import com.flappygo.flappyim.Tools.StringTool;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
-import io.netty.channel.ChannelFuture;
+import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.timeout.IdleStateEvent;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+import com.flappygo.flappyim.Tools.StringTool;
+
+import io.netty.channel.ChannelFuture;
+
+import java.util.Collections;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
+import android.os.Message;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 //登录的handler
@@ -50,7 +59,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final ChatUser user;
 
     //当前的channel
-    private ChannelHandlerContext channelHandlerContext;
+    private ChannelHandlerContext currentActiveContext;
 
     //心跳包
     private final Flappy.FlappyRequest heart;
@@ -84,32 +93,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //三次握手成功,发送登录验证
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-        //创建builder
-        Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
-                .setDevice(FlappyConfig.getInstance().device)
-                .setUserID(this.user.getUserId())
-                .setPushid(StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
-
-        //获取最近latest
-        ChatUser user = DataManager.getInstance().getLoginUser();
-        //消息
-        if (user != null && user.getLatest() != null) {
-            loginInfoBuilder.setLatest(user.getLatest());
-        }
-        //登录信息创建
-        Flappy.ReqLogin loginInfo = loginInfoBuilder.build();
-
-        //创建登录请求消息
-        Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
-                .setLogin(loginInfo)
-                .setType(FlappyRequest.REQ_LOGIN);
-
-        //发送登录消息
-        ctx.writeAndFlush(builder.build());
-        //context
-        channelHandlerContext = ctx;
-        //消息
+        //发送登录验证
+        sendLoginRequest(ctx);
+        //设置当前active的context
+        currentActiveContext = ctx;
         super.channelActive(ctx);
     }
 
@@ -122,26 +109,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof IdleStateEvent) {
-            System.out.println("heat beat");
-            //发送心跳包用于检测
-            ctx.writeAndFlush(heart).addListeners((ChannelFutureListener) future -> {
-                //如果发送给服务器是成功的
-                if (future.isSuccess()) {
-                    //更新时间
-                    NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
-                }
-            });
-            Long formerTime = NettyAttrUtil.getReaderTime(ctx.channel());
-            //30秒没有收到信息了，关闭吧
-            if (formerTime != null && System.currentTimeMillis() - formerTime > 30 * 1000) {
-                //连接不通，下线
-                closeChannel(ctx);
-            }
-        }
+        sendHeartBeatRequest(ctx, evt);
         super.userEventTriggered(ctx, evt);
     }
-
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
@@ -165,31 +135,66 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         super.exceptionCaught(ctx, cause);
     }
 
+
+    ///发送心跳并检查心跳
+    ///发送心跳并检查心跳
+    private void sendHeartBeatRequest(ChannelHandlerContext ctx, Object evt) {
+        if (evt instanceof IdleStateEvent) {
+            //发送心跳包
+            ctx.writeAndFlush(heart).addListeners((ChannelFutureListener) future -> {
+                if (future.isSuccess()) {
+                    NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
+                }
+            });
+            //检查心跳，出现异常关闭socket
+            Long formerTime = NettyAttrUtil.getReaderTime(ctx.channel());
+            if (formerTime != null && System.currentTimeMillis() - formerTime > 30 * 1000) {
+                closeChannel(ctx);
+            }
+        }
+    }
+
+    ///发送登录请求
+    ///发送登录请求
+    private void sendLoginRequest(ChannelHandlerContext ctx) {
+        //创建builder
+        Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
+                .setDevice(FlappyConfig.getInstance().device)
+                .setUserID(this.user.getUserId())
+                .setPushid(StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
+
+        //设置最近的消息偏移量作为请求消息数据
+        ChatUser user = DataManager.getInstance().getLoginUser();
+        if (user != null && user.getLatest() != null) {
+            loginInfoBuilder.setLatest(user.getLatest());
+        }
+
+        //创建登录请求消息
+        Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                .setLogin(loginInfoBuilder.build())
+                .setType(FlappyRequest.REQ_LOGIN);
+
+        //发送登录消息
+        ctx.writeAndFlush(builder.build());
+    }
+
     //登录成功返回处理
     private void receiveLogin(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
-        //登录
-        if (this.handlerLogin == null) {
-            return;
-        }
 
         //保存用户成功的登录信息
         synchronized (this) {
 
-            //设置登录
+            //设置登录成功，并保存
             user.setLogin(1);
-
-            //保存用户
             DataManager.getInstance().saveLoginUser(user);
 
             //遍历消息进行通知
             Database database = new Database();
-
-            //更新所有会话
             if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
                 database.insertSessions(handlerLogin.getLoginResponse().getSessions(), handlerSession);
             }
 
-            //消息转发
+            //消息转换为我们的message
             List<ChatMessage> messages = new ArrayList<>();
             for (int s = 0; s < response.getMsgCount(); s++) {
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
@@ -219,7 +224,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 messageSendSuccess(chatMessage);
                 //通知监听变化
                 notifyMessageReceive(chatMessage, former);
-
                 //保存最后的offset
                 if (s == (messages.size() - 1)) {
                     messageArrivedReceipt(chatMessage, former);
@@ -230,8 +234,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             database.close();
 
             //发送成功消息
-            Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS);
-            msg.obj = response.getMsgList();
+            Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS,response);
             handlerLogin.sendMessage(msg);
 
             //检查是否更新
@@ -363,7 +366,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         .setType(FlappyRequest.REQ_UPDATE);
 
                 //发送需要更新的消息
-                channelHandlerContext.writeAndFlush(builder.build());
+                currentActiveContext.writeAndFlush(builder.build());
             }
         }
     }
@@ -411,7 +414,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     .setType(FlappyRequest.REQ_RECEIPT);
 
             //发送回执，发送回执后，所有之前的消息都会被列为已经收到，因为端口是阻塞的
-            channelHandlerContext.writeAndFlush(builder.build());
+            currentActiveContext.writeAndFlush(builder.build());
 
         }
     }
@@ -432,7 +435,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
                     .setMsg(message)
                     .setType(FlappyRequest.REQ_MSG);
-            ChannelFuture future = channelHandlerContext.channel().writeAndFlush(builder.build());
+            ChannelFuture future = currentActiveContext.channel().writeAndFlush(builder.build());
             future.addListener((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
                     messageSendFailure(chatMessage, new Exception("连接已经断开"));

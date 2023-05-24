@@ -20,7 +20,7 @@ public class HandlerLoginCallback extends Handler {
 
 
     //真实的回调
-    private FlappyIMCallback callback;
+    private FlappyIMCallback<ResponseLogin> callback;
 
     //登录信息
     private ResponseLogin loginResponse;
@@ -31,7 +31,7 @@ public class HandlerLoginCallback extends Handler {
     }
 
     //返回
-    public HandlerLoginCallback(FlappyIMCallback callback, ResponseLogin loginResponse) {
+    public HandlerLoginCallback(FlappyIMCallback<ResponseLogin> callback, ResponseLogin loginResponse) {
         this.callback = callback;
         this.loginResponse = loginResponse;
     }
@@ -40,21 +40,15 @@ public class HandlerLoginCallback extends Handler {
     public void handleMessage(Message message) {
         //成功
         if (message.what == LOGIN_SUCCESS) {
-            //成功
             if (callback != null) {
-                //执行成功的回调
                 callback.success(loginResponse);
-                //只执行一次
                 callback = null;
             }
         }
         //失败
         else if (message.what == LOGIN_FAILURE) {
-            //失败
             if (callback != null) {
-                //执行失败的回调
                 callback.failure((Exception) message.obj, Integer.parseInt(RESULT_NET_ERROR));
-                //同样只执行一次
                 callback = null;
             }
         }
