@@ -14,6 +14,8 @@ import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.IDGenerator;
+import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
+import com.flappygo.flappyim.Tools.Upload.LXImageWH;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -160,6 +162,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatImage chatImage = new ChatImage();
         //发送地址
         chatImage.setSendPath(path);
+        //图片大小
+        LXImageWH imageSize = ImageReadTool.getImageSize(path);
+        //设置宽度
+        chatImage.setWidth(Integer.toString(imageSize.getWidth()));
+        //设置高度
+        chatImage.setHeight(Integer.toString(imageSize.getHeight()));
         //设置内容
         msg.setChatImage(chatImage);
         //时间

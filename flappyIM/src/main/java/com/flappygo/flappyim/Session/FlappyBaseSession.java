@@ -145,18 +145,19 @@ public class FlappyBaseSession {
 
                 //构建文件参数
                 HashMap<String, Object> paramMap = new HashMap<>();
-                //构建文件参数
-                HashMap<String, String> fileMap = new HashMap<>();
-                //地址
-                fileMap.put("file", image.getSendPath());
-                //保存宽高
-                LXImageWH lxImageWH = new LXImageWH();
+
+                UploadModel uploadModel = new UploadModel();
+                uploadModel.setName("file");
+                uploadModel.setPath(image.getSendPath());
+                ArrayList<UploadModel> files = new ArrayList<>();
+                files.add(uploadModel);
+
                 //返回的字符串
-                String str = UploadTool.postImage(FlappyConfig.getInstance().fileUpload, paramMap, fileMap, lxImageWH);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, paramMap, files);
 
 
                 //返回数据
-                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
+                BaseApiModel<String> baseApiModel = new BaseApiModel<>();
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
@@ -168,19 +169,15 @@ public class FlappyBaseSession {
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
+                if (jb.optJSONArray("data") != null && jb.optJSONArray("data").length() > 0) {
+                    baseApiModel.setData(jb.optJSONArray("data").getString(0));
+                }
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getMsg());
                 }
-
-
-                //设置宽度
-                image.setWidth(Integer.toString(lxImageWH.getWidth()));
-                //设置高度
-                image.setHeight(Integer.toString(lxImageWH.getHeight()));
                 //设置数据返回
-                image.setPath(baseApiModel.getData().getFilePath());
+                image.setPath(baseApiModel.getData());
                 //转换为content
                 data.setChatImage(image);
 
@@ -227,7 +224,7 @@ public class FlappyBaseSession {
 
 
                 //返回数据
-                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
+                BaseApiModel<String> baseApiModel = new BaseApiModel<>();
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
@@ -239,14 +236,16 @@ public class FlappyBaseSession {
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
+                if (jb.optJSONArray("data") != null && jb.optJSONArray("data").length() > 0) {
+                    baseApiModel.setData(jb.optJSONArray("data").getString(0));
+                }
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getMsg());
                 }
 
                 //设置数据返回
-                voice.setPath(baseApiModel.getData().getFilePath());
+                voice.setPath(baseApiModel.getData());
 
                 //长度
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -392,7 +391,7 @@ public class FlappyBaseSession {
 
 
                 //返回数据
-                BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
+                BaseApiModel<String> baseApiModel = new BaseApiModel<>();
                 //创建
                 JSONObject jb = new JSONObject(str);
                 //返回码
@@ -404,14 +403,16 @@ public class FlappyBaseSession {
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setData(GsonTool.jsonObjectToModel(jb.optString("data"), ResponseUpload.class));
+                if (jb.optJSONArray("data") != null && jb.optJSONArray("data").length() > 0) {
+                    baseApiModel.setData(jb.optJSONArray("data").getString(0));
+                }
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getMsg());
                 }
 
                 //设置数据返回
-                chatFile.setPath(baseApiModel.getData().getFilePath());
+                chatFile.setPath(baseApiModel.getData());
                 //设置文件
                 data.setChatFile(chatFile);
                 //消息
