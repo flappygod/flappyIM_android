@@ -4,26 +4,20 @@ import java.io.Serializable;
 
 public class ChatVideo implements Serializable {
 
-    //发送的本地地址
-    private String sendPath;
-    //地址
+    //网页路径
     private String path;
+    //本地路径
+    private String sendPath;
     //封面图片
     private String coverPath;
+    //封面图片
+    private String coverSendPath;
     //时长
     private String duration;
     //宽度
     private String width;
     //高度
     private String height;
-
-    public String getSendPath() {
-        return sendPath;
-    }
-
-    public void setSendPath(String sendPath) {
-        this.sendPath = sendPath;
-    }
 
     public String getPath() {
         return path;
@@ -33,12 +27,28 @@ public class ChatVideo implements Serializable {
         this.path = path;
     }
 
+    public String getSendPath() {
+        return sendPath;
+    }
+
+    public void setSendPath(String sendPath) {
+        this.sendPath = sendPath;
+    }
+
     public String getCoverPath() {
         return coverPath;
     }
 
     public void setCoverPath(String coverPath) {
         this.coverPath = coverPath;
+    }
+
+    public String getCoverSendPath() {
+        return coverSendPath;
+    }
+
+    public void setCoverSendPath(String coverSendPath) {
+        this.coverSendPath = coverSendPath;
     }
 
     public String getDuration() {

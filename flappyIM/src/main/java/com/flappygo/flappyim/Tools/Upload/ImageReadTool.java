@@ -145,7 +145,7 @@ public class ImageReadTool {
      * @throws IOException
      ***********************/
     public synchronized static Bitmap readFileBitmap(String path,
-                                                     LXImageReadOption setting) throws Exception{
+                                                     LXImageReadOption setting) throws Exception {
         // 获取InputStream
         FileInputStream fin = null;
         try {
@@ -197,7 +197,7 @@ public class ImageReadTool {
      * @param path 文件地址
      * @return 图片
      */
-    public synchronized static Bitmap readFileBitmap(String path) throws Exception{
+    public synchronized static Bitmap readFileBitmap(String path) throws Exception {
         FileInputStream fin = null;
         try {
             // 如果为空就返回空的
@@ -229,7 +229,7 @@ public class ImageReadTool {
      * @param path 大小
      * @return
      */
-    public synchronized static LXImageWH getImageSize(String path) {
+    public synchronized static LXImageWH getImageSize(String path) throws Exception {
         if (isFileExsitsAntNotDic(path)) {
             // 创建设置
             Options options = new Options();
@@ -244,7 +244,7 @@ public class ImageReadTool {
 
             return new LXImageWH(imageWidth, imageHeight);
         } else {
-            return null;
+            throw new Exception("file not exists or is dictionary");
         }
     }
 

@@ -1,23 +1,31 @@
 package com.flappygo.flappyim.Session;
 
+
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
+
 import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.DataBase.Database;
-import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
+import com.flappygo.flappyim.Models.Request.ChatLocation;
+import com.flappygo.flappyim.Models.Response.SessionData;
+import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
+import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Request.ChatVideo;
+import com.flappygo.flappyim.Models.Request.ChatImage;
+import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatFile;
-import com.flappygo.flappyim.Models.Request.ChatImage;
-import com.flappygo.flappyim.Models.Request.ChatLocation;
-import com.flappygo.flappyim.Models.Request.ChatVideo;
-import com.flappygo.flappyim.Models.Request.ChatVoice;
-import com.flappygo.flappyim.Models.Response.SessionData;
-import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Tools.IDGenerator;
-import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
 import com.flappygo.flappyim.Tools.Upload.LXImageWH;
+import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.DataBase.Database;
+import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.Tools.IDGenerator;
+import com.flappygo.flappyim.FlappyImService;
+import com.flappygo.flappyim.Tools.VideoTool;
 
-import java.math.BigDecimal;
+import android.media.MediaMetadataRetriever;
+import android.text.TextUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -162,12 +170,19 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatImage chatImage = new ChatImage();
         //发送地址
         chatImage.setSendPath(path);
-        //图片大小
-        LXImageWH imageSize = ImageReadTool.getImageSize(path);
-        //设置宽度
-        chatImage.setWidth(Integer.toString(imageSize.getWidth()));
-        //设置高度
-        chatImage.setHeight(Integer.toString(imageSize.getHeight()));
+
+        try {
+            //图片大小
+            LXImageWH imageSize = ImageReadTool.getImageSize(path);
+            //设置宽度
+            chatImage.setWidth(Integer.toString(imageSize.getWidth()));
+            //设置高度
+            chatImage.setHeight(Integer.toString(imageSize.getHeight()));
+        } catch (Exception ex) {
+            callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
+            return msg;
+        }
+
         //设置内容
         msg.setChatImage(chatImage);
         //时间
@@ -237,6 +252,22 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatVoice chatVoice = new ChatVoice();
         //设置语音的本地地址
         chatVoice.setSendPath(path);
+        //释放
+        try {
+            //获取音频长度
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            //在获取前，设置文件路径（应该只能是本地路径）
+            retriever.setDataSource(path);
+            //长度
+            String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            //发送哦
+            chatVoice.setSeconds(duration);
+            //释放
+            retriever.release();
+        } catch (IOException ex) {
+            callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
+            return msg;
+        }
         //设置内容
         msg.setChatVoice(chatVoice);
         //时间
@@ -277,7 +308,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
-
         return msg;
     }
 
@@ -309,7 +339,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
-
         return msg;
     }
 
@@ -335,6 +364,24 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatVideo chatVideo = new ChatVideo();
         //设置语音的本地地址
         chatVideo.setSendPath(path);
+        //初始化视频数据
+        try {
+            //获取到图片的bitmap
+            VideoTool.VideoInfo info = VideoTool.getVideoInfo(FlappyImService.getInstance().getAppContext(),
+                    512,
+                    path);
+            //封面地址
+            chatVideo.setCoverSendPath(info.getOverPath());
+            //时长
+            chatVideo.setDuration(info.getDuration());
+            //宽度
+            chatVideo.setWidth(info.getWidth());
+            //高度
+            chatVideo.setHeight(info.getHeight());
+        } catch (Exception ex) {
+            callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
+            return msg;
+        }
         //设置内容
         msg.setChatVideo(chatVideo);
         //时间
@@ -446,7 +493,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
-
         return msg;
     }
 

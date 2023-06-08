@@ -2,11 +2,9 @@ package com.flappygo.flappyimdemo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -126,7 +124,7 @@ public class MainActivity extends Activity {
                     Toast.makeText(getBaseContext(), chatMessage.getChatLocation().getAddress(), Toast.LENGTH_SHORT).show();
                 }
                 if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
-                    Toast.makeText(getBaseContext(), chatMessage.getChatVideo().getPath(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), chatMessage.getChatVideo().getSendPath(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
