@@ -280,7 +280,7 @@ public class FlappyBaseSession {
                 //封面图片添加
                 UploadModel overFileModel = new UploadModel();
                 //上传文件
-                overFileModel.setName("file");
+                overFileModel.setName("cover");
                 //上传路径
                 overFileModel.setPath(video.getCoverSendPath());
                 //添加入上传
@@ -290,7 +290,7 @@ public class FlappyBaseSession {
                 //视频地址添加
                 UploadModel videoModel = new UploadModel();
                 //文件
-                videoModel.setName("file");
+                videoModel.setName("video");
                 //路径
                 videoModel.setPath(video.getSendPath());
                 //添加
