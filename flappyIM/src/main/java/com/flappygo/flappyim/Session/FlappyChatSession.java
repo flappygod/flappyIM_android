@@ -25,6 +25,7 @@ import com.flappygo.flappyim.Tools.VideoTool;
 import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -451,6 +452,11 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatFile chatFile = new ChatFile();
         //设置文件的本地地址
         chatFile.setSendPath(path);
+        //设置文件大小设置
+        File file= new File(path);
+        if(file.exists()){
+            chatFile.setFileSize(Long.toString(file.length()));
+        }
         //设置文件的名称
         chatFile.setFileName(name);
         //设置内容

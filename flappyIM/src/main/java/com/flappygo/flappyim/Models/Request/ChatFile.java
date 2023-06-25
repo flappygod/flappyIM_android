@@ -4,6 +4,8 @@ public class ChatFile {
 
     //文件名称
     private String fileName;
+    //文件大小
+    private String fileSize;
     //文件发送地址
     private String sendPath;
     //文件网络地址
@@ -15,6 +17,14 @@ public class ChatFile {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
     }
 
     public String getSendPath() {
