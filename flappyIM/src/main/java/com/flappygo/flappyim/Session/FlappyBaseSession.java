@@ -276,14 +276,6 @@ public class FlappyBaseSession {
 
                 ArrayList<UploadModel> files = new ArrayList<>();
 
-                //视频地址添加
-                UploadModel videoModel = new UploadModel();
-                //文件
-                videoModel.setName("file");
-                //路径
-                videoModel.setPath(video.getSendPath());
-                //添加
-                files.add(videoModel);
 
                 //封面图片添加
                 UploadModel overFileModel = new UploadModel();
@@ -293,6 +285,17 @@ public class FlappyBaseSession {
                 overFileModel.setPath(video.getCoverSendPath());
                 //添加入上传
                 files.add(overFileModel);
+
+
+                //视频地址添加
+                UploadModel videoModel = new UploadModel();
+                //文件
+                videoModel.setName("file");
+                //路径
+                videoModel.setPath(video.getSendPath());
+                //添加
+                files.add(videoModel);
+
 
                 //返回的字符串
                 String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload, new HashMap<>(), files);
