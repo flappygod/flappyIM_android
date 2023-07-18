@@ -58,6 +58,7 @@ public class MainActivity extends Activity {
         FlappyImService.getInstance().createAccount(
                 "100",
                 "李俊霖",
+                "",
                 "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1183057007,4270556535&fm=26&gp=0.jpg",
                 new FlappyIMCallback<String>() {
                     @Override

@@ -179,6 +179,7 @@ public class FlappyImService {
     //创建用户账户
     public void createAccount(String userID,
                               String userName,
+                              String userData,
                               String userAvatar,
                               final FlappyIMCallback<String> callback) {
 
@@ -188,6 +189,8 @@ public class FlappyImService {
         hashMap.put("userExtendID", userID);
         //用户名称
         hashMap.put("userName", userName);
+        //用户名称
+        hashMap.put("userData", userData);
         //用户头像
         hashMap.put("userAvatar", userAvatar);
         //进行callBack
@@ -196,7 +199,6 @@ public class FlappyImService {
                 new BaseParseCallback<String>(String.class) {
                     @Override
                     protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        //失败
                         if (callback != null) {
                             callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                         }
@@ -204,7 +206,6 @@ public class FlappyImService {
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
-                        //解析失败
                         if (callback != null) {
                             callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
                         }
@@ -212,7 +213,6 @@ public class FlappyImService {
 
                     @Override
                     public void stateTrue(String s, String tag) {
-                        //这里代表注册账户成功
                         if (callback != null) {
                             callback.success(s);
                         }
@@ -227,6 +227,55 @@ public class FlappyImService {
                 }, null);
     }
 
+    //更新用户账户
+    public void updateAccount(String userID,
+                              String userName,
+                              String userData,
+                              String userAvatar,
+                              final FlappyIMCallback<String> callback) {
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        //设置index
+        hashMap.put("userExtendID", userID);
+        //用户名称
+        hashMap.put("userName", userName);
+        //用户名称
+        hashMap.put("userData", userData);
+        //用户头像
+        hashMap.put("userAvatar", userAvatar);
+        //进行callBack
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().updateUser,
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(String s, String tag) {
+                        if (callback != null) {
+                            callback.success(s);
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                        }
+                    }
+                }, null);
+    }
 
     //这里就代表登录了
     public void login(String userExtendID, final FlappyIMCallback<ResponseLogin> callback) {

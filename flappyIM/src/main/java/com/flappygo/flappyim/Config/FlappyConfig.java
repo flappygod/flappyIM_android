@@ -48,6 +48,9 @@ public class FlappyConfig {
     //创建账户
     public String register = serverUrl + "/api/register";
 
+    //更新账户
+    public String updateUser = serverUrl + "/api/updateUser";
+
     //登录接口的地址
     public String login = serverUrl + "/api/login";
 
