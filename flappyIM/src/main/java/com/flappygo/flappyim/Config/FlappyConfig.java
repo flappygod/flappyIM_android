@@ -2,21 +2,6 @@ package com.flappygo.flappyim.Config;
 
 public class FlappyConfig {
 
-
-    //单例模式
-    private static FlappyConfig instance;
-
-    public static FlappyConfig getInstance() {
-        if (instance == null) {
-            synchronized (FlappyConfig.class) {
-                if (instance == null) {
-                    instance = new FlappyConfig();
-                }
-            }
-        }
-        return instance;
-    }
-
     //安卓设备
     final public String device = "Android";
 
@@ -24,76 +9,94 @@ public class FlappyConfig {
     public String pushPlat = "Google";
 
     //12秒
-    public int IdleSeconds = 12;
+    final public int IdleSeconds = 12;
 
     //自动登录间隔时间
-    public int autoLoginSpace = 1000 * 6;
+    final public int autoLoginSpace = 1000 * 6;
 
     //自动重试netty次数
-    public int autoRetryNetty = 6;
+    final public int autoRetryNetty = 3;
 
     //链接的http服务器器的地址192.168.124.105
     //public String serverUrl = "http://192.168.124.127";
     public String serverUrl = "http://49.234.106.91";
 
     //上传地址
-    public String serverUploadUrl = serverUrl;
+    //public String serverUploadUrl = "http://192.168.124.127";
+    public String serverUploadUrl = "http://49.234.106.91";
+
+    //单例模式
+    private static final class InstanceHolder {
+        static final FlappyConfig instance = new FlappyConfig();
+    }
+
+    //单例模式
+    public static FlappyConfig getInstance() {
+        return InstanceHolder.instance;
+    }
+
+    //单例模式
+    private FlappyConfig() {
+        setServerUrl("http://49.234.106.91", "http://49.234.106.91");
+    }
+
 
     //上传文件的地址
-    public String fileUpload = serverUploadUrl + "/upload/fileUpload";
+    public String fileUpload;
 
     //上传视频的地址
-    public String videoUpload = serverUploadUrl + "/upload/videoUpload";
+    public String videoUpload;
 
     //创建账户
-    public String register = serverUrl + "/api/register";
+    public String register;
 
     //更新账户
-    public String updateUser = serverUrl + "/api/updateUser";
+    public String updateUser;
 
     //登录接口的地址
-    public String login = serverUrl + "/api/login";
+    public String login;
 
     //退出登录的接口地址
-    public String logout = serverUrl + "/api/logout";
+    public String logout;
 
     //自动登录
-    public String autoLogin = serverUrl + "/api/autoLogin";
+    public String autoLogin;
 
     //创建单聊会话
-    public String createSingleSession = serverUrl + "/api/createSingleSession";
+    public String createSingleSession;
 
     //获取单聊会话
-    public String getSingleSession = serverUrl + "/api/getSingleSession";
+    public String getSingleSession;
 
     //创建群组会话
-    public String createGroupSession = serverUrl + "/api/createGroupSession";
+    public String createGroupSession;
 
     //获取群组会话
-    public String getSessionByExtendID = serverUrl + "/api/getSessionByExtendID";
+    public String getSessionByExtendID;
 
     //获取用户的所有会话
-    public String getUserSessions = serverUrl + "/api/getUserSessions";
+    public String getUserSessions;
 
     //向会话中添加人员
-    public String addUserToSession = serverUrl + "/api/addUserToSession";
+    public String addUserToSession;
 
     //向会话中移除人员
-    public String delUserInSession = serverUrl + "/api/delUserInSession";
+    public String delUserInSession;
 
 
     //服务器的地址
     public void setServerUrl(String serverUrl, String serverUploadUrl) {
 
+        //不能为空
         if (serverUrl == null || serverUploadUrl == null) {
             throw new RuntimeException("服务器地址不能为空");
         }
 
         //服务器地址
         this.serverUrl = serverUrl;
+
         //资源文件上传地址
         this.serverUploadUrl = serverUploadUrl;
-
 
         //上传文件的地址
         fileUpload = serverUploadUrl + "/upload/fileUpload";
@@ -103,6 +106,9 @@ public class FlappyConfig {
 
         //创建账户
         register = serverUrl + "/api/register";
+
+        //update user
+        updateUser = serverUrl + "/api/updateUser";
 
         //登录接口的地址
         login = serverUrl + "/api/login";
