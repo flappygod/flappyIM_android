@@ -957,10 +957,6 @@ public class FlappyImService {
             }
             return;
         }
-        //先关闭当前的长连接
-        if (FlappyService.getInstance() != null) {
-            FlappyService.getInstance().offline();
-        }
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
         //用户ID不用传了
@@ -993,22 +989,24 @@ public class FlappyImService {
                     }
 
                     @Override
-                    public void stateTrue(String response, String tag) {
-                        DataManager.getInstance().clearLoginUser();
-                        if (callback != null) {
-                            callback.success(response);
-                        }
-                    }
-
-                    @Override
                     protected void netError(Exception e, String tag) {
                         if (callback != null) {
                             callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
                         }
                     }
+
+                    @Override
+                    public void stateTrue(String response, String tag) {
+                        //先关闭当前的长连接
+                        FlappyService.getInstance().offline();
+                        //清空
+                        DataManager.getInstance().clearLoginUser();
+                        if (callback != null) {
+                            callback.success(response);
+                        }
+                    }
                 }, null);
     }
-
 
     //添加全局的监听
     public void addGlobalMessageListener(MessageListener listener) {
