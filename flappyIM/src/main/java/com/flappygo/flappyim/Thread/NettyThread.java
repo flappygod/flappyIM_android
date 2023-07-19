@@ -1,30 +1,37 @@
 package com.flappygo.flappyim.Thread;
 
-import android.os.Message;
+
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+
+import com.flappygo.flappyim.Handler.HandlerLoginCallback;
+
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+
+import com.flappygo.flappyim.Handler.ChannelMsgHandler;
+
+import io.netty.channel.socket.nio.NioSocketChannel;
+
+import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Models.Protoc.Flappy;
+
+import io.netty.handler.timeout.IdleStateHandler;
 
 import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.Handler.HandlerLoginCallback;
-import com.flappygo.flappyim.Handler.ChannelMsgHandler;
-import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Models.Server.ChatUser;
+
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
+import io.netty.bootstrap.Bootstrap;
 
 import java.net.InetSocketAddress;
 
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import io.netty.handler.timeout.IdleStateHandler;
+import android.os.Message;
 
 //用于和服务器保持长连接的线程
 public class NettyThread extends Thread {
@@ -39,24 +46,24 @@ public class NettyThread extends Thread {
     private HandlerLoginCallback loginHandler;
 
     //线程死亡的回调
-    private NettyThreadDead deadCallback;
+    private final NettyThreadDead deadCallback;
 
     //获取channel
     public ChannelMsgHandler getChannelMsgHandler() {
         return channelMsgHandler;
     }
 
-    //消息的handler
-    private ChannelMsgHandler channelMsgHandler;
-
     //group
     private EventLoopGroup group;
 
+    //消息的handler
+    private final ChannelMsgHandler channelMsgHandler;
+
     //服务器的IP
-    private String serverIP;
+    private final String serverIP;
 
     //服务器的端口
-    private int serverPort;
+    private final int serverPort;
 
     //线程构造
     public NettyThread(
@@ -79,7 +86,7 @@ public class NettyThread extends Thread {
     }
 
     //连接服务器
-    private boolean connect() {
+    private void connect() {
         //连接
         group = new NioEventLoopGroup();
         //设置
@@ -113,11 +120,7 @@ public class NettyThread extends Thread {
             closeConnection(e);
             //设置为空
             future = null;
-            //返回false
-            return false;
         }
-        //成功连接
-        return true;
     }
 
     //下线
@@ -131,7 +134,7 @@ public class NettyThread extends Thread {
     //关闭连接
     public void closeConnection(Exception ex) {
         //登录失败
-        loginFaulure(ex);
+        loginFailure(ex);
         //通知死亡
         if (deadCallback != null) {
             deadCallback.dead();
@@ -154,14 +157,13 @@ public class NettyThread extends Thread {
     }
 
     //登录失败
-    private void loginFaulure(Exception ex) {
-        //假如存在登录回调
+    private void loginFailure(Exception ex) {
         synchronized (this) {
             if (loginHandler != null) {
                 Message message = new Message();
                 //失败
                 message.what = HandlerLoginCallback.LOGIN_FAILURE;
-                //失败excepiton
+                //失败exception
                 message.obj = ex;
                 //发送消息，只执行一次
                 this.loginHandler.sendMessage(message);
@@ -173,7 +175,6 @@ public class NettyThread extends Thread {
 
     //运行
     public void run() {
-        //当前线程开始连接服务器
         connect();
     }
 
