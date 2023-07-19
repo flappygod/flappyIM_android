@@ -34,26 +34,50 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_LOCATE;
+import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_NORMAL;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
+import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_HIDE;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_JSON_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NOT_LOGIN;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_LOCATE;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
-import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_HIDE;
-import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_NORMAL;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_FAILURE;
 
 
 //服务
 public class FlappyImService {
+
+    //单例模式
+    private static final class InstanceHolder {
+        static final FlappyImService instance = new FlappyImService();
+    }
+
+    //单例manager
+    public static FlappyImService getInstance() {
+        return InstanceHolder.instance;
+    }
 
     //上下文
     private Context appContext;
 
     //是否显示notification
     private boolean showNotification;
+
+    //检查是否初始化
+    private void checkInit() {
+        if (appContext == null) {
+            throw new RuntimeException("flappy im not init,call init first");
+        }
+    }
+
+    //获取上下文
+    public Context getAppContext() {
+        checkInit();
+        return appContext;
+    }
 
     //发送本地通知
     private final MessageListener messageListener = new MessageListener() {
@@ -79,63 +103,6 @@ public class FlappyImService {
     };
 
 
-    //获取上下文
-    public Context getAppContext() {
-        //没有初始化就报错
-        if (appContext == null) {
-            throw new RuntimeException("flappy im not init,call init first");
-        }
-        //返回
-        return appContext;
-    }
-
-    //初始化
-    public void init(Context appContext) {
-        //初始化上下文
-        this.appContext = appContext.getApplicationContext();
-        //初始化context
-        FlappyService.getInstance().init(appContext.getApplicationContext());
-        //添加总体的监听
-        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
-    }
-
-    //初始化
-    public void init(Context appContext, String serverPath, String uploadPath) {
-        //获取application
-        this.appContext = appContext.getApplicationContext();
-        //初始化context
-        FlappyService.getInstance().init(appContext.getApplicationContext());
-        //更新服务器地址和资源文件上传地址
-        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
-        //添加总体的监听,定义全局防止多次重复添加这个监听
-        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
-    }
-
-    //推送的平台
-    public void setPushPlatform(String flatForm) {
-        FlappyConfig.getInstance().pushPlat = flatForm;
-    }
-
-    //单例模式
-    private static final class InstanceHolder {
-        static final FlappyImService instance = new FlappyImService();
-    }
-
-    //单例manager
-    public static FlappyImService getInstance() {
-        return InstanceHolder.instance;
-    }
-
-    //正式开启服务
-    public void startServer() {
-        FlappyService.getInstance().startService();
-    }
-
-    //停止服务
-    public void stopServer() {
-        FlappyService.getInstance().stopService();
-    }
-
     //设置notification
     public void setNotification(boolean flag) {
         this.showNotification = flag;
@@ -143,6 +110,7 @@ public class FlappyImService {
 
     //发送本地通知
     private void sendNotification(ChatMessage chatMessage) {
+        //不显示notification
         if (!showNotification) {
             return;
         }
@@ -152,7 +120,6 @@ public class FlappyImService {
             NotificationUtil util = new NotificationUtil(FlappyImService.this.appContext);
             //普通
             if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_NORMAL) {
-
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
                     util.sendNotification(chatMessage, "消息提醒", chatMessage.getChatText());
                 }
@@ -168,15 +135,88 @@ public class FlappyImService {
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
                     util.sendNotification(chatMessage, "消息提醒", "您有一条视频消息");
                 }
-
             } else if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_HIDE) {
                 util.sendNotification(chatMessage, "消息提醒", "您有一条新的消息");
             }
         }
     }
 
+    /******
+     * 获取两个用户的关联ID
+     * @param userOne 用户1
+     * @param userTwo 用户2
+     * @return 会话ID
+     */
+    private static String getTwoUserString(String userOne, String userTwo) {
+        List<String> strList = new ArrayList<>();
+        strList.add(userOne);
+        strList.add(userTwo);
+        Collections.sort(strList);
+        return strList.get(0) + "-" + strList.get(1);
+    }
 
-    //创建用户账户
+    /******
+     * 初始化
+     * @param appContext 上下文
+     */
+    public void init(Context appContext) {
+        //初始化上下文
+        this.appContext = appContext.getApplicationContext();
+        //初始化context
+        FlappyService.getInstance().init(appContext.getApplicationContext());
+        //添加总体的监听
+        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
+    }
+
+    /******
+     * 初始化
+     * @param appContext 上下文
+     * @param serverPath Im服务器地址
+     * @param uploadPath 资源服务器地址
+     */
+    public void init(Context appContext, String serverPath, String uploadPath) {
+        //获取application
+        this.appContext = appContext.getApplicationContext();
+        //初始化context
+        FlappyService.getInstance().init(appContext.getApplicationContext());
+        //更新服务器地址和资源文件上传地址
+        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
+        //添加总体的监听,定义全局防止多次重复添加这个监听
+        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
+    }
+
+    /*******
+     * 推送的平台
+     * @param flatForm 推送平台
+     */
+    public void setPushPlatform(String flatForm) {
+        FlappyConfig.getInstance().pushPlat = flatForm;
+    }
+
+
+    /*******
+     * 正式开启服务
+     */
+    public void startServer() {
+        FlappyService.getInstance().startService();
+    }
+
+    /*******
+     * 停止服务
+     */
+    public void stopServer() {
+        FlappyService.getInstance().stopService();
+    }
+
+
+    /*******
+     * 创建用户账户
+     * @param userID      用户ID
+     * @param userName    用户姓名
+     * @param userData    用户数据
+     * @param userAvatar  用户头像
+     * @param callback    回调
+     */
     public void createAccount(String userID,
                               String userName,
                               String userData,
@@ -200,7 +240,10 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel<String> model, String tag) {
                         if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
                         }
                     }
 
@@ -250,7 +293,10 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel<String> model, String tag) {
                         if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
                         }
                     }
 
@@ -283,7 +329,6 @@ public class FlappyImService {
         synchronized (FlappyService.getInstance()) {
             //正在登录
             FlappyService.getInstance().isLoading = true;
-
             //创建这个HashMap
             HashMap<String, Object> hashMap = new HashMap<>();
             //用户ID不用传了
@@ -296,17 +341,13 @@ public class FlappyImService {
             hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
             //设备ID
             hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
-
-
             //进行callBack
             LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().login,
                     hashMap,
                     new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                         @Override
                         protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
-
                             FlappyService.getInstance().isLoading = false;
-                            //失败
                             if (callback != null) {
                                 callback.failure(new Exception(model.getMsg()),
                                         Integer.parseInt(model.getCode()));
@@ -316,42 +357,9 @@ public class FlappyImService {
                         @Override
                         protected void jsonError(Exception e, String tag) {
                             FlappyService.getInstance().isLoading = false;
-                            //解析失败
                             if (callback != null) {
                                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
                             }
-                        }
-
-                        @Override
-                        public void stateTrue(ResponseLogin response, String tag) {
-                            //生成一个时间戳，用户保证多次重复请求的情况
-                            long uuid = System.currentTimeMillis();
-                            //转换
-                            String str = Long.toString(uuid);
-                            //保存设置
-                            DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
-                            //添加登录回调
-                            HolderLoginCallback.getInstance().addLoginCallBack(str, new FlappyIMCallback<ResponseLogin>() {
-                                @Override
-                                public void success(ResponseLogin data) {
-                                    if (callback != null) {
-                                        callback.success(data);
-                                    }
-                                    FlappyService.getInstance().isLoading = false;
-                                }
-
-                                @Override
-                                public void failure(Exception ex, int code) {
-                                    if (callback != null) {
-                                        callback.failure(ex, code);
-                                    }
-                                    FlappyService.getInstance().isLoading = false;
-                                }
-                            });
-                            //重置
-                            NettyThreadDead.reset();
-                            //开启服务
-                            FlappyService.getInstance().startService(str, response);
                         }
 
                         @Override
@@ -360,6 +368,36 @@ public class FlappyImService {
                             if (callback != null) {
                                 callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
                             }
+                        }
+
+                        @Override
+                        public void stateTrue(ResponseLogin response, String tag) {
+                            //转换
+                            String loginReqUDID = Long.toString(System.currentTimeMillis());
+                            //保存设置
+                            DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+                            //添加登录回调
+                            HolderLoginCallback.getInstance().addLoginCallBack(loginReqUDID, new FlappyIMCallback<ResponseLogin>() {
+                                @Override
+                                public void success(ResponseLogin data) {
+                                    FlappyService.getInstance().isLoading = false;
+                                    if (callback != null) {
+                                        callback.success(data);
+                                    }
+                                }
+
+                                @Override
+                                public void failure(Exception ex, int code) {
+                                    FlappyService.getInstance().isLoading = false;
+                                    if (callback != null) {
+                                        callback.failure(ex, code);
+                                    }
+                                }
+                            });
+                            //重置
+                            NettyThreadDead.reset();
+                            //开启服务
+                            FlappyService.getInstance().startService(loginReqUDID, response);
                         }
                     }, null);
         }
@@ -371,24 +409,30 @@ public class FlappyImService {
         //用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null) {
-                callback.failure(new Exception("当前用户未登录"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(
+                        new Exception("当前用户未登录"),
+                        Integer.parseInt(RESULT_NOT_LOGIN)
+                );
             }
             return;
         }
         //判断是否为空
         if (StringTool.isEmpty(peerUser)) {
             if (callback != null) {
-                callback.failure(new Exception("账户ID不能为空"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(
+                        new Exception("账户ID不能为空"),
+                        Integer.parseInt(RESULT_NOT_LOGIN)
+                );
             }
             return;
         }
         //创建extend id
         if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
             if (callback != null) {
-                callback.failure(new Exception("创建session账户不能是当前账户"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(
+                        new Exception("创建session账户不能是当前账户"),
+                        Integer.parseInt(RESULT_NOT_LOGIN)
+                );
             }
             return;
         }
@@ -399,8 +443,197 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userTwo", peerUser);
         //调用
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createSingleSession, hashMap,
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createSingleSession,
+                hashMap,
                 new BaseParseCallback<SessionData>(SessionData.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
+                        //失败
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        //解析失败
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(SessionData data, String tag) {
+                        FlappyChatSession session = new FlappyChatSession();
+                        session.setSession(data);
+                        if (callback != null) {
+                            callback.success(session);
+                        }
+                    }
+
+                }, null);
+    }
+
+
+    //获取单聊会话
+    public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
+        //用户未登录
+        if (DataManager.getInstance().getLoginUser() == null) {
+            if (callback != null) {
+                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
+            return;
+        }
+        //判断是否为空
+        if (StringTool.isEmpty(peerUser)) {
+            if (callback != null) {
+                callback.failure(new Exception("账户ID不能为空"), Integer.parseInt(RESULT_FAILURE));
+            }
+            return;
+        }
+        //创建extend id
+        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
+            if (callback != null) {
+                callback.failure(new Exception("获取的session不能是自己"), Integer.parseInt(RESULT_FAILURE));
+            }
+            return;
+        }
+
+        FlappyChatSession chatSession = new FlappyChatSession();
+        //ID
+        String extendID = getTwoUserString(peerUser, DataManager.getInstance().getLoginUser().getUserExtendId());
+        //数据库
+        Database database = new Database();
+        //获取数据
+        SessionData data = database.getUserSessionByExtendID(extendID);
+        //关闭
+        database.close();
+        //返回session
+        if (data != null) {
+            chatSession.setSession(data);
+            callback.success(chatSession);
+        } else {
+            //从网络获取数据
+            getSingleSessionHttp(peerUser, callback);
+        }
+    }
+
+
+    //获取单聊会话
+    public void getSingleSessionHttp(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
+        //用户未登录
+        if (DataManager.getInstance().getLoginUser() == null) {
+            if (callback != null) {
+                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
+            return;
+        }
+        //判断是否为空
+        if (StringTool.isEmpty(userTwo)) {
+            if (callback != null) {
+                callback.failure(new Exception("账户ID不能为空"), Integer.parseInt(RESULT_FAILURE));
+            }
+            return;
+        }
+        //创建extend id
+        if (userTwo.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
+            if (callback != null) {
+                callback.failure(new Exception("创建session账户不能是当前账户"), Integer.parseInt(RESULT_FAILURE));
+            }
+            return;
+        }
+
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        //用户ID
+        hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
+        //外部用户ID
+        hashMap.put("userTwo", userTwo);
+        //调用
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getSingleSession,
+                hashMap,
+                new BaseParseCallback<SessionData>(SessionData.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
+                        //失败
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        //解析失败
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(SessionData data, String tag) {
+                        //会话
+                        FlappyChatSession session = new FlappyChatSession();
+                        //设置名称
+                        session.setSession(data);
+                        //执行回调
+                        if (callback != null) {
+                            callback.success(session);
+                        }
+                    }
+
+                }, null);
+    }
+
+
+    //创建群组会话
+    public void createGroupSession(List<String> users,
+                                   String groupID,
+                                   String groupName,
+                                   final FlappyIMCallback<FlappyChatSession> callback) {
+        //用户未登录
+        if (DataManager.getInstance().getLoginUser() == null) {
+            if (callback != null) {
+                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
+            return;
+        }
+        //用户未登录
+        if (users == null || users.size() == 0) {
+            if (callback != null) {
+                callback.failure(new Exception("用户ID列表为空"), Integer.parseInt(RESULT_FAILURE));
+            }
+            return;
+        }
+
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        //用户ID
+        hashMap.put("users", GsonTool.jsonArrayListStr(users));
+        //外部用户ID
+        hashMap.put("createUser", DataManager.getInstance().getLoginUser().getUserId());
+        //外部的群组ID
+        hashMap.put("extendID", groupID);
+        //外部会话的名称
+        hashMap.put("sessionName", groupName);
+        //调用
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createGroupSession,
+                hashMap,
+                new BaseParseCallback<SessionData>(SessionData.class) {
+
                     @Override
                     protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
                         //失败
@@ -436,202 +669,6 @@ public class FlappyImService {
     }
 
 
-    //获取两个用户的关联ID
-    private static String getTwoUserString(String userOne, String userTwo) {
-        List<String> strList = new ArrayList<>();
-        strList.add(userOne);
-        strList.add(userTwo);
-        Collections.sort(strList);
-        return strList.get(0) + "-" + strList.get(1);
-    }
-
-
-    //获取单聊会话
-    public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
-        //用户未登录
-        if (DataManager.getInstance().getLoginUser() == null) {
-            if (callback != null) {
-                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
-            }
-            return;
-        }
-        //判断是否为空
-        if (StringTool.isEmpty(peerUser)) {
-            if (callback != null) {
-                callback.failure(new Exception("账户ID不能为空"), Integer.parseInt(RESULT_NOT_LOGIN));
-            }
-            return;
-        }
-        //创建extend id
-        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
-            if (callback != null) {
-                callback.failure(new Exception("获取的session不能是自己"), Integer.parseInt(RESULT_NOT_LOGIN));
-            }
-            return;
-        }
-
-        FlappyChatSession chatSession = new FlappyChatSession();
-        //用户
-        List<String> user = new ArrayList<>();
-        //用户
-        user.add(peerUser);
-        //添加
-        user.add(DataManager.getInstance().getLoginUser().getUserExtendId());
-        //排序
-        Collections.sort(user);
-        //ID
-        String extendID = user.get(0) + "-" + user.get(1);
-        //数据库
-        Database database = new Database();
-        //获取数据
-        SessionData data = database.getUserSessionByExtendID(extendID);
-        //关闭
-        database.close();
-        //返回session
-        if (data != null) {
-            chatSession.setSession(data);
-            callback.success(chatSession);
-        } else {
-            //从网络获取数据
-            getSingleSessionHttp(peerUser, callback);
-        }
-    }
-
-
-    //获取单聊会话
-    public void getSingleSessionHttp(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
-        //用户未登录
-        if (DataManager.getInstance().getLoginUser() == null) {
-            if (callback != null) {
-                callback.failure(new Exception("当前用户未登录"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
-            }
-            return;
-        }
-        //判断是否为空
-        if (StringTool.isEmpty(userTwo)) {
-            if (callback != null) {
-                callback.failure(new Exception("账户ID不能为空"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
-            }
-            return;
-        }
-        //创建extend id
-        if (userTwo.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
-            if (callback != null) {
-                callback.failure(new Exception("创建session账户不能是当前账户"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
-            }
-            return;
-        }
-
-        //创建这个HashMap
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        //用户ID
-        hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
-        //外部用户ID
-        hashMap.put("userTwo", userTwo);
-        //调用
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getSingleSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
-            @Override
-            protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
-                //失败
-                if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                }
-            }
-
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                //解析失败
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                }
-            }
-
-            @Override
-            public void stateTrue(SessionData data, String tag) {
-                //会话
-                FlappyChatSession session = new FlappyChatSession();
-                //设置名称
-                session.setSession(data);
-                //执行回调
-                if (callback != null) {
-                    callback.success(session);
-                }
-            }
-
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                }
-            }
-        }, null);
-    }
-
-
-    //创建群组会话
-    public void createGroupSession(List<String> users,
-                                   String groupID,
-                                   String groupName,
-                                   final FlappyIMCallback<FlappyChatSession> callback) {
-
-        if (DataManager.getInstance().getLoginUser() == null) {
-            if (callback != null)
-                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
-            return;
-        }
-
-        //创建这个HashMap
-        HashMap<String, Object> hashMap = new HashMap<>();
-        //用户ID
-        hashMap.put("users", GsonTool.jsonArrayListStr(users));
-        //外部用户ID
-        hashMap.put("createUser", DataManager.getInstance().getLoginUser().getUserId());
-        //外部的群组ID
-        hashMap.put("extendID", groupID);
-        //外部会话的名称
-        hashMap.put("sessionName", groupName);
-
-        //调用
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createGroupSession, hashMap, new BaseParseCallback<SessionData>(SessionData.class) {
-
-            @Override
-            protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
-                //失败
-                if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                }
-            }
-
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                //解析失败
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                }
-            }
-
-            @Override
-            public void stateTrue(SessionData data, String tag) {
-                FlappyChatSession session = new FlappyChatSession();
-                session.setSession(data);
-                if (callback != null) {
-                    callback.success(session);
-                }
-            }
-
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                }
-            }
-        }, null);
-    }
-
-
     //获取群组的会话
     public void getSessionByExtendID(String extendID,
                                      final FlappyIMCallback<FlappyChatSession> callback) {
@@ -659,9 +696,11 @@ public class FlappyImService {
     //获取群组的会话
     public void getSessionByExtendIDHttp(String extendID,
                                          final FlappyIMCallback<FlappyChatSession> callback) {
+        //用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
-            if (callback != null)
+            if (callback != null) {
                 callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
             return;
         }
         //创建这个HashMap
@@ -735,10 +774,10 @@ public class FlappyImService {
     //通过用户ID获取session
     public void getUserSessionsHttp(final FlappyIMCallback<List<FlappyChatSession>> callback) {
 
+        //当前用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null) {
-                callback.failure(new Exception("当前用户未登录"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
             }
             return;
         }
@@ -747,49 +786,52 @@ public class FlappyImService {
         //用户ID
         hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
         //调用
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getUserSessions, hashMap, new BaseListParseCallBack<SessionData>(SessionData.class) {
-
-            @Override
-            public void stateFalse(String message, String tag) {
-                //失败
-                if (callback != null) {
-                    callback.failure(new Exception(message), Integer.parseInt(tag));
-                }
-            }
-
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                //解析失败
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                }
-            }
-
-            @Override
-            public void stateTrue(List<SessionData> data, String tag) {
-                if (callback != null) {
-                    List<FlappyChatSession> sessions = new ArrayList<>();
-                    for (int s = 0; s < data.size(); s++) {
-                        FlappyChatSession chatSession = new FlappyChatSession();
-                        chatSession.setSession(data.get(s));
-                        sessions.add(chatSession);
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getUserSessions,
+                hashMap,
+                new BaseListParseCallBack<SessionData>(SessionData.class) {
+                    @Override
+                    public void stateFalse(String message, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(message), Integer.parseInt(tag));
+                        }
                     }
-                    callback.success(sessions);
-                }
-            }
 
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                }
-            }
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
 
-            @Override
-            protected void signError(Exception e, String tag) {
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
 
-            }
-        }, null);
+                    @Override
+                    protected void signError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(List<SessionData> data, String tag) {
+                        if (callback != null) {
+                            List<FlappyChatSession> sessions = new ArrayList<>();
+                            for (int s = 0; s < data.size(); s++) {
+                                FlappyChatSession chatSession = new FlappyChatSession();
+                                chatSession.setSession(data.get(s));
+                                sessions.add(chatSession);
+                            }
+                            callback.success(sessions);
+                        }
+                    }
+
+
+                }, null);
     }
 
 
@@ -799,9 +841,11 @@ public class FlappyImService {
             String groupID,
             final FlappyIMCallback<String> callback) {
 
+        //用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
-            if (callback != null)
+            if (callback != null) {
                 callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
             return;
         }
 
@@ -812,37 +856,40 @@ public class FlappyImService {
         //群组的ID
         hashMap.put("extendID", groupID);
         //调用
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().addUserToSession, hashMap, new BaseParseCallback<String>(String.class) {
-            @Override
-            protected void stateFalse(BaseApiModel<String> model, String tag) {
-                //失败
-                if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                }
-            }
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().addUserToSession,
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        //失败
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
 
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                //解析失败
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                }
-            }
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        //解析失败
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
 
-            @Override
-            public void stateTrue(String data, String tag) {
-                if (callback != null) {
-                    callback.success(data);
-                }
-            }
 
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                }
-            }
-        }, null);
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(String data, String tag) {
+                        if (callback != null) {
+                            callback.success(data);
+                        }
+                    }
+                }, null);
     }
 
 
@@ -854,8 +901,7 @@ public class FlappyImService {
 
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null) {
-                callback.failure(new Exception("当前用户未登录"),
-                        Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
             }
             return;
         }
@@ -867,42 +913,44 @@ public class FlappyImService {
         //群组的ID
         hashMap.put("extendID", groupID);
         //调用
-        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().delUserInSession, hashMap, new BaseParseCallback<String>(String.class) {
-            @Override
-            protected void stateFalse(BaseApiModel<String> model, String tag) {
-                //失败
-                if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                }
-            }
+        LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().delUserInSession,
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
 
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                //解析失败
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                }
-            }
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
 
-            @Override
-            public void stateTrue(String data, String tag) {
-                if (callback != null) {
-                    callback.success(data);
-                }
-            }
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
 
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                }
-            }
-        }, null);
+                    @Override
+                    public void stateTrue(String data, String tag) {
+                        if (callback != null) {
+                            callback.success(data);
+                        }
+                    }
+
+                }, null);
     }
 
 
     //注销当前的登录
     public void logout(final FlappyIMCallback<String> callback) {
+        //用户未登录
         if (DataManager.getInstance().getLoginUser() == null) {
             if (callback != null) {
                 callback.failure(new Exception("当前用户未登录"), Integer.parseInt(RESULT_NOT_LOGIN));
@@ -911,7 +959,6 @@ public class FlappyImService {
         }
         //先关闭当前的长连接
         if (FlappyService.getInstance() != null) {
-            //关闭长连接下线
             FlappyService.getInstance().offline();
         }
         //创建这个HashMap
@@ -999,13 +1046,11 @@ public class FlappyImService {
 
     //判断当前是否是登录的状态
     public boolean isLogin() {
-        //存在账号
         ChatUser user = DataManager.getInstance().getLoginUser();
-        //为空或者被踢下线
         return user != null && user.isLogin() != 0;
     }
 
-    //当前是否在线
+    //判断当前是否是在线的状态
     public boolean isOnline() {
         if (FlappyService.getInstance() != null) {
             return FlappyService.getInstance().isOnline();

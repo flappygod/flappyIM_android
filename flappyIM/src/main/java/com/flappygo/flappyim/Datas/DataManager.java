@@ -1,12 +1,13 @@
 package com.flappygo.flappyim.Datas;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.FlappyImService;
-import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Session.FlappyChatSession;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.FlappyImService;
+
+import android.content.SharedPreferences;
+import android.content.Context;
 
 public class DataManager {
 
@@ -20,28 +21,26 @@ public class DataManager {
         return InstanceHolder.instance;
     }
 
-
     // 首选项名称
-    private final static String PREFERENCENAME = "com.flappygo.flappyim.data";
+    private final static String PREFERENCE_NAME = "com.flappygo.flappyim.data";
 
     // 用户信息保存
     private final static String KEY_FOR_USER = "com.flappygo.flappyim.data.KEY_FOR_USER";
 
     // 推送方式的保存
-    private final static String KEY_FOR_PUSHTYPE = "com.flappygo.flappyim.data.KEY_FOR_PUSHTYPE";
+    private final static String KEY_FOR_PUSH_TYPE = "com.flappygo.flappyim.data.KEY_FOR_PUSHTYPE";
 
     // 消息被点击
-    private final static String KEY_FOR_MESSAGECLICK = "com.flappygo.flappyim.data.KEY_FOR_MESSAGECLICK";
+    private final static String KEY_FOR_MESSAGE_CLICK = "com.flappygo.flappyim.data.KEY_FOR_MESSAGECLICK";
 
     //进行缓存
     private ChatUser chatUser;
-
 
     //保存用户信息
     public boolean saveLoginUser(ChatUser user) {
         chatUser = user;
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -58,7 +57,7 @@ public class DataManager {
         }
         //获取首选项
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         //获取到设置信息
@@ -79,7 +78,7 @@ public class DataManager {
     public boolean clearLoginUser() {
         chatUser = null;
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -91,28 +90,28 @@ public class DataManager {
     //保存用户的推送类型
     public boolean savePushType(String pushType) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_FOR_PUSHTYPE, pushType);
+        editor.putString(KEY_FOR_PUSH_TYPE, pushType);
         return editor.commit();
     }
 
     //获取用户的推送类型
     public String getPushType() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         //获取到设置信息
-        return mSharedPreferences.getString(KEY_FOR_PUSHTYPE, "0");
+        return mSharedPreferences.getString(KEY_FOR_PUSH_TYPE, "0");
     }
 
     //保存会话
     public boolean saveChatSession(String key, FlappyChatSession chatSession) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -123,7 +122,7 @@ public class DataManager {
     //获取会话
     public FlappyChatSession getChatSession(String key) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         //获取到设置信息
@@ -136,34 +135,33 @@ public class DataManager {
     //保存消息被点击事件
     public boolean saveNotificationClick(String message) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_FOR_MESSAGECLICK, message);
+        editor.putString(KEY_FOR_MESSAGE_CLICK, message);
         return editor.commit();
     }
 
     //获取消息被点击事件
     public String getNotificationClick() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         //返回本地的会话数据
-        return mSharedPreferences.getString(KEY_FOR_MESSAGECLICK, null);
+        return mSharedPreferences.getString(KEY_FOR_MESSAGE_CLICK, null);
     }
 
     //移除消息被点击事件
     public boolean removeNotificationClick() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
+                PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(KEY_FOR_MESSAGECLICK);
+        editor.remove(KEY_FOR_MESSAGE_CLICK);
         return editor.commit();
     }
-
 
 }

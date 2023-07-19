@@ -1,14 +1,7 @@
 package com.flappygo.flappyim.Service;
 
-import android.content.BroadcastReceiver;
-import android.net.ConnectivityManager;
-import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
 
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
@@ -28,13 +21,34 @@ import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.NetTool;
 
-import java.util.HashMap;
+import android.content.BroadcastReceiver;
+import android.net.ConnectivityManager;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Message;
+import android.os.Handler;
+import android.os.Looper;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
+import java.util.HashMap;
 
 
 //应用的服务
-public class FlappyService extends Object {
+public class FlappyService {
+
+    //当前的服务实例
+    private static final class InstanceHolder {
+        static final FlappyService instance = new FlappyService();
+    }
+
+    //获取当前开启的服务
+    public static FlappyService getInstance() {
+        return InstanceHolder.instance;
+    }
+
+    //上下文
+    private Context mContext;
 
     //自动HTTP登录
     private static final int AUTO_LOGIN_HTTP = 1;
@@ -54,47 +68,49 @@ public class FlappyService extends Object {
     //当前正在登录
     public boolean isLoading = false;
 
-    //上下文
-    private Context mContext;
-
     //当前服务是否注册
     private boolean receiverRegistered = false;
 
-
-    //上下文
-    public FlappyService() {
-    }
-
     //赋值上下文
     public void init(Context context) {
-        this.mContext = context;
+        mContext = context;
     }
 
-    //开启服务
-    public boolean startService() {
-        //初始化接收器
-        InstanceHolder.instance.initReceiver();
-        //开始服务
-        InstanceHolder.instance.startServer();
-        //开启成功
-        return true;
+    /******
+     * 判断当前是否连接
+     */
+    BroadcastReceiver netReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                checkAutoLoginHttp(100);
+            }
+        }
+    };
+
+    /******
+     * 注册网络监听的广播
+     */
+    private void initReceiver() {
+        synchronized (this) {
+            if (!receiverRegistered) {
+                IntentFilter timeFilter = new IntentFilter();
+                timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
+                timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
+                timeFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+                timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+                timeFilter.addAction("android.net.wifi.STATE_CHANGE");
+                timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+                mContext.registerReceiver(netReceiver, timeFilter);
+                receiverRegistered = true;
+            }
+        }
     }
 
-    //开启服务
-    public boolean startService(String uuid, ResponseLogin response) {
-        //初始化接收器
-        InstanceHolder.instance.initReceiver();
-        //开始服务
-        InstanceHolder.instance.startServer(uuid, response);
-        //开启成功
-        return true;
-    }
-
-    //销毁
-    public void stopService() {
-        //下线
-        offline();
-        //释放
+    /******
+     * 移除接收器
+     */
+    private void removeReceiver() {
         synchronized (this) {
             if (receiverRegistered) {
                 mContext.unregisterReceiver(netReceiver);
@@ -103,24 +119,52 @@ public class FlappyService extends Object {
         }
     }
 
-    private static final class InstanceHolder {
-        //当前的服务实例
-        static final FlappyService instance = new FlappyService();
+    /******
+     * 开启服务,如果用户已经登录的情况下自动登录
+     */
+    public void startService() {
+        //初始化接收器
+        InstanceHolder.instance.initReceiver();
+        //开始服务
+        InstanceHolder.instance.startServer(null, null);
     }
 
-    //获取当前开启的服务
-    public static FlappyService getInstance() {
-        return InstanceHolder.instance;
+
+    /******
+     * 开启服务,并完成用户登录
+     */
+    public void startService(String uuid, ResponseLogin response) {
+        //初始化接收器
+        InstanceHolder.instance.initReceiver();
+        //开始服务
+        InstanceHolder.instance.startServer(uuid, response);
     }
 
-    //获取当前服务的线程
+    /******
+     * 关闭服务并下线
+     */
+    public void stopService() {
+        //移除网络监听器
+        InstanceHolder.instance.removeReceiver();
+        //下线
+        InstanceHolder.instance.offline();
+    }
+
+
+    /******
+     * 获取当前服务的线程
+     * @return 服务线程
+     */
     public NettyThread getClientThread() {
         synchronized (this) {
             return clientThread;
         }
     }
 
-    //当前是否在线
+    /******
+     * 获取当前是否是在线状态
+     * @return 服务线程
+     */
     public boolean isOnline() {
         NettyThread thread = getClientThread();
         return thread != null && thread.isConnected();
@@ -155,7 +199,6 @@ public class FlappyService extends Object {
 
     //通知被点击
     public void notifyClicked() {
-        //消息
         String str = DataManager.getInstance().getNotificationClick();
         if (notificationClickListener != null && str != null) {
             ChatMessage message = GsonTool.jsonObjectToModel(str, ChatMessage.class);
@@ -178,12 +221,6 @@ public class FlappyService extends Object {
             //发现不存在就自动登录
             checkAutoLoginHttp(100);
         }
-    }
-
-    //开启服务
-    private void startServer() {
-        //开启自动登录
-        checkAutoLoginHttp(100);
     }
 
     //检查是否需要重新登录
@@ -221,23 +258,21 @@ public class FlappyService extends Object {
     }
 
     //用于检测
-    private Handler handler = new Handler(Looper.getMainLooper()) {
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
             //如果当前的网络是连接上了的
             if (NetTool.isConnected(mContext)) {
-                synchronized (FlappyService.getInstance()) {
-                    //自动登录
-                    if (msg.what == AUTO_LOGIN_HTTP) {
-                        if (!FlappyService.getInstance().isLoading) {
-                            autoLogin();
-                        }
+                //http重连
+                if (msg.what == AUTO_LOGIN_HTTP) {
+                    if (!FlappyService.getInstance().isLoading) {
+                        autoLogin();
                     }
-                    //自动登录
-                    else if (msg.what == AUTO_LOGIN_NETTY) {
-                        if (!FlappyService.getInstance().isLoading) {
-                            ResponseLogin responseLogin = (ResponseLogin) msg.obj;
-                            startConnect(Long.toString(System.currentTimeMillis()), responseLogin);
-                        }
+                }
+                //netty重连
+                else if (msg.what == AUTO_LOGIN_NETTY) {
+                    if (!FlappyService.getInstance().isLoading) {
+                        ResponseLogin responseLogin = (ResponseLogin) msg.obj;
+                        startConnect(Long.toString(System.currentTimeMillis()), responseLogin);
                     }
                 }
             }
@@ -260,6 +295,7 @@ public class FlappyService extends Object {
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
                 hashMap,
                 new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                    //出现异常
                     @Override
                     protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
                         //当前的用户已经被踢下线了
@@ -272,7 +308,6 @@ public class FlappyService extends Object {
                             DataManager.getInstance().saveLoginUser(user);
                             //当前已经被踢下线了
                             if (knickedOutListener != null) {
-                                //只执行一次
                                 knickedOutListener.kickedOut();
                             }
                         } else {
@@ -281,117 +316,94 @@ public class FlappyService extends Object {
                         }
                     }
 
+                    //自动登录
                     @Override
                     protected void jsonError(Exception e, String tag) {
-                        //自动登录
                         checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                     }
 
+                    //测试并自动登录
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                    }
+
+                    //重置
                     @Override
                     public void stateTrue(ResponseLogin response, String tag) {
-                        //重置
                         NettyThreadDead.reset();
                         //保存推送设置
                         DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
                         //自动登录成功，我们拿到了相应的数据
-                        startConnect(Long.toString(System.currentTimeMillis()), response);
+                        if (!FlappyService.getInstance().isLoading) {
+                            startConnect(Long.toString(System.currentTimeMillis()), response);
+                        }
                     }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        //测试并自动登录
-                        checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                    }
-
                 }, null);
     }
 
-    //判断当前是否连接
-    BroadcastReceiver netReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                //检查是否需要重新登录
-                checkAutoLoginHttp(100);
-            }
-        }
-    };
-
-    /**
-     * 注册网络监听的广播
-     */
-    private void initReceiver() {
-        //新增
-        synchronized (this) {
-            if (!receiverRegistered) {
-                IntentFilter timeFilter = new IntentFilter();
-                timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
-                timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
-                timeFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-                timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-                timeFilter.addAction("android.net.wifi.STATE_CHANGE");
-                timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-                mContext.registerReceiver(netReceiver, timeFilter);
-                receiverRegistered = true;
-            }
-        }
-    }
 
     //根据当前的信息重新连接
     private void startConnect(String uuid, final ResponseLogin loginResponse) {
 
-        //之前的先下线
-        offline();
+        synchronized (this) {
 
-        //装饰登录
-        HandlerLoginCallback loginCallback = new HandlerLoginCallback(
-                HolderLoginCallback.getInstance().getLoginCallBack(uuid),
-                loginResponse);
-
-        //死亡消息
-        NettyThreadDead nettyThreadDead = new NettyThreadDead() {
-            @Override
-            public void threadDeadRetryHttp() {
-                //再开始
-                checkAutoLoginHttp(100);
+            //之前的先下线
+            if (clientThread != null) {
+                clientThread.offline();
+                clientThread = null;
             }
 
-            @Override
-            protected void threadDeadRetryNetty() {
-                //先开始netty重连
-                checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, loginResponse);
-            }
-        };
+            //装饰登录
+            HandlerLoginCallback loginCallback = new HandlerLoginCallback(
+                    HolderLoginCallback.getInstance().getLoginCallBack(uuid),
+                    loginResponse
+            );
+
+            //死亡消息
+            NettyThreadDead nettyThreadDead = new NettyThreadDead() {
+                @Override
+                public void threadDeadRetryHttp() {
+                    //断线重连，使用http的方式，也许服务器的ip已经发生了变化
+                    checkAutoLoginHttp(100);
+                }
+
+                @Override
+                protected void threadDeadRetryNetty() {
+                    //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
+                    checkAutoLoginNetty(
+                            FlappyConfig.getInstance().autoLoginSpace,
+                            loginResponse
+                    );
+                }
+            };
 
 
+            //创建新的线程
+            clientThread = new NettyThread(
+                    //获取用户
+                    loginResponse.getUser(),
+                    //服务端的IP
+                    loginResponse.getServerIP(),
+                    //端口
+                    StringTool.strToInt(loginResponse.getServerPort(), 11211),
+                    //登录回调
+                    loginCallback,
+                    //回调
+                    nettyThreadDead
+            );
 
-        //创建新的线程
-        clientThread = new NettyThread(
-                //获取用户
-                loginResponse.getUser(),
-                //服务端的IP
-                loginResponse.getServerIP(),
-                //端口
-                StringTool.strToInt(loginResponse.getServerPort(),11211),
-                //登录回调
-                loginCallback,
-                //回调
-                nettyThreadDead);
-
-        //开始这个线程
-        clientThread.start();
+            //开始这个线程
+            clientThread.start();
+        }
     }
 
 
     //下线了
     public void offline() {
         synchronized (this) {
-            //假如之前存在连接
             if (clientThread != null) {
-                //之前的账号下线
                 clientThread.offline();
-                //清空
                 clientThread = null;
             }
         }

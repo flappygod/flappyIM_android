@@ -7,7 +7,7 @@ import com.flappygo.flappyim.Config.FlappyConfig;
 public abstract class NettyThreadDead implements FlappyDeadCallback {
 
     //只执行一次
-    private boolean onece = false;
+    private boolean once = false;
 
     //是否开启
     private boolean enable = true;
@@ -17,15 +17,14 @@ public abstract class NettyThreadDead implements FlappyDeadCallback {
 
     //创建
     public static void reset() {
-        //重试的次数
         retryCount = FlappyConfig.getInstance().autoRetryNetty;
     }
 
     @Override
     public void dead() {
         synchronized (this) {
-            if (enable == true && onece == false) {
-                onece = true;
+            if (enable && !once) {
+                once = true;
                 if (retryCount > 0) {
                     retryCount--;
                     System.out.println("NETTY重连");

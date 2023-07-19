@@ -12,7 +12,7 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
  */
 public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
 
-    //class
+    ///class
     private Class<T> entityClass;
 
 
@@ -72,7 +72,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
     /***************
      * 请求成功
      *
-     * @param data 请求成功后的stringdata
+     * @param data 请求成功后的string data
      * @param tag  线程tag
      */
     public void success(String data, String tag) {
