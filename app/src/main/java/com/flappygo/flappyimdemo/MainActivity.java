@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.FlappyImService;
-import com.flappygo.flappyim.Listener.KnickedOutListener;
+import com.flappygo.flappyim.Listener.KickedOutListener;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Listener.SessionListener;
@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        FlappyImService.getInstance().setKickedOutListener(new KnickedOutListener() {
+        FlappyImService.getInstance().setKickedOutListener(new KickedOutListener() {
             @Override
             public void kickedOut() {
 

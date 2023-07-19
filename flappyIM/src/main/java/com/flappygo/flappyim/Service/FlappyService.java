@@ -8,7 +8,7 @@ import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Handler.HandlerLoginCallback;
-import com.flappygo.flappyim.Listener.KnickedOutListener;
+import com.flappygo.flappyim.Listener.KickedOutListener;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
@@ -60,7 +60,7 @@ public class FlappyService {
     private NettyThread clientThread;
 
     //被踢下线的监听
-    private KnickedOutListener knickedOutListener;
+    private KickedOutListener knickedOutListener;
 
     //监听
     private NotificationClickListener notificationClickListener;
@@ -172,7 +172,7 @@ public class FlappyService {
 
 
     //设置踢下线的监听
-    public void setKickedOutListener(KnickedOutListener listener) {
+    public void setKickedOutListener(KickedOutListener listener) {
         //监听
         knickedOutListener = listener;
         //获取用户数据

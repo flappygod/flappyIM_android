@@ -7,7 +7,7 @@ import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
-import com.flappygo.flappyim.Listener.KnickedOutListener;
+import com.flappygo.flappyim.Listener.KickedOutListener;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
@@ -1029,7 +1029,7 @@ public class FlappyImService {
     }
 
     //设置被踢下线的监听
-    public void setKickedOutListener(KnickedOutListener listener) {
+    public void setKickedOutListener(KickedOutListener listener) {
         if (FlappyService.getInstance() != null) {
             FlappyService.getInstance().setKickedOutListener(listener);
         }
