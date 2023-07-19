@@ -1,29 +1,26 @@
 package com.flappygo.flappyim.Holder;
 
-import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Callback.FlappyIMCallback;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+//Holder login call back
 public class HolderLoginCallback {
+
+    //单例模式
+    private static final class InstanceHolder {
+        static final HolderLoginCallback instance = new HolderLoginCallback();
+    }
+
+    //单例manager
+    public static HolderLoginCallback getInstance() {
+        return InstanceHolder.instance;
+    }
 
     //登录的回调
     private final ConcurrentHashMap<String, FlappyIMCallback<ResponseLogin>> loginCallbacks = new ConcurrentHashMap<>();
 
-    //单例模式
-    private static HolderLoginCallback instance;
-
-    //单例manager
-    public static HolderLoginCallback getInstance() {
-        if (instance == null) {
-            synchronized (HolderLoginCallback.class) {
-                if (instance == null) {
-                    instance = new HolderLoginCallback();
-                }
-            }
-        }
-        return instance;
-    }
 
     //登录成功的回调
     public void addLoginCallBack(String uuid, FlappyIMCallback<ResponseLogin> callBack) {

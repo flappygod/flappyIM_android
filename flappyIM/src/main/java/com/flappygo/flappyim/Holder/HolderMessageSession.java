@@ -11,28 +11,23 @@ import java.util.List;
 //收到消息的
 public class HolderMessageSession {
 
+    //global message tag
     public static String globalMsgTag = "HolderMessageSession";
 
-
     //接收消息的监听列表
-    private HashMap<String, List<MessageListener>> msgListeners = new HashMap<>();
+    private final HashMap<String, List<MessageListener>> msgListeners = new HashMap<>();
 
     //会话更新的监听
-    private List<SessionListener> sessionListeners = new ArrayList<>();
+    private final List<SessionListener> sessionListeners = new ArrayList<>();
 
     //单例模式
-    private static HolderMessageSession instance;
+    private static final class InstanceHolder {
+        static final HolderMessageSession instance = new HolderMessageSession();
+    }
 
     //单例manager
     public static HolderMessageSession getInstance() {
-        if (instance == null) {
-            synchronized (HolderMessageSession.class) {
-                if (instance == null) {
-                    instance = new HolderMessageSession();
-                }
-            }
-        }
-        return instance;
+        return InstanceHolder.instance;
     }
 
     //监听
