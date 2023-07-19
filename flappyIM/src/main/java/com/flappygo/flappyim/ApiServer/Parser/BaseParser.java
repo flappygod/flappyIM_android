@@ -5,9 +5,7 @@ import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 
 import org.json.JSONObject;
 
-/**
- * Created by yang on 2016/5/27.
- */
+//Base parser
 public class BaseParser<T> {
 
     //基本的解析对象
@@ -16,7 +14,6 @@ public class BaseParser<T> {
     private boolean parseSuccess;
     //解析错误时候的报错代码
     private Exception exception;
-
 
     public BaseParser(String dataStr, Class<T> cls) {
         try {
@@ -44,51 +41,44 @@ public class BaseParser<T> {
             }
             //假如是对象
             else {
-                //解析基本数据
-                T t = GsonTool.jsonObjectToModel(strData, cls);
-                baseApiModel.setData(t);
+                baseApiModel.setData(GsonTool.jsonObjectToModel(strData, cls));
             }
             //解析成功
             parseSuccess = true;
-
-        } catch (Exception e) {
-            exception = e;
+        } catch (Exception ex) {
+            //解析失败
+            parseSuccess = false;
+            //解析失败
+            exception = ex;
         }
     }
 
-    /*********
-     * 判断是否解析成功
-     * @return
-     */
+    //判断是否解析成功
     public boolean isParseSuccess() {
         return parseSuccess;
     }
 
+    //设置解析成功
     public void setParseSuccess(boolean parseSuccess) {
         this.parseSuccess = parseSuccess;
     }
 
+    //获取Exception
     public Exception getException() {
         return exception;
     }
 
+    //设置Exception
     public void setException(Exception exception) {
         this.exception = exception;
     }
 
-    /*********
-     * 获取解析后的参数
-     *
-     * @return
-     */
+    //获取解析后的参数
     public BaseApiModel<T> getBaseApiModel() {
         return baseApiModel;
     }
 
-    /**********
-     * 设置解析model
-     * @param baseApiModel
-     */
+    //设置解析model
     public void setBaseApiModel(BaseApiModel<T> baseApiModel) {
         this.baseApiModel = baseApiModel;
     }

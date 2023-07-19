@@ -38,7 +38,7 @@ public class BaseListParser<T> {
             //创建
             JSONObject jb = new JSONObject(dataStr);
             //获取到Array数据
-            String strData = StringTool.ToNotNullStrWithDefault(jb.optString("data"),"[]") ;
+            String strData = StringTool.ToNotNullStrWithDefault(jb.optString("data"), "[]");
             //返回码
             baseApiModel.setCode(jb.optString("code"));
             //解析code
@@ -47,9 +47,8 @@ public class BaseListParser<T> {
             baseApiModel.setSign(jb.optString("sign"));
             //返回的总页码
             baseApiModel.setPageCount(jb.optInt("pageCount"));
-
+            //所有的都先默认为true
             signRight = true;
-
             //解析数组
             JSONArray data = new JSONArray(strData);
             //列表解析
@@ -61,62 +60,57 @@ public class BaseListParser<T> {
                 } else if (cls == JSONObject.class) {
                     rs.add((T) data.getJSONObject(s));
                 } else {
-                    String str=data.getJSONObject(s).toString();
-                    T t = gson.fromJson(str, cls);
-                    rs.add(t);
+                    String str = data.getJSONObject(s).toString();
+                    rs.add(gson.fromJson(str, cls));
                 }
             }
+            //解析成功
             baseApiModel.setData(rs);
             parseSuccess = true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            //解析失败
             parseSuccess = false;
-            exception = e;
+            exception = ex;
         }
     }
 
-    /*********
-     * 判断是否解析成功
-     *
-     * @return
-     */
-    public boolean isParseSuccess() {
-        return parseSuccess;
-    }
 
-    public void setParseSuccess(boolean parseSuccess) {
-        this.parseSuccess = parseSuccess;
-    }
-
-    public Exception getException() {
-        return exception;
-    }
-
-    public void setException(Exception exception) {
-        this.exception = exception;
-    }
-
-    /*********
-     * 获取解析后的参数
-     *
-     * @return
-     */
+    //获取解析后的参数
     public BaseApiModel<List<T>> getBaseApiModel() {
         return baseApiModel;
     }
 
-    /***************
-     * 设置数据model
-     *
-     * @param baseApiModel
-     */
+    //设置数据model
     public void setBaseApiModel(BaseApiModel<List<T>> baseApiModel) {
         this.baseApiModel = baseApiModel;
     }
 
+    //判断是否解析成功
+    public boolean isParseSuccess() {
+        return parseSuccess;
+    }
+
+    //设置是否解析成功
+    public void setParseSuccess(boolean parseSuccess) {
+        this.parseSuccess = parseSuccess;
+    }
+
+    //获取错误
+    public Exception getException() {
+        return exception;
+    }
+
+    //设置错误
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
+    //判断签名是否正确
     public boolean isSignRight() {
         return signRight;
     }
 
+    //判断签名是否正确
     public void setSignRight(boolean signRight) {
         this.signRight = signRight;
     }

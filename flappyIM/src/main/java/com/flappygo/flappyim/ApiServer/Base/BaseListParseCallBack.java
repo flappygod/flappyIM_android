@@ -1,23 +1,22 @@
 package com.flappygo.flappyim.ApiServer.Base;
 
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
-import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
+import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
 
 import java.util.List;
-
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
 /***************************************
  * 基础回调，返回列表类型的数据
  */
 public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String> {
-    //class
+
+    ///解析字符串的class
     private Class<T> entityClass;
 
     /*************
      * 构造器
-     *
      * @param cls class
      */
     public BaseListParseCallBack(Class<T> cls) {
@@ -27,7 +26,6 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
 
     /**************
      * 返回状态false
-     *
      * @param message 错误消息
      * @param tag     线程tag
      */
@@ -35,7 +33,6 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
 
     /****************
      * 返回数据JSon解析出错
-     *
      * @param e 错误
      * @param tag   线程tag
      */
@@ -43,7 +40,6 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
 
     /**************
      * 解析成功
-     *
      * @param t   数据
      * @param tag 线程tag
      */
@@ -59,21 +55,23 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
 
     /******************
      * 秘钥验证失败
-     *
      * @param e   错误
      * @param tag 线程tag
      */
     protected abstract void signError(Exception e, String tag);
 
 
-    //联网错误的提示
+    /*************
+     * 联网错误的提示
+     * @param error 错误
+     * @param tag   线程tag
+     */
     public void failure(Exception error, String tag) {
         netError(error, tag);
     }
 
     /********************
      * 数据获取成功
-     *
      * @param data 数据
      * @param tag  线程tag
      */
