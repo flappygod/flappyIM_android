@@ -88,7 +88,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // 创建数据库表
         db.execSQL(createTableMessage);
-        // 创建数据库表
         db.execSQL(createTableSession);
     }
 
@@ -97,11 +96,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // /用于升级数据库
         if (newVersion != oldVersion) {
             try {
+                // 创建数据库表
                 db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_MESSAGE + ";");
                 db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_SESSION + ";");
-                // 创建数据库表
                 db.execSQL(createTableMessage);
-                // 创建数据库表
                 db.execSQL(createTableSession);
                 db.setVersion(newVersion);
             } catch (Exception ex) {

@@ -86,7 +86,7 @@ public class GsonTool {
      * @param <T>       泛型
      * @return
      */
-    public static <T> List jsonArrayToModels(String jsonArray, Class<T> cls) {
+    public static <T> List<T> jsonArrayToModels(String jsonArray, Class<T> cls) {
         try {
             if (gson == null) {
                 gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
