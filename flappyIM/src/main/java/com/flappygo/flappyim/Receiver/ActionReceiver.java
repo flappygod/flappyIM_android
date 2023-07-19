@@ -1,19 +1,18 @@
 package com.flappygo.flappyim.Receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.pm.ResolveInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.flappygo.flappyim.Datas.DataManager;
+import static android.content.Intent.CATEGORY_LAUNCHER;
 import com.flappygo.flappyim.Service.FlappyService;
-
+import com.flappygo.flappyim.Datas.DataManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.Intent.CATEGORY_LAUNCHER;
 
 /**
  * 自定义接收器
