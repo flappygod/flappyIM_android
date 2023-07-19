@@ -933,7 +933,6 @@ public class FlappyImService {
                 new BaseParseCallback<String>(String.class) {
                     @Override
                     protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        //失败
                         if (callback != null) {
                             callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                         }
@@ -941,7 +940,6 @@ public class FlappyImService {
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
-                        //解析失败
                         if (callback != null) {
                             callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
                         }
@@ -949,9 +947,7 @@ public class FlappyImService {
 
                     @Override
                     public void stateTrue(String response, String tag) {
-                        //清空当期的用户数据信息
-                        DataManager.getInstance().clearUser();
-                        //退出登录成功
+                        DataManager.getInstance().clearLoginUser();
                         if (callback != null) {
                             callback.success(response);
                         }

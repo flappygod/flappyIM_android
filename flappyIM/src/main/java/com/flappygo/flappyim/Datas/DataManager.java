@@ -75,6 +75,19 @@ public class DataManager {
     }
 
 
+    //清空当前的用户信息，用户已经退出登录了
+    public boolean clearLoginUser() {
+        chatUser = null;
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCENAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(KEY_FOR_USER);
+        return editor.commit();
+    }
+
+
     //保存用户的推送类型
     public boolean savePushType(String pushType) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
@@ -143,22 +156,12 @@ public class DataManager {
 
     //移除消息被点击事件
     public boolean removeNotificationClick() {
-
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCENAME,
-                Context.MODE_PRIVATE);
+                Context.MODE_PRIVATE
+        );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(KEY_FOR_MESSAGECLICK);
-        return editor.commit();
-    }
-
-    //清空当前的用户信息，用户已经退出登录了
-    public boolean clearUser() {
-        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCENAME,
-                Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(KEY_FOR_USER);
         return editor.commit();
     }
 
