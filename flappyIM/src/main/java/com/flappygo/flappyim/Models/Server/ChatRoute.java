@@ -163,7 +163,7 @@ public class ChatRoute implements Serializable {
             builder.setDevice(getRouteDevice());
         }
         if(getRoutePushId()!=null){
-            builder.setPushid(getRoutePushId());
+            builder.setPushId(getRoutePushId());
         }
         if(getRoutePushType()!=null){
             builder.setPushType(getRoutePushType().toString());
