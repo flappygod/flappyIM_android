@@ -1,9 +1,9 @@
 package com.flappygo.flappyim.DataBase;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
 
 //数据库创建
 public class DatabaseHelper extends SQLiteOpenHelper {
