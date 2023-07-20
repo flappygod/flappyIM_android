@@ -1,6 +1,7 @@
 package com.flappygo.flappyim.Handler;
 
 import static com.flappygo.flappyim.Holder.HolderMessageSession.globalMsgTag;
+
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Listener.MessageListener;
@@ -23,6 +24,11 @@ public class HandlerMessage extends Handler {
 
     //消息的状态更新
     public static final int MSG_UPDATE = 2;
+
+    //Handle message
+    public HandlerMessage() {
+        super();
+    }
 
     //执行消息
     public void handleMessage(Message message) {
