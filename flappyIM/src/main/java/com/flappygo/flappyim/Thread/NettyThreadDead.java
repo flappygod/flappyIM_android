@@ -20,6 +20,12 @@ public abstract class NettyThreadDead implements FlappyDeadCallback {
         retryCount = FlappyConfig.getInstance().autoRetryNetty;
     }
 
+    //重试Http
+    abstract protected void threadDeadRetryHttp();
+
+    //重试netty
+    abstract protected void threadDeadRetryNetty();
+
     @Override
     public void dead() {
         synchronized (this) {
@@ -44,9 +50,4 @@ public abstract class NettyThreadDead implements FlappyDeadCallback {
         }
     }
 
-    //重试Http
-    abstract protected void threadDeadRetryHttp();
-
-    //重试netty
-    abstract protected void threadDeadRetryNetty();
 }
