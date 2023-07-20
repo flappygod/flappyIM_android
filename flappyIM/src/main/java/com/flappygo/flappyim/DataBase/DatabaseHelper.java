@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // 当前插入的用户
             "messageInsertUser" + " varchar,"
             // 消息ID
-            + " primary key (messageId)" + ")";
+            + " primary key (messageId,messageInsertUser)" + ")";
 
 
     public final String createTableSession = "CREATE TABLE " + DataBaseConfig.TABLE_SESSION + "(" +
