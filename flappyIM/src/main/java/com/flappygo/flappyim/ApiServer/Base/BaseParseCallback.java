@@ -1,11 +1,11 @@
 package com.flappygo.flappyim.ApiServer.Base;
 
 
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
+import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
 /**
  * Created by yang on 2016/5/27.
