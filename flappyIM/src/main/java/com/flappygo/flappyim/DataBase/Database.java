@@ -69,10 +69,20 @@ public class Database {
      */
     public boolean insertMessage(ChatMessage chatMessage) {
         synchronized (lock) {
+
+            //检查用户是否登录了
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser == null) {
+                return false;
+            }
+
             //检查是否有记录
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE, null,
-                    "messageId=?",
-                    new String[]{chatMessage.getMessageId()},
+                    "messageId=? and messageInsertUser=?",
+                    new String[]{
+                            chatMessage.getMessageId(),
+                            chatUser.getUserId()
+                    },
                     null,
                     null,
                     null);
@@ -128,6 +138,7 @@ public class Database {
                 if (chatMessage.getDeleteDate() != null) {
                     values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
                 }
+                values.put("messageInsertUser", chatUser.getUserId());
                 //消息的时间戳
                 values.put("messageStamp", System.currentTimeMillis());
                 //插入消息数据
@@ -239,15 +250,12 @@ public class Database {
                 return false;
             }
 
-            //当前的ID
-            String currentUserID = chatUser.getUserExtendId();
-
             //检查是否有记录
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
                     null,
                     "sessionId=? and sessionInsertUser=? ",
-                    new String[]{session.getSessionId(), currentUserID},
+                    new String[]{session.getSessionId(), chatUser.getUserId()},
                     null,
                     null,
                     null
@@ -296,7 +304,7 @@ public class Database {
                 if (session.getUsers() != null) {
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 }
-                values.put("sessionInsertUser", chatUser.getUserExtendId());
+                values.put("sessionInsertUser", chatUser.getUserId());
                 //插入数据
                 long ret = db.insert(DataBaseConfig.TABLE_SESSION, null, values);
                 if (ret > 0) {
@@ -344,13 +352,13 @@ public class Database {
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 }
                 //插入者
-                values.put("sessionInsertUser", chatUser.getUserExtendId());
+                values.put("sessionInsertUser", chatUser.getUserId());
                 //更新消息信息
                 long ret = db.update(
                         DataBaseConfig.TABLE_SESSION,
                         values,
                         "sessionId=? and sessionInsertUser=? ",
-                        new String[]{session.getSessionId(), currentUserID}
+                        new String[]{session.getSessionId(), chatUser.getUserId()}
                 );
                 //更新成功
                 if (ret > 0) {
@@ -404,7 +412,7 @@ public class Database {
                     DataBaseConfig.TABLE_SESSION,
                     null,
                     "sessionExtendId=? and sessionInsertUser=? ",
-                    new String[]{sessionExtendID, chatUser.getUserExtendId()},
+                    new String[]{sessionExtendID, chatUser.getUserId()},
                     null,
                     null,
                     null
@@ -457,7 +465,7 @@ public class Database {
                     DataBaseConfig.TABLE_SESSION,
                     null,
                     "sessionInsertUser=? ",
-                    new String[]{chatUser.getUserExtendId()},
+                    new String[]{chatUser.getUserId()},
                     null,
                     null,
                     null);
@@ -713,11 +721,8 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageType = 0 and messageReadState = 0 and ( messageReceiveId = ? or messageSendId = ? )",
-                    new String[]{
-                            chatUser.getUserId(),
-                            chatUser.getUserId()
-                    },
+                    "messageType = 0 and messageReadState = 0 and messageInsertUser = ?",
+                    new String[]{chatUser.getUserId()},
                     null,
                     null,
                     "messageTableSeq DESC"
@@ -815,11 +820,8 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageReceiveId = ? or messageSendId = ?",
-                    new String[]{
-                            chatUser.getUserId(),
-                            chatUser.getUserId()
-                    },
+                    "messageInsertUser = ?",
+                    new String[]{chatUser.getUserId()},
                     null,
                     null,
                     "messageTableSeq DESC,messageStamp DESC LIMIT 1"

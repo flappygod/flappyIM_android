@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 //数据库创建
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final String createTableMessage = "CREATE TABLE " + DataBaseConfig.TABLE_MESSAGE + "("+
+    public final String createTableMessage = "CREATE TABLE " + DataBaseConfig.TABLE_MESSAGE + "(" +
             // 消息ID
             "messageId" + " varchar ," +
             //消息的会话
@@ -42,7 +42,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // 时间戳
             "messageStamp" + " integer," +
             // 发送类型
-            "deleteDate" + " varchar,"
+            "deleteDate" + " varchar," +
+            // 当前插入的用户
+            "messageInsertUser" + " varchar,"
             // 消息ID
             + " primary key (messageId)" + ")";
 
@@ -59,13 +61,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //会话名称
             "sessionName" + " varchar," +
             // 会话图片
-            "sessionImage" + " varchar,"+
+            "sessionImage" + " varchar," +
             // 会话当前offset
-            "sessionOffset" + " varchar,"+
+            "sessionOffset" + " varchar," +
             // 会话更新时间戳
-            "sessionStamp" + " integer,"+
+            "sessionStamp" + " integer," +
             // 会话创建者
-            "sessionCreateDate" + " varchar,"+
+            "sessionCreateDate" + " varchar," +
             // 会话创建者
             "sessionCreateUser" + " varchar," +
             // 是否删除
