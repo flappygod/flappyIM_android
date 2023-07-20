@@ -266,7 +266,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         checkSessionNeedUpdate();
     }
 
-
     //收到会话更新的消息
     private void receiveUpdate(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
         //进行会话更新

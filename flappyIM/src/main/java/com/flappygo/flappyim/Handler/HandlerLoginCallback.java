@@ -6,6 +6,7 @@ import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 
@@ -35,6 +36,16 @@ public class HandlerLoginCallback extends Handler {
     public HandlerLoginCallback(FlappyIMCallback<ResponseLogin> callback,
                                 ResponseLogin loginResponse) {
         super();
+        this.callback = callback;
+        this.loginResponse = loginResponse;
+    }
+
+
+    //返回
+    public HandlerLoginCallback(Looper looper,
+                                FlappyIMCallback<ResponseLogin> callback,
+                                ResponseLogin loginResponse) {
+        super(looper);
         this.callback = callback;
         this.loginResponse = loginResponse;
     }

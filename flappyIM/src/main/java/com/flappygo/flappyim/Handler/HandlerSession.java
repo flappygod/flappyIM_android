@@ -4,15 +4,26 @@ import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Listener.SessionListener;
+
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 //会话更新的监听
 public class HandlerSession extends Handler {
 
+    //Handle message
+    public HandlerSession() {
+        super();
+    }
+
+    //handle message
+    public HandlerSession(Looper looper) {
+        super(looper);
+    }
+
     //消息更新了
     public static final int SESSION_UPDATE = 1;
-
 
     //执行消息
     public void handleMessage(Message message) {

@@ -2,6 +2,7 @@ package com.flappygo.flappyim.Handler;
 
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -26,8 +27,17 @@ public class HandlerSendCall extends Handler {
 
     //构造器
     public HandlerSendCall(FlappySendCallback<ChatMessage> callback, ChatMessage message) {
+        super();
         this.callback = callback;
-        this.chatMessage =message;
+        this.chatMessage = message;
+    }
+
+
+    //handle message
+    public HandlerSendCall(Looper looper, FlappySendCallback<ChatMessage> callback, ChatMessage message) {
+        super(looper);
+        this.callback = callback;
+        this.chatMessage = message;
     }
 
 
@@ -50,7 +60,7 @@ public class HandlerSendCall extends Handler {
         } else {
             //失败
             if (callback != null) {
-                callback.failure(chatMessage,(Exception) msg.obj, msg.what);
+                callback.failure(chatMessage, (Exception) msg.obj, msg.what);
             }
         }
     }

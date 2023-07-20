@@ -7,6 +7,7 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Listener.MessageListener;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import java.util.List;
@@ -28,6 +29,11 @@ public class HandlerMessage extends Handler {
     //Handle message
     public HandlerMessage() {
         super();
+    }
+
+    //handle message
+    public HandlerMessage(Looper looper) {
+        super(looper);
     }
 
     //执行消息
