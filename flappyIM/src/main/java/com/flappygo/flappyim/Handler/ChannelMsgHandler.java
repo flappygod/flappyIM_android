@@ -233,9 +233,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //关闭数据库
             database.close();
 
-            //发送成功消息
-            Message msg = handlerLogin.obtainMessage(HandlerLoginCallback.LOGIN_SUCCESS,response);
-            handlerLogin.sendMessage(msg);
+            //登录成功
+            handlerLogin.loginSuccess();
 
             //检查是否更新
             checkSessionNeedUpdate();
@@ -316,7 +315,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //线程非正常退出
         if (deadCallback != null) {
-            //死亡
             deadCallback.dead();
         }
         //关闭与服务器的连接
