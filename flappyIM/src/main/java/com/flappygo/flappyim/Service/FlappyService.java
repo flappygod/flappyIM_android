@@ -60,7 +60,7 @@ public class FlappyService {
     private NettyThread clientThread;
 
     //被踢下线的监听
-    private KickedOutListener knickedOutListener;
+    private KickedOutListener kickedOutListener;
 
     //监听
     private NotificationClickListener notificationClickListener;
@@ -174,14 +174,14 @@ public class FlappyService {
     //设置踢下线的监听
     public void setKickedOutListener(KickedOutListener listener) {
         //监听
-        knickedOutListener = listener;
+        kickedOutListener = listener;
         //获取用户数据
         ChatUser user = DataManager.getInstance().getLoginUser();
         //已经被踢下线了，不要挣扎了
         if (user != null && user.isLogin() == 0) {
             //如果不为空
-            if (knickedOutListener != null) {
-                knickedOutListener.kickedOut();
+            if (kickedOutListener != null) {
+                kickedOutListener.kickedOut();
             }
         }
     }
@@ -307,8 +307,8 @@ public class FlappyService {
                             //清空用户数据
                             DataManager.getInstance().saveLoginUser(user);
                             //当前已经被踢下线了
-                            if (knickedOutListener != null) {
-                                knickedOutListener.kickedOut();
+                            if (kickedOutListener != null) {
+                                kickedOutListener.kickedOut();
                             }
                         } else {
                             //重新登录
