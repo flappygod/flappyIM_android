@@ -14,8 +14,7 @@ public class IDGenerator {
     public static String generateCommonID() {
         UUID uuid = UUID.randomUUID();
         String str = uuid.toString();
-        String uuidStr = str.replace("-", "");
-        return uuidStr;
+        return str.replace("-", "");
     }
 
 

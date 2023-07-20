@@ -233,8 +233,14 @@ public class Database {
     public boolean insertSession(SessionData session, HandlerSession handlerSession) {
         synchronized (lock) {
 
+            //检查用户是否登录了
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser == null) {
+                return false;
+            }
+
             //当前的ID
-            String currentUserID = DataManager.getInstance().getLoginUser().getUserExtendId();
+            String currentUserID = chatUser.getUserExtendId();
 
             //检查是否有记录
             Cursor cursor = db.query(
@@ -290,7 +296,7 @@ public class Database {
                 if (session.getUsers() != null) {
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 }
-                values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
+                values.put("sessionInsertUser", chatUser.getUserExtendId());
                 //插入数据
                 long ret = db.insert(DataBaseConfig.TABLE_SESSION, null, values);
                 if (ret > 0) {
@@ -338,7 +344,7 @@ public class Database {
                     values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
                 }
                 //插入者
-                values.put("sessionInsertUser", DataManager.getInstance().getLoginUser().getUserExtendId());
+                values.put("sessionInsertUser", chatUser.getUserExtendId());
                 //更新消息信息
                 long ret = db.update(
                         DataBaseConfig.TABLE_SESSION,
@@ -387,12 +393,18 @@ public class Database {
     public SessionData getUserSessionByExtendID(String sessionExtendID) {
         synchronized (lock) {
 
+            //检查用户是否登录了
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser == null) {
+                return null;
+            }
+
             //请求数据
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
                     null,
                     "sessionExtendId=? and sessionInsertUser=? ",
-                    new String[]{sessionExtendID, DataManager.getInstance().getLoginUser().getUserExtendId()},
+                    new String[]{sessionExtendID, chatUser.getUserExtendId()},
                     null,
                     null,
                     null
@@ -432,12 +444,20 @@ public class Database {
     @SuppressLint("Range")
     public List<SessionData> getUserSessions() {
         synchronized (lock) {
+
+            //检查用户是否登录了
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser == null) {
+                return new ArrayList<>();
+            }
+
+
             //获取用户的会话
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
                     null,
                     "sessionInsertUser=? ",
-                    new String[]{DataManager.getInstance().getLoginUser().getUserExtendId()},
+                    new String[]{chatUser.getUserExtendId()},
                     null,
                     null,
                     null);
@@ -679,14 +699,25 @@ public class Database {
     public List<ChatMessage> getNotActionSystemMessage() {
 
         synchronized (lock) {
+
+            //检查用户是否登录了
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser == null) {
+                return new ArrayList<>();
+            }
+
+            //当前用户的消息拿出来
             List<ChatMessage> list = new ArrayList<>();
 
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageType = 0 and messageReadState = 0 ",
-                    null,
+                    "messageType = 0 and messageReadState = 0 and ( messageReceiveId = ? or messageSendId = ? )",
+                    new String[]{
+                            chatUser.getUserId(),
+                            chatUser.getUserId()
+                    },
                     null,
                     null,
                     "messageTableSeq DESC"
@@ -773,13 +804,22 @@ public class Database {
     @SuppressLint("Range")
     public ChatMessage getLatestMessage() {
 
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return null;
+        }
+
         //查询最近一条消息
         synchronized (lock) {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    null,
-                    null,
+                    "messageReceiveId = ? or messageSendId = ?",
+                    new String[]{
+                            chatUser.getUserId(),
+                            chatUser.getUserId()
+                    },
                     null,
                     null,
                     "messageTableSeq DESC,messageStamp DESC LIMIT 1"

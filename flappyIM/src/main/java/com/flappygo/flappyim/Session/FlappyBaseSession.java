@@ -16,6 +16,7 @@ import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Tools.Upload.UploadTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Handler.MessageManager;
 import com.flappygo.flappyim.Service.FlappyService;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
@@ -46,14 +47,13 @@ public class FlappyBaseSession {
         if (flappyService == null) {
             return null;
         }
-        //服务中的线程没有运行
+        //服务中的线程没有运行(按照道理这里不太可能，因为app在初始化启动的时候就已经开启线程去联网了，不过仍然会有一个小的时间差)
         NettyThread thread = flappyService.getClientThread();
         if (thread == null) {
             return null;
         }
         //线程中的handler不存在
-        ChannelMsgHandler handler = thread.getChannelMsgHandler();
-        return handler;
+        return thread.getChannelMsgHandler();
     }
 
     //我们姑且认为是最后一条
@@ -66,12 +66,8 @@ public class FlappyBaseSession {
         Database database = new Database();
         database.insertMessage(msg);
         database.close();
-
-        //线程中的handler不存在
-        ChannelMsgHandler handler = getCurrentChannelMessageHandler();
-        if (handler != null) {
-            handler.notifyMessageSend(msg);
-        }
+        //通知消息发送成功
+        MessageManager.getInstance().notifyMessageSend(msg);
     }
 
 
@@ -81,11 +77,8 @@ public class FlappyBaseSession {
         Database database = new Database();
         database.insertMessage(msg);
         database.close();
-        //线程中的handler不存在
-        ChannelMsgHandler handler = getCurrentChannelMessageHandler();
-        if (handler != null) {
-            handler.notifyMessageFailure(msg);
-        }
+        //通知消息发送失败
+        MessageManager.getInstance().notifyMessageFailure(msg);
     }
 
 
