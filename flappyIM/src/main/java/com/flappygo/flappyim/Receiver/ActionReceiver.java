@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import static android.content.Intent.CATEGORY_LAUNCHER;
-import com.flappygo.flappyim.Service.FlappyService;
+
+import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Datas.DataManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class ActionReceiver extends BroadcastReceiver {
                 Intent main = new Intent();
                 main.setClassName(activities.get(0).activityInfo.packageName,
                         activities.get(0).activityInfo.name);
-                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(main);
             }
         } catch (Exception ex) {
@@ -53,7 +55,7 @@ public class ActionReceiver extends BroadcastReceiver {
                 //缓存消息
                 DataManager.getInstance().saveNotificationClick(msg);
                 //保存这个消息，直到设置回调或则其他
-                FlappyService.getInstance().notifyClicked();
+                FlappyImService.getInstance().notifyClicked();
             }
         } catch (Exception ex) {
             //打印消息

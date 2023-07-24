@@ -1,6 +1,7 @@
 package com.flappygo.flappyim.Session;
 
 
+import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
@@ -17,7 +18,6 @@ import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Tools.Upload.UploadTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Handler.MessageManager;
-import com.flappygo.flappyim.Service.FlappyService;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.DataBase.Database;
@@ -42,7 +42,7 @@ public class FlappyBaseSession {
 
     ///获取当前的消息handler
     ChannelMsgHandler getCurrentChannelMessageHandler() {
-        FlappyService flappyService = FlappyService.getInstance();
+        FlappySocketService flappyService = FlappySocketService.getInstance();
         //如果当前服务不在线，错误
         if (flappyService == null) {
             return null;

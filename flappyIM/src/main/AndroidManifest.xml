@@ -32,7 +32,7 @@
             android:name=".Service.FlappyService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.flappygo.flappyim.Service.FlappyService" />
+                <action android:name="com.flappygo.flappyim.Service.FlappySocketService" />
             </intent-filter>
         </service>-->
 

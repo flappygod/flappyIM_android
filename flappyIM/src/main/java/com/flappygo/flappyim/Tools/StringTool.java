@@ -3,8 +3,11 @@ package com.flappygo.flappyim.Tools;
 import android.content.Context;
 import android.provider.Settings;
 
+import com.flappygo.flappyim.Datas.DataManager;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,6 +59,15 @@ public class StringTool {
         } catch (Exception ex) {
             return 0;
         }
+    }
+
+
+    public static String getTwoUserString(String userOne, String userTwo) {
+        List<String> strList = new ArrayList<>();
+        strList.add(userOne);
+        strList.add(userTwo);
+        Collections.sort(strList);
+        return strList.get(0) + "-" + strList.get(1);
     }
 
     /**********

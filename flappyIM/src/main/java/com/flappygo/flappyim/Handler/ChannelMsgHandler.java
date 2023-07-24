@@ -60,7 +60,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final List<String> updateSessions = new ArrayList<>();
 
     //检查是否是active状态的
-    private volatile boolean isActive = false;
+    public volatile boolean isActive = false;
 
     //回调
     public ChannelMsgHandler(HandlerLoginCallback handler, NettyThreadDead deadCallback, ChatUser user) {
