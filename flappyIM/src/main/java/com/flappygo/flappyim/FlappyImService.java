@@ -536,6 +536,8 @@ public class FlappyImService {
                         public void stateTrue(ResponseLogin response, String tag) {
                             //保存设置
                             DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+                            //重置
+                            NettyThreadDead.reset();
                             //转换
                             String loginReqUDID = Long.toString(System.currentTimeMillis());
                             //添加登录回调
@@ -556,8 +558,6 @@ public class FlappyImService {
                                     }
                                 }
                             });
-                            //重置
-                            NettyThreadDead.reset();
                             //开启服务
                             FlappySocketService.getInstance().startConnect(
                                     loginReqUDID,
