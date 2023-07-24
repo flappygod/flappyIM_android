@@ -451,7 +451,10 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel<String> model, String tag) {
                         if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
                         }
                     }
 
@@ -511,8 +514,10 @@ public class FlappyImService {
                         protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
                             isRunningLogin = false;
                             if (callback != null) {
-                                callback.failure(new Exception(model.getMsg()),
-                                        Integer.parseInt(model.getCode()));
+                                callback.failure(
+                                        new Exception(model.getMsg()),
+                                        Integer.parseInt(model.getCode())
+                                );
                             }
                         }
 
@@ -767,8 +772,70 @@ public class FlappyImService {
         }
     }
 
+
+    //注销当前的登录
+    public void logout(final FlappyIMCallback<String> callback) {
+        synchronized (this) {
+            //用户未登录
+            if (checkNotLogin(callback)) {
+                return;
+            }
+            //正在登录
+            if (checkLoginRunning(callback)) {
+                return;
+            }
+            //创建这个HashMap
+            HashMap<String, Object> hashMap = new HashMap<>();
+            //用户ID不用传了
+            hashMap.put("userID", "");
+            //外部用户ID
+            hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
+            //设备ID
+            hashMap.put("device", FlappyConfig.getInstance().device);
+            //设备ID
+            hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
+            //设备ID
+            hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
+
+            //进行callBack
+            LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().logout,
+                    hashMap,
+                    new BaseParseCallback<String>(String.class) {
+                        @Override
+                        protected void stateFalse(BaseApiModel<String> model, String tag) {
+                            if (callback != null) {
+                                callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                            }
+                        }
+
+                        @Override
+                        protected void jsonError(Exception e, String tag) {
+                            if (callback != null) {
+                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                            }
+                        }
+
+                        @Override
+                        protected void netError(Exception e, String tag) {
+                            if (callback != null) {
+                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                            }
+                        }
+
+                        @Override
+                        public void stateTrue(String response, String tag) {
+                            logoutNetty();
+                            if (callback != null) {
+                                callback.success(response);
+                            }
+                        }
+                    }
+            );
+        }
+    }
+
     //退出登录
-    private void nettySocketLogOut() {
+    private void logoutNetty() {
         synchronized (this) {
             FlappySocketService.getInstance().offline();
             DataManager.getInstance().clearLoginUser();
@@ -942,7 +1009,10 @@ public class FlappyImService {
                     protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
                         //失败
                         if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
                         }
                     }
 
@@ -1014,7 +1084,10 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
                         if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
                         }
                     }
 
@@ -1308,67 +1381,6 @@ public class FlappyImService {
         );
     }
 
-
-    //注销当前的登录
-    public void logout(final FlappyIMCallback<String> callback) {
-        synchronized (this) {
-            //用户未登录
-            if (checkNotLogin(callback)) {
-                return;
-            }
-            //正在登录
-            if (checkLoginRunning(callback)) {
-                return;
-            }
-            //创建这个HashMap
-            HashMap<String, Object> hashMap = new HashMap<>();
-            //用户ID不用传了
-            hashMap.put("userID", "");
-            //外部用户ID
-            hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
-            //设备ID
-            hashMap.put("device", FlappyConfig.getInstance().device);
-            //设备ID
-            hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
-            //设备ID
-            hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
-
-            //进行callBack
-            LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().logout,
-                    hashMap,
-                    new BaseParseCallback<String>(String.class) {
-                        @Override
-                        protected void stateFalse(BaseApiModel<String> model, String tag) {
-                            if (callback != null) {
-                                callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                            }
-                        }
-
-                        @Override
-                        protected void jsonError(Exception e, String tag) {
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                            }
-                        }
-
-                        @Override
-                        protected void netError(Exception e, String tag) {
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                            }
-                        }
-
-                        @Override
-                        public void stateTrue(String response, String tag) {
-                            nettySocketLogOut();
-                            if (callback != null) {
-                                callback.success(response);
-                            }
-                        }
-                    }
-            );
-        }
-    }
 
     //检查用户的登录状态
     private boolean checkNotLogin(FlappyIMCallback callback) {
