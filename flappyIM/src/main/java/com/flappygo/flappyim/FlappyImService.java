@@ -187,16 +187,13 @@ public class FlappyImService {
     //用于检测
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
-            //如果当前的网络是连接上了的
-            if (NetTool.isConnected(getAppContext())) {
-                //http重连
-                if (msg.what == AUTO_LOGIN_HTTP) {
-                    autoLogin();
-                }
-                //netty重连
-                else if (msg.what == AUTO_LOGIN_NETTY) {
-                    nettySocketLogin((ResponseLogin) msg.obj);
-                }
+            //http重连
+            if (msg.what == AUTO_LOGIN_HTTP) {
+                autoLogin();
+            }
+            //netty重连
+            else if (msg.what == AUTO_LOGIN_NETTY) {
+                nettySocketLogin((ResponseLogin) msg.obj);
             }
         }
     };
@@ -591,7 +588,7 @@ public class FlappyImService {
 
             //再次检查用户
             ChatUser user = DataManager.getInstance().getLoginUser();
-            if (user == null) {
+            if (user == null || user.isLogin() == 0) {
                 return;
             }
 
@@ -612,73 +609,78 @@ public class FlappyImService {
                 return;
             }
 
-            //创建这个HashMap
-            HashMap<String, Object> hashMap = new HashMap<>();
-            //用户ID
-            hashMap.put("userID", user.getUserId());
-            //设备ID
-            hashMap.put("device", FlappyConfig.getInstance().device);
-            //设备ID
-            hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
-            //设备ID
-            hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
-            //进行callBack
-            LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
-                    hashMap,
-                    new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
-                        //出现异常
-                        @Override
-                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            //当前的用户已经被踢下线了
-                            if (model.getCode().equals(RESULT_EXPIRED)) {
-                                //设置登录状态
-                                ChatUser user = DataManager.getInstance().getLoginUser();
-                                //当前没有登录
-                                user.setLogin(0);
-                                //清空用户数据
-                                DataManager.getInstance().saveLoginUser(user);
-                                //当前已经被踢下线了
-                                if (kickedOutListener != null) {
-                                    kickedOutListener.kickedOut();
+            //如果当前的网络是连接上了的
+            if (NetTool.isConnected(getAppContext())) {
+
+                //创建这个HashMap
+                HashMap<String, Object> hashMap = new HashMap<>();
+                //用户ID
+                hashMap.put("userID", user.getUserId());
+                //设备ID
+                hashMap.put("device", FlappyConfig.getInstance().device);
+                //设备ID
+                hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
+                //设备ID
+                hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
+                //进行callBack
+                LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().autoLogin,
+                        hashMap,
+                        new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                            //出现异常
+                            @Override
+                            protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
+                                //当前不在自动登录状态了
+                                isRunningAutoLogin = false;
+                                //当前的用户已经被踢下线了
+                                if (model.getCode().equals(RESULT_EXPIRED)) {
+                                    //设置登录状态
+                                    ChatUser user = DataManager.getInstance().getLoginUser();
+                                    //当前没有登录
+                                    user.setLogin(0);
+                                    //清空用户数据
+                                    DataManager.getInstance().saveLoginUser(user);
+                                    //当前已经被踢下线了
+                                    if (kickedOutListener != null) {
+                                        kickedOutListener.kickedOut();
+                                    }
+                                } else {
+                                    //重新登录
+                                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                                 }
-                            } else {
-                                //重新登录
+                            }
+
+                            //自动登录
+                            @Override
+                            protected void jsonError(Exception e, String tag) {
+                                //当前不在自动登录状态了
+                                isRunningAutoLogin = false;
+                                //当前不在自动登录状态了
                                 checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                             }
-                        }
 
-                        //自动登录
-                        @Override
-                        protected void jsonError(Exception e, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            //当前不在自动登录状态了
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
+                            //测试并自动登录
+                            @Override
+                            protected void netError(Exception e, String tag) {
+                                //当前不在自动登录状态了
+                                isRunningAutoLogin = false;
+                                checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                            }
 
-                        //测试并自动登录
-                        @Override
-                        protected void netError(Exception e, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
+                            //重置
+                            @Override
+                            public void stateTrue(ResponseLogin response, String tag) {
+                                //当前不在自动登录状态了
+                                isRunningAutoLogin = false;
+                                //重置死亡状态
+                                NettyThreadDead.reset();
+                                //保存推送设置
+                                DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+                                //请求成功，自动登录netty
+                                nettySocketLogin(response);
+                            }
+                        }, null);
+            }
 
-                        //重置
-                        @Override
-                        public void stateTrue(ResponseLogin response, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            //重置死亡状态
-                            NettyThreadDead.reset();
-                            //保存推送设置
-                            DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
-                            //请求成功，自动登录netty
-                            nettySocketLogin(response);
-                        }
-                    }, null);
         }
     }
 
@@ -687,7 +689,7 @@ public class FlappyImService {
         synchronized (this) {
             //再次检查用户
             ChatUser user = DataManager.getInstance().getLoginUser();
-            if (user == null) {
+            if (user == null || user.isLogin() == 0) {
                 return;
             }
 
@@ -708,38 +710,42 @@ public class FlappyImService {
                 return;
             }
 
-            //转换
-            String loginReqUDID = Long.toString(System.currentTimeMillis());
-            //添加登录回调
-            HolderLoginCallback.getInstance().addLoginCallBack(loginReqUDID, new FlappyIMCallback<ResponseLogin>() {
-                @Override
-                public void success(ResponseLogin data) {
-                    isRunningAutoLogin = false;
-                }
-
-                @Override
-                public void failure(Exception ex, int code) {
-                    isRunningAutoLogin = false;
-                }
-            });
-            //开始链接
-            FlappySocketService.getInstance().startConnect(
-                    loginReqUDID,
-                    responseInfo,
-                    new NettyThreadDead() {
-                        @Override
-                        public void threadDeadRetryHttp() {
-                            //断线重连，使用http的方式，也许服务器的ip已经发生了变化
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
-
-                        @Override
-                        protected void threadDeadRetryNetty() {
-                            //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
-                            checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, responseInfo);
-                        }
+            //如果当前的网络是连接上了的
+            if (NetTool.isConnected(getAppContext())) {
+                //转换
+                String loginReqUDID = Long.toString(System.currentTimeMillis());
+                //添加登录回调
+                HolderLoginCallback.getInstance().addLoginCallBack(loginReqUDID, new FlappyIMCallback<ResponseLogin>() {
+                    @Override
+                    public void success(ResponseLogin data) {
+                        isRunningAutoLogin = false;
                     }
-            );
+
+                    @Override
+                    public void failure(Exception ex, int code) {
+                        isRunningAutoLogin = false;
+                    }
+                });
+                //开始链接
+                FlappySocketService.getInstance().startConnect(
+                        loginReqUDID,
+                        responseInfo,
+                        new NettyThreadDead() {
+                            @Override
+                            public void threadDeadRetryHttp() {
+                                //断线重连，使用http的方式，也许服务器的ip已经发生了变化
+                                checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                            }
+
+                            @Override
+                            protected void threadDeadRetryNetty() {
+                                //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
+                                checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, responseInfo);
+                            }
+                        }
+                );
+            }
+
         }
     }
 
