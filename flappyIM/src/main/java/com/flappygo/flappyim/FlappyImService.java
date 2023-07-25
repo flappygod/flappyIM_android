@@ -1395,7 +1395,7 @@ public class FlappyImService {
 
 
     //判断当前是否是登录的状态
-    public boolean isRunningLogin() {
+    public boolean isLogin() {
         ChatUser user = DataManager.getInstance().getLoginUser();
         return user != null && user.isLogin() != 0;
     }
