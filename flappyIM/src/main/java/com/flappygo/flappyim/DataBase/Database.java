@@ -1,6 +1,8 @@
 package com.flappygo.flappyim.DataBase;
 
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
+
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
@@ -60,6 +62,15 @@ public class Database {
         dbHelper.close();
         db = null;
         dbHelper = null;
+    }
+
+    /*******
+     * 清空正在发送中的消息为发送失败
+     */
+    public void clearSendingMessage(){
+        ContentValues values = new ContentValues();
+        values.put("messageSendState", SEND_STATE_FAILURE);
+        db.update(DataBaseConfig.TABLE_MESSAGE,values,"messageSendState = 0",null);
     }
 
     /*****

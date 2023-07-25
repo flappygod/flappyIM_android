@@ -324,6 +324,10 @@ public class FlappyImService {
         this.appContext = appContext.getApplicationContext();
         //添加总体的监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
+        //清空当前正在发送的消息
+        Database database = new Database();
+        database.clearSendingMessage();
+        database.close();
     }
 
     /******
@@ -339,6 +343,10 @@ public class FlappyImService {
         FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
         //添加总体的监听,定义全局防止多次重复添加这个监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
+        //清空当前正在发送的消息
+        Database database = new Database();
+        database.clearSendingMessage();
+        database.close();
     }
 
     /*******
