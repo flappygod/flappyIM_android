@@ -796,9 +796,9 @@ public class FlappyImService {
             hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
             //设备ID
             hashMap.put("device", FlappyConfig.getInstance().device);
-            //设备ID
+            //推送ID
             hashMap.put("pushid", StringTool.getDeviceUnicNumber(getAppContext()));
-            //设备ID
+            //推送平台
             hashMap.put("pushplat", FlappyConfig.getInstance().pushPlat);
 
             //进行callBack
