@@ -167,8 +167,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //保存用户成功的登录信息
         synchronized (this) {
 
+            //活跃状态设置为true
+            isActive = true;
+
             //设置登录成功，并保存
             user.setLogin(1);
+            //保存数据
             DataManager.getInstance().saveLoginUser(user);
 
             //遍历消息进行通知
@@ -221,9 +225,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //检查是否更新
             checkSessionNeedUpdate();
-
-            //活跃状态设置为true
-            isActive = true;
 
             //如果说之前有消息不是在active状态发送的，那么链接成功后就触发发送
             checkFormerMessagesToSend();
