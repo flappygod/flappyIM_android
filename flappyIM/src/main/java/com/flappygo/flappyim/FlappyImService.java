@@ -497,6 +497,7 @@ public class FlappyImService {
             if (!checkLoginEnable(callback)) {
                 return;
             }
+            isRunningLogin = true;
             //创建这个HashMap
             HashMap<String, Object> hashMap = new HashMap<>();
             //用户ID不用传了
@@ -584,14 +585,14 @@ public class FlappyImService {
                     response,
                     new NettyThreadDead() {
                         @Override
+                        //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                         public void threadDeadRetryHttp() {
-                            //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                             checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                         }
 
                         @Override
+                        //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
                         protected void threadDeadRetryNetty() {
-                            //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
                             checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
                         }
                     }
@@ -618,8 +619,6 @@ public class FlappyImService {
             //正在自动登录无需多次自动登录
             if (isRunningAutoLogin) {
                 return;
-            } else {
-                isRunningAutoLogin = true;
             }
 
             //当前已经是登录状态了，无需处理
@@ -632,6 +631,8 @@ public class FlappyImService {
                 return;
             }
 
+            //正在自动登录模式
+            isRunningAutoLogin = true;
             //创建这个HashMap
             HashMap<String, Object> hashMap = new HashMap<>();
             //用户ID
@@ -721,8 +722,6 @@ public class FlappyImService {
             //正在自动登录无需多次自动登录
             if (isRunningAutoLogin) {
                 return;
-            } else {
-                isRunningAutoLogin = true;
             }
 
             //当前已经是登录状态了，无需处理
@@ -734,6 +733,9 @@ public class FlappyImService {
             if (!NetTool.isConnected(getAppContext())) {
                 return;
             }
+
+            //正在自动登录
+            isRunningAutoLogin = true;
 
             //重置死亡状态
             NettyThreadDead.reset();
@@ -901,17 +903,14 @@ public class FlappyImService {
 
     //获取单聊会话
     public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
-
         //检查登录
         if (!checkLogin(callback)) {
             return;
         }
-
         //检查聊天对象
         if (!checkPeerUser(peerUser, callback)) {
             return;
         }
-
         FlappyChatSession chatSession = new FlappyChatSession();
         //根据默认规则拼接出session的extendId
         String extendID = StringTool.getTwoUserString(
@@ -941,12 +940,10 @@ public class FlappyImService {
         if (!checkLogin(callback)) {
             return;
         }
-
         //检查聊天对象
         if (!checkPeerUser(peerUser, callback)) {
             return;
         }
-
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
         //用户ID
@@ -1003,7 +1000,7 @@ public class FlappyImService {
         if (!checkLogin(callback)) {
             return;
         }
-
+        //检查用户
         if (!checkUsers(users, callback)) {
             return;
         }
