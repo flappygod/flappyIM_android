@@ -692,7 +692,6 @@ public class FlappyImService {
                         public void stateTrue(ResponseLogin response, String tag) {
                             //当前不在自动登录状态了
                             isRunningAutoLogin = false;
-                            //请求成功，自动登录netty
                             autoLoginNetty(response);
                         }
                     }
