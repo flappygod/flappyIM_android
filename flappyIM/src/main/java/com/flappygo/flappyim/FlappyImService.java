@@ -187,11 +187,12 @@ public class FlappyImService {
     //用于检测
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
+            //http重连
             if (msg.what == AUTO_LOGIN_HTTP) {
-                //http重连
                 autoLogin();
-            } else if (msg.what == AUTO_LOGIN_NETTY) {
-                //netty重连
+            }
+            //netty重连
+            else if (msg.what == AUTO_LOGIN_NETTY) {
                 autoLoginNetty((ResponseLogin) msg.obj);
             }
         }
@@ -366,7 +367,7 @@ public class FlappyImService {
     }
 
 
-    /*******
+    /**************
      * 创建用户账户
      * @param userID      用户ID
      * @param userName    用户姓名
@@ -428,7 +429,14 @@ public class FlappyImService {
         );
     }
 
-    //更新用户账户
+    /**************
+     * 更新用户账户
+     * @param userID      用户ID
+     * @param userName    用户姓名
+     * @param userData    用户数据
+     * @param userAvatar  用户头像
+     * @param callback    回调
+     */
     public void updateAccount(String userID,
                               String userName,
                               String userData,
@@ -485,14 +493,9 @@ public class FlappyImService {
     //这里就代表登录了
     public void login(String userExtendID, final FlappyIMCallback<ResponseLogin> callback) {
         synchronized (this) {
-            //正在登录
-            if (isRunningLogin) {
-                callback.failure(
-                        new Exception("A login thread is running"),
-                        Integer.parseInt(RESULT_NET_ERROR)
-                );
-            } else {
-                isRunningLogin = true;
+            //可以登录
+            if (!checkLoginEnable(callback)) {
+                return;
             }
             //创建这个HashMap
             HashMap<String, Object> hashMap = new HashMap<>();
@@ -693,7 +696,6 @@ public class FlappyImService {
                         }
                     }
             );
-
         }
     }
 
@@ -756,15 +758,15 @@ public class FlappyImService {
                     loginReqUDID,
                     responseInfo,
                     new NettyThreadDead() {
+                        //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                         @Override
                         public void threadDeadRetryHttp() {
-                            //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                             checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                         }
 
+                        //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
                         @Override
                         protected void threadDeadRetryNetty() {
-                            //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
                             checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, responseInfo);
                         }
                     }
@@ -777,11 +779,11 @@ public class FlappyImService {
     public void logout(final FlappyIMCallback<String> callback) {
         synchronized (this) {
             //用户未登录
-            if (checkNotLogin(callback)) {
+            if (!checkLogin(callback)) {
                 return;
             }
-            //正在登录
-            if (checkLoginRunning(callback)) {
+            //可以登录
+            if (!checkLoginEnable(callback)) {
                 return;
             }
             //创建这个HashMap
@@ -846,27 +848,11 @@ public class FlappyImService {
     //创建会话
     public void createSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
-        //判断是否为空
-        if (StringTool.isEmpty(peerUser)) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Peer user id is empty"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
-            }
-            return;
-        }
-        //创建extend id
-        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Can't chat with your self"),
-                        Integer.parseInt(RESULT_NOT_LOGIN)
-                );
-            }
+        //检查聊天对象
+        if (!checkPeerUser(peerUser, callback)) {
             return;
         }
         //创建这个HashMap
@@ -917,29 +903,12 @@ public class FlappyImService {
     public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
 
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
 
-        //判断是否为空
-        if (StringTool.isEmpty(peerUser)) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Peer user id is empty"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
-            }
-            return;
-        }
-
-        //创建extend id
-        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Can't chat with your self"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
-            }
+        //检查聊天对象
+        if (!checkPeerUser(peerUser, callback)) {
             return;
         }
 
@@ -967,31 +936,14 @@ public class FlappyImService {
 
 
     //获取单聊会话
-    public void getSingleSessionHttp(final String userTwo, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSingleSessionHttp(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
 
-        //判断是否为空
-        if (StringTool.isEmpty(userTwo)) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Peer user id is empty"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
-            }
-            return;
-        }
-
-        //创建extend id
-        if (userTwo.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Can't chat with your self"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
-            }
+        //检查聊天对象
+        if (!checkPeerUser(peerUser, callback)) {
             return;
         }
 
@@ -1000,25 +952,20 @@ public class FlappyImService {
         //用户ID
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         //外部用户ID
-        hashMap.put("userTwo", userTwo);
+        hashMap.put("userTwo", peerUser);
         //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getSingleSession,
                 hashMap,
                 new BaseParseCallback<SessionData>(SessionData.class) {
                     @Override
                     protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
-                        //失败
                         if (callback != null) {
-                            callback.failure(
-                                    new Exception(model.getMsg()),
-                                    Integer.parseInt(model.getCode())
-                            );
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                         }
                     }
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
-                        //解析失败
                         if (callback != null) {
                             callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
                         }
@@ -1053,17 +1000,11 @@ public class FlappyImService {
                                    String groupName,
                                    final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
-        //用户未登录
-        if (users == null || users.size() == 0) {
-            if (callback != null) {
-                callback.failure(
-                        new Exception("Users is empty"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
-            }
+
+        if (!checkUsers(users, callback)) {
             return;
         }
         //创建这个HashMap
@@ -1084,10 +1025,7 @@ public class FlappyImService {
                     @Override
                     protected void stateFalse(BaseApiModel<SessionData> model, String tag) {
                         if (callback != null) {
-                            callback.failure(
-                                    new Exception(model.getMsg()),
-                                    Integer.parseInt(model.getCode())
-                            );
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                         }
                     }
 
@@ -1121,7 +1059,7 @@ public class FlappyImService {
     //获取群组的会话
     public void getSessionByExtendID(String extendID, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
         //数据库
@@ -1139,10 +1077,9 @@ public class FlappyImService {
 
 
     //获取群组的会话
-    public void getSessionByExtendIDHttp(String extendID,
-                                         final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSessionByExtendIDHttp(String extendID, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
         //创建这个HashMap
@@ -1190,7 +1127,7 @@ public class FlappyImService {
     //通过用户ID获取session
     public void getUserSessions(final FlappyIMCallback<List<FlappyChatSession>> callback) {
         //检查登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
         //数据库
@@ -1216,7 +1153,7 @@ public class FlappyImService {
     public void getUserSessionsHttp(final FlappyIMCallback<List<FlappyChatSession>> callback) {
 
         //用户未登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
         //创建这个HashMap
@@ -1279,7 +1216,7 @@ public class FlappyImService {
             final FlappyIMCallback<String> callback) {
 
         //用户未登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
 
@@ -1335,7 +1272,7 @@ public class FlappyImService {
             final FlappyIMCallback<String> callback) {
 
         //用户未登录
-        if (checkNotLogin(callback)) {
+        if (!checkLogin(callback)) {
             return;
         }
 
@@ -1381,34 +1318,54 @@ public class FlappyImService {
         );
     }
 
-
-    //检查用户的登录状态
-    private boolean checkNotLogin(FlappyIMCallback callback) {
-        if (DataManager.getInstance().getLoginUser() == null) {
+    //检查聊天对象ID是否合法
+    private boolean checkPeerUser(String peerUser, FlappyIMCallback callback) {
+        if (StringTool.isEmpty(peerUser)) {
             if (callback != null) {
-                callback.failure(
-                        new Exception("Not login"),
-                        Integer.parseInt(RESULT_NOT_LOGIN)
-                );
+                callback.failure(new Exception("Peer user id is empty"), Integer.parseInt(RESULT_FAILURE));
             }
-            return true;
+            return false;
         }
-        return false;
+        if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
+            if (callback != null) {
+                callback.failure(new Exception("Can't chat with your self"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
+            return false;
+        }
+        return true;
     }
 
+    //检查用户ID列表是否合法
+    private boolean checkUsers(List<String> users, FlappyIMCallback callback) {
+        if (users == null || users.size() == 0) {
+            if (callback != null) {
+                callback.failure(new Exception("Users is empty"), Integer.parseInt(RESULT_FAILURE));
+            }
+            return false;
+        }
+        return true;
+    }
+
+    //检查用户的登录状态
+    private boolean checkLogin(FlappyIMCallback callback) {
+        if (DataManager.getInstance().getLoginUser() == null) {
+            if (callback != null) {
+                callback.failure(new Exception("Not login"), Integer.parseInt(RESULT_NOT_LOGIN));
+            }
+            return false;
+        }
+        return true;
+    }
 
     //检查用户是否正在登录
-    private boolean checkLoginRunning(FlappyIMCallback callback) {
+    private boolean checkLoginEnable(FlappyIMCallback callback) {
         if (isRunningLogin) {
             if (callback != null) {
-                callback.failure(
-                        new Exception("Other thread is running login"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
+                callback.failure(new Exception("Other thread is running login"), Integer.parseInt(RESULT_FAILURE));
             }
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     //添加全局的监听
