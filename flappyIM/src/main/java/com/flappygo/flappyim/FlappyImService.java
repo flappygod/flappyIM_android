@@ -748,8 +748,14 @@ public class FlappyImService {
             NettyThreadDead.reset();
             //保存推送设置
             DataManager.getInstance().savePushType(StringTool.decimalToStr(responseInfo.getRoute().getRoutePushType()));
-            responseInfo.getUser().setLogin(1);
-            DataManager.getInstance().saveLoginUser(responseInfo.getUser());
+
+            //保存数据
+            ChatUser chatUser=DataManager.getInstance().getLoginUser();
+            chatUser.setLogin(1);
+            chatUser.setUserAvatar(responseInfo.getUser().getUserAvatar());
+            chatUser.setUserName(responseInfo.getUser().getUserName());
+            chatUser.setUserData(responseInfo.getUser().getUserData());
+            DataManager.getInstance().saveLoginUser(chatUser);
             //转换
             String loginReqUDID = Long.toString(System.currentTimeMillis());
             //添加登录回调
