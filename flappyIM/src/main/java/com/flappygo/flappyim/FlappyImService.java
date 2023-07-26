@@ -748,6 +748,7 @@ public class FlappyImService {
             NettyThreadDead.reset();
             //保存推送设置
             DataManager.getInstance().savePushType(StringTool.decimalToStr(responseInfo.getRoute().getRoutePushType()));
+            responseInfo.getUser().setLogin(1);
             DataManager.getInstance().saveLoginUser(responseInfo.getUser());
             //转换
             String loginReqUDID = Long.toString(System.currentTimeMillis());
