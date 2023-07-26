@@ -35,7 +35,7 @@ public class HandlerLoginCallback extends Handler {
     //返回
     public HandlerLoginCallback(FlappyIMCallback<ResponseLogin> callback,
                                 ResponseLogin loginResponse) {
-        super();
+        super(Looper.getMainLooper());
         this.callback = callback;
         this.loginResponse = loginResponse;
     }

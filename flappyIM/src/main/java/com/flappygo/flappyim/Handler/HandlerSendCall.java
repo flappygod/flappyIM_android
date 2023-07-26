@@ -27,7 +27,7 @@ public class HandlerSendCall extends Handler {
 
     //构造器
     public HandlerSendCall(FlappySendCallback<ChatMessage> callback, ChatMessage message) {
-        super();
+        super(Looper.getMainLooper());
         this.callback = callback;
         this.chatMessage = message;
     }

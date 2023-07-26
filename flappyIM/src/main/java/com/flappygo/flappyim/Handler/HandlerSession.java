@@ -14,7 +14,7 @@ public class HandlerSession extends Handler {
 
     //Handle message
     public HandlerSession() {
-        super();
+        super(Looper.getMainLooper());
     }
 
     //handle message

@@ -28,7 +28,7 @@ public class HandlerMessage extends Handler {
 
     //Handle message
     public HandlerMessage() {
-        super();
+        super(Looper.getMainLooper());
     }
 
     //handle message

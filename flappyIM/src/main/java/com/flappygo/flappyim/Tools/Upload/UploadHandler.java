@@ -11,7 +11,7 @@ public class UploadHandler extends Handler {
 
     //Handle message
     public UploadHandler(ProgressCallBack callBack) {
-        super();
+        super(Looper.getMainLooper());
         this.callBack = callBack;
     }
 
