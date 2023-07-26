@@ -385,8 +385,8 @@ public class FlappyImService {
      */
     public void createAccount(String userID,
                               String userName,
-                              String userData,
                               String userAvatar,
+                              String userData,
                               final FlappyIMCallback<String> callback) {
 
         //创建这个HashMap
@@ -395,10 +395,10 @@ public class FlappyImService {
         hashMap.put("userExtendID", userID);
         //用户名称
         hashMap.put("userName", userName);
-        //用户名称
-        hashMap.put("userData", userData);
         //用户头像
         hashMap.put("userAvatar", userAvatar);
+        //用户名称
+        hashMap.put("userData", userData);
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().register,
                 hashMap,
@@ -447,8 +447,8 @@ public class FlappyImService {
      */
     public void updateAccount(String userID,
                               String userName,
-                              String userData,
                               String userAvatar,
+                              String userData,
                               final FlappyIMCallback<String> callback) {
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -456,10 +456,10 @@ public class FlappyImService {
         hashMap.put("userExtendID", userID);
         //用户名称
         hashMap.put("userName", userName);
-        //用户名称
-        hashMap.put("userData", userData);
         //用户头像
         hashMap.put("userAvatar", userAvatar);
+        //用户名称
+        hashMap.put("userData", userData);
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().updateUser,
                 hashMap,
