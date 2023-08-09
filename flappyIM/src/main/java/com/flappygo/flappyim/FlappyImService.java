@@ -1161,8 +1161,15 @@ public class FlappyImService {
                     if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
                         return 1;
                     }
-                    if (one.getLatestMessage().getMessageTableSeq().longValue() >
-                            two.getLatestMessage().getMessageTableSeq().longValue()) {
+                    ChatMessage msgOne = one.getLatestMessage();
+                    ChatMessage msgTwo = two.getLatestMessage();
+                    if (msgOne == null) {
+                        return 1;
+                    }
+                    if (msgTwo == null) {
+                        return -1;
+                    }
+                    if (msgOne.getMessageTableSeq().longValue() >msgTwo.getMessageTableSeq().longValue()) {
                         return -1;
                     } else {
                         return 1;
@@ -1235,8 +1242,15 @@ public class FlappyImService {
                                     if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
                                         return 1;
                                     }
-                                    if (one.getLatestMessage().getMessageTableSeq().longValue() >
-                                            two.getLatestMessage().getMessageTableSeq().longValue()) {
+                                    ChatMessage msgOne = one.getLatestMessage();
+                                    ChatMessage msgTwo = two.getLatestMessage();
+                                    if (msgOne == null) {
+                                        return 1;
+                                    }
+                                    if (msgTwo == null) {
+                                        return -1;
+                                    }
+                                    if (msgOne.getMessageTableSeq().longValue() >msgTwo.getMessageTableSeq().longValue()) {
                                         return -1;
                                     } else {
                                         return 1;
