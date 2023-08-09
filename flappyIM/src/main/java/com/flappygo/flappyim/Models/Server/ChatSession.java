@@ -12,6 +12,8 @@ public class ChatSession implements Serializable {
     public final static int TYPE_SINGLE=1;
     //群聊
     public final static int TYPE_GROUP=2;
+    //系统
+    public final static int TYPE_SYSTEM=3;
 
 
     private String sessionId;

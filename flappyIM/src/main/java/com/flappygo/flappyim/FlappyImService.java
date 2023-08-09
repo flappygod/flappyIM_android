@@ -7,6 +7,7 @@ import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Listener.KickedOutListener;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
@@ -43,6 +44,8 @@ import android.os.Message;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -750,7 +753,7 @@ public class FlappyImService {
             DataManager.getInstance().savePushType(StringTool.decimalToStr(responseInfo.getRoute().getRoutePushType()));
 
             //保存数据
-            ChatUser chatUser=DataManager.getInstance().getLoginUser();
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
             chatUser.setLogin(1);
             chatUser.setUserAvatar(responseInfo.getUser().getUserAvatar());
             chatUser.setUserName(responseInfo.getUser().getUserName());
@@ -961,11 +964,8 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        //用户ID
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
-        //外部用户ID
         hashMap.put("userTwo", peerUser);
-        //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getSingleSession,
                 hashMap,
                 new BaseParseCallback<SessionData>(SessionData.class) {
@@ -1019,16 +1019,14 @@ public class FlappyImService {
         if (!checkUsers(users, callback)) {
             return;
         }
+
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        //用户ID
         hashMap.put("users", GsonTool.jsonArrayListStr(users));
-        //外部用户ID
         hashMap.put("createUser", DataManager.getInstance().getLoginUser().getUserId());
-        //外部的群组ID
         hashMap.put("extendID", groupID);
-        //外部会话的名称
         hashMap.put("sessionName", groupName);
+
         //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().createGroupSession,
                 hashMap,
@@ -1154,6 +1152,23 @@ public class FlappyImService {
                 chatSession.setSession(data.get(s));
                 sessions.add(chatSession);
             }
+            Collections.sort(sessions, new Comparator<FlappyChatSession>() {
+                @Override
+                public int compare(FlappyChatSession one, FlappyChatSession two) {
+                    if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                        return -1;
+                    }
+                    if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                        return 1;
+                    }
+                    if (one.getLatestMessage().getMessageTableSeq().longValue() >
+                            two.getLatestMessage().getMessageTableSeq().longValue()) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            });
             callback.success(sessions);
         } else {
             getUserSessionsHttp(callback);
@@ -1170,9 +1185,7 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        //用户ID
         hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
-        //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().getUserSessions,
                 hashMap,
                 new BaseListParseCallBack<SessionData>(SessionData.class) {
@@ -1213,6 +1226,23 @@ public class FlappyImService {
                                 chatSession.setSession(data.get(s));
                                 sessions.add(chatSession);
                             }
+                            Collections.sort(sessions, new Comparator<FlappyChatSession>() {
+                                @Override
+                                public int compare(FlappyChatSession one, FlappyChatSession two) {
+                                    if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                                        return -1;
+                                    }
+                                    if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                                        return 1;
+                                    }
+                                    if (one.getLatestMessage().getMessageTableSeq().longValue() >
+                                            two.getLatestMessage().getMessageTableSeq().longValue()) {
+                                        return -1;
+                                    } else {
+                                        return 1;
+                                    }
+                                }
+                            });
                             callback.success(sessions);
                         }
                     }
@@ -1234,17 +1264,13 @@ public class FlappyImService {
 
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        //用户ID
         hashMap.put("userID", userID);
-        //群组的ID
         hashMap.put("extendID", groupID);
-        //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().addUserToSession,
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override
                     protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        //失败
                         if (callback != null) {
                             callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                         }
@@ -1252,7 +1278,6 @@ public class FlappyImService {
 
                     @Override
                     protected void jsonError(Exception e, String tag) {
-                        //解析失败
                         if (callback != null) {
                             callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
                         }
@@ -1290,11 +1315,8 @@ public class FlappyImService {
 
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        //用户ID
         hashMap.put("userID", userID);
-        //群组的ID
         hashMap.put("extendID", groupID);
-        //调用
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().delUserInSession,
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
