@@ -21,6 +21,8 @@ message FlappyResponse{
   repeated Message  msg = 2;
   //会话列表
   repeated Session  sessions = 3;
+  //消息回执
+  ReqReceipt receipt = 4;
 }
 
 
@@ -118,11 +120,13 @@ message Message{
 
 message FlappyKafka{
   //类型
-  int32           type = 1;
+  int32            type = 1;
   //路由信息
-  repeated Route route = 2;
+  repeated Route   route = 2;
   //消息信息
   Message          msg = 3;
+  //回执信息
+  ReqReceipt       receipt = 4;
 }
 
 
