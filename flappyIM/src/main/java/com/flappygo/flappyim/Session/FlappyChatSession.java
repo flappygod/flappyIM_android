@@ -76,45 +76,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         this.session = session;
     }
 
-    //获取自己
-    private ChatUser getMine() {
-        return DataManager.getInstance().getLoginUser();
-    }
-
-    //获取要发送的ID
-    private String getPeerID() {
-        //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
-            return getSession().getSessionId();
-        }
-        //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
-            for (int s = 0; s < getSession().getUsers().size(); s++) {
-                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
-                    return getSession().getUsers().get(s).getUserId();
-                }
-            }
-        }
-        throw new RuntimeException("账号错误，聊天对象丢失");
-    }
-
-    //获取对方的extendID
-    private String getPeerExtendID() {
-        //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
-            return getSession().getSessionExtendId();
-        }
-        //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
-            for (int s = 0; s < getSession().getUsers().size(); s++) {
-                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
-                    return getSession().getUsers().get(s).getUserExtendId();
-                }
-            }
-        }
-        throw new RuntimeException("账号错误，聊天对象丢失");
-    }
-
 
     //发送消息
     public ChatMessage sendText(String text,
@@ -453,8 +414,8 @@ public class FlappyChatSession extends FlappyBaseSession {
         //设置文件的本地地址
         chatFile.setSendPath(path);
         //设置文件大小设置
-        File file= new File(path);
-        if(file.exists()){
+        File file = new File(path);
+        if (file.exists()) {
             chatFile.setFileSize(Long.toString(file.length()));
         }
         //设置文件的名称
@@ -566,6 +527,53 @@ public class FlappyChatSession extends FlappyBaseSession {
         }
     }
 
+    //获取自己
+    private ChatUser getMine() {
+        return DataManager.getInstance().getLoginUser();
+    }
+
+    //获取要发送的ID
+    private String getPeerID() {
+        //如果是群聊，返回会话ID
+        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
+            return getSession().getSessionId();
+        }
+        //如果是单聊，返回用户ID
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
+            for (int s = 0; s < getSession().getUsers().size(); s++) {
+                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
+                    return getSession().getUsers().get(s).getUserId();
+                }
+            }
+        }
+        //系统通知，返回0
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SYSTEM) {
+            return "0";
+        }
+        throw new RuntimeException("账号错误，聊天对象丢失");
+    }
+
+    //获取对方的extendID
+    private String getPeerExtendID() {
+        //如果是群聊，返回会话ID
+        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
+            return getSession().getSessionExtendId();
+        }
+        //如果是单聊，返回用户ID
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
+            for (int s = 0; s < getSession().getUsers().size(); s++) {
+                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
+                    return getSession().getUsers().get(s).getUserExtendId();
+                }
+            }
+        }
+        //系统通知，返回0
+        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SYSTEM) {
+            return "0";
+        }
+        throw new RuntimeException("账号错误，聊天对象丢失");
+    }
+
     //获取最后一条消息
     public ChatMessage getLatestMessage() {
         Database database = new Database();
@@ -582,6 +590,11 @@ public class FlappyChatSession extends FlappyBaseSession {
                 size);
         database.close();
         return chatMessages;
+    }
+
+    //读取所有消息
+    public void readAllMessage(){
+
     }
 
 }

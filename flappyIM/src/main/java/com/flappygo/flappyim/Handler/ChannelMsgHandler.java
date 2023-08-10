@@ -80,7 +80,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //发送登录验证
         sendLoginRequest(ctx);
-        currentActiveContext = ctx;
         super.channelActive(ctx);
     }
 
@@ -91,7 +90,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     @Override
-    public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         sendHeartBeatRequest(ctx, evt);
         super.userEventTriggered(ctx, evt);
     }
@@ -170,6 +169,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //活跃状态设置为true
             isActive = true;
 
+            //设置当前的context
+            currentActiveContext = ctx;
+
             //设置登录成功，并保存
             user.setLogin(1);
             //保存数据
@@ -213,7 +215,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 MessageManager.getInstance().notifyMessageReceive(chatMessage, former);
                 //保存最后的offset
                 if (s == (messages.size() - 1)) {
-                    messageArrivedReceipt(chatMessage, former);
+                    messageArrivedReceipt(ctx, chatMessage, former);
                 }
             }
 
@@ -224,7 +226,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             handlerLogin.loginSuccess();
 
             //检查是否更新
-            checkSessionNeedUpdate();
+            checkSessionNeedUpdate(ctx);
 
             //如果说之前有消息不是在active状态发送的，那么链接成功后就触发发送
             checkFormerMessagesToSend();
@@ -249,11 +251,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //新消息到达
             MessageManager.getInstance().notifyMessageReceive(chatMessage, former);
             //消息回执
-            messageArrivedReceipt(chatMessage, former);
+            messageArrivedReceipt(ctx, chatMessage, former);
         }
         database.close();
         //检查会话是否需要更新
-        checkSessionNeedUpdate();
+        checkSessionNeedUpdate(ctx);
     }
 
     //收到会话更新的消息
@@ -315,7 +317,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     //检查会话是否需要更新
-    private void checkSessionNeedUpdate() {
+    private void checkSessionNeedUpdate(ChannelHandlerContext ctx) {
 
         //获取所有数据
         Database database = new Database();
@@ -357,7 +359,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         .setType(FlappyRequest.REQ_UPDATE);
 
                 //发送需要更新的消息
-                currentActiveContext.writeAndFlush(builder.build());
+                ctx.writeAndFlush(builder.build());
             }
         }
     }
@@ -379,7 +381,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     //消息已经到达
-    private void messageArrivedReceipt(ChatMessage chatMessage, ChatMessage former) {
+    private void messageArrivedReceipt(ChannelHandlerContext cxt, ChatMessage chatMessage, ChatMessage former) {
 
         //保存最近一条的偏移量
         ChatUser user = DataManager.getInstance().getLoginUser();
@@ -405,7 +407,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     .setType(FlappyRequest.REQ_RECEIPT);
 
             //发送回执，发送回执后，所有之前的消息都会被列为已经收到，因为端口是阻塞的
-            currentActiveContext.writeAndFlush(builder.build());
+            cxt.writeAndFlush(builder.build());
 
         }
     }
@@ -440,23 +442,24 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //发送消息
     public void sendMessageIfActive(final ChatMessage chatMessage) {
-        if (isActive) {
-            try {
-                synchronized (this) {
-                    Flappy.Message message = chatMessage.toProtocMessage(Flappy.Message.newBuilder());
-                    Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
-                            .setMsg(message)
-                            .setType(FlappyRequest.REQ_MSG);
-                    ChannelFuture future = currentActiveContext.channel().writeAndFlush(builder.build());
-                    future.addListener((ChannelFutureListener) channelFuture -> {
-                        if (!channelFuture.isSuccess()) {
-                            MessageManager.getInstance().messageSendFailure(chatMessage, new Exception("连接已经断开"));
-                        }
-                    });
+        try {
+            synchronized (this) {
+                if (!isActive) {
+                    return;
                 }
-            } catch (Exception ex) {
-                MessageManager.getInstance().messageSendFailure(chatMessage, ex);
+                Flappy.Message message = chatMessage.toProtocMessage(Flappy.Message.newBuilder());
+                Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                        .setMsg(message)
+                        .setType(FlappyRequest.REQ_MSG);
+                ChannelFuture future = currentActiveContext.channel().writeAndFlush(builder.build());
+                future.addListener((ChannelFutureListener) channelFuture -> {
+                    if (!channelFuture.isSuccess()) {
+                        MessageManager.getInstance().messageSendFailure(chatMessage, new Exception("连接已经断开"));
+                    }
+                });
             }
+        } catch (Exception ex) {
+            MessageManager.getInstance().messageSendFailure(chatMessage, ex);
         }
     }
 
