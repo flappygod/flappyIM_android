@@ -1,14 +1,13 @@
 package com.flappygo.flappyim.Session;
 
-
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
-import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
+import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatImage;
@@ -24,15 +23,13 @@ import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.VideoTool;
 
 import android.media.MediaMetadataRetriever;
-import android.text.TextUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.io.File;
 
 //单聊的会话
 public class FlappyChatSession extends FlappyBaseSession {
@@ -43,13 +40,19 @@ public class FlappyChatSession extends FlappyBaseSession {
     //设置消息的监听,新收到消息都会在这里
     public void addMessageListener(MessageListener messageListener) {
         //添加监听
-        HolderMessageSession.getInstance().addMessageListener(messageListener, session.getSessionId());
+        HolderMessageSession.getInstance().addMessageListener(
+                messageListener,
+                session.getSessionId()
+        );
         listenerList.add(messageListener);
     }
 
     //移除当前会话的监听
     public void removeListener(MessageListener messageListener) {
-        HolderMessageSession.getInstance().removeMessageListener(messageListener, session.getSessionId());
+        HolderMessageSession.getInstance().removeMessageListener(
+                messageListener,
+                session.getSessionId()
+        );
         listenerList.remove(messageListener);
     }
 
@@ -61,7 +64,10 @@ public class FlappyChatSession extends FlappyBaseSession {
     //session使用完成之后，请务必关闭防止内存泄漏
     public void close() {
         for (int s = 0; s < listenerList.size(); s++) {
-            HolderMessageSession.getInstance().removeMessageListener(listenerList.get(s), session.getSessionId());
+            HolderMessageSession.getInstance().removeMessageListener(
+                    listenerList.get(s),
+                    session.getSessionId()
+            );
         }
         listenerList.clear();
     }
@@ -114,7 +120,6 @@ public class FlappyChatSession extends FlappyBaseSession {
     //发送本地图片
     public ChatMessage sendLocalImage(String path,
                                       final FlappySendCallback<ChatMessage> callback) {
-
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
