@@ -409,6 +409,59 @@ public class Database {
         return true;
     }
 
+
+    //获取当前用户的会话
+    @SuppressLint("Range")
+    public SessionData getUserSessionByID(String sessionId) {
+        synchronized (lock) {
+
+            //检查用户是否登录了
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser == null) {
+                return null;
+            }
+
+            //请求数据
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_SESSION,
+                    null,
+                    "sessionId=? and sessionInsertUser=? ",
+                    new String[]{sessionId, chatUser.getUserExtendId()},
+                    null,
+                    null,
+                    null
+            );
+
+            //获取数据
+            if (cursor.moveToFirst()) {
+                SessionData info = new SessionData();
+                info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+                info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
+                info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
+                info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
+                info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
+                info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
+                info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
+                info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
+                info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
+                info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
+                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
+                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
+                //转换为array
+                info.setUsers(
+                        GsonTool.jsonArrayToModels(
+                                cursor.getString(cursor.getColumnIndex("users")),
+                                ChatUser.class
+                        )
+                );
+                cursor.close();
+                return info;
+            }
+            cursor.close();
+            return null;
+        }
+    }
+
     //获取当前用户的会话
     @SuppressLint("Range")
     public SessionData getUserSessionByExtendID(String sessionExtendID) {

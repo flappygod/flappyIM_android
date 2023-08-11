@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
+import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
@@ -45,6 +46,16 @@ public class ChatMessage {
     public final static int MSG_TYPE_FILE = 6;
     //自定义消息
     public final static int MSG_TYPE_CUSTOM = 7;
+    //动作消息
+    public final static int MSG_TYPE_ACTION = 8;
+
+
+
+    //已读消息
+    public final static int ACTION_TYPE_READ = 1;
+    //删除消息
+    public final static int ACTION_TYPE_DELETE = 2;
+
 
 
     public ChatMessage() {
@@ -450,5 +461,31 @@ public class ChatMessage {
         return null;
     }
 
+
+    //设置文件消息
+    public void setChatAction(ChatAction chatAction) {
+        if (chatAction != null) {
+            messageType = new BigDecimal(ChatMessage.MSG_TYPE_ACTION);
+            String strBase64 = Base64.encodeToString(
+                    GsonTool.modelToString(chatAction, ChatAction.class).getBytes(),
+                    Base64.DEFAULT
+            );
+            setMessageContent(strBase64);
+        }
+    }
+
+    //获取文件消息
+    public ChatAction getChatAction() {
+        if (getMessageType().intValue() == MSG_TYPE_ACTION) {
+            String str = getMessageContent();
+            if (!StringTool.isEmpty(str)) {
+                return GsonTool.jsonObjectToModel(
+                        new String(Base64.decode(str.getBytes(), Base64.DEFAULT)),
+                        ChatAction.class
+                );
+            }
+        }
+        return null;
+    }
 
 }

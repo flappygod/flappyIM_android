@@ -5,6 +5,7 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
+import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
@@ -28,8 +29,10 @@ import android.text.TextUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 //单聊的会话
 public class FlappyChatSession extends FlappyBaseSession {
@@ -192,8 +195,6 @@ public class FlappyChatSession extends FlappyBaseSession {
     //发送本地的音频
     public ChatMessage sendLocalVoice(String path,
                                       final FlappySendCallback<ChatMessage> callback) {
-
-
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -305,7 +306,8 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //发送短视频
-    public ChatMessage sendLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVideo(String path,
+                                      final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -331,7 +333,8 @@ public class FlappyChatSession extends FlappyBaseSession {
             //获取到图片的bitmap
             VideoTool.VideoInfo info = VideoTool.getVideoInfo(FlappyImService.getInstance().getAppContext(),
                     512,
-                    path);
+                    path
+            );
             //封面地址
             chatVideo.setCoverSendPath(info.getOverPath());
             //时长
@@ -357,7 +360,8 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //发送视频信息
-    public ChatMessage sendVideo(ChatVideo chatVideo, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendVideo(ChatVideo chatVideo,
+                                 final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -391,8 +395,6 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendLocalFile(String path,
                                      String name,
                                      final FlappySendCallback<ChatMessage> callback) {
-
-
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -495,8 +497,89 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
+    //设置消息已读sequence
+    public ChatMessage readSessionMessage(String tableSequence,
+                                          FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommonID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+
+        //读取消息的action消息
+        ChatAction chatAction = new ChatAction();
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_READ);
+        chatAction.setActionIds(
+                new ArrayList<>(Arrays.asList(session.getSessionId(), tableSequence))
+        );
+
+        //设置内容
+        msg.setChatAction(chatAction);
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
+    }
+
+
+    //设置消息已读sequence
+    public ChatMessage deleteSessionMessage(String tableSequence,
+                                            FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerator.generateCommonID());
+        //设置
+        msg.setMessageSession(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(getMine().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+
+        //读取消息的action消息
+        ChatAction chatAction = new ChatAction();
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_DELETE);
+        chatAction.setActionIds(
+                new ArrayList<>(Arrays.asList(session.getSessionId(), tableSequence))
+        );
+
+        //设置内容
+        msg.setChatAction(chatAction);
+        //时间
+        msg.setMessageDate(new Date());
+        //插入数据
+        insertMessage(msg);
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
+    }
+
+
     //重发消息
-    public void resendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
+    public void resendMessage(final ChatMessage chatMessage,
+                              final FlappySendCallback<ChatMessage> callback) {
         //文本消息
         if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
             sendMessage(chatMessage, callback);
@@ -534,44 +617,53 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取要发送的ID
     private String getPeerID() {
-        //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
-            return getSession().getSessionId();
-        }
-        //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
-            for (int s = 0; s < getSession().getUsers().size(); s++) {
-                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
-                    return getSession().getUsers().get(s).getUserId();
+        switch (getSession().getSessionType().intValue()) {
+            ///群聊会话
+            case SessionData.TYPE_GROUP:
+                return getSession().getSessionId();
+            ///单聊会话
+            case SessionData.TYPE_SINGLE: {
+                for (ChatUser chatUser : getSession().getUsers()) {
+                    if (!chatUser.getUserId().equals(getMine().getUserId())) {
+                        return chatUser.getUserId();
+                    }
                 }
+                break;
             }
+            ///系统会话
+            case SessionData.TYPE_SYSTEM:
+                return "0";
+            ///WHAT??
+            default:
+                throw new RuntimeException("账号错误，聊天对象丢失");
         }
-        //系统通知，返回0
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SYSTEM) {
-            return "0";
-        }
-        throw new RuntimeException("账号错误，聊天对象丢失");
+        return null;
     }
 
     //获取对方的extendID
     private String getPeerExtendID() {
-        //如果是群聊，返回会话ID
-        if (getSession().getSessionType().intValue() == SessionData.TYPE_GROUP) {
-            return getSession().getSessionExtendId();
-        }
-        //如果是单聊，返回用户ID
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SINGLE) {
-            for (int s = 0; s < getSession().getUsers().size(); s++) {
-                if (!getSession().getUsers().get(s).getUserId().equals(getMine().getUserId())) {
-                    return getSession().getUsers().get(s).getUserExtendId();
+        //查找
+        switch (getSession().getSessionType().intValue()) {
+            ///群聊会话
+            case SessionData.TYPE_GROUP:
+                return getSession().getSessionExtendId();
+            ///单聊会话
+            case SessionData.TYPE_SINGLE: {
+                for (ChatUser chatUser : getSession().getUsers()) {
+                    if (!chatUser.getUserId().equals(getMine().getUserId())) {
+                        return chatUser.getUserExtendId();
+                    }
                 }
+                break;
             }
+            ///系统会话
+            case SessionData.TYPE_SYSTEM:
+                return "0";
+            ///WHAT??
+            default:
+                throw new RuntimeException("账号错误，聊天对象丢失");
         }
-        //系统通知，返回0
-        else if (getSession().getSessionType().intValue() == SessionData.TYPE_SYSTEM) {
-            return "0";
-        }
-        throw new RuntimeException("账号错误，聊天对象丢失");
+        return null;
     }
 
     //获取最后一条消息
@@ -590,11 +682,6 @@ public class FlappyChatSession extends FlappyBaseSession {
                 size);
         database.close();
         return chatMessages;
-    }
-
-    //读取所有消息
-    public void readAllMessage(){
-
     }
 
 }

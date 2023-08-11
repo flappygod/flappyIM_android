@@ -451,7 +451,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
                         .setMsg(message)
                         .setType(FlappyRequest.REQ_MSG);
-                ChannelFuture future = currentActiveContext.channel().writeAndFlush(builder.build());
+                ChannelFuture future = currentActiveContext.writeAndFlush(builder.build());
                 future.addListener((ChannelFutureListener) channelFuture -> {
                     if (!channelFuture.isSuccess()) {
                         MessageManager.getInstance().messageSendFailure(chatMessage, new Exception("连接已经断开"));
