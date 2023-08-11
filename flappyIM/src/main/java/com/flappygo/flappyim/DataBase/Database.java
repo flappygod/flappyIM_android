@@ -578,7 +578,7 @@ public class Database {
             //消息更新
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageInsertUser = ?",
+                    "messageInsertUser = ? and messageType != 8 ",
                     new String[]{chatUser.getUserExtendId()},
                     null,
                     null,
@@ -627,7 +627,7 @@ public class Database {
         //获取这条消息之前的消息，并且不包含自身
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                 null,
-                "messageSession = ? and messageTableSeq = ? and messageInsertUser = ?",
+                "messageSession = ? and messageTableSeq = ? and messageInsertUser = ? and messageType !=8 ",
                 new String[]{
                         messageSession,
                         messageTableSeq,
@@ -701,7 +701,7 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageTableSeq < ? and messageInsertUser = ?",
+                    "messageSession = ? and messageTableSeq < ? and messageInsertUser = ? and messageType != 8",
                     new String[]{
                             messageSession,
                             chatMessage.getMessageTableSeq().toString(),
@@ -873,7 +873,7 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageInsertUser = ?",
+                    "messageSession = ? and messageInsertUser = ? and messageType != 8",
                     new String[]{messageSession, chatUser.getUserExtendId()},
                     null,
                     null,
@@ -927,7 +927,7 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageInsertUser = ?",
+                    "messageInsertUser = ? and messageType != 8 ",
                     new String[]{chatUser.getUserExtendId()},
                     null,
                     null,
@@ -977,7 +977,7 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageId = ? and messageInsertUser = ?",
+                    "messageId = ? and messageInsertUser = ? and messageType != 8",
                     new String[]{messageID, chatUser.getUserExtendId()},
                     null,
                     null,
