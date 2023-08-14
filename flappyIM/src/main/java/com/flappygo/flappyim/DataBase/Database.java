@@ -690,17 +690,18 @@ public class Database {
         }
     }
 
-    //获取用户的所有会话列表
+    /******
+     * 获取用户的所有会话列表
+     * @return 所有的会话数据
+     */
     @SuppressLint("Range")
     public List<SessionData> getUserSessions() {
         synchronized (lock) {
-
             //检查用户是否登录了
             ChatUser chatUser = DataManager.getInstance().getLoginUser();
             if (chatUser == null) {
                 return new ArrayList<>();
             }
-
             //获取用户的会话
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
@@ -733,14 +734,15 @@ public class Database {
                     cursor.moveToNext();
                 }
             }
-            ///关闭句柄
             cursor.close();
             return sessions;
         }
     }
 
-
-    //获取所有的消息
+    /******
+     * 获取所有的消息
+     * @return 所有的消息
+     */
     @SuppressLint("Range")
     public List<ChatMessage> getAllMessages() {
         synchronized (lock) {
@@ -789,7 +791,12 @@ public class Database {
         }
     }
 
-    //获取当前这个messageTableSeq 的所有消息
+    /******
+     * 获取当前这个messageTableSeq的所有消息
+     * @param messageSession  会话ID
+     * @param messageTableSeq 表序号
+     * @return
+     */
     @SuppressLint("Range")
     private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableSeq) {
 
@@ -1138,7 +1145,11 @@ public class Database {
         }
     }
 
-    //通过消息ID获取消息
+    /******
+     * 通过消息ID获取消息
+     * @param messageID 消息ID
+     * @return 消息
+     */
     @SuppressLint("Range")
     public ChatMessage getMessageByID(String messageID) {
         synchronized (lock) {
