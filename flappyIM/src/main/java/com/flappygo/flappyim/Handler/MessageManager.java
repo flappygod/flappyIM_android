@@ -2,9 +2,11 @@ package com.flappygo.flappyim.Handler;
 
 import android.os.Message;
 
+import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -120,6 +122,39 @@ public class MessageManager {
         }
         msg.obj = chatMessage;
         this.handlerMessage.sendMessage(msg);
+    }
+
+    //消息已读回执,对方的阅读消息存在的时候才会执行
+    public void notifyMessageAction(ChatMessage chatMessage,
+                                    ChatMessage formerMessage) {
+        //动作消息处理
+        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION && formerMessage == null) {
+            ChatAction chatAction = chatMessage.getChatAction();
+            switch (chatAction.getActionType()) {
+                ///插入的情况下，代表已读，进行通知
+                case ChatMessage.ACTION_TYPE_READ: {
+                    Message msg = new Message();
+                    msg.what = HandlerMessage.MSG_READ;
+                    msg.obj = new ArrayList<>(Arrays.asList(
+                            chatAction.getActionIds().get(1),
+                            chatAction.getActionIds().get(2)
+                    ));
+                    this.handlerMessage.sendMessage(msg);
+                    break;
+                }
+                ///插入的情况下，代表新增，进行通知
+                case ChatMessage.ACTION_TYPE_DELETE: {
+                    Message msg = new Message();
+                    msg.what = HandlerMessage.MSG_DELETE;
+                    msg.obj = new ArrayList<>(Arrays.asList(
+                            chatAction.getActionIds().get(1),
+                            chatAction.getActionIds().get(2)
+                    ));
+                    this.handlerMessage.sendMessage(msg);
+                    break;
+                }
+            }
+        }
     }
 
     //消息错误监听

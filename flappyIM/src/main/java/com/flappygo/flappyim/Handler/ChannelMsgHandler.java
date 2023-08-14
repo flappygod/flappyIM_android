@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.Handler;
 
-
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -13,18 +12,16 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Config.FlappyConfig;
+import com.flappygo.flappyim.Tools.NettyAttrUtil;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.FlappyImService;
-
-
-import com.flappygo.flappyim.Tools.NettyAttrUtil;
 
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.FlappyImService;
 
 import io.netty.channel.ChannelFuture;
 
@@ -179,8 +176,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //遍历消息进行通知
             Database database = new Database();
-            if (handlerLogin.getLoginResponse().getSessions() != null && handlerLogin.getLoginResponse().getSessions().size() != 0) {
-                database.insertSessions(handlerLogin.getLoginResponse().getSessions(), MessageManager.getInstance().getHandlerSession());
+            if (handlerLogin.getLoginResponse().getSessions() != null &&
+                    handlerLogin.getLoginResponse().getSessions().size() != 0) {
+                database.insertSessions(handlerLogin.getLoginResponse().getSessions());
             }
 
             //消息转换为我们的message
@@ -213,6 +211,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 MessageManager.getInstance().messageSendSuccess(chatMessage);
                 //通知监听变化
                 MessageManager.getInstance().notifyMessageReceive(chatMessage, former);
+                //通知监听变化
+                MessageManager.getInstance().notifyMessageAction(chatMessage, former);
                 //保存最后的offset
                 if (s == (messages.size() - 1)) {
                     messageArrivedReceipt(ctx, chatMessage, former);
@@ -244,12 +244,14 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
             //消息到达后的状态改变
             messageArrivedState(chatMessage, former);
-            //插入
+            //插入消息
             database.insertMessage(chatMessage);
             //发送成功
             MessageManager.getInstance().messageSendSuccess(chatMessage);
             //新消息到达
             MessageManager.getInstance().notifyMessageReceive(chatMessage, former);
+            //新消息到达
+            MessageManager.getInstance().notifyMessageAction(chatMessage, former);
             //消息回执
             messageArrivedReceipt(ctx, chatMessage, former);
         }
@@ -388,7 +390,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         if (user.getLatest() == null) {
             user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
         } else {
-            user.setLatest(Long.toString(Math.max(chatMessage.getMessageTableSeq().longValue(), StringTool.strToLong(user.getLatest()))));
+            user.setLatest(
+                    Long.toString(Math.max(chatMessage.getMessageTableSeq().longValue(),
+                            StringTool.strToLong(user.getLatest()))));
         }
         DataManager.getInstance().saveLoginUser(user);
 
@@ -454,7 +458,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 ChannelFuture future = currentActiveContext.writeAndFlush(builder.build());
                 future.addListener((ChannelFutureListener) channelFuture -> {
                     if (!channelFuture.isSuccess()) {
-                        MessageManager.getInstance().messageSendFailure(chatMessage, new Exception("连接已经断开"));
+                        MessageManager.getInstance().messageSendFailure(
+                                chatMessage,
+                                new Exception("连接已经断开")
+                        );
                     }
                 });
             }

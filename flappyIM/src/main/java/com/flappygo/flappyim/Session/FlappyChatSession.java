@@ -98,9 +98,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -129,9 +129,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -178,9 +178,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -209,9 +209,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -261,9 +261,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -292,9 +292,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -322,9 +322,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -376,9 +376,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -409,9 +409,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -452,9 +452,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -482,9 +482,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -503,8 +503,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //设置消息已读sequence
-    public ChatMessage readSessionMessage(String tableSequence,
-                                          FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage readSessionMessage(FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -514,9 +513,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -526,7 +525,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatAction chatAction = new ChatAction();
         chatAction.setActionType(ChatMessage.ACTION_TYPE_READ);
         chatAction.setActionIds(
-                new ArrayList<>(Arrays.asList(session.getSessionId(), tableSequence))
+                new ArrayList<>(
+                        Arrays.asList(
+                                DataManager.getInstance().getLoginUser().getUserId(),
+                                session.getSessionId(),
+                                getLatestMessage().getMessageTableSeq().toString()
+                        ))
         );
 
         //设置内容
@@ -543,7 +547,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //设置消息已读sequence
-    public ChatMessage deleteSessionMessage(String tableSequence,
+    public ChatMessage deleteSessionMessage(String messageId,
                                             FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -554,9 +558,9 @@ public class FlappyChatSession extends FlappyBaseSession {
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
-        msg.setMessageSendId(getMine().getUserId());
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
         //发送者
-        msg.setMessageSendExtendId(getMine().getUserExtendId());
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
         //接收者
         msg.setMessageReceiveId(getPeerID());
         //接收者
@@ -566,7 +570,11 @@ public class FlappyChatSession extends FlappyBaseSession {
         ChatAction chatAction = new ChatAction();
         chatAction.setActionType(ChatMessage.ACTION_TYPE_DELETE);
         chatAction.setActionIds(
-                new ArrayList<>(Arrays.asList(session.getSessionId(), tableSequence))
+                new ArrayList<>(Arrays.asList(
+                        DataManager.getInstance().getLoginUser().getUserId(),
+                        session.getSessionId(),
+                        messageId
+                ))
         );
 
         //设置内容
@@ -615,10 +623,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         }
     }
 
-    //获取自己
-    private ChatUser getMine() {
-        return DataManager.getInstance().getLoginUser();
-    }
 
     //获取要发送的ID
     private String getPeerID() {
@@ -629,7 +633,7 @@ public class FlappyChatSession extends FlappyBaseSession {
             ///单聊会话
             case SessionData.TYPE_SINGLE: {
                 for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(getMine().getUserId())) {
+                    if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                         return chatUser.getUserId();
                     }
                 }
@@ -655,7 +659,7 @@ public class FlappyChatSession extends FlappyBaseSession {
             ///单聊会话
             case SessionData.TYPE_SINGLE: {
                 for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(getMine().getUserId())) {
+                    if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                         return chatUser.getUserExtendId();
                     }
                 }

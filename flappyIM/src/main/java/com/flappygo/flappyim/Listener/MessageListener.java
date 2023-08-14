@@ -16,4 +16,9 @@ public interface MessageListener {
     //消息接收
     void messageReceived(ChatMessage chatMessage);
 
+    //消息接收
+    void messageRead(String tableSequence);
+
+    //消息被删除
+    void messageDelete(String messageId);
 }

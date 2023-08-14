@@ -20,6 +20,8 @@ public class ChatUser implements Serializable {
 
     private Date userLoginDate;
 
+    private String sessionMemberLatestRead;
+
     private BigDecimal isDelete;
 
     private Date deleteDate;
@@ -84,6 +86,14 @@ public class ChatUser implements Serializable {
 
     public void setUserCreateDate(Date userCreateDate) {
         this.userCreateDate = userCreateDate;
+    }
+
+    public String getSessionMemberLatestRead() {
+        return sessionMemberLatestRead;
+    }
+
+    public void setSessionMemberLatestRead(String sessionMemberLatestRead) {
+        this.sessionMemberLatestRead = sessionMemberLatestRead;
     }
 
     public BigDecimal getIsDelete() {

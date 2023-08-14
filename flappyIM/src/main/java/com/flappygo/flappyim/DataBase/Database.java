@@ -3,7 +3,9 @@ package com.flappygo.flappyim.DataBase;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 
+import com.flappygo.flappyim.Handler.MessageManager;
 import com.flappygo.flappyim.Models.Response.SessionData;
+import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Handler.HandlerSession;
@@ -67,24 +69,28 @@ public class Database {
     /*******
      * 清空正在发送中的消息为发送失败
      */
-    public void clearSendingMessage(){
+    public void clearSendingMessage() {
         ContentValues values = new ContentValues();
         values.put("messageSendState", SEND_STATE_FAILURE);
-        db.update(DataBaseConfig.TABLE_MESSAGE,values,"messageSendState = 0",null);
+        db.update(
+                DataBaseConfig.TABLE_MESSAGE,
+                values,
+                "messageSendState = 0",
+                null
+        );
     }
 
     /*****
      * 插入单条消息
      * @param chatMessage  消息
-     * @return 返回是否成功
      */
-    public boolean insertMessage(ChatMessage chatMessage) {
+    public void insertMessage(ChatMessage chatMessage) {
         synchronized (lock) {
 
             //检查用户是否登录了
             ChatUser chatUser = DataManager.getInstance().getLoginUser();
             if (chatUser == null) {
-                return false;
+                return;
             }
 
             //检查是否有记录
@@ -155,12 +161,15 @@ public class Database {
                 //消息的时间戳
                 values.put("messageStamp", System.currentTimeMillis());
                 //插入消息数据
-                long ret = db.insert(
+                db.insert(
                         DataBaseConfig.TABLE_MESSAGE,
                         null,
                         values
                 );
-                return ret > 0;
+                handleActionMessageInsert(
+                        chatMessage,
+                        MessageManager.getInstance().getHandlerSession()
+                );
             }
             ///已经存在记录就更新数据
             else {
@@ -215,37 +224,172 @@ public class Database {
                     values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
                 }
                 //更新消息信息
-                long ret = db.update(
+                db.update(
                         DataBaseConfig.TABLE_MESSAGE,
                         values,
                         "messageId=?",
                         new String[]{chatMessage.getMessageId()
                         });
-                return ret > 0;
+                handleActionMessageUpdate(
+                        chatMessage,
+                        MessageManager.getInstance().getHandlerSession()
+                );
             }
         }
     }
 
-    /*******
+    //insert message
+    public void handleActionMessageInsert(ChatMessage chatMessage, HandlerSession handlerSession) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+        //不是动作类型
+        if (chatMessage.getMessageType().intValue() != ChatMessage.MSG_TYPE_ACTION) {
+            return;
+        }
+        ChatAction action = chatMessage.getChatAction();
+        switch (action.getActionType()) {
+            //消息已读
+            case ChatMessage.ACTION_TYPE_READ: {
+                //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                //获取会话ID
+                String sessionId = action.getActionIds().get(1);
+                //获取TableSequence
+                String tableSequence = action.getActionIds().get(2);
+                //设置已读消息
+                ContentValues values = new ContentValues();
+                //设置已读
+                values.put("messageReadState", 1);
+                //更新已读消息
+                db.update(
+                        DataBaseConfig.TABLE_MESSAGE,
+                        values,
+                        "messageInsertUser=? and messageSendId!=? and messageSession=? and messageTableSeq <= ? ",
+                        new String[]{
+                                chatUser.getUserExtendId(),
+                                userId,
+                                sessionId,
+                                tableSequence,
+                        }
+                );
+
+
+                SessionData sessionData = getUserSessionByID(sessionId);
+                List<ChatUser> chatUserList = sessionData.getUsers();
+                for (ChatUser user : chatUserList) {
+                    if (user.getUserId().equals(userId)) {
+                        user.setSessionMemberLatestRead(tableSequence);
+                    }
+                }
+                insertSession(sessionData, handlerSession);
+            }
+        }
+    }
+
+    /**
+     * 处理动作消息
+     *
+     * @param chatMessage 消息
+     */
+    public boolean handleActionMessageUpdate(ChatMessage chatMessage, HandlerSession handlerSession) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return false;
+        }
+        //不是动作类型
+        if (chatMessage.getMessageType().intValue() != ChatMessage.MSG_TYPE_ACTION) {
+            return false;
+        }
+        ChatAction action = chatMessage.getChatAction();
+        switch (action.getActionType()) {
+            //消息已读
+            case ChatMessage.ACTION_TYPE_READ: {
+                //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                //获取会话ID
+                String sessionId = action.getActionIds().get(1);
+                //获取TableSequence
+                String tableSequence = action.getActionIds().get(2);
+                //设置已读消息
+                ContentValues values = new ContentValues();
+                //设置已读
+                values.put("messageReadState", 1);
+                //更新已读消息
+                db.update(
+                        DataBaseConfig.TABLE_MESSAGE,
+                        values,
+                        "messageInsertUser=? and messageSendId!=? and messageSession=? and messageTableSeq <= ? ",
+                        new String[]{
+                                chatUser.getUserExtendId(),
+                                userId,
+                                sessionId,
+                                tableSequence,
+                        }
+                );
+
+
+                SessionData sessionData = getUserSessionByID(sessionId);
+                List<ChatUser> chatUserList = sessionData.getUsers();
+                for (ChatUser user : chatUserList) {
+                    if (user.getUserId().equals(userId)) {
+                        user.setSessionMemberLatestRead(tableSequence);
+                    }
+                }
+                insertSession(sessionData, handlerSession);
+                return true;
+            }
+            //消息删除
+            case ChatMessage.ACTION_TYPE_DELETE: {
+                //获取用户ID
+                //String userId = action.getActionIds().get(0);
+                //获取会话ID
+                String sessionId = action.getActionIds().get(1);
+                //获取TableSequence
+                String messageId = action.getActionIds().get(2);
+                //设置已读消息
+                ContentValues values = new ContentValues();
+                //设置已读
+                values.put("isDelete", 1);
+                //更新已读消息
+                db.update(
+                        DataBaseConfig.TABLE_MESSAGE,
+                        values,
+                        "messageInsertUser=? and messageSession=? and messageId = ?",
+                        new String[]{
+                                chatUser.getUserExtendId(),
+                                sessionId,
+                                messageId,
+                        }
+                );
+                return true;
+            }
+            //其他情况返回false
+            default:
+                return false;
+        }
+    }
+
+
+    /**
      * 插入一个列表的消息
+     *
      * @param messages 消息列表
      * @return 插入结果
      */
-    public boolean insertMessages(List<ChatMessage> messages) {
+    public void insertMessages(List<ChatMessage> messages) {
         if (messages == null || messages.size() == 0) {
-            return true;
+            return;
         }
         db.beginTransaction();
         for (ChatMessage msg : messages) {
-            boolean insertFlag = insertMessage(msg);
-            if (!insertFlag) {
-                db.endTransaction();
-                return false;
-            }
+            insertMessage(msg);
         }
         db.setTransactionSuccessful();
         db.endTransaction();
-        return true;
     }
 
     /*********
@@ -254,7 +398,8 @@ public class Database {
      * @param handlerSession 插入会话后的handler
      * @return 是否成功
      */
-    public boolean insertSession(SessionData session, HandlerSession handlerSession) {
+    public boolean insertSession(SessionData session,
+                                 HandlerSession handlerSession) {
         synchronized (lock) {
 
             //检查用户是否登录了
@@ -388,25 +533,19 @@ public class Database {
 
     /**********
      * 插入多个会话
-     * @param sessionDataList  会话列表
-     * @param handlerSession   插入会话的handler
+     * @param  sessionDataList  会话列表
      * @return 是否成功
      */
-    public boolean insertSessions(List<SessionData> sessionDataList, HandlerSession handlerSession) {
+    public void insertSessions(List<SessionData> sessionDataList) {
         if (sessionDataList == null || sessionDataList.size() == 0) {
-            return true;
+            return;
         }
         db.beginTransaction();
         for (SessionData sessionData : sessionDataList) {
-            boolean flag = insertSession(sessionData, handlerSession);
-            if (!flag) {
-                db.endTransaction();
-                return false;
-            }
+            insertSession(sessionData, MessageManager.getInstance().getHandlerSession());
         }
         db.setTransactionSuccessful();
         db.endTransaction();
-        return true;
     }
 
 
