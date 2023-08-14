@@ -560,7 +560,7 @@ public class Database {
         }
     }
 
-    /**********
+    /******
      * 插入多个会话
      * @param  sessionDataList  会话列表
      * @return 是否成功
@@ -578,7 +578,11 @@ public class Database {
     }
 
 
-    //获取当前用户的会话
+    /******
+     * 获取当前用户的会话
+     * @param sessionId  会话ID
+     * @return 会话
+     */
     @SuppressLint("Range")
     public SessionData getUserSessionByID(String sessionId) {
         synchronized (lock) {
@@ -630,7 +634,11 @@ public class Database {
         }
     }
 
-    //获取当前用户的会话
+    /******
+     * 获取当前用户的会话
+     * @param sessionExtendID  会话外部ID
+     * @return 会话
+     */
     @SuppressLint("Range")
     public SessionData getUserSessionByExtendID(String sessionExtendID) {
         synchronized (lock) {
