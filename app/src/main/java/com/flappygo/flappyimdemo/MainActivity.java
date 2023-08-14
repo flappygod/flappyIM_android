@@ -128,6 +128,16 @@ public class MainActivity extends Activity {
                     Toast.makeText(getBaseContext(), chatMessage.getChatVideo().getSendPath(), Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void messageRead(String tableSequence) {
+
+            }
+
+            @Override
+            public void messageDelete(String messageId) {
+
+            }
         });
 
         //登录
@@ -197,6 +207,16 @@ public class MainActivity extends Activity {
                             @Override
                             public void messageReceived(ChatMessage chatMessage) {
                                 rect.setText(chatMessage.getChatText());
+                            }
+
+                            @Override
+                            public void messageRead(String tableSequence) {
+
+                            }
+
+                            @Override
+                            public void messageDelete(String messageId) {
+
                             }
                         });
 

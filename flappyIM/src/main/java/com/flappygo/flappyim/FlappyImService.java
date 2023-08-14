@@ -267,6 +267,16 @@ public class FlappyImService {
         public void messageReceived(ChatMessage chatMessage) {
             sendNotification(chatMessage);
         }
+
+        @Override
+        public void messageRead(String tableSequence) {
+
+        }
+
+        @Override
+        public void messageDelete(String messageId) {
+
+        }
     };
 
 
