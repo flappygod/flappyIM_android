@@ -95,7 +95,7 @@ public class NettyThread extends Thread {
                         @Override
                         protected void initChannel(SocketChannel channel) {
                             ChannelPipeline p = channel.pipeline();
-                            //用于心跳,十秒钟没有事件就开始心跳
+                            //用于心跳,12秒钟没有事件就开始心跳
                             p.addLast(new IdleStateHandler(0, FlappyConfig.getInstance().IdleSeconds, 0))
                                     .addLast(new ProtobufVarint32FrameDecoder())
                                     .addLast(new ProtobufDecoder(Flappy.FlappyResponse.getDefaultInstance()))
