@@ -129,7 +129,7 @@ public class FlappyConfig {
         createGroupSession = serverUrl + "/api/createGroupSession";
 
         //获取群组会话
-        getSessionByExtendID = serverUrl + "/api/getSessionByID";
+        getSessionByExtendID = serverUrl + "/api/getSessionByExtendID";
 
         //获取用户的所有会话
         getUserSessions = serverUrl + "/api/getUserSessions";
