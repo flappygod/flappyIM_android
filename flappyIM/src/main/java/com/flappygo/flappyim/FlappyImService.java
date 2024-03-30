@@ -1,6 +1,7 @@
 package com.flappygo.flappyim;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseListParseCallBack;
+import com.flappygo.flappyim.Models.Settings.BroadcastMsgSetting;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
@@ -105,6 +106,20 @@ public class FlappyImService {
     //通知被点击的监听
     private NotificationClickListener notificationClickListener;
 
+    //广播翻译
+    private BroadcastMsgSetting broadcastMsgSetting;
+
+    //消息设置
+    private final BroadcastMsgSetting defaultMsgSetting = new BroadcastMsgSetting(
+            "消息提醒",
+            "您有一条系统消息",
+            "您有一条图片消息",
+            "您有一条语音消息",
+            "您有一条位置消息",
+            "您有一条视频消息",
+            "您有一条新消息"
+    );
+
 
     /****************
      * 设置踢下线的监听
@@ -181,6 +196,13 @@ public class FlappyImService {
                 handler.sendMessageDelayed(message, delayMillis);
             }
         }
+    }
+
+
+    //设置broad cast settings
+    public void setBroadcastMsgSetting(BroadcastMsgSetting setting) {
+        this.broadcastMsgSetting = setting;
+        DataManager.getInstance().saveBroadCastSetting(setting);
     }
 
 
@@ -291,24 +313,27 @@ public class FlappyImService {
         //正在后台
         if (RunningTool.isBackground(FlappyImService.this.getAppContext())) {
             NotificationUtil util = new NotificationUtil(FlappyImService.this.getAppContext());
+            //推送类型普通
             if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_NORMAL) {
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
-                    util.sendNotification(chatMessage, "消息提醒", chatMessage.getChatText());
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), chatMessage.getChatText());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_IMG) {
-                    util.sendNotification(chatMessage, "消息提醒", "您有一条图片消息");
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getImgMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VOICE) {
-                    util.sendNotification(chatMessage, "消息提醒", "您有一条语音消息");
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getVoiceMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_LOCATE) {
-                    util.sendNotification(chatMessage, "消息提醒", "您有一条位置消息");
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getLocateMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
-                    util.sendNotification(chatMessage, "消息提醒", "您有一条视频消息");
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getVideoMsg());
                 }
-            } else if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_HIDE) {
-                util.sendNotification(chatMessage, "消息提醒", "您有一条新的消息");
+            }
+            //推送类型隐藏
+            else if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_HIDE) {
+                util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getGeneralMsg());
             }
         }
     }
@@ -336,6 +361,9 @@ public class FlappyImService {
         Database database = new Database();
         database.clearSendingMessage();
         database.close();
+        //设置广播消息设置
+        BroadcastMsgSetting former = DataManager.getInstance().getBroadCastSetting();
+        broadcastMsgSetting = (former == null ? defaultMsgSetting : former);
     }
 
     /******
@@ -358,6 +386,9 @@ public class FlappyImService {
         Database database = new Database();
         database.clearSendingMessage();
         database.close();
+        //设置广播消息设置
+        BroadcastMsgSetting former = DataManager.getInstance().getBroadCastSetting();
+        broadcastMsgSetting = (former == null ? defaultMsgSetting : former);
     }
 
     /*******
@@ -1177,11 +1208,7 @@ public class FlappyImService {
                     if (msgTwo == null) {
                         return -1;
                     }
-                    if (msgOne.getMessageTableSeq().longValue() > msgTwo.getMessageTableSeq().longValue()) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
+                    return Long.compare(msgTwo.getMessageTableSeq().longValue(), msgOne.getMessageTableSeq().longValue());
                 }
             });
             callback.success(sessions);
@@ -1258,11 +1285,7 @@ public class FlappyImService {
                                     if (msgTwo == null) {
                                         return -1;
                                     }
-                                    if (msgOne.getMessageTableSeq().longValue() > msgTwo.getMessageTableSeq().longValue()) {
-                                        return -1;
-                                    } else {
-                                        return 1;
-                                    }
+                                    return Long.compare(msgTwo.getMessageTableSeq().longValue(), msgOne.getMessageTableSeq().longValue());
                                 }
                             });
                             callback.success(sessions);
