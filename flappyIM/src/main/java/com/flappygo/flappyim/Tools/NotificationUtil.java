@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.Tools;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -39,14 +40,14 @@ public class NotificationUtil extends ContextWrapper {
         if (Build.VERSION.SDK_INT >= 26) {
             createNotificationChannel();
             Notification notification = getNotification_26(chatMessage, title, content).build();
-            getmManager().notify(1, notification);
+            getManager().notify(1, notification);
         } else {
             Notification notification = getNotification_25(chatMessage, title, content).build();
-            getmManager().notify(1, notification);
+            getManager().notify(1, notification);
         }
     }
 
-    private NotificationManager getmManager() {
+    private NotificationManager getManager() {
         if (mManager == null) {
             mManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
@@ -56,30 +57,26 @@ public class NotificationUtil extends ContextWrapper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createNotificationChannel() {
         NotificationChannel channel = new NotificationChannel(sID, sName, NotificationManager.IMPORTANCE_HIGH);
-        getmManager().createNotificationChannel(channel);
+        getManager().createNotificationChannel(channel);
     }
 
 
     /**
      * 获取图标 bitmap
      *
-     * @param context
+     * @param context content
      */
     public static synchronized Bitmap getBitmap(Context context) {
         PackageManager packageManager = null;
         ApplicationInfo applicationInfo = null;
         try {
-            packageManager = context.getApplicationContext()
-                    .getPackageManager();
-            applicationInfo = packageManager.getApplicationInfo(
-                    context.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            applicationInfo = null;
+            packageManager = context.getApplicationContext().getPackageManager();
+            applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException ignored) {
         }
         //xxx根据自己的情况获取drawable
-        Drawable d = packageManager.getApplicationIcon(applicationInfo);
-        Bitmap bm = drawableToBitmap(d);
-        return bm;
+        assert applicationInfo != null;
+        return drawableToBitmap(packageManager.getApplicationIcon(applicationInfo));
     }
 
     //drawable转成bitmap
@@ -101,6 +98,7 @@ public class NotificationUtil extends ContextWrapper {
         return bitmap;
     }
 
+    @SuppressLint("NotificationTrampoline")
     public NotificationCompat.Builder getNotification_25(ChatMessage chatMessage, String title, String content) {
 
         // 以下是展示大图的通知
@@ -112,7 +110,6 @@ public class NotificationUtil extends ContextWrapper {
         androidx.core.app.NotificationCompat.BigTextStyle style1 = new androidx.core.app.NotificationCompat.BigTextStyle();
         style1.setBigContentTitle(title);
         style1.bigText(content);
-
         return new NotificationCompat.Builder(getApplicationContext())
                 .setContentTitle(title)
                 .setContentText(content)
@@ -129,9 +126,12 @@ public class NotificationUtil extends ContextWrapper {
     public PendingIntent getPendingIntent(ChatMessage chatMessage) {
         Intent openintent = new Intent(this, ActionReceiver.class);
         openintent.putExtra("msg", GsonTool.modelToString(chatMessage, ChatMessage.class));
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(FlappyImService.getInstance().getAppContext(),
-                0, openintent, PendingIntent.FLAG_CANCEL_CURRENT);
-        return pendingIntent;
+        return PendingIntent.getBroadcast(
+                FlappyImService.getInstance().getAppContext(),
+                0,
+                openintent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
     }
 
 
