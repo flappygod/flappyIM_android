@@ -33,6 +33,8 @@ message ReqLogin{
   string pushId = 3;
   //最后的消息序号
   string latest = 4;
+  //秘钥验证
+  string secret = 5;
 }
 
 message ReqUpdate{
@@ -107,12 +109,16 @@ message Message{
   int32 messageSendState = 12;
   //消息是否已经被阅读
   int32 messageReadState = 13;
+  //消息发送秘钥
+  string messageSecretSend = 14; 
+  //消息发送秘钥
+  string messageSecretReceive = 15; 
   //消息时间
-  string messageDate = 14;
+  string messageDate = 16;
   //消息是否被删除
-  int32 isDelete = 15;
+  int32 isDelete = 17;
   //消息删除日期
-  string deleteDate = 16;
+  string deleteDate = 18;
 }
 
 
@@ -135,9 +141,8 @@ message Route{
   string pushId = 3;
   //推送类型
   string pushType = 4;
-  //时间
-  string time = 5;
   //推送平台类型
-  string pushPlat = 6;
+  string pushPlat = 5;
+  //时间
+  string time = 6;
 }
-

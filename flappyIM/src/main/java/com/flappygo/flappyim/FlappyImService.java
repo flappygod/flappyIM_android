@@ -7,10 +7,10 @@ import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
-import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Listener.KickedOutListener;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
@@ -27,7 +27,7 @@ import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Tools.RunninTool;
+import com.flappygo.flappyim.Tools.RunningTool;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.NetTool;
 
@@ -46,6 +46,7 @@ import android.os.Looper;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.HashMap;
 import java.util.List;
 
@@ -109,13 +110,9 @@ public class FlappyImService {
      * 设置踢下线的监听
      ****************/
     public void setKickedOutListener(KickedOutListener listener) {
-        //监听
         kickedOutListener = listener;
-        //获取用户数据
         ChatUser user = DataManager.getInstance().getLoginUser();
-        //已经被踢下线了，不要挣扎了
         if (user != null && user.isLogin() == 0) {
-            //如果不为空
             if (kickedOutListener != null) {
                 kickedOutListener.kickedOut();
             }
@@ -209,7 +206,7 @@ public class FlappyImService {
     BroadcastReceiver netReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+            if (Objects.equals(intent.getAction(), ConnectivityManager.CONNECTIVITY_ACTION)) {
                 checkAutoLoginHttp(0);
             }
         }
@@ -292,10 +289,8 @@ public class FlappyImService {
             return;
         }
         //正在后台
-        if (RunninTool.isBackground(FlappyImService.this.getAppContext())) {
-            //上下文
+        if (RunningTool.isBackground(FlappyImService.this.getAppContext())) {
             NotificationUtil util = new NotificationUtil(FlappyImService.this.getAppContext());
-            //普通
             if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_NORMAL) {
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
                     util.sendNotification(chatMessage, "消息提醒", chatMessage.getChatText());
@@ -349,7 +344,10 @@ public class FlappyImService {
      * @param serverPath Im服务器地址
      * @param uploadPath 资源服务器地址
      */
-    public void init(Context appContext, String serverPath, String uploadPath) {
+    public void init(Context appContext,
+                     String serverPath,
+                     String uploadPath
+    ) {
         //获取application
         this.appContext = appContext.getApplicationContext();
         //更新服务器地址和资源文件上传地址
@@ -809,7 +807,7 @@ public class FlappyImService {
     public void logout(final FlappyIMCallback<String> callback) {
         synchronized (this) {
             //用户未登录
-            if (!checkLogin(callback)) {
+            if (checkLogin(callback)) {
                 return;
             }
             //可以登录
@@ -878,7 +876,7 @@ public class FlappyImService {
     //创建会话
     public void createSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //检查聊天对象
@@ -932,7 +930,7 @@ public class FlappyImService {
     //获取单聊会话
     public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //检查聊天对象
@@ -965,7 +963,7 @@ public class FlappyImService {
     //获取单聊会话
     public void getSingleSessionHttp(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //检查聊天对象
@@ -1022,7 +1020,7 @@ public class FlappyImService {
                                    String groupName,
                                    final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //检查用户
@@ -1079,7 +1077,7 @@ public class FlappyImService {
     //获取群组的会话
     public void getSessionByExtendID(String extendID, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //数据库
@@ -1099,7 +1097,7 @@ public class FlappyImService {
     //获取群组的会话
     public void getSessionByExtendIDHttp(String extendID, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //创建这个HashMap
@@ -1147,7 +1145,7 @@ public class FlappyImService {
     //通过用户ID获取session
     public void getUserSessions(final FlappyIMCallback<List<FlappyChatSession>> callback) {
         //检查登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //数据库
@@ -1179,7 +1177,7 @@ public class FlappyImService {
                     if (msgTwo == null) {
                         return -1;
                     }
-                    if (msgOne.getMessageTableSeq().longValue() >msgTwo.getMessageTableSeq().longValue()) {
+                    if (msgOne.getMessageTableSeq().longValue() > msgTwo.getMessageTableSeq().longValue()) {
                         return -1;
                     } else {
                         return 1;
@@ -1197,7 +1195,7 @@ public class FlappyImService {
     public void getUserSessionsHttp(final FlappyIMCallback<List<FlappyChatSession>> callback) {
 
         //用户未登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
         //创建这个HashMap
@@ -1260,7 +1258,7 @@ public class FlappyImService {
                                     if (msgTwo == null) {
                                         return -1;
                                     }
-                                    if (msgOne.getMessageTableSeq().longValue() >msgTwo.getMessageTableSeq().longValue()) {
+                                    if (msgOne.getMessageTableSeq().longValue() > msgTwo.getMessageTableSeq().longValue()) {
                                         return -1;
                                     } else {
                                         return 1;
@@ -1282,7 +1280,7 @@ public class FlappyImService {
             final FlappyIMCallback<String> callback) {
 
         //用户未登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
 
@@ -1333,7 +1331,7 @@ public class FlappyImService {
             final FlappyIMCallback<String> callback) {
 
         //用户未登录
-        if (!checkLogin(callback)) {
+        if (checkLogin(callback)) {
             return;
         }
 
@@ -1410,9 +1408,9 @@ public class FlappyImService {
             if (callback != null) {
                 callback.failure(new Exception("Not login"), Integer.parseInt(RESULT_NOT_LOGIN));
             }
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     //检查用户是否正在登录

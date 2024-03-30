@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.List;
 
-public class RunninTool {
+public class RunningTool {
 
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
