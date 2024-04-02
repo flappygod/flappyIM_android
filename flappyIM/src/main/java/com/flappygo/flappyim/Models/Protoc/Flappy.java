@@ -12516,10 +12516,50 @@ public final class Flappy {
 
     /**
      * <pre>
+     *推送平台语言
+     * </pre>
+     *
+     * <code>string pushLanguage = 6;</code>
+     * @return The pushLanguage.
+     */
+    String getPushLanguage();
+    /**
+     * <pre>
+     *推送平台语言
+     * </pre>
+     *
+     * <code>string pushLanguage = 6;</code>
+     * @return The bytes for pushLanguage.
+     */
+    com.google.protobuf.ByteString
+        getPushLanguageBytes();
+
+    /**
+     * <pre>
+     *推送平台隐私
+     * </pre>
+     *
+     * <code>int32 pushPrivacy = 7;</code>
+     * @return The pushPrivacy.
+     */
+    int getPushPrivacy();
+
+    /**
+     * <pre>
+     *推送平台免打扰
+     * </pre>
+     *
+     * <code>int32 pushNoDisturb = 8;</code>
+     * @return The pushNoDisturb.
+     */
+    int getPushNoDisturb();
+
+    /**
+     * <pre>
      *时间
      * </pre>
      *
-     * <code>string time = 6;</code>
+     * <code>string time = 9;</code>
      * @return The time.
      */
     String getTime();
@@ -12528,7 +12568,7 @@ public final class Flappy {
      *时间
      * </pre>
      *
-     * <code>string time = 6;</code>
+     * <code>string time = 9;</code>
      * @return The bytes for time.
      */
     com.google.protobuf.ByteString
@@ -12551,6 +12591,7 @@ public final class Flappy {
       pushId_ = "";
       pushType_ = "";
       pushPlat_ = "";
+      pushLanguage_ = "";
       time_ = "";
     }
 
@@ -12614,6 +12655,22 @@ public final class Flappy {
               break;
             }
             case 50: {
+              String s = input.readStringRequireUtf8();
+
+              pushLanguage_ = s;
+              break;
+            }
+            case 56: {
+
+              pushPrivacy_ = input.readInt32();
+              break;
+            }
+            case 64: {
+
+              pushNoDisturb_ = input.readInt32();
+              break;
+            }
+            case 74: {
               String s = input.readStringRequireUtf8();
 
               time_ = s;
@@ -12852,14 +12909,90 @@ public final class Flappy {
       }
     }
 
-    public static final int TIME_FIELD_NUMBER = 6;
+    public static final int PUSHLANGUAGE_FIELD_NUMBER = 6;
+    private volatile Object pushLanguage_;
+    /**
+     * <pre>
+     *推送平台语言
+     * </pre>
+     *
+     * <code>string pushLanguage = 6;</code>
+     * @return The pushLanguage.
+     */
+    @Override
+    public String getPushLanguage() {
+      Object ref = pushLanguage_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        pushLanguage_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *推送平台语言
+     * </pre>
+     *
+     * <code>string pushLanguage = 6;</code>
+     * @return The bytes for pushLanguage.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getPushLanguageBytes() {
+      Object ref = pushLanguage_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        pushLanguage_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int PUSHPRIVACY_FIELD_NUMBER = 7;
+    private int pushPrivacy_;
+    /**
+     * <pre>
+     *推送平台隐私
+     * </pre>
+     *
+     * <code>int32 pushPrivacy = 7;</code>
+     * @return The pushPrivacy.
+     */
+    @Override
+    public int getPushPrivacy() {
+      return pushPrivacy_;
+    }
+
+    public static final int PUSHNODISTURB_FIELD_NUMBER = 8;
+    private int pushNoDisturb_;
+    /**
+     * <pre>
+     *推送平台免打扰
+     * </pre>
+     *
+     * <code>int32 pushNoDisturb = 8;</code>
+     * @return The pushNoDisturb.
+     */
+    @Override
+    public int getPushNoDisturb() {
+      return pushNoDisturb_;
+    }
+
+    public static final int TIME_FIELD_NUMBER = 9;
     private volatile Object time_;
     /**
      * <pre>
      *时间
      * </pre>
      *
-     * <code>string time = 6;</code>
+     * <code>string time = 9;</code>
      * @return The time.
      */
     @Override
@@ -12880,7 +13013,7 @@ public final class Flappy {
      *时间
      * </pre>
      *
-     * <code>string time = 6;</code>
+     * <code>string time = 9;</code>
      * @return The bytes for time.
      */
     @Override
@@ -12927,8 +13060,17 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushPlat_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, pushPlat_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushLanguage_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, pushLanguage_);
+      }
+      if (pushPrivacy_ != 0) {
+        output.writeInt32(7, pushPrivacy_);
+      }
+      if (pushNoDisturb_ != 0) {
+        output.writeInt32(8, pushNoDisturb_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(time_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, time_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 9, time_);
       }
       unknownFields.writeTo(output);
     }
@@ -12955,8 +13097,19 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushPlat_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, pushPlat_);
       }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushLanguage_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, pushLanguage_);
+      }
+      if (pushPrivacy_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, pushPrivacy_);
+      }
+      if (pushNoDisturb_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, pushNoDisturb_);
+      }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(time_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, time_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(9, time_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -12983,6 +13136,12 @@ public final class Flappy {
           .equals(other.getPushType())) return false;
       if (!getPushPlat()
           .equals(other.getPushPlat())) return false;
+      if (!getPushLanguage()
+          .equals(other.getPushLanguage())) return false;
+      if (getPushPrivacy()
+          != other.getPushPrivacy()) return false;
+      if (getPushNoDisturb()
+          != other.getPushNoDisturb()) return false;
       if (!getTime()
           .equals(other.getTime())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
@@ -13007,6 +13166,12 @@ public final class Flappy {
       hash = (53 * hash) + getPushType().hashCode();
       hash = (37 * hash) + PUSHPLAT_FIELD_NUMBER;
       hash = (53 * hash) + getPushPlat().hashCode();
+      hash = (37 * hash) + PUSHLANGUAGE_FIELD_NUMBER;
+      hash = (53 * hash) + getPushLanguage().hashCode();
+      hash = (37 * hash) + PUSHPRIVACY_FIELD_NUMBER;
+      hash = (53 * hash) + getPushPrivacy();
+      hash = (37 * hash) + PUSHNODISTURB_FIELD_NUMBER;
+      hash = (53 * hash) + getPushNoDisturb();
       hash = (37 * hash) + TIME_FIELD_NUMBER;
       hash = (53 * hash) + getTime().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -13152,6 +13317,12 @@ public final class Flappy {
 
         pushPlat_ = "";
 
+        pushLanguage_ = "";
+
+        pushPrivacy_ = 0;
+
+        pushNoDisturb_ = 0;
+
         time_ = "";
 
         return this;
@@ -13185,6 +13356,9 @@ public final class Flappy {
         result.pushId_ = pushId_;
         result.pushType_ = pushType_;
         result.pushPlat_ = pushPlat_;
+        result.pushLanguage_ = pushLanguage_;
+        result.pushPrivacy_ = pushPrivacy_;
+        result.pushNoDisturb_ = pushNoDisturb_;
         result.time_ = time_;
         onBuilt();
         return result;
@@ -13252,6 +13426,16 @@ public final class Flappy {
         if (!other.getPushPlat().isEmpty()) {
           pushPlat_ = other.pushPlat_;
           onChanged();
+        }
+        if (!other.getPushLanguage().isEmpty()) {
+          pushLanguage_ = other.pushLanguage_;
+          onChanged();
+        }
+        if (other.getPushPrivacy() != 0) {
+          setPushPrivacy(other.getPushPrivacy());
+        }
+        if (other.getPushNoDisturb() != 0) {
+          setPushNoDisturb(other.getPushNoDisturb());
         }
         if (!other.getTime().isEmpty()) {
           time_ = other.time_;
@@ -13713,13 +13897,195 @@ public final class Flappy {
         return this;
       }
 
+      private Object pushLanguage_ = "";
+      /**
+       * <pre>
+       *推送平台语言
+       * </pre>
+       *
+       * <code>string pushLanguage = 6;</code>
+       * @return The pushLanguage.
+       */
+      public String getPushLanguage() {
+        Object ref = pushLanguage_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          pushLanguage_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *推送平台语言
+       * </pre>
+       *
+       * <code>string pushLanguage = 6;</code>
+       * @return The bytes for pushLanguage.
+       */
+      public com.google.protobuf.ByteString
+          getPushLanguageBytes() {
+        Object ref = pushLanguage_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          pushLanguage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *推送平台语言
+       * </pre>
+       *
+       * <code>string pushLanguage = 6;</code>
+       * @param value The pushLanguage to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPushLanguage(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        pushLanguage_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *推送平台语言
+       * </pre>
+       *
+       * <code>string pushLanguage = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPushLanguage() {
+        
+        pushLanguage_ = getDefaultInstance().getPushLanguage();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *推送平台语言
+       * </pre>
+       *
+       * <code>string pushLanguage = 6;</code>
+       * @param value The bytes for pushLanguage to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPushLanguageBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        pushLanguage_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int pushPrivacy_ ;
+      /**
+       * <pre>
+       *推送平台隐私
+       * </pre>
+       *
+       * <code>int32 pushPrivacy = 7;</code>
+       * @return The pushPrivacy.
+       */
+      @Override
+      public int getPushPrivacy() {
+        return pushPrivacy_;
+      }
+      /**
+       * <pre>
+       *推送平台隐私
+       * </pre>
+       *
+       * <code>int32 pushPrivacy = 7;</code>
+       * @param value The pushPrivacy to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPushPrivacy(int value) {
+        
+        pushPrivacy_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *推送平台隐私
+       * </pre>
+       *
+       * <code>int32 pushPrivacy = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPushPrivacy() {
+        
+        pushPrivacy_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int pushNoDisturb_ ;
+      /**
+       * <pre>
+       *推送平台免打扰
+       * </pre>
+       *
+       * <code>int32 pushNoDisturb = 8;</code>
+       * @return The pushNoDisturb.
+       */
+      @Override
+      public int getPushNoDisturb() {
+        return pushNoDisturb_;
+      }
+      /**
+       * <pre>
+       *推送平台免打扰
+       * </pre>
+       *
+       * <code>int32 pushNoDisturb = 8;</code>
+       * @param value The pushNoDisturb to set.
+       * @return This builder for chaining.
+       */
+      public Builder setPushNoDisturb(int value) {
+        
+        pushNoDisturb_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *推送平台免打扰
+       * </pre>
+       *
+       * <code>int32 pushNoDisturb = 8;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearPushNoDisturb() {
+        
+        pushNoDisturb_ = 0;
+        onChanged();
+        return this;
+      }
+
       private Object time_ = "";
       /**
        * <pre>
        *时间
        * </pre>
        *
-       * <code>string time = 6;</code>
+       * <code>string time = 9;</code>
        * @return The time.
        */
       public String getTime() {
@@ -13739,7 +14105,7 @@ public final class Flappy {
        *时间
        * </pre>
        *
-       * <code>string time = 6;</code>
+       * <code>string time = 9;</code>
        * @return The bytes for time.
        */
       public com.google.protobuf.ByteString
@@ -13760,7 +14126,7 @@ public final class Flappy {
        *时间
        * </pre>
        *
-       * <code>string time = 6;</code>
+       * <code>string time = 9;</code>
        * @param value The time to set.
        * @return This builder for chaining.
        */
@@ -13779,7 +14145,7 @@ public final class Flappy {
        *时间
        * </pre>
        *
-       * <code>string time = 6;</code>
+       * <code>string time = 9;</code>
        * @return This builder for chaining.
        */
       public Builder clearTime() {
@@ -13793,7 +14159,7 @@ public final class Flappy {
        *时间
        * </pre>
        *
-       * <code>string time = 6;</code>
+       * <code>string time = 9;</code>
        * @param value The bytes for time to set.
        * @return This builder for chaining.
        */
@@ -13946,10 +14312,12 @@ public final class Flappy {
       "ve\030\017 \001(\t\022\023\n\013messageDate\030\020 \001(\t\022\020\n\010isDelet" +
       "e\030\021 \001(\005\022\022\n\ndeleteDate\030\022 \001(\t\"I\n\013FlappyKaf" +
       "ka\022\014\n\004type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022" +
-      "\025\n\003msg\030\003 \001(\0132\010.Message\"i\n\005Route\022\016\n\006userI" +
-      "D\030\001 \001(\003\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022" +
-      "\020\n\010pushType\030\004 \001(\t\022\020\n\010pushPlat\030\005 \001(\t\022\014\n\004t" +
-      "ime\030\006 \001(\tb\006proto3"
+      "\025\n\003msg\030\003 \001(\0132\010.Message\"\253\001\n\005Route\022\016\n\006user" +
+      "ID\030\001 \001(\003\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t" +
+      "\022\020\n\010pushType\030\004 \001(\t\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014" +
+      "pushLanguage\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022" +
+      "\025\n\rpushNoDisturb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -14008,7 +14376,7 @@ public final class Flappy {
     internal_static_Route_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Route_descriptor,
-        new String[] { "UserID", "Device", "PushId", "PushType", "PushPlat", "Time", });
+        new String[] { "UserID", "Device", "PushId", "PushType", "PushPlat", "PushLanguage", "PushPrivacy", "PushNoDisturb", "Time", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

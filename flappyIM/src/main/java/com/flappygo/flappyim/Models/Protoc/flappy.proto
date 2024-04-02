@@ -143,6 +143,12 @@ message Route{
   string pushType = 4;
   //推送平台类型
   string pushPlat = 5;
+  //推送平台语言
+  string pushLanguage = 6;
+  //推送平台隐私
+  int32 pushPrivacy = 7;
+  //推送平台免打扰
+  int32 pushNoDisturb = 8;
   //时间
-  string time = 6;
+  string time = 9;
 }
