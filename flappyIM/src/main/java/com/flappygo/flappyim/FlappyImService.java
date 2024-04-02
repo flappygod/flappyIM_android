@@ -51,7 +51,10 @@ import java.util.Objects;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_CUSTOM;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_FILE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_LOCATE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_NORMAL;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
@@ -117,6 +120,7 @@ public class FlappyImService {
             "您有一条语音消息",
             "您有一条位置消息",
             "您有一条视频消息",
+            "您有一条文件消息",
             "您有一条新消息"
     );
 
@@ -329,6 +333,15 @@ public class FlappyImService {
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
                     util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getVideoMsg());
+                }
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_FILE) {
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getFileMsg());
+                }
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_SYSTEM) {
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getSysMsg());
+                }
+                if (chatMessage.getMessageType().intValue() == MSG_TYPE_CUSTOM) {
+                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getGeneralMsg());
                 }
             }
             //推送类型隐藏

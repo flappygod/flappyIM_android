@@ -13,6 +13,8 @@ public class BroadcastMsgSetting {
     String locateMsg;
     //视频消息
     String videoMsg;
+    //文件消息
+    String fileMsg;
     //通用消息
     String generalMsg;
 
@@ -22,6 +24,7 @@ public class BroadcastMsgSetting {
                                String voiceMsg,
                                String locateMsg,
                                String videoMsg,
+                               String fileMsg,
                                String generalMsg
     ) {
         this.title = title;
@@ -30,6 +33,7 @@ public class BroadcastMsgSetting {
         this.voiceMsg = voiceMsg;
         this.locateMsg = locateMsg;
         this.videoMsg = videoMsg;
+        this.fileMsg = fileMsg;
         this.generalMsg = generalMsg;
     }
 
@@ -79,6 +83,14 @@ public class BroadcastMsgSetting {
 
     public void setVideoMsg(String videoMsg) {
         this.videoMsg = videoMsg;
+    }
+
+    public String getFileMsg() {
+        return fileMsg;
+    }
+
+    public void setFileMsg(String fileMsg) {
+        this.fileMsg = fileMsg;
     }
 
     public String getGeneralMsg() {
