@@ -6,6 +6,7 @@ import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.FlappyImService;
+import com.flappygo.flappyim.Tools.StringTool;
 
 import android.content.SharedPreferences;
 import android.content.Context;
@@ -28,8 +29,14 @@ public class DataManager {
     // 用户信息保存
     private final static String KEY_FOR_USER = "com.flappygo.flappyim.data.KEY_FOR_USER";
 
+    // 推送ID的保存
+    private final static String KEY_FOR_PUSH_ID = "com.flappygo.flappyim.data.KEY_FOR_PUSH_ID";
+
     // 推送方式的保存
     private final static String KEY_FOR_PUSH_TYPE = "com.flappygo.flappyim.data.KEY_FOR_PUSH_TYPE";
+
+    // 推送设置信息
+    private final static String KEY_FOR_PUSH_SETTING = "com.flappygo.flappyim.data.KEY_FOR_PUSH_SETTING";
 
     // 消息被点击
     private final static String KEY_FOR_MESSAGE_CLICK = "com.flappygo.flappyim.data.KEY_FOR_MESSAGE_CLICK";
@@ -78,6 +85,40 @@ public class DataManager {
     }
 
 
+    //保存用户信息
+    public void savePushSetting(PushSetting setting) {
+
+        PushSetting update = getPushSetting();
+        update.setRoutePushLanguage(setting.getRoutePushLanguage()==null ? update.getRoutePushLanguage():setting.getRoutePushLanguage());
+        update.setRoutePushNoDisturb(setting.getRoutePushNoDisturb()==null ? update.getRoutePushNoDisturb():setting.getRoutePushNoDisturb());
+        update.setRoutePushPrivacy(setting.getRoutePushPrivacy()==null ? update.getRoutePushPrivacy():setting.getRoutePushPrivacy());
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_PUSH_SETTING, GsonTool.modelToString(update, PushSetting.class));
+        editor.apply();
+    }
+
+
+    //获取推送设置信息
+    public PushSetting getPushSetting() {
+        //获取首选项
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        //获取到设置信息
+        String setting = mSharedPreferences.getString(KEY_FOR_PUSH_SETTING, null);
+        if (setting == null) {
+            return null;
+        }
+        //返回配置信息
+        return GsonTool.jsonObjectToModel(setting, PushSetting.class);
+    }
+
+
     //清空当前的用户信息，用户已经退出登录了
     public void clearLoginUser() {
         chatUser = null;
@@ -90,6 +131,25 @@ public class DataManager {
         editor.apply();
     }
 
+    //保存用户的推送ID
+    public void savePushId(String pushId) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_PUSH_ID, pushId);
+        editor.apply();
+    }
+
+    //获取用户的推送ID
+    public String getPushId() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        return mSharedPreferences.getString(KEY_FOR_PUSH_ID, StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
+    }
 
     //保存用户的推送类型
     public void savePushType(String pushType) {
@@ -108,7 +168,6 @@ public class DataManager {
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
-        //获取到设置信息
         return mSharedPreferences.getString(KEY_FOR_PUSH_TYPE, "0");
     }
 
@@ -129,9 +188,7 @@ public class DataManager {
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
-        //获取到设置信息
         String str = mSharedPreferences.getString(key, null);
-        //返回本地的会话数据
         return GsonTool.jsonObjectToModel(str, FlappyChatSession.class);
     }
 
@@ -153,7 +210,6 @@ public class DataManager {
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
-        //返回本地的会话数据
         return mSharedPreferences.getString(KEY_FOR_MESSAGE_CLICK, null);
     }
 
@@ -187,7 +243,6 @@ public class DataManager {
         );
         //获取到设置信息
         String str = mSharedPreferences.getString(KEY_FOR_SETTING_BROADCAST, null);
-        //空的
         if (str == null) {
             return null;
         }

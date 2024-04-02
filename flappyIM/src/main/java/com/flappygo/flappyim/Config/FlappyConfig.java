@@ -56,6 +56,9 @@ public class FlappyConfig {
     //登录接口的地址
     public String login;
 
+    //更新推送信息
+    public String changePush;
+
     //退出登录的接口地址
     public String logout;
 
@@ -112,6 +115,9 @@ public class FlappyConfig {
 
         //登录接口的地址
         login = serverUrl + "/api/login";
+
+        //修改推送信息
+        changePush = serverUrl + "/api/changePush";
 
         //退出登录的接口地址
         logout = serverUrl + "/api/logout";
