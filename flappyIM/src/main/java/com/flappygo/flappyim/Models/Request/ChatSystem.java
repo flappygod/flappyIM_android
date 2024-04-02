@@ -6,13 +6,13 @@ import java.io.Serializable;
 public class ChatSystem implements Serializable {
 
     //什么也不做
-    public static final int ACTION_UPDATE_DONOTHING=0;
+    public static final int ACTION_UPDATE_DO_NOTHING =0;
 
     //当前会话需要更新至版本
-    public static final int ACTION_UPDATE_ONESESSION=1;
+    public static final int ACTION_UPDATE_ONE_SESSION =1;
 
     //所有会话都需要更新
-    public static final int ACTION_UPDATE_ALLSESSION=2;
+    public static final int ACTION_UPDATE_ALL_SESSION =2;
 
     //系统动作的文本
     private int sysAction;
