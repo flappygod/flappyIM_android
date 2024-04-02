@@ -1,7 +1,6 @@
 package com.flappygo.flappyim;
 
 import com.flappygo.flappyim.ApiServer.Base.BaseListParseCallBack;
-import com.flappygo.flappyim.Models.Settings.BroadcastMsgSetting;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
@@ -23,14 +22,16 @@ import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Thread.NettyThreadDead;
 import com.flappygo.flappyim.Tools.NotificationUtil;
 import com.flappygo.lilin.lxhttpclient.LXHttpClient;
+import com.flappygo.flappyim.Push.PushMsgLanPack;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Datas.FlappyIMCode;
-import com.flappygo.flappyim.Datas.PushSetting;
+import com.flappygo.flappyim.Push.ConfigPushMsg;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.RunningTool;
 import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.Tools.NetTool;
 
 import android.content.BroadcastReceiver;
@@ -39,6 +40,7 @@ import android.net.wifi.WifiManager;
 import android.content.IntentFilter;
 import android.content.Context;
 import android.content.Intent;
+
 import java.util.ArrayList;
 
 import android.os.Message;
@@ -51,16 +53,16 @@ import java.util.Objects;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_NORMAL;
+import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_HIDE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_CUSTOM;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_LOCATE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
-import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_NORMAL;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_FILE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
-import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_TYPE_HIDE;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_JSON_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
@@ -91,9 +93,6 @@ public class FlappyImService {
     //上下文
     private Context appContext;
 
-    //是否显示Notification
-    private boolean showNotification;
-
     //当前服务是否注册
     private volatile boolean receiverRegistered = false;
 
@@ -108,21 +107,6 @@ public class FlappyImService {
 
     //通知被点击的监听
     private NotificationClickListener notificationClickListener;
-
-    //广播翻译
-    private BroadcastMsgSetting broadcastMsgSetting;
-
-    //消息设置
-    private final BroadcastMsgSetting defaultMsgSetting = new BroadcastMsgSetting(
-            "消息提醒",
-            "您有一条系统消息",
-            "您有一条图片消息",
-            "您有一条语音消息",
-            "您有一条位置消息",
-            "您有一条视频消息",
-            "您有一条文件消息",
-            "您有一条新消息"
-    );
 
 
     /****************
@@ -167,7 +151,6 @@ public class FlappyImService {
     /****************
      * 自动Http重新登录和自动Netty重新登录
      ****************/
-    //检查是否需要重新登录
     public void checkAutoLoginHttp(int delayMillis) {
         //如果不是新登录查看旧的是否登录了
         ChatUser user = DataManager.getInstance().getLoginUser();
@@ -203,13 +186,6 @@ public class FlappyImService {
     }
 
 
-    //设置broad cast settings
-    public void setBroadcastMsgSetting(BroadcastMsgSetting setting) {
-        this.broadcastMsgSetting = setting;
-        DataManager.getInstance().saveBroadCastSetting(setting);
-    }
-
-
     //用于检测
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
@@ -236,6 +212,17 @@ public class FlappyImService {
             }
         }
     };
+
+
+    /******
+     * 设置推送语言信息
+     * @param languages 语言信息
+     */
+    public void setPushMsgLanPack(HashMap<String, PushMsgLanPack> languages) {
+        if (!languages.isEmpty()) {
+            ConfigPushMsg.languageMaps = languages;
+        }
+    }
 
 
     //注册网络监听的广播
@@ -302,50 +289,83 @@ public class FlappyImService {
     };
 
 
-    //设置notification
-    public void setNotification(boolean flag) {
-        this.showNotification = flag;
-    }
-
     //发送本地通知
     private void sendNotification(ChatMessage chatMessage) {
-        //不显示notification
-        if (!showNotification) {
+        //免打扰模式
+        if (StringTool.strToInt(DataManager.getInstance().getPushSetting().getRoutePushNoDisturb(), 0) == 1) {
             return;
         }
         //正在后台
         if (RunningTool.isBackground(FlappyImService.this.getAppContext())) {
             NotificationUtil util = new NotificationUtil(FlappyImService.this.getAppContext());
+            String privacy = DataManager.getInstance().getPushSetting().getRoutePushPrivacy();
+            String language = DataManager.getInstance().getPushSetting().getRoutePushLanguage();
             //推送类型普通
-            if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_NORMAL) {
+            if (StringTool.strToInt(privacy, 0) == PUSH_PRIVACY_TYPE_NORMAL) {
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), chatMessage.getChatText());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            chatMessage.getChatText()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_IMG) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getImgMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getImgMsg()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VOICE) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getVoiceMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getVoiceMsg()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_LOCATE) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getLocateMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getLocateMsg()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getVideoMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getVideoMsg()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_FILE) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getFileMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getFileMsg()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_SYSTEM) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getSysMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getSysMsg()
+                    );
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_CUSTOM) {
-                    util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getGeneralMsg());
+                    util.sendNotification(
+                            chatMessage,
+                            ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                            ConfigPushMsg.getLanguagePushMsg(language).getGeneralMsg()
+                    );
                 }
             }
             //推送类型隐藏
-            else if (StringTool.strToDecimal(DataManager.getInstance().getPushType()).intValue() == PUSH_TYPE_HIDE) {
-                util.sendNotification(chatMessage, broadcastMsgSetting.getTitle(), broadcastMsgSetting.getGeneralMsg());
+            else if (StringTool.strToInt(privacy, 0) == PUSH_PRIVACY_TYPE_HIDE) {
+                util.sendNotification(
+                        chatMessage,
+                        ConfigPushMsg.getLanguagePushMsg(language).getTitle(),
+                        ConfigPushMsg.getLanguagePushMsg(language).getGeneralMsg()
+                );
             }
         }
     }
@@ -373,9 +393,6 @@ public class FlappyImService {
         Database database = new Database();
         database.clearSendingMessage();
         database.close();
-        //设置广播消息设置
-        BroadcastMsgSetting former = DataManager.getInstance().getBroadCastSetting();
-        broadcastMsgSetting = (former == null ? defaultMsgSetting : former);
     }
 
     /******
@@ -398,9 +415,6 @@ public class FlappyImService {
         Database database = new Database();
         database.clearSendingMessage();
         database.close();
-        //设置广播消息设置
-        BroadcastMsgSetting former = DataManager.getInstance().getBroadCastSetting();
-        broadcastMsgSetting = (former == null ? defaultMsgSetting : former);
     }
 
     /*******
@@ -518,6 +532,10 @@ public class FlappyImService {
         //免打扰
         if (pushSettings.getRoutePushNoDisturb() != null) {
             hashMap.put("pushNoDisturb", pushSettings.getRoutePushNoDisturb());
+        }
+        //免打扰
+        if (pushSettings.getRoutePushType() != null) {
+            hashMap.put("pushType", pushSettings.getRoutePushType());
         }
         //进行callBack
         LXHttpClient.getInstacne().postParam(FlappyConfig.getInstance().changePush,
@@ -755,7 +773,6 @@ public class FlappyImService {
 
                         @Override
                         public void stateTrue(ResponseLogin response, String tag) {
-                            //netty登录(Socket)
                             loginNetty(response, callback);
                         }
                     }
@@ -767,8 +784,7 @@ public class FlappyImService {
     //自动登录netty
     private void loginNetty(ResponseLogin response, FlappyIMCallback<ResponseLogin> callback) {
         synchronized (this) {
-            //保存设置
-            DataManager.getInstance().savePushType(StringTool.decimalToStr(response.getRoute().getRoutePushType()));
+
             //重置次数
             NettyThreadDead.reset();
             //转换
@@ -779,6 +795,12 @@ public class FlappyImService {
                 public void success(ResponseLogin data) {
                     isRunningLogin = false;
                     if (callback != null) {
+                        PushSetting setting = new PushSetting();
+                        setting.setRoutePushPrivacy(response.getRoute().getRoutePushPrivacy());
+                        setting.setRoutePushNoDisturb(response.getRoute().getRoutePushNoDisturb());
+                        setting.setRoutePushLanguage(response.getRoute().getRoutePushLanguage());
+                        setting.setRoutePushType(response.getRoute().getRoutePushType().toString());
+                        DataManager.getInstance().savePushSetting(setting);
                         callback.success(data);
                     }
                 }
@@ -912,7 +934,7 @@ public class FlappyImService {
     }
 
     //自动登录netty
-    private void autoLoginNetty(ResponseLogin responseInfo) {
+    private void autoLoginNetty(ResponseLogin response) {
         synchronized (this) {
             //再次检查用户
             ChatUser user = DataManager.getInstance().getLoginUser();
@@ -921,7 +943,7 @@ public class FlappyImService {
             }
 
             //用户不一致，那么也不行
-            if (!responseInfo.getUser().getUserId().equals(user.getUserId())) {
+            if (!response.getUser().getUserId().equals(user.getUserId())) {
                 return;
             }
 
@@ -950,15 +972,13 @@ public class FlappyImService {
 
             //重置死亡状态
             NettyThreadDead.reset();
-            //保存推送设置
-            DataManager.getInstance().savePushType(StringTool.decimalToStr(responseInfo.getRoute().getRoutePushType()));
 
             //保存数据
             ChatUser chatUser = DataManager.getInstance().getLoginUser();
             chatUser.setLogin(1);
-            chatUser.setUserAvatar(responseInfo.getUser().getUserAvatar());
-            chatUser.setUserName(responseInfo.getUser().getUserName());
-            chatUser.setUserData(responseInfo.getUser().getUserData());
+            chatUser.setUserAvatar(response.getUser().getUserAvatar());
+            chatUser.setUserName(response.getUser().getUserName());
+            chatUser.setUserData(response.getUser().getUserData());
             DataManager.getInstance().saveLoginUser(chatUser);
             //转换
             String loginReqUDID = Long.toString(System.currentTimeMillis());
@@ -966,6 +986,15 @@ public class FlappyImService {
             HolderLoginCallback.getInstance().addLoginCallBack(loginReqUDID, new FlappyIMCallback<ResponseLogin>() {
                 @Override
                 public void success(ResponseLogin data) {
+
+                    //保存设置
+                    PushSetting pushSetting = new PushSetting();
+                    pushSetting.setRoutePushLanguage(response.getRoute().getRoutePushLanguage());
+                    pushSetting.setRoutePushPrivacy(response.getRoute().getRoutePushPrivacy());
+                    pushSetting.setRoutePushNoDisturb(response.getRoute().getRoutePushNoDisturb());
+                    pushSetting.setRoutePushType(response.getRoute().getRoutePushType().toString());
+                    DataManager.getInstance().savePushSetting(pushSetting);
+
                     isRunningAutoLogin = false;
                 }
 
@@ -977,7 +1006,7 @@ public class FlappyImService {
             //开始链接
             FlappySocketService.getInstance().startConnect(
                     loginReqUDID,
-                    responseInfo,
+                    response,
                     new NettyThreadDead() {
                         //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                         @Override
@@ -988,7 +1017,7 @@ public class FlappyImService {
                         //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
                         @Override
                         protected void threadDeadRetryNetty() {
-                            checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, responseInfo);
+                            checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
                         }
                     }
             );

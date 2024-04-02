@@ -1,18 +1,15 @@
 package com.flappygo.flappyim.Models.Server;
 
-import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Tools.StringTool;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class ChatRoute implements Serializable {
+
     //默认显示文本
-    public final static int PUSH_TYPE_NORMAL = 0;
+    public final static int PUSH_PRIVACY_TYPE_NORMAL = 0;
     //隐藏文本信息
-    public final static int PUSH_TYPE_HIDE = 1;
-
-
+    public final static int PUSH_PRIVACY_TYPE_HIDE = 1;
 
     private String routeId;
 
@@ -29,6 +26,12 @@ public class ChatRoute implements Serializable {
     private BigDecimal routePushType;
 
     private String routePushPlat;
+
+    private String routePushLanguage;
+
+    private String routePushPrivacy;
+
+    private String routePushNoDisturb;
 
     private String routeServerIp;
 
@@ -154,23 +157,28 @@ public class ChatRoute implements Serializable {
         this.routePushPlat = routePushPlat;
     }
 
-    //创建
-    public Flappy.Route toProtocRoute(Flappy.Route.Builder builder){
-        if(getRouteUserId()!=null){
-            builder.setUserID(StringTool.strToLong(getRouteUserId()));
-        }
-        if(getRouteDevice()!=null){
-            builder.setDevice(getRouteDevice());
-        }
-        if(getRoutePushId()!=null){
-            builder.setPushId(getRoutePushId());
-        }
-        if(getRoutePushType()!=null){
-            builder.setPushType(getRoutePushType().toString());
-        }
-        if(getRouteTime()!=null){
-            builder.setTime(getRouteTime());
-        }
-        return builder.build();
+    public String getRoutePushLanguage() {
+        return routePushLanguage;
     }
+
+    public void setRoutePushLanguage(String routePushLanguage) {
+        this.routePushLanguage = routePushLanguage;
+    }
+
+    public String getRoutePushPrivacy() {
+        return routePushPrivacy;
+    }
+
+    public void setRoutePushPrivacy(String routePushPrivacy) {
+        this.routePushPrivacy = routePushPrivacy;
+    }
+
+    public String getRoutePushNoDisturb() {
+        return routePushNoDisturb;
+    }
+
+    public void setRoutePushNoDisturb(String routePushNoDisturb) {
+        this.routePushNoDisturb = routePushNoDisturb;
+    }
+
 }

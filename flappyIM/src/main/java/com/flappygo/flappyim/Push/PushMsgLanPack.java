@@ -1,6 +1,6 @@
-package com.flappygo.flappyim.Models.Settings;
+package com.flappygo.flappyim.Push;
 
-public class BroadcastMsgSetting {
+public class PushMsgLanPack {
     //标题
     String title;
     //系统消息
@@ -13,19 +13,19 @@ public class BroadcastMsgSetting {
     String locateMsg;
     //视频消息
     String videoMsg;
-    //文件消息
+    //通用消息
     String fileMsg;
     //通用消息
     String generalMsg;
 
-    public BroadcastMsgSetting(String title,
-                               String sysMsg,
-                               String imgMsg,
-                               String voiceMsg,
-                               String locateMsg,
-                               String videoMsg,
-                               String fileMsg,
-                               String generalMsg
+    public PushMsgLanPack(String title,
+                          String sysMsg,
+                          String imgMsg,
+                          String voiceMsg,
+                          String locateMsg,
+                          String videoMsg,
+                          String fileMsg,
+                          String generalMsg
     ) {
         this.title = title;
         this.sysMsg = sysMsg;

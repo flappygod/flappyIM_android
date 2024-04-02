@@ -1,6 +1,9 @@
-package com.flappygo.flappyim.Datas;
+package com.flappygo.flappyim.Push;
 
 public class PushSetting {
+
+    //推送类型
+    private String routePushType;
 
     //推送语言
     private String routePushLanguage;
@@ -10,6 +13,15 @@ public class PushSetting {
 
     //推送免打扰
     private String routePushNoDisturb;
+
+
+    public String getRoutePushType() {
+        return routePushType;
+    }
+
+    public void setRoutePushType(String routePushType) {
+        this.routePushType = routePushType;
+    }
 
     public String getRoutePushLanguage() {
         return routePushLanguage;
