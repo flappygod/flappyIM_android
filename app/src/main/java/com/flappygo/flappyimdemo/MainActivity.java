@@ -45,8 +45,6 @@ public class MainActivity extends Activity {
         FlappyImService.getInstance().setPushPlatform("Google");
         //服务初始
         FlappyImService.getInstance().init(getBaseContext(), "http://192.168.31.11", "http://192.168.31.11");
-        //设置顶部不弹出默认通知
-        FlappyImService.getInstance().setNotification(false);
         //开启服务
         FlappyImService.getInstance().startServer();
 
