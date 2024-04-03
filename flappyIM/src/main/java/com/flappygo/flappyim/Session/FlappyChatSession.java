@@ -695,4 +695,14 @@ public class FlappyChatSession extends FlappyBaseSession {
         return chatMessages;
     }
 
+
+    //获取未读消息的数量
+    public int getUnReadMessageCount() {
+        Database database = Database.getInstance().open();
+        int count = database.getNotReadSessionMessageCountBySessionId(getSession().getSessionId());
+        database.close();
+        return count;
+    }
+
+
 }

@@ -109,7 +109,7 @@ public class FlappyImService {
     private NotificationClickListener notificationClickListener;
 
 
-    /****************
+    /******
      * 设置踢下线的监听
      */
     public void setKickedOutListener(KickedOutListener listener) {
@@ -123,21 +123,25 @@ public class FlappyImService {
     }
 
 
-    /****************
+    /******
      * 消息被点击监听
      */
-    //设置消息被点击的监听
     public void setNotificationClickListener(NotificationClickListener listener) {
         notificationClickListener = listener;
         notifyClicked();
     }
 
-    //获取消息被点击的监听
+    /******
+     * 获取消息被点击的监听
+     * @return 监听
+     */
     public NotificationClickListener getNotificationClickListener() {
         return notificationClickListener;
     }
 
-    //通知被点击
+    /******
+     * 通知被点击
+     */
     public void notifyClicked() {
         String str = DataManager.getInstance().getNotificationClick();
         if (notificationClickListener != null && str != null) {
