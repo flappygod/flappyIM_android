@@ -309,15 +309,20 @@ public class FlappyImService {
      * @param chatMessage 消息
      */
     private void sendNotification(ChatMessage chatMessage) {
+        PushSetting pushSetting = DataManager.getInstance().getPushSetting();
+        //push settings
+        if (pushSetting == null) {
+            return;
+        }
         //免打扰模式
-        if (StringTool.strToInt(DataManager.getInstance().getPushSetting().getRoutePushNoDisturb(), 0) == 1) {
+        if (StringTool.strToInt(pushSetting.getRoutePushNoDisturb(), 0) == 1) {
             return;
         }
         //正在后台
         if (RunningTool.isBackground(FlappyImService.this.getAppContext())) {
             NotificationUtil util = new NotificationUtil(FlappyImService.this.getAppContext());
-            String privacy = DataManager.getInstance().getPushSetting().getRoutePushPrivacy();
-            String language = DataManager.getInstance().getPushSetting().getRoutePushLanguage();
+            String privacy = pushSetting.getRoutePushPrivacy();
+            String language = pushSetting.getRoutePushLanguage();
             //推送类型普通
             if (StringTool.strToInt(privacy, 0) == PUSH_PRIVACY_TYPE_NORMAL) {
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
