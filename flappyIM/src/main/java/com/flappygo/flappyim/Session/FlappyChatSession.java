@@ -679,7 +679,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取最后一条消息
     public ChatMessage getLatestMessage() {
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         ChatMessage chatMessage = database.getSessionLatestMessage(getSession().getSessionId());
         database.close();
         return chatMessage;
@@ -687,7 +687,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取这条消息之前的消息
     public List<ChatMessage> getFormerMessages(String messageId, int size) {
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         List<ChatMessage> chatMessages = database.getSessionLatestMessage(getSession().getSessionId(),
                 messageId,
                 size);

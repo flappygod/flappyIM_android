@@ -175,7 +175,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             DataManager.getInstance().saveLoginUser(user);
 
             //遍历消息进行通知
-            Database database = new Database();
+            Database database = Database.getInstance().open();
             if (handlerLogin.getLoginResponse().getSessions() != null &&
                     handlerLogin.getLoginResponse().getSessions().size() != 0) {
                 database.insertSessions(handlerLogin.getLoginResponse().getSessions());
@@ -235,7 +235,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //收到新的消息
     private void receiveMessage(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         //设置
         for (int s = 0; s < response.getMsgCount(); s++) {
             //得到真正的消息对象
@@ -265,7 +265,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //进行会话更新
         List<Flappy.Session> session = response.getSessionsList();
         //设置
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         //数据开始
         for (int s = 0; s < session.size(); s++) {
             //更新数据
@@ -324,7 +324,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void checkSessionNeedUpdate(ChannelHandlerContext ctx) {
 
         //获取所有数据
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         //获取系统消息
         List<ChatMessage> latestMessages = database.getNotActionSystemMessage();
         //开始处理

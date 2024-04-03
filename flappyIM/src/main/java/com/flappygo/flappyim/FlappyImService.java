@@ -407,7 +407,7 @@ public class FlappyImService {
         //添加总体的监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
         //清空当前正在发送的消息
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         database.clearSendingMessage();
         database.close();
     }
@@ -429,7 +429,7 @@ public class FlappyImService {
         //添加总体的监听,定义全局防止多次重复添加这个监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
         //清空当前正在发送的消息
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         database.clearSendingMessage();
         database.close();
     }
@@ -1212,7 +1212,7 @@ public class FlappyImService {
                 DataManager.getInstance().getLoginUser().getUserExtendId()
         );
         //数据库
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         //获取数据
         SessionData data = database.getUserSessionByExtendID(extendID);
         //关闭
@@ -1354,7 +1354,7 @@ public class FlappyImService {
         if (checkLogin(callback)) {
             return;
         }
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         SessionData data = database.getUserSessionByExtendID(extendID);
         database.close();
         if (data != null) {
@@ -1425,7 +1425,7 @@ public class FlappyImService {
             return;
         }
         //数据库
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         List<SessionData> data = database.getUserSessions();
         database.close();
         //获取所有会话

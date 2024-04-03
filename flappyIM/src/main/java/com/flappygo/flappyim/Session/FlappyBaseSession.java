@@ -63,7 +63,7 @@ public class FlappyBaseSession {
         BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
         bigDecimal = bigDecimal.add(new BigDecimal(1));
         msg.setMessageTableSeq(bigDecimal);
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         database.insertMessage(msg);
         database.close();
         //通知消息发送成功
@@ -74,7 +74,7 @@ public class FlappyBaseSession {
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         database.insertMessage(msg);
         database.close();
         //通知消息发送失败
@@ -85,7 +85,7 @@ public class FlappyBaseSession {
     //将消息的状态更新为已经发送
     private void updateMsgSent(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
-        Database database = new Database();
+        Database database = Database.getInstance().open();
         database.insertMessage(msg);
         database.close();
     }
