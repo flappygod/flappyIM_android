@@ -37,6 +37,21 @@ public class FlappyChatSession extends FlappyBaseSession {
     //保留的监听列表
     private final List<MessageListener> listenerList = new ArrayList<>();
 
+    //会话
+    private SessionData session;
+
+
+    //通过session data 创建
+    public FlappyChatSession(SessionData session) {
+        this.session = session;
+    }
+
+
+    //获取会话数据
+    public SessionData getSession() {
+        return session;
+    }
+
     //设置消息的监听,新收到消息都会在这里
     public void addMessageListener(MessageListener messageListener) {
         //添加监听
@@ -70,19 +85,6 @@ public class FlappyChatSession extends FlappyBaseSession {
             );
         }
         listenerList.clear();
-    }
-
-    //会话
-    private SessionData session;
-
-    //获取会话数据
-    public SessionData getSession() {
-        return session;
-    }
-
-    //设置会话数据
-    public void setSession(SessionData session) {
-        this.session = session;
     }
 
 
