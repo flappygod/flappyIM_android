@@ -93,7 +93,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Flappy.FlappyResponse response) throws Exception {
+    protected void messageReceived(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
         //登录成功,现在才代表真正的登录成功
         if (response.getType() == FlappyResponse.RES_LOGIN) {
             receiveLogin(ctx, response);
@@ -107,7 +107,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             receiveUpdate(ctx, response);
         }
     }
-
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -472,7 +471,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             MessageManager.getInstance().messageSendFailure(chatMessage, ex);
         }
     }
-
 
 
 }
