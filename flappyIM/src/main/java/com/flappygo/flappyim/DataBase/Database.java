@@ -55,7 +55,8 @@ public class Database {
     }
 
     //单例
-    private Database() {}
+    private Database() {
+    }
 
     //加锁
     private static Object lock = new Object();
@@ -976,8 +977,8 @@ public class Database {
     //获取未读消息数量
     public int getNotReadSessionMessageCountBySessionId(String sessionID) {
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE + " WHERE messageSession = ? and messageSendId != ? and messageReadState = 0 and messageType != 0 and messageType != 8";
-        Cursor cursor = db.rawQuery(countQuery, new String[]{sessionID, chatUser.getUserId()});
+        String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE + " WHERE messageInsertUser = ? and messageSession = ? and messageSendId != ? and messageReadState = 0 and messageType != 0 and messageType != 8";
+        Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
         int count = 0;
         if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
