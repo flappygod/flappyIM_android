@@ -278,7 +278,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             for (ChatMessage message : messages) {
                 //更新消息
                 if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(message.getChatSystem().getSysTime()).longValue()) {
+                    //设置阅读状态
                     message.setMessageReadState(new BigDecimal(1));
+                    //插入消息
                     database.insertMessage(message);
                 }
             }

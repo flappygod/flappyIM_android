@@ -6,8 +6,6 @@ import java.util.Date;
 
 public class ChatSession implements Serializable {
 
-
-
     //单聊
     public final static int TYPE_SINGLE=1;
     //群聊

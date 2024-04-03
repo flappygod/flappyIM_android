@@ -619,13 +619,8 @@ public class Database {
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
                 info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-                //转换为array
-                info.setUsers(
-                        GsonTool.jsonArrayToModels(
-                                cursor.getString(cursor.getColumnIndex("users")),
-                                ChatUser.class
-                        )
-                );
+                info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")),ChatUser.class));
+                info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(sessionId));
                 cursor.close();
                 return info;
             }
@@ -676,12 +671,8 @@ public class Database {
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
                 info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 //转换为array
-                info.setUsers(
-                        GsonTool.jsonArrayToModels(
-                                cursor.getString(cursor.getColumnIndex("users")),
-                                ChatUser.class
-                        )
-                );
+                info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")),ChatUser.class));
+                info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
                 cursor.close();
                 return info;
             }
@@ -730,6 +721,7 @@ public class Database {
                     info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
                     info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                     info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
+                    info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
                     sessions.add(info);
                     cursor.moveToNext();
                 }
@@ -982,6 +974,21 @@ public class Database {
             return list;
         }
     }
+
+
+    //获取未读消息数量
+    public int getNotReadSessionMessageCountBySessionId(String sessionID) {
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE + " WHERE messageSession = ? and messageSendId != ? and messageReadState = 0 and messageType != 0 and messageType != 8";
+        Cursor cursor = db.rawQuery(countQuery, new String[]{sessionID, chatUser.getUserId()});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
 
     //获取所有还未做处理的系统消息
     @SuppressLint("Range")
