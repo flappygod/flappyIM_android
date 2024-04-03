@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     defaultConfig {
         applicationId "com.flappygo.flappyim"
         minSdkVersion 21
@@ -16,6 +16,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    packagingOptions {
+        resources.excludes += '**/META-INF/INDEX.LIST'
+        resources.excludes += '**/META-INF/io.netty.versions.properties'
     }
 }
 

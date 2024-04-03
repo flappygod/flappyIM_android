@@ -22,6 +22,21 @@ android {
         }
     }
 
+    packagingOptions {
+        resources.excludes += '**/META-INF/INDEX.LIST'
+        resources.excludes += '**/META-INF/io.netty.versions.properties'
+        // 如果需要，你还可以添加更多的排除项
+        // exclude 'META-INF/DEPENDENCIES'
+        // exclude 'META-INF/LICENSE'
+        // exclude 'META-INF/LICENSE.txt'
+        // exclude 'META-INF/license.txt'
+        // exclude 'META-INF/NOTICE'
+        // exclude 'META-INF/NOTICE.txt'
+        // exclude 'META-INF/notice.txt'
+        // exclude 'META-INF/ASL2.0'
+        // exclude 'META-INF/*.kotlin_module'
+    }
+
 }
 
 allprojects {
@@ -33,9 +48,16 @@ allprojects {
 }
 
 dependencies {
-    implementation group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
+    //implementation group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
+
+    // Netty基础模块
+    implementation 'io.netty:netty-transport:4.1.79.Final' // Netty传输层
+    implementation 'io.netty:netty-buffer:4.1.79.Final' // Netty数据缓冲区
+    implementation 'io.netty:netty-common:4.1.79.Final' // Netty编解码器
+    implementation 'io.netty:netty-handler:4.1.79.Final'// Netty通用处理器
+
     implementation 'com.google.protobuf:protobuf-java:3.21.5'
     implementation 'com.github.flappygod:LXHttpClient:2.7'
-    implementation 'androidx.core:core:1.0.2'
+    implementation 'androidx.core:core:1.10.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
