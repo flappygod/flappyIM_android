@@ -131,10 +131,9 @@ public class MessageNotifyManager {
     }
 
     //消息已读回执,对方的阅读消息存在的时候才会执行
-    public void notifyMessageAction(ChatMessage chatMessage,
-                                    ChatMessage formerMessage) {
+    public void notifyMessageAction(ChatMessage chatMessage) {
         //动作消息处理
-        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION && formerMessage == null) {
+        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION) {
             //执行数据库更新操作
             Database.getInstance().handleActionMessageUpdate(chatMessage);
             //获取对象

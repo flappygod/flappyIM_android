@@ -203,7 +203,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             for (int s = 0; s < messages.size(); s++) {
                 ChatMessage chatMessage = messages.get(s);
                 //通知接收成功或者发送成功
-                ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
+                ChatMessage former = database.getMessageByID(chatMessage.getMessageId(), true);
                 //消息状态更改
                 messageArrivedState(chatMessage, former);
                 //插入消息
@@ -213,7 +213,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //通知监听变化
                 MessageNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
                 //通知监听变化
-                MessageNotifyManager.getInstance().notifyMessageAction(chatMessage, former);
+                MessageNotifyManager.getInstance().notifyMessageAction(chatMessage);
                 //保存最后的offset
                 if (s == (messages.size() - 1)) {
                     messageArrivedReceipt(ctx, chatMessage, former);
@@ -242,7 +242,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //得到真正的消息对象
             ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
             //判断数据库是否存在
-            ChatMessage former = database.getMessageByID(chatMessage.getMessageId());
+            ChatMessage former = database.getMessageByID(chatMessage.getMessageId(), true);
             //消息到达后的状态改变
             messageArrivedState(chatMessage, former);
             //插入消息
@@ -252,7 +252,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //新消息到达
             MessageNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
             //新消息到达
-            MessageNotifyManager.getInstance().notifyMessageAction(chatMessage, former);
+            MessageNotifyManager.getInstance().notifyMessageAction(chatMessage);
             //消息回执
             messageArrivedReceipt(ctx, chatMessage, former);
         }
