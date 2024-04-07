@@ -17,9 +17,8 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
     private final Class<T> entityClass;
 
 
-    /*************
+    /******
      * 构造器
-     *
      * @param cls class
      */
     public BaseParseCallback(Class<T> cls) {
@@ -27,7 +26,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
     }
 
 
-    /**************
+    /******
      * 返回状态false
      *
      * @param message 错误消息
@@ -35,7 +34,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
      */
     protected abstract void stateFalse(BaseApiModel<T> message, String tag);
 
-    /****************
+    /******
      * 返回数据JSon解析出错
      *
      * @param e   错误
@@ -43,7 +42,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
      */
     protected abstract void jsonError(Exception e, String tag);
 
-    /**************
+    /******
      * 解析成功
      *
      * @param t   数据
@@ -51,7 +50,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
      */
     public abstract void stateTrue(T t, String tag);
 
-    /*****************
+    /******
      * 网络错误
      *
      * @param e   exception
@@ -60,7 +59,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
     protected abstract void netError(Exception e, String tag);
 
 
-    /****************
+    /******
      * 联网错误的提示
      *
      * @param error 网络错误的原因
@@ -70,7 +69,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
         netError(error, tag);
     }
 
-    /***************
+    /******
      * 请求成功
      *
      * @param data 请求成功后的string data
@@ -81,7 +80,6 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
         BaseParser<T> parser = new BaseParser<T>(data, entityClass);
         //解析成功
         if (parser.isParseSuccess()) {
-            //解析成功
             //此处可以对sign进行必要的验证
             if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
                 //假如设置了验证，而且

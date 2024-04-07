@@ -15,7 +15,7 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
     ///解析字符串的class
     private final Class<T> entityClass;
 
-    /*************
+    /******
      * 构造器
      * @param cls class
      */
@@ -24,28 +24,28 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
     }
 
 
-    /**************
+    /******
      * 返回状态false
      * @param message 错误消息
      * @param tag     线程tag
      */
     public abstract void stateFalse(String message, String tag);
 
-    /****************
+    /******
      * 返回数据JSon解析出错
      * @param e 错误
      * @param tag   线程tag
      */
     protected abstract void jsonError(Exception e, String tag);
 
-    /**************
+    /******
      * 解析成功
      * @param t   数据
      * @param tag 线程tag
      */
     protected abstract void stateTrue(List<T> t, String tag);
 
-    /*****************
+    /******
      * 网络错误
      *
      * @param e   exception
@@ -53,7 +53,7 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
      */
     protected abstract void netError(Exception e, String tag);
 
-    /******************
+    /******
      * 秘钥验证失败
      * @param e   错误
      * @param tag 线程tag
@@ -61,7 +61,7 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
     protected abstract void signError(Exception e, String tag);
 
 
-    /*************
+    /******
      * 联网错误的提示
      * @param error 错误
      * @param tag   线程tag
@@ -70,7 +70,7 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
         netError(error, tag);
     }
 
-    /********************
+    /******
      * 数据获取成功
      * @param data 数据
      * @param tag  线程tag
