@@ -89,7 +89,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //发送消息
-    public ChatMessage sendText(String text,FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendText(String text, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -119,7 +119,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //发送本地图片
-    public ChatMessage sendLocalImage(String path,final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalImage(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -167,7 +167,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //发送图片
-    public ChatMessage sendImage(ChatImage image,FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendImage(ChatImage image, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -197,7 +197,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //发送本地的音频
-    public ChatMessage sendLocalVoice(String path,final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVoice(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -505,15 +505,10 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //未读为零
         if (getUnReadMessageCount() == 0) {
-            //打开数据库
-            Database database = Database.getInstance().open();
-            //获取最后一条阅读消息
-            ChatMessage chatMessage = database.getSessionLatestReadMessage(getSession().getSessionId());
-            //关闭数据库
-            database.close();
-            //成功
-            callback.success(chatMessage);
-            return chatMessage;
+            if (callback != null) {
+                callback.success(null);
+            }
+            return null;
         }
 
         //创建消息
