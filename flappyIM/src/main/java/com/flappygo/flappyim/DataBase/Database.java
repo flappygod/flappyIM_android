@@ -9,7 +9,7 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Handler.HandlerSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Handler.MessageManager;
+import com.flappygo.flappyim.Handler.MessageNotifyManager;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
@@ -189,8 +189,6 @@ public class Database {
                     null,
                     values
             );
-            //处理Action消息插入
-            handleActionMessageInsert(chatMessage);
         }
         ///已经存在记录就更新数据
         else {
@@ -251,56 +249,9 @@ public class Database {
                     "messageId=?",
                     new String[]{chatMessage.getMessageId()
                     });
-            //处理Action消息更新
-            handleActionMessageUpdate(chatMessage);
         }
     }
 
-    /******
-     * 插入消息
-     * @param chatMessage 消息
-     */
-    public void handleActionMessageInsert(ChatMessage chatMessage) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        //不是动作类型
-        if (chatMessage.getMessageType().intValue() != ChatMessage.MSG_TYPE_ACTION) {
-            return;
-        }
-        ChatAction action = chatMessage.getChatAction();
-        switch (action.getActionType()) {
-            case ChatMessage.ACTION_TYPE_READ: {
-                //获取TableSequence
-                String userId = action.getActionIds().get(0);
-                //获取会话ID
-                String sessionId = action.getActionIds().get(1);
-                //获取TableSequence
-                String tableSequence = action.getActionIds().get(2);
-                //更新消息已读
-                updateMessageRead(userId, sessionId, tableSequence);
-                //更新会话任务最新已读
-                updateSessionMemberLatestRead(userId, sessionId, tableSequence);
-                break;
-            }
-            //消息删除
-            case ChatMessage.ACTION_TYPE_DELETE: {
-                //获取用户ID
-                String userId = action.getActionIds().get(0);
-                //获取会话ID
-                String sessionId = action.getActionIds().get(1);
-                //获取TableSequence
-                String messageId = action.getActionIds().get(2);
-                //不是自己发送的消息，进行删除
-                if (!userId.equals(chatUser.getUserId())) {
-                    updateMessageDelete(sessionId, messageId);
-                }
-                break;
-            }
-        }
-    }
 
     /******
      * 处理动作消息
@@ -422,7 +373,7 @@ public class Database {
                 user.setSessionMemberLatestRead(tableSequence);
             }
         }
-        insertSession(sessionData, MessageManager.getInstance().getHandlerSession());
+        insertSession(sessionData, MessageNotifyManager.getInstance().getHandlerSession());
     }
 
     /******
@@ -587,7 +538,7 @@ public class Database {
         }
         db.beginTransaction();
         for (SessionData sessionData : sessionDataList) {
-            insertSession(sessionData, MessageManager.getInstance().getHandlerSession());
+            insertSession(sessionData, MessageNotifyManager.getInstance().getHandlerSession());
         }
         db.setTransactionSuccessful();
         db.endTransaction();

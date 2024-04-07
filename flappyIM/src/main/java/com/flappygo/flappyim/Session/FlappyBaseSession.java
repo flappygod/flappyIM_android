@@ -16,7 +16,7 @@ import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Tools.Upload.UploadTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Handler.MessageManager;
+import com.flappygo.flappyim.Handler.MessageNotifyManager;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.DataBase.Database;
@@ -68,7 +68,7 @@ public class FlappyBaseSession {
         database.insertMessage(msg);
         database.close();
         //通知消息发送成功
-        MessageManager.getInstance().notifyMessageSend(msg);
+        MessageNotifyManager.getInstance().notifyMessageSend(msg);
     }
 
     //发送失败了更新数据
@@ -78,7 +78,7 @@ public class FlappyBaseSession {
         database.insertMessage(msg);
         database.close();
         //通知消息发送失败
-        MessageManager.getInstance().notifyMessageFailure(msg);
+        MessageNotifyManager.getInstance().notifyMessageFailure(msg);
     }
 
     //将消息的状态更新为已经发送

@@ -3,6 +3,8 @@ package com.flappygo.flappyim.Handler;
 
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.DataBase.Database;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
@@ -13,18 +15,18 @@ import java.util.Arrays;
 import java.util.List;
 
 /******
- * message manager
+ * 消息管理器
  */
-public class MessageManager {
+public class MessageNotifyManager {
 
     //单例holder
     private static final class InstanceHolder {
-        static final MessageManager instance = new MessageManager();
+        static final MessageNotifyManager instance = new MessageNotifyManager();
     }
 
     //获取单例
-    public static MessageManager getInstance() {
-        return MessageManager.InstanceHolder.instance;
+    public static MessageNotifyManager getInstance() {
+        return MessageNotifyManager.InstanceHolder.instance;
     }
 
     //用于加锁
@@ -133,17 +135,34 @@ public class MessageManager {
                                     ChatMessage formerMessage) {
         //动作消息处理
         if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION && formerMessage == null) {
+            //执行数据库更新操作
+            Database.getInstance().handleActionMessageUpdate(chatMessage);
+            //获取对象
             ChatAction chatAction = chatMessage.getChatAction();
+            //操作类型
             switch (chatAction.getActionType()) {
                 ///插入的情况下，代表已读，进行通知
                 case ChatMessage.ACTION_TYPE_READ: {
-                    Message msg = new Message();
-                    msg.what = HandlerMessage.MSG_READ;
-                    msg.obj = new ArrayList<>(Arrays.asList(
-                            chatAction.getActionIds().get(1),
-                            chatAction.getActionIds().get(2)
-                    ));
-                    this.handlerMessage.sendMessage(msg);
+                    //自身已读
+                    if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
+                        Message msg = new Message();
+                        msg.what = HandlerMessage.MSG_READ_SELF;
+                        msg.obj = new ArrayList<>(Arrays.asList(
+                                chatAction.getActionIds().get(1),
+                                chatAction.getActionIds().get(2)
+                        ));
+                        this.handlerMessage.sendMessage(msg);
+                    }
+                    //对方已读
+                    else {
+                        Message msg = new Message();
+                        msg.what = HandlerMessage.MSG_READ_OTHER;
+                        msg.obj = new ArrayList<>(Arrays.asList(
+                                chatAction.getActionIds().get(1),
+                                chatAction.getActionIds().get(2)
+                        ));
+                        this.handlerMessage.sendMessage(msg);
+                    }
                     break;
                 }
                 ///插入的情况下，代表新增，进行通知

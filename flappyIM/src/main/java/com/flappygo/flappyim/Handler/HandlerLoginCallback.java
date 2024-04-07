@@ -20,7 +20,6 @@ public class HandlerLoginCallback extends Handler {
     //登录失败
     public final static int LOGIN_FAILURE = 0;
 
-
     //真实的回调
     private FlappyIMCallback<ResponseLogin> callback;
 
@@ -40,17 +39,6 @@ public class HandlerLoginCallback extends Handler {
         this.loginResponse = loginResponse;
     }
 
-
-    //返回
-    public HandlerLoginCallback(Looper looper,
-                                FlappyIMCallback<ResponseLogin> callback,
-                                ResponseLogin loginResponse) {
-        super(looper);
-        this.callback = callback;
-        this.loginResponse = loginResponse;
-    }
-
-
     //设置登录失败
     public void loginFailure(Exception exception) {
         Message message = this.obtainMessage(LOGIN_FAILURE, exception);
@@ -62,7 +50,6 @@ public class HandlerLoginCallback extends Handler {
         Message message = this.obtainMessage(LOGIN_SUCCESS);
         sendMessage(message);
     }
-
 
     //处理消息
     public void handleMessage(Message message) {

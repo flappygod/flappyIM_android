@@ -17,11 +17,6 @@ public class HandlerSession extends Handler {
         super(Looper.getMainLooper());
     }
 
-    //handle message
-    public HandlerSession(Looper looper) {
-        super(looper);
-    }
-
     //消息更新了
     public static final int SESSION_UPDATE = 1;
 

@@ -171,6 +171,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //设置登录成功，并保存
             user.setLogin(1);
+
             //保存数据
             DataManager.getInstance().saveLoginUser(user);
 
@@ -208,11 +209,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //插入消息
                 database.insertMessage(chatMessage);
                 //消息发送回调
-                MessageManager.getInstance().messageSendSuccess(chatMessage);
+                MessageNotifyManager.getInstance().messageSendSuccess(chatMessage);
                 //通知监听变化
-                MessageManager.getInstance().notifyMessageReceive(chatMessage, former);
+                MessageNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
                 //通知监听变化
-                MessageManager.getInstance().notifyMessageAction(chatMessage, former);
+                MessageNotifyManager.getInstance().notifyMessageAction(chatMessage, former);
                 //保存最后的offset
                 if (s == (messages.size() - 1)) {
                     messageArrivedReceipt(ctx, chatMessage, former);
@@ -247,11 +248,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //插入消息
             database.insertMessage(chatMessage);
             //发送成功
-            MessageManager.getInstance().messageSendSuccess(chatMessage);
+            MessageNotifyManager.getInstance().messageSendSuccess(chatMessage);
             //新消息到达
-            MessageManager.getInstance().notifyMessageReceive(chatMessage, former);
+            MessageNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
             //新消息到达
-            MessageManager.getInstance().notifyMessageAction(chatMessage, former);
+            MessageNotifyManager.getInstance().notifyMessageAction(chatMessage, former);
             //消息回执
             messageArrivedReceipt(ctx, chatMessage, former);
         }
@@ -271,7 +272,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //更新数据
             SessionData data = new SessionData(session.get(s));
             //插入数据
-            database.insertSession(data, MessageManager.getInstance().getHandlerSession());
+            database.insertSession(data, MessageNotifyManager.getInstance().getHandlerSession());
             //消息标记为已经处理
             List<ChatMessage> messages = database.getNotActionSystemMessageBySession(data.getSessionId());
             //将系统消息标记成为已经处理，不再需要重复处理
@@ -297,7 +298,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         isActive = false;
 
         //消息通道关闭，回调
-        MessageManager.getInstance().messageSendFailureAll();
+        MessageNotifyManager.getInstance().messageSendFailureAll();
 
         //如果这里还没有回调成功，那么就是登录失败
         if (this.handlerLogin != null) {
@@ -420,7 +421,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //检查旧消息进行发送
     private void checkFormerMessagesToSend() {
-        List<ChatMessage> formerMessageList = MessageManager.getInstance().getAllUnSendMessages();
+        List<ChatMessage> formerMessageList = MessageNotifyManager.getInstance().getAllUnSendMessages();
         for (ChatMessage message : formerMessageList) {
             sendMessageIfActive(message);
         }
@@ -430,13 +431,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     public void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
         //多次发送，之前的发送全部直接给他失败
-        MessageManager.getInstance().messageSendFailure(
+        MessageNotifyManager.getInstance().messageSendFailure(
                 chatMessage,
                 new Exception("消息重新发送")
         );
 
         //添加进入到消息发送请求
-        MessageManager.getInstance().addHandlerSendCall(
+        MessageNotifyManager.getInstance().addHandlerSendCall(
                 chatMessage.getMessageId(),
                 new HandlerSendCall(callback, chatMessage)
         );
@@ -460,7 +461,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 ChannelFuture future = currentActiveContext.writeAndFlush(builder.build());
                 future.addListener((ChannelFutureListener) channelFuture -> {
                     if (!channelFuture.isSuccess()) {
-                        MessageManager.getInstance().messageSendFailure(
+                        MessageNotifyManager.getInstance().messageSendFailure(
                                 chatMessage,
                                 new Exception("连接已经断开")
                         );
@@ -468,7 +469,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 });
             }
         } catch (Exception ex) {
-            MessageManager.getInstance().messageSendFailure(chatMessage, ex);
+            MessageNotifyManager.getInstance().messageSendFailure(chatMessage, ex);
         }
     }
 
