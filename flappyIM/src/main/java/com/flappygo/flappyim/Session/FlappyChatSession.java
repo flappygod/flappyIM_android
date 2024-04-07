@@ -89,8 +89,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //发送消息
-    public ChatMessage sendText(String text,
-                                FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendText(String text,FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -120,8 +119,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     //发送本地图片
-    public ChatMessage sendLocalImage(String path,
-                                      final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalImage(String path,final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -169,8 +167,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //发送图片
-    public ChatMessage sendImage(ChatImage image,
-                                 FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendImage(ChatImage image,FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -200,8 +197,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     //发送本地的音频
-    public ChatMessage sendLocalVoice(String path,
-                                      final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVoice(String path,final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
