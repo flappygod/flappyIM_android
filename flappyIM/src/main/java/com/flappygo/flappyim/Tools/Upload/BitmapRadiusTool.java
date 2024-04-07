@@ -1,12 +1,12 @@
 package com.flappygo.flappyim.Tools.Upload;
 
+import android.graphics.PorterDuffXfermode;
+import android.graphics.PorterDuff;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Paint;
+import android.graphics.Rect;
 
 
 /**
@@ -28,17 +28,17 @@ public class BitmapRadiusTool {
         //截取的话
         if (option.getScaleType() == RadiusOption.ScaleType.RADIUS_CENTER_CROP) {
             //宽高比为1.0,进行切割
-            float whscale =  1.0f;
+            float rationScale =  1.0f;
             float whbScale = (float) bitmap.getWidth() / (float) bitmap.getHeight();
             //如果view的长宽比
-            if (whscale > whbScale) {
+            if (rationScale > whbScale) {
                 //计算src需要被写入的部分
-                int top = (int) ((bitmap.getHeight() - bitmap.getWidth() / whscale) / 2);
+                int top = (int) ((bitmap.getHeight() - bitmap.getWidth() / rationScale) / 2);
                 srcRect = new Rect(0, top, bitmap.getWidth(), bitmap.getHeight() - top);
                 destRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight() - 2 * top);
 
             } else {
-                int left = (int) ((bitmap.getWidth() - bitmap.getHeight() * whscale) / 2);
+                int left = (int) ((bitmap.getWidth() - bitmap.getHeight() * rationScale) / 2);
                 srcRect = new Rect(left, 0, bitmap.getWidth() - left, bitmap.getHeight());
                 destRect = new Rect(0, 0, bitmap.getWidth() - 2 * left, bitmap.getHeight());
             }

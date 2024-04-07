@@ -6,8 +6,12 @@ import android.util.Log;
 
 import java.util.List;
 
+/******
+ * 运行工具类
+ */
 public class RunningTool {
 
+    //判断是否在后台
     public static boolean isBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();

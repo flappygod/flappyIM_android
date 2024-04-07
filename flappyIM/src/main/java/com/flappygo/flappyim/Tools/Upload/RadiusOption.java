@@ -1,9 +1,8 @@
 package com.flappygo.flappyim.Tools.Upload;
 
-/**
- * Created by Administrator on 2017/5/27.
+/******
+ * 圆角配置
  */
-
 public class RadiusOption {
 
     //corner的类型

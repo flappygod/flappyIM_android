@@ -1,11 +1,11 @@
 package com.flappygo.flappyim.Tools.Upload;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
+import android.os.Looper;
 
-/**
- * Created by yang on 2017/2/9.
+/******
+ * 上传handler
  */
 public class UploadHandler extends Handler {
 
@@ -22,7 +22,7 @@ public class UploadHandler extends Handler {
     }
 
     //回调
-    private ProgressCallBack callBack;
+    private final ProgressCallBack callBack;
 
     //回调
     public interface ProgressCallBack {

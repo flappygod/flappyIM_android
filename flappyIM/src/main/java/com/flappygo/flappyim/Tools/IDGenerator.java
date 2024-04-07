@@ -1,21 +1,17 @@
 package com.flappygo.flappyim.Tools;
 
-
-import java.util.Random;
 import java.util.UUID;
 
-/**
- * Created by lijunlin on 2018/3/11.
+/******
+ * ID生成器
  */
 
 public class IDGenerator {
 
-    //use this to avoid repeat
+    //使用UUID防止重复的message等
     public static String generateCommonID() {
         UUID uuid = UUID.randomUUID();
         String str = uuid.toString();
         return str.replace("-", "");
     }
-
-
 }

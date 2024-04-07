@@ -534,6 +534,7 @@ public class FlappyImService {
 
         ///没有登录直接设置
         if (DataManager.getInstance().getLoginUser() == null || DataManager.getInstance().getLoginUser().isLogin() == 0) {
+            //保存推送信息
             DataManager.getInstance().savePushSetting(pushSettings);
             if (callback != null) {
                 callback.success(DataManager.getInstance().getPushSetting());
@@ -916,7 +917,7 @@ public class FlappyImService {
             //设备ID
             hashMap.put("device", FlappyConfig.getInstance().device);
             //设备ID
-            hashMap.put("pushId", StringTool.getDeviceUnicNumber(getAppContext()));
+            hashMap.put("pushId", StringTool.getDeviceIDNumber(getAppContext()));
             //设备ID
             hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
             //进行callBack
@@ -1093,7 +1094,7 @@ public class FlappyImService {
             //设备ID
             hashMap.put("device", FlappyConfig.getInstance().device);
             //推送ID
-            hashMap.put("pushId", StringTool.getDeviceUnicNumber(getAppContext()));
+            hashMap.put("pushId", StringTool.getDeviceIDNumber(getAppContext()));
             //推送平台
             hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
 

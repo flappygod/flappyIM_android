@@ -3,14 +3,8 @@ package com.flappygo.flappyim.Tools.Upload;
 import android.graphics.Bitmap;
 
 
-/************
- * 
- * Package Name:com.flappygo.lipo.limagegetter.model <br/>
- * ClassName: LXImageReadOption <br/>
- * Function: 读取图片时候的图片地区参数设置   <br/> 
- * date: 2016-3-9 下午2:04:21 <br/> 
- * 
- * @author lijunlin
+/******
+ * 读取配置
  */
 public class LXImageReadOption {
 

@@ -1,26 +1,22 @@
 package com.flappygo.flappyim.Tools.Upload;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
+
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.BitmapFactory.Options;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 
-/********
- * Package Name:com.flappygo.lipo.limagegetter.tools <br/>
- * ClassName: ImageReadTool <br/>
- * Function: 图片读取的工具 <br/>
- * date: 2016-3-9 下午3:27:46 <br/>
- *
- * @author lijunlin
+import java.io.File;
+
+/*****
+ * 图像读取工具
  */
 public class ImageReadTool {
 
@@ -28,11 +24,10 @@ public class ImageReadTool {
 
     /************
      * 判断文件是否存在
-     *
-     * @param path
-     * @return
+     * @param path 路径
+     * @return 是否存在
      */
-    public static boolean isFileExsits(String path) {
+    public static boolean isFileExists(String path) {
         try {
             File file = new File(path);
             return file.exists();
@@ -43,11 +38,10 @@ public class ImageReadTool {
 
     /*********
      * 判断文件是否存在
-     *
      * @param path 判断文件是否存在而且不是文件夹
-     * @return
+     * @return 是否存在
      */
-    public static boolean isFileExsitsAntNotDic(String path) {
+    public static boolean isFileExistsAntNotDic(String path) {
         try {
             File file = new File(path);
             return file.exists() && !file.isDirectory();
@@ -58,16 +52,14 @@ public class ImageReadTool {
 
     /***************
      * 获取图片的宽高
-     *
      * @param filePath 文件路径
-     * @return
+     * @return 宽高
      */
     public static LXImageWH getImageWH(String filePath) {
         // 创建设置
         Options options = new Options();
         // 设置inJustDecodeBounds为true后，decodeFile并不分配空间，此时计算原始图片的长度和宽度
         options.inJustDecodeBounds = true;
-        // 取得参数
         BitmapFactory.decodeFile(filePath, options);
         LXImageWH ret = new LXImageWH();
         ret.setWidth(options.outWidth);
@@ -82,14 +74,12 @@ public class ImageReadTool {
      * @param context 上下文
      * @param path    文件路径
      * @param setting 读取图片的参数设置
-     * @return
+     * @return drawable
      */
     public synchronized static Drawable readFileDrawable(Context context,
                                                          String path,
                                                          LXImageReadOption setting) {
 
-        // 获取InputStream
-        FileInputStream fin = null;
         try {
             // 如果为空就返回空的
             if (path == null) {
@@ -100,7 +90,7 @@ public class ImageReadTool {
                 return null;
             }
             // 获取输入流
-            fin = new FileInputStream(path);
+            FileInputStream fin = new FileInputStream(path);
             // 通过读取图片的大小设置获取option
             Options option = getOption(path, setting);
             // 真正的解析图片
@@ -117,49 +107,30 @@ public class ImageReadTool {
             if (setting != null && setting.getRadiusOption() != null) {
                 bm = BitmapRadiusTool.toRoundCorner(bm, setting.getRadiusOption());
             }
-            // 创建drawable
-            BitmapDrawable drawable = new BitmapDrawable(
-                    context.getResources(), bm);
             // 返回drawable
-            return drawable;
+            return new BitmapDrawable(context.getResources(), bm);
         } catch (FileNotFoundException e) {
-
-        } finally {
-            // 关闭输入流
-            if (fin != null) {
-                try {
-                    fin.close();
-                } catch (IOException e) {
-
-                }
-            }
+            return null;
         }
-
-        return null;
     }
 
-    /**********************
+    /******
      * 获取文件Bitmap
-     *
      * @param setting 设置
-     * @throws IOException
-     ***********************/
-    public synchronized static Bitmap readFileBitmap(String path,
-                                                     LXImageReadOption setting) throws Exception {
-        // 获取InputStream
-        FileInputStream fin = null;
+     */
+    public synchronized static Bitmap readFileBitmap(String path, LXImageReadOption setting) throws Exception {
         try {
-            File file = new File(path);
+            // 文件没找到
             if (path == null) {
-                // 文件没找到
                 throw new Exception("the path is a null");
             }
+            File file = new File(path);
+            // 文件是文件夹
             if (file.isDirectory()) {
-                // 文件没找到
-                throw new Exception("the bitmapfile is a dictionary");
+                throw new Exception("the bitmap file is a dictionary");
             }
             // 获取输入流
-            fin = new FileInputStream(path);
+            FileInputStream fin = new FileInputStream(path);
             // 通过读取图片的大小设置获取option
             Options option = getOption(path, setting);
             // 真正的解析图片
@@ -178,59 +149,36 @@ public class ImageReadTool {
             }
             return bm;
         } catch (FileNotFoundException e) {
-            // 文件没找到
-            throw e;
-        } finally {
-            // 关闭输入流
-            if (fin != null) {
-                try {
-                    fin.close();
-                } catch (IOException e) {
-                }
-            }
+            return null;
         }
     }
 
-    /*********************
+    /******
      * 直接读取文件的bitmap
-     *
      * @param path 文件地址
      * @return 图片
      */
     public synchronized static Bitmap readFileBitmap(String path) throws Exception {
-        FileInputStream fin = null;
         try {
             // 如果为空就返回空的
             if (path == null) {
-                // 文件没找到
                 throw new Exception("the path is a null");
             }
-            fin = new FileInputStream(path);
-            Bitmap bm = BitmapFactory.decodeStream(fin);
-            return bm;
+            FileInputStream fin = new FileInputStream(path);
+            return BitmapFactory.decodeStream(fin);
         } catch (FileNotFoundException e) {
-            // 文件没找到
-            throw e;
-        } finally {
-            // 关闭输入流
-            if (fin != null) {
-                try {
-                    fin.close();
-                } catch (IOException e) {
-                }
-            }
+            return null;
         }
     }
 
 
-    /*************
+    /******
      * 获取图片的大小数据
-     *
      * @param path 大小
-     * @return
+     * @return 图像大小
      */
     public synchronized static LXImageWH getImageSize(String path) throws Exception {
-        if (isFileExsitsAntNotDic(path)) {
+        if (isFileExistsAntNotDic(path)) {
             // 创建设置
             Options options = new Options();
             // 设置inJustDecodeBounds为true后，decodeFile并不分配空间，此时计算原始图片的长度和宽度
@@ -250,11 +198,10 @@ public class ImageReadTool {
 
 
     /**********************
-     * 不同文件不同设置防止大图造成outof memmery
-     *
+     * 不同文件不同设置防止大图造成out of memory
      * @param path    输出图片宽度
      * @param setting 设置
-     ***********************/
+     */
     public synchronized static Options getOption(String path,
                                                  LXImageReadOption setting) {
         // 创建设置
@@ -279,10 +226,7 @@ public class ImageReadTool {
         // 根据要求设置缩放大小
         if (imageWidth != 0 && imageHeight != 0 && setting != null) {
             // 获取缩放的比例
-            int sampleSize = computeSampleSize(options, -1,
-                    setting.getMaxHeight() * setting.getMaxWidth());
-            // 设置缩放的比例
-            options.inSampleSize = sampleSize;
+            options.inSampleSize = computeSampleSize(options, -1, setting.getMaxHeight() * setting.getMaxWidth());
         }
         options.inJustDecodeBounds = false;
         // 最后把标志复原
@@ -294,8 +238,7 @@ public class ImageReadTool {
      *
      * @param setting 设置
      * @param bitmap  输入位图
-     ***********************/
-
+     */
     public synchronized static Bitmap imageScaleMax(Bitmap bitmap,
                                                     LXImageReadOption setting) {
         int dst_w = setting.getMaxWidth();
@@ -305,10 +248,8 @@ public class ImageReadTool {
             return bitmap;
         float src_w = bitmap.getWidth();
         float src_h = bitmap.getHeight();
-
         float scale_w;
         float scale_h;
-
         if (src_w / src_h > dst_w / dst_h)
         // 用宽来缩放
         {
@@ -321,18 +262,15 @@ public class ImageReadTool {
 
         Matrix matrix = new Matrix();
         matrix.postScale(scale_w, scale_h);
-        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, (int) src_w,
+        return Bitmap.createBitmap(bitmap, 0, 0, (int) src_w,
                 (int) src_h, matrix, true);
-
-        return dstbmp;
     }
 
-    /**********************
+    /******
      * 图片大小转换
-     *
      * @param setting 设置
      * @param bitmap  输入位图
-     ***********************/
+     */
 
     public synchronized static Bitmap imageScale(Bitmap bitmap,
                                                  LXImageReadOption setting) {
@@ -346,23 +284,19 @@ public class ImageReadTool {
         float scale_h = ((float) dst_h) / src_h;
         Matrix matrix = new Matrix();
         matrix.postScale(scale_w, scale_h);
-        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,
+        return Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,
                 true);
-        return dstbmp;
     }
 
-    /**************
+    /******
      * 计算出缩放大小
-     *
-     * @param options
-     * @param minSideLength
-     * @param maxNumOfPixels
-     * @return
+     * @param options 配置
+     * @param minSideLength  minSideLength
+     * @param maxNumOfPixels maxNumOfPixels
+     * @return 缩放大小
      */
-    public static int computeSampleSize(Options options,
-                                        int minSideLength, int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength,
-                maxNumOfPixels);
+    public static int computeSampleSize(Options options, int minSideLength, int maxNumOfPixels) {
+        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
         int roundedSize;
         if (initialSize <= 8) {
             roundedSize = 1;
@@ -384,7 +318,6 @@ public class ImageReadTool {
         int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(
                 Math.floor(w / minSideLength), Math.floor(h / minSideLength));
         if (upperBound < lowerBound) {
-            // return the larger one when there is no overlapping zone.
             return lowerBound;
         }
         if ((maxNumOfPixels == -1) && (minSideLength == -1)) {

@@ -13,9 +13,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/******
+ * 视频工具类
+ */
 public class VideoTool {
 
 
+    /******
+     * 视频信息类
+     */
     public static class VideoInfo {
         private String width;
         private String height;
@@ -57,6 +63,13 @@ public class VideoTool {
     }
 
 
+    /******
+     * 获取视频信息
+     * @param context  上下文
+     * @param maxWidHeight 最大高度
+     * @param path  路径
+     * @return 视频信息疏浚
+     */
     public static VideoInfo getVideoInfo(Context context, int maxWidHeight, String path) throws Exception {
         //创建视频信息
         VideoInfo info = new VideoInfo();

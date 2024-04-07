@@ -145,7 +145,7 @@ public class DataManager {
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
-        return mSharedPreferences.getString(KEY_FOR_PUSH_ID, StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
+        return mSharedPreferences.getString(KEY_FOR_PUSH_ID, StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
     }
 
     //保存会话

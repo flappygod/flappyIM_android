@@ -140,7 +140,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
                 .setDevice(FlappyConfig.getInstance().device)
                 .setUserID(this.user.getUserId())
-                .setPushId(StringTool.getDeviceUnicNumber(FlappyImService.getInstance().getAppContext()));
+                .setPushId(StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
 
         //设置最近的消息偏移量作为请求消息数据
         ChatUser user = DataManager.getInstance().getLoginUser();
