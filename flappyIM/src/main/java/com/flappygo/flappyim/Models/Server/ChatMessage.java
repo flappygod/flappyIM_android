@@ -2,20 +2,20 @@ package com.flappygo.flappyim.Models.Server;
 
 import android.util.Base64;
 
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Models.Request.ChatAction;
-import com.flappygo.flappyim.Models.Request.ChatFile;
-import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
+import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
+import com.flappygo.flappyim.Models.Request.ChatImage;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Models.Request.ChatFile;
+import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Tools.StringTool;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
 
 public class ChatMessage {
 
@@ -49,19 +49,13 @@ public class ChatMessage {
     //动作消息
     public final static int MSG_TYPE_ACTION = 8;
 
-
-
     //已读消息
     public final static int ACTION_TYPE_READ = 1;
     //删除消息
     public final static int ACTION_TYPE_DELETE = 2;
 
 
-
-    public ChatMessage() {
-
-    }
-
+    public ChatMessage() {}
 
     private String messageId;
 
@@ -313,7 +307,6 @@ public class ChatMessage {
         return null;
     }
 
-
     //设置系统消息
     public void setChatSystem(ChatSystem chatSystem) {
         if (chatSystem != null) {
@@ -374,7 +367,6 @@ public class ChatMessage {
         return null;
     }
 
-
     //设置定位消息
     public void setChatLocation(ChatLocation chatLocation) {
         //设置文本消息
@@ -397,7 +389,6 @@ public class ChatMessage {
         return null;
     }
 
-
     //设置视频消息
     public void setChatVideo(ChatVideo chatVideo) {
         //设置文本消息
@@ -419,7 +410,6 @@ public class ChatMessage {
         return null;
     }
 
-
     //设置文件消息
     public void setChatFile(ChatFile chatFile) {
         if (chatFile != null) {
@@ -440,7 +430,6 @@ public class ChatMessage {
         return null;
     }
 
-
     //设置自定义消息
     public void setChatCustom(String text) {
         if (text != null) {
@@ -460,7 +449,6 @@ public class ChatMessage {
         }
         return null;
     }
-
 
     //设置文件消息
     public void setChatAction(ChatAction chatAction) {

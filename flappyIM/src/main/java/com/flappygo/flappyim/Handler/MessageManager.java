@@ -5,10 +5,10 @@ import android.os.Message;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /******
  * message manager
@@ -37,10 +37,12 @@ public class MessageManager {
     //回调
     private final ConcurrentHashMap<String, HandlerSendCall> sendHandlers = new ConcurrentHashMap<>();
 
+    //获取Handler Message
     public HandlerMessage getHandlerMessage() {
         return handlerMessage;
     }
 
+    //获取Handler session
     public HandlerSession getHandlerSession() {
         return handlerSession;
     }

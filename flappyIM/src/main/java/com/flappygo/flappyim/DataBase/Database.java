@@ -293,7 +293,7 @@ public class Database {
                 String messageId = action.getActionIds().get(2);
                 //不是自己发送的消息，进行删除
                 if (!userId.equals(chatUser.getUserId())) {
-                    updateMessageDelete(userId, sessionId, messageId);
+                    updateMessageDelete(sessionId, messageId);
                 }
                 break;
             }
@@ -332,14 +332,12 @@ public class Database {
             }
             //消息删除
             case ChatMessage.ACTION_TYPE_DELETE: {
-                //获取用户ID
-                String userId = action.getActionIds().get(0);
                 //获取会话ID
                 String sessionId = action.getActionIds().get(1);
                 //获取TableSequence
                 String messageId = action.getActionIds().get(2);
                 //删除消息
-                updateMessageDelete(userId, sessionId, messageId);
+                updateMessageDelete(sessionId, messageId);
                 break;
             }
         }
@@ -379,12 +377,10 @@ public class Database {
 
     /******
      * 更新消息已读
-     * @param userId        用户ID
      * @param sessionId     会话ID
      * @param messageId     消息ID
      */
-    private void updateMessageDelete(String userId,
-                                     String sessionId,
+    private void updateMessageDelete(String sessionId,
                                      String messageId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
@@ -595,6 +591,28 @@ public class Database {
         db.endTransaction();
     }
 
+    /******
+     * 获取未读消息数量
+     * @param sessionID 会话ID
+     * @return 未读消息数量
+     */
+    public int getNotReadSessionMessageCountBySessionId(String sessionID) {
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE +
+                " WHERE messageInsertUser = ? " +
+                "and messageSession = ? " +
+                "and messageSendId != ? " +
+                "and messageReadState = 0 " +
+                "and messageType != 0 " +
+                "and messageType != 8";
+        Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
 
     /******
      * 获取当前用户的会话
@@ -608,7 +626,6 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
-
         //请求数据
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION,
@@ -619,7 +636,6 @@ public class Database {
                 null,
                 null
         );
-
         //获取数据
         if (cursor.moveToFirst()) {
             SessionData info = new SessionData();
@@ -656,7 +672,6 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
-
         //请求数据
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION,
@@ -667,7 +682,6 @@ public class Database {
                 null,
                 null
         );
-
         //获取数据
         if (cursor.moveToFirst()) {
             SessionData info = new SessionData();
@@ -741,61 +755,12 @@ public class Database {
         return sessions;
     }
 
-    /******
-     * 获取所有的消息
-     * @return 所有的消息
-     */
-    @SuppressLint("Range")
-    public List<ChatMessage> getAllMessages() {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        //列表
-        List<ChatMessage> list = new ArrayList<>();
-        //消息更新
-        Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
-                null,
-                "messageInsertUser = ? and messageType != 8 ",
-                new String[]{chatUser.getUserExtendId()},
-                null,
-                null,
-                "messageTableSeq DESC,messageStamp DESC");
-        //获取数据
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
-                list.add(info);
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
-        return list;
-    }
 
     /******
      * 获取当前这个messageTableSeq的所有消息
      * @param messageSession  会话ID
      * @param messageTableSeq 表序号
-     * @return
+     * @return 获取消息，这个消息可能有多条，主要是没发成功的
      */
     @SuppressLint("Range")
     private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableSeq) {
@@ -851,14 +816,11 @@ public class Database {
     //获取会话之前的消息列表
     @SuppressLint("Range")
     public List<ChatMessage> getSessionFormerMessages(String messageSession, String messageID, int size) {
-
-
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
             return new ArrayList<>();
         }
-
         //首先查询到这个消息
         ChatMessage chatMessage = getMessageByID(messageID);
         List<ChatMessage> chatMessages = new ArrayList<>();
@@ -917,28 +879,12 @@ public class Database {
             chatMessages = chatMessages.subList(0, size);
         }
         return chatMessages;
-
-    }
-
-
-    //获取未读消息数量
-    public int getNotReadSessionMessageCountBySessionId(String sessionID) {
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE + " WHERE messageInsertUser = ? and messageSession = ? and messageSendId != ? and messageReadState = 0 and messageType != 0 and messageType != 8";
-        Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
-        int count = 0;
-        if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);
-        }
-        cursor.close();
-        return count;
     }
 
 
     //获取最近的一条消息
     @SuppressLint("Range")
     public ChatMessage getSessionLatestMessage(String messageSession) {
-
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -979,23 +925,27 @@ public class Database {
         }
         cursor.close();
         return null;
-
     }
 
-    //获取所有的消息中最近的一条消息
+
+    //获取最近的一条消息
     @SuppressLint("Range")
-    public ChatMessage getLatestMessage() {
+    public ChatMessage getSessionLatestReadMessage(String messageSession) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
             return null;
         }
-        //获取最近的user
+        //查询最近一条消息
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_MESSAGE,
                 null,
-                "messageInsertUser = ? and messageType != 8 ",
-                new String[]{chatUser.getUserExtendId()},
+                "messageSession = ? and messageSendExtendId=? and messageInsertUser = ? and messageType = 8",
+                new String[]{
+                        messageSession,
+                        chatUser.getUserExtendId(),
+                        chatUser.getUserExtendId()
+                },
                 null,
                 null,
                 "messageTableSeq DESC,messageStamp DESC LIMIT 1"

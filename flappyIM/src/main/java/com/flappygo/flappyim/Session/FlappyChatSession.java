@@ -506,6 +506,20 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //设置消息已读sequence
     public ChatMessage readSessionMessage(FlappySendCallback<ChatMessage> callback) {
+
+        //未读为零
+        if (getUnReadMessageCount() == 0) {
+            //打开数据库
+            Database database = Database.getInstance().open();
+            //获取最后一条阅读消息
+            ChatMessage chatMessage = database.getSessionLatestReadMessage(getSession().getSessionId());
+            //关闭数据库
+            database.close();
+            //成功
+            callback.success(chatMessage);
+            return chatMessage;
+        }
+
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID

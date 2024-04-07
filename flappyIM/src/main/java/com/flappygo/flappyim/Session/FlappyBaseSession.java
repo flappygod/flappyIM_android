@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.Session;
 
-
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
@@ -25,7 +24,9 @@ import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
 
 import java.math.BigDecimal;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,7 +37,6 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
 public class FlappyBaseSession {
-
 
     ///获取当前的消息handler
     ChannelMsgHandler getCurrentChannelMessageHandler() {
@@ -56,18 +56,20 @@ public class FlappyBaseSession {
 
     //我们姑且认为是最后一条
     public void insertMessage(ChatMessage msg) {
+        //设置状态
         msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
+        //设置消息的TableSeq,这里这个值并不是最终值，最终以服务端成功后的返回值为准
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
         bigDecimal = bigDecimal.add(new BigDecimal(1));
         msg.setMessageTableSeq(bigDecimal);
+        //插入消息
         Database database = Database.getInstance().open();
         database.insertMessage(msg);
         database.close();
         //通知消息发送成功
         MessageManager.getInstance().notifyMessageSend(msg);
     }
-
 
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
@@ -79,7 +81,6 @@ public class FlappyBaseSession {
         MessageManager.getInstance().notifyMessageFailure(msg);
     }
 
-
     //将消息的状态更新为已经发送
     private void updateMsgSent(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
@@ -87,7 +88,6 @@ public class FlappyBaseSession {
         database.insertMessage(msg);
         database.close();
     }
-
 
     //发送消息
     protected void sendMessage(ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
@@ -98,7 +98,6 @@ public class FlappyBaseSession {
             callback.failure(chatMessage, new Exception("Channel error"), Integer.parseInt(RESULT_NET_ERROR));
             return;
         }
-
         //取得了handler,再发送消息
         handler.sendMessage(chatMessage, new FlappySendCallback<ChatMessage>() {
             @Override
@@ -114,7 +113,6 @@ public class FlappyBaseSession {
             }
         });
     }
-
 
     //上传图片并发送
     protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
