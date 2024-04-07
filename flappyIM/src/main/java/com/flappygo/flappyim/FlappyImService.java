@@ -293,9 +293,15 @@ public class FlappyImService {
         }
 
         @Override
-        public void messageRead(String tableSequence) {
+        public void messageReadOther(String sessionId, String readerId, String tableSequence) {
 
         }
+
+        @Override
+        public void messageReadSelf(String sessionId, String readerId, String tableSequence) {
+
+        }
+
 
         @Override
         public void messageDelete(String messageId) {

@@ -128,7 +128,12 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void messageRead(String tableSequence) {
+            public void messageReadOther(String sessionId, String readerId, String tableSequence) {
+
+            }
+
+            @Override
+            public void messageReadSelf(String sessionId, String readerId, String tableSequence) {
 
             }
 
@@ -208,7 +213,12 @@ public class MainActivity extends Activity {
                             }
 
                             @Override
-                            public void messageRead(String tableSequence) {
+                            public void messageReadOther(String sessionId, String readerId, String tableSequence) {
+
+                            }
+
+                            @Override
+                            public void messageReadSelf(String sessionId, String readerId, String tableSequence) {
 
                             }
 
