@@ -688,7 +688,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     //获取这条消息之前的消息
     public List<ChatMessage> getFormerMessages(String messageId, int size) {
         Database database = Database.getInstance().open();
-        List<ChatMessage> chatMessages = database.getSessionLatestMessage(getSession().getSessionId(),
+        List<ChatMessage> chatMessages = database.getSessionFormerMessages(getSession().getSessionId(),
                 messageId,
                 size);
         database.close();
