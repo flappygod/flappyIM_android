@@ -1,12 +1,14 @@
 package com.flappygo.flappyim.Handler;
 
-import android.os.Message;
 
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
+
+import android.os.Message;
+
 import java.util.Arrays;
 import java.util.List;
 
