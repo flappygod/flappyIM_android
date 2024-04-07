@@ -18,17 +18,19 @@ public class BaseListParser<T> {
 
     //基本列表的解析对象
     private BaseApiModel<List<T>> baseApiModel;
+
     //判断是否解析成功
     private boolean parseSuccess;
+
     //解析错误时候的报错代码
     private Exception exception;
+
     //判断加密是否正确
     private boolean signRight;
 
 
-    /***********
+    /******
      * 基本列表解析对象
-     *
      * @param dataStr 数据
      * @param cls     列表中的对象类型
      */

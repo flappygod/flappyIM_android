@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 public class BaseApiModel<T> implements Serializable {
 
-
     //请求返回的编码
     private String code;
     //加密秘钥
@@ -18,8 +17,6 @@ public class BaseApiModel<T> implements Serializable {
     private int pageCount;
     //请求返回的数据内容
     private T data;
-
-
 
     public int getPageCount() {
         return pageCount;
