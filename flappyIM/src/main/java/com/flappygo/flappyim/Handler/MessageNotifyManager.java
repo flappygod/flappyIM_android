@@ -149,6 +149,7 @@ public class MessageNotifyManager {
                         msg.what = HandlerMessage.MSG_READ_SELF;
                         msg.obj = new ArrayList<>(Arrays.asList(
                                 chatAction.getActionIds().get(1),
+                                chatAction.getActionIds().get(0),
                                 chatAction.getActionIds().get(2)
                         ));
                         this.handlerMessage.sendMessage(msg);
@@ -159,6 +160,7 @@ public class MessageNotifyManager {
                         msg.what = HandlerMessage.MSG_READ_OTHER;
                         msg.obj = new ArrayList<>(Arrays.asList(
                                 chatAction.getActionIds().get(1),
+                                chatAction.getActionIds().get(0),
                                 chatAction.getActionIds().get(2)
                         ));
                         this.handlerMessage.sendMessage(msg);

@@ -95,12 +95,13 @@ public class HandlerMessage extends Handler {
         if (message.what == MSG_READ_OTHER) {
             List<String> chatMessage = (List<String>) message.obj;
             String sessionId = chatMessage.get(0);
-            String messageTableSeq = chatMessage.get(1);
+            String readerId = chatMessage.get(1);
+            String messageTableSeq = chatMessage.get(2);
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
                 if (sessionId.equals(key) || key.equals(globalMsgTag)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageReadPeer(messageTableSeq);
+                        messageListeners.get(x).messageReadOther(sessionId, readerId, messageTableSeq);
                     }
                 }
             }
@@ -109,12 +110,13 @@ public class HandlerMessage extends Handler {
         if (message.what == MSG_READ_SELF) {
             List<String> chatMessage = (List<String>) message.obj;
             String sessionId = chatMessage.get(0);
-            String messageTableSeq = chatMessage.get(1);
+            String readerId = chatMessage.get(1);
+            String messageTableSeq = chatMessage.get(2);
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
                 if (sessionId.equals(key) || key.equals(globalMsgTag)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageReadSelf(messageTableSeq);
+                        messageListeners.get(x).messageReadSelf(sessionId, readerId, messageTableSeq);
                     }
                 }
             }

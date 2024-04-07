@@ -17,10 +17,10 @@ public interface MessageListener {
     void messageReceived(ChatMessage chatMessage);
 
     //消息已读
-    void messageReadPeer(String tableSequence);
+    void messageReadOther(String sessionId,String readerId,String tableSequence);
 
     //消息已读
-    void messageReadSelf(String tableSequence);
+    void messageReadSelf(String sessionId,String readerId,String tableSequence);
 
     //消息被删除
     void messageDelete(String messageId);
