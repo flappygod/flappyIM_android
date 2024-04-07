@@ -41,7 +41,7 @@ public class BaseParser<T> {
             }
             //假如是对象
             else {
-                baseApiModel.setData(GsonTool.jsonObjectToModel(strData, cls));
+                baseApiModel.setData(GsonTool.jsonStringToModel(strData, cls));
             }
             //解析成功
             parseSuccess = true;

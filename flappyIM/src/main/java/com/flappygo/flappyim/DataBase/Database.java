@@ -189,6 +189,7 @@ public class Database {
                     null,
                     values
             );
+            //处理Action消息插入
             handleActionMessageInsert(chatMessage);
         }
         ///已经存在记录就更新数据
@@ -250,6 +251,7 @@ public class Database {
                     "messageId=?",
                     new String[]{chatMessage.getMessageId()
                     });
+            //处理Action消息更新
             handleActionMessageUpdate(chatMessage);
         }
     }
@@ -730,26 +732,29 @@ public class Database {
 
         //获取数据
         List<SessionData> sessions = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                SessionData info = new SessionData();
-                info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
-                info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
-                info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
-                info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
-                info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
-                info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
-                info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
-                info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
-                info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
-                info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
-                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-                info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
-                info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
-                sessions.add(info);
-                cursor.moveToNext();
-            }
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return sessions;
+        }
+        while (!cursor.isAfterLast()) {
+            SessionData info = new SessionData();
+            info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+            info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
+            info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
+            info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
+            info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
+            info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
+            info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
+            info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
+            info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
+            info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
+            info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
+            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
+            info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
+            info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
+            sessions.add(info);
+            cursor.moveToNext();
         }
         cursor.close();
         return sessions;
@@ -783,30 +788,32 @@ public class Database {
                 null,
                 null,
                 "messageStamp DESC");
-        //获取数据
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
-                list.add(info);
-                cursor.moveToNext();
-            }
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return list;
+        }
+        while (!cursor.isAfterLast()) {
+            ChatMessage info = new ChatMessage();
+            info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
+            info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
+            info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
+            info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
+            info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+            info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+            info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
+            info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
+            info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
+            info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
+            info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
+            info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
+            info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+            info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            list.add(info);
+            cursor.moveToNext();
         }
         cursor.close();
         return list;
@@ -821,7 +828,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
-        //首先查询到这个消息
+        //首先查询所有的这个seq的消息，可能有很多发送失败的消息，而这里的消息也是经过排序好的
         ChatMessage chatMessage = getMessageByID(messageID);
         List<ChatMessage> chatMessages = new ArrayList<>();
         List<ChatMessage> sessionSeqMessages = getSessionSeqMessages(
@@ -848,30 +855,33 @@ public class Database {
                 null,
                 "messageTableSeq DESC,messageStamp DESC LIMIT " + size
         );
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return list;
+        }
         //获取数据
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast() && list.size() < size) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
-                list.add(info);
-                cursor.moveToNext();
-            }
+        while (!cursor.isAfterLast() && list.size() < size) {
+            ChatMessage info = new ChatMessage();
+            info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
+            info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
+            info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
+            info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
+            info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+            info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+            info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
+            info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
+            info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
+            info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
+            info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
+            info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
+            info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+            info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            list.add(info);
+            cursor.moveToNext();
         }
         cursor.close();
         chatMessages.addAll(list);
@@ -1048,29 +1058,33 @@ public class Database {
         );
         //获取数据
         List<ChatMessage> list = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
-                list.add(info);
-                cursor.moveToNext();
-            }
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return list;
+        }
+        //获取所有数据
+        while (!cursor.isAfterLast()) {
+            ChatMessage info = new ChatMessage();
+            info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
+            info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
+            info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
+            info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
+            info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+            info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+            info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
+            info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
+            info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
+            info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
+            info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
+            info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
+            info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+            info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            list.add(info);
+            cursor.moveToNext();
         }
         cursor.close();
         return list;
@@ -1097,30 +1111,33 @@ public class Database {
                 null,
                 "messageTableSeq DESC"
         );
-        //获取数据
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-                info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-                info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
-                list.add(info);
-                cursor.moveToNext();
-            }
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return list;
+        }
+        //获取所有数据
+        while (!cursor.isAfterLast()) {
+            ChatMessage info = new ChatMessage();
+            info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
+            info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
+            info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
+            info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
+            info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+            info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+            info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
+            info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
+            info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
+            info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
+            info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
+            info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
+            info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+            info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            list.add(info);
+            cursor.moveToNext();
         }
         cursor.close();
         return list;

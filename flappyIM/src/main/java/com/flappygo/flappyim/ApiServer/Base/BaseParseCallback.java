@@ -7,13 +7,14 @@ import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
 
 
-/**
- * Created by yang on 2016/5/27.
+/******
+ * 基础解析
+ * @param <T> 类型
  */
 public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
 
-    ///class
-    private Class<T> entityClass;
+    //实体对象
+    private final Class<T> entityClass;
 
 
     /*************

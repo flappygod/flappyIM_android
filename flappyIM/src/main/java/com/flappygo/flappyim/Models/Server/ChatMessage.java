@@ -321,7 +321,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_SYSTEM) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatSystem.class);
+                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatSystem.class);
             }
         }
         return null;
@@ -341,7 +341,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_IMG) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatImage.class);
+                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatImage.class);
             }
         }
         return null;
@@ -361,7 +361,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_VOICE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatVoice.class);
+                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatVoice.class);
             }
         }
         return null;
@@ -383,7 +383,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatLocation.class);
+                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatLocation.class);
             }
         }
         return null;
@@ -404,7 +404,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatVideo.class);
+                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatVideo.class);
             }
         }
         return null;
@@ -424,7 +424,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_FILE) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatFile.class);
+                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatFile.class);
             }
         }
         return null;
@@ -467,7 +467,7 @@ public class ChatMessage {
         if (getMessageType().intValue() == MSG_TYPE_ACTION) {
             String str = getMessageContent();
             if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonObjectToModel(
+                return GsonTool.jsonStringToModel(
                         new String(Base64.decode(str.getBytes(), Base64.DEFAULT)),
                         ChatAction.class
                 );

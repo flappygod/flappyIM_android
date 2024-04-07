@@ -72,7 +72,7 @@ public class DataManager {
             return null;
         }
         //转换为设置
-        ChatUser model = GsonTool.jsonObjectToModel(setting, ChatUser.class);
+        ChatUser model = GsonTool.jsonStringToModel(setting, ChatUser.class);
         //进行缓存
         chatUser = model;
         //返回配置信息
@@ -112,7 +112,7 @@ public class DataManager {
             return null;
         }
         //返回配置信息
-        return GsonTool.jsonObjectToModel(setting, PushSetting.class);
+        return GsonTool.jsonStringToModel(setting, PushSetting.class);
     }
 
 
@@ -166,7 +166,7 @@ public class DataManager {
                 Context.MODE_PRIVATE
         );
         String str = mSharedPreferences.getString(key, null);
-        return GsonTool.jsonObjectToModel(str, FlappyChatSession.class);
+        return GsonTool.jsonStringToModel(str, FlappyChatSession.class);
     }
 
 

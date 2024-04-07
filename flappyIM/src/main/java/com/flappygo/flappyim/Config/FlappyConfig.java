@@ -40,7 +40,6 @@ public class FlappyConfig {
         setServerUrl("http://49.234.106.91", "http://49.234.106.91");
     }
 
-
     //上传文件的地址
     public String fileUpload;
 

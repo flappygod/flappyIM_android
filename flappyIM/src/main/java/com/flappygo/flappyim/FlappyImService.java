@@ -145,7 +145,7 @@ public class FlappyImService {
     public void notifyClicked() {
         String str = DataManager.getInstance().getNotificationClick();
         if (notificationClickListener != null && str != null) {
-            ChatMessage message = GsonTool.jsonObjectToModel(str, ChatMessage.class);
+            ChatMessage message = GsonTool.jsonStringToModel(str, ChatMessage.class);
             notificationClickListener.notificationClicked(message);
             DataManager.getInstance().removeNotificationClick();
         }

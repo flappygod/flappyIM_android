@@ -7,13 +7,13 @@ import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
 
 import java.util.List;
 
-/***************************************
+/******
  * 基础回调，返回列表类型的数据
  */
 public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String> {
 
     ///解析字符串的class
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
 
     /*************
      * 构造器
