@@ -23,14 +23,14 @@ public class AESTool {
         }
         //set iv
         IvParameterSpec zeroIv = new IvParameterSpec(iv.getBytes());
-        //keybyte
+        //key byte
         byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //aes
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
         //"AES/CBC/PKCS5Padding"
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         //Encrypt
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, zeroIv);
+        cipher.init(Cipher.ENCRYPT_MODE, skySpec, zeroIv);
         //Encrypt
         byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
         //base64
@@ -50,11 +50,11 @@ public class AESTool {
         //bytes
         byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //aes
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
         //"AES/CBC/PKCS5Padding"
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         //set
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec, zeroIv);
+        cipher.init(Cipher.DECRYPT_MODE, skySpec, zeroIv);
         //base 64
         byte[] encrypted1 = Base64.decode(sSrc, Base64.DEFAULT);
         //original
@@ -71,14 +71,14 @@ public class AESTool {
         if (sKey.length() != 16 && sKey.length() != 32) {
             throw new RuntimeException("Key length must be 16 or 32");
         }
-        //keybyte
+        //key byte
         byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //AES
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
         //"AES/ECB/PKCS5Padding"
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         //Encrypt
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+        cipher.init(Cipher.ENCRYPT_MODE, skySpec);
         //Encrypt
         byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
         //base64
@@ -93,14 +93,14 @@ public class AESTool {
         if (sKey.length() != 16 && sKey.length() != 32) {
             throw new RuntimeException("Key length must be 16 or 32");
         }
-        //keybyte
+        //key byte
         byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //AES
-        SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
         //AES/ECB/PKCS5Padding
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         //Decrypt
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+        cipher.init(Cipher.DECRYPT_MODE, skySpec);
         //base64
         byte[] encrypted1 = Base64.decode(sSrc, Base64.DEFAULT);
         //Decrypt
