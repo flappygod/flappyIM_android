@@ -3,9 +3,6 @@ package com.flappygo.flappyim.Tools;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import android.util.Base64;
-
-import java.nio.charset.StandardCharsets;
-
 import javax.crypto.Cipher;
 
 /******
@@ -24,15 +21,15 @@ public class AESTool {
         //set iv
         IvParameterSpec zeroIv = new IvParameterSpec(iv.getBytes());
         //key byte
-        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
+        byte[] raw = sKey.getBytes("utf-8");
         //aes
-        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec sKeySpec = new SecretKeySpec(raw, "AES");
         //"AES/CBC/PKCS5Padding"
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         //Encrypt
-        cipher.init(Cipher.ENCRYPT_MODE, skySpec, zeroIv);
+        cipher.init(Cipher.ENCRYPT_MODE, sKeySpec, zeroIv);
         //Encrypt
-        byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
+        byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
         //base64
         return Base64.encodeToString(encrypted, Base64.DEFAULT);
     }
@@ -48,19 +45,19 @@ public class AESTool {
         //set iv
         IvParameterSpec zeroIv = new IvParameterSpec(iv.getBytes());
         //bytes
-        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
+        byte[] raw = sKey.getBytes("utf-8");
         //aes
-        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec sKeySpec = new SecretKeySpec(raw, "AES");
         //"AES/CBC/PKCS5Padding"
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         //set
-        cipher.init(Cipher.DECRYPT_MODE, skySpec, zeroIv);
+        cipher.init(Cipher.DECRYPT_MODE, sKeySpec, zeroIv);
         //base 64
         byte[] encrypted1 = Base64.decode(sSrc, Base64.DEFAULT);
         //original
         byte[] original = cipher.doFinal(encrypted1);
         //set string
-        return new String(original, StandardCharsets.UTF_8);
+        return new String(original, "utf-8");
     }
 
     //Encrypt ECB
@@ -72,15 +69,15 @@ public class AESTool {
             throw new RuntimeException("Key length must be 16 or 32");
         }
         //key byte
-        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
+        byte[] raw = sKey.getBytes("utf-8");
         //AES
-        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec sKeySpec = new SecretKeySpec(raw, "AES");
         //"AES/ECB/PKCS5Padding"
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         //Encrypt
-        cipher.init(Cipher.ENCRYPT_MODE, skySpec);
+        cipher.init(Cipher.ENCRYPT_MODE, sKeySpec);
         //Encrypt
-        byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
+        byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
         //base64
         return Base64.encodeToString(encrypted, Base64.DEFAULT);
     }
@@ -94,19 +91,19 @@ public class AESTool {
             throw new RuntimeException("Key length must be 16 or 32");
         }
         //key byte
-        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
+        byte[] raw = sKey.getBytes("utf-8");
         //AES
-        SecretKeySpec skySpec = new SecretKeySpec(raw, "AES");
+        SecretKeySpec sKeySpec = new SecretKeySpec(raw, "AES");
         //AES/ECB/PKCS5Padding
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         //Decrypt
-        cipher.init(Cipher.DECRYPT_MODE, skySpec);
+        cipher.init(Cipher.DECRYPT_MODE, sKeySpec);
         //base64
         byte[] encrypted1 = Base64.decode(sSrc, Base64.DEFAULT);
         //Decrypt
         byte[] original = cipher.doFinal(encrypted1);
         //ret string
-        return new String(original, StandardCharsets.UTF_8);
+        return new String(original, "utf-8");
     }
 
 
