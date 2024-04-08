@@ -3,6 +3,9 @@ package com.flappygo.flappyim.Tools;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import android.util.Base64;
+
+import java.nio.charset.StandardCharsets;
+
 import javax.crypto.Cipher;
 
 /******
@@ -21,7 +24,7 @@ public class AESTool {
         //set iv
         IvParameterSpec zeroIv = new IvParameterSpec(iv.getBytes());
         //keybyte
-        byte[] raw = sKey.getBytes("utf-8");
+        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //aes
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         //"AES/CBC/PKCS5Padding"
@@ -29,7 +32,7 @@ public class AESTool {
         //Encrypt
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, zeroIv);
         //Encrypt
-        byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
+        byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
         //base64
         return Base64.encodeToString(encrypted, Base64.DEFAULT);
     }
@@ -45,7 +48,7 @@ public class AESTool {
         //set iv
         IvParameterSpec zeroIv = new IvParameterSpec(iv.getBytes());
         //bytes
-        byte[] raw = sKey.getBytes("utf-8");
+        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //aes
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         //"AES/CBC/PKCS5Padding"
@@ -57,9 +60,7 @@ public class AESTool {
         //original
         byte[] original = cipher.doFinal(encrypted1);
         //set string
-        String originalString = new String(original, "utf-8");
-        //return str
-        return originalString;
+        return new String(original, StandardCharsets.UTF_8);
     }
 
     //Encrypt ECB
@@ -71,7 +72,7 @@ public class AESTool {
             throw new RuntimeException("Key length must be 16 or 32");
         }
         //keybyte
-        byte[] raw = sKey.getBytes("utf-8");
+        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //AES
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         //"AES/ECB/PKCS5Padding"
@@ -79,7 +80,7 @@ public class AESTool {
         //Encrypt
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
         //Encrypt
-        byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
+        byte[] encrypted = cipher.doFinal(sSrc.getBytes(StandardCharsets.UTF_8));
         //base64
         return Base64.encodeToString(encrypted, Base64.DEFAULT);
     }
@@ -93,7 +94,7 @@ public class AESTool {
             throw new RuntimeException("Key length must be 16 or 32");
         }
         //keybyte
-        byte[] raw = sKey.getBytes("utf-8");
+        byte[] raw = sKey.getBytes(StandardCharsets.UTF_8);
         //AES
         SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
         //AES/ECB/PKCS5Padding
@@ -105,9 +106,7 @@ public class AESTool {
         //Decrypt
         byte[] original = cipher.doFinal(encrypted1);
         //ret string
-        String originalString = new String(original, "utf-8");
-        //return
-        return originalString;
+        return new String(original, StandardCharsets.UTF_8);
     }
 
 
