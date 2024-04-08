@@ -84,6 +84,10 @@ public class ChatMessage {
 
     private BigDecimal messageReadState;
 
+    private String messageSecretSend;
+
+    private String messageSecretReceive;
+
     private Date messageDate;
 
     private BigDecimal isDelete;
@@ -196,6 +200,22 @@ public class ChatMessage {
         this.messageReadState = messageReadState;
     }
 
+    public String getMessageSecretSend() {
+        return messageSecretSend;
+    }
+
+    public void setMessageSecretSend(String messageSecretSend) {
+        this.messageSecretSend = messageSecretSend;
+    }
+
+    public String getMessageSecretReceive() {
+        return messageSecretReceive;
+    }
+
+    public void setMessageSecretReceive(String messageSecretReceive) {
+        this.messageSecretReceive = messageSecretReceive;
+    }
+
     public Date getMessageDate() {
         return messageDate;
     }
@@ -230,7 +250,6 @@ public class ChatMessage {
 
     //消息
     public ChatMessage(Flappy.Message msg) {
-        //数据
         messageId = msg.getMessageId();
         messageSession = msg.getMessageSession();
         messageSessionType = new BigDecimal(msg.getMessageSessionType());
@@ -244,6 +263,8 @@ public class ChatMessage {
         messageContent = msg.getMessageContent();
         messageSendState = new BigDecimal(msg.getMessageSendState());
         messageReadState = new BigDecimal(msg.getMessageReadState());
+        messageSecretSend = msg.getMessageSecretSend();
+        messageSecretReceive = msg.getMessageSecretReceive();
         isDelete = new BigDecimal(msg.getIsDelete());
         messageDate = DateTimeTool.strToDate(msg.getMessageDate());
         deleteDate = DateTimeTool.strToDate(msg.getDeleteDate());
@@ -278,6 +299,10 @@ public class ChatMessage {
             msgBuilder.setMessageSendState(StringTool.decimalToInt(getMessageSendState()));
         if (getMessageReadState() != null)
             msgBuilder.setMessageReadState(StringTool.decimalToInt(getMessageReadState()));
+        if (getMessageSecretSend() != null)
+            msgBuilder.setMessageSecretSend(getMessageSecretSend());
+        if (getMessageSecretReceive() != null)
+            msgBuilder.setMessageSecretReceive(getMessageSecretReceive());
         if (getMessageDate() != null)
             msgBuilder.setMessageDate(DateTimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
