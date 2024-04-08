@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.ApiServer.Tools;
 
+import com.flappygo.flappyim.Tools.StringTool;
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
 
@@ -12,8 +13,8 @@ import org.json.JSONArray;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2017/3/30.
+/******
+ * json快速转换工具
  */
 
 public class GsonTool {
@@ -48,6 +49,9 @@ public class GsonTool {
      */
     public static String jsonArrayListStr(List<String> strList) {
         JSONArray array = new JSONArray();
+        if (strList == null || strList.isEmpty()) {
+            return array.toString();
+        }
         for (int s = 0; s < strList.size(); s++) {
             array.put(strList.get(s));
         }
@@ -78,11 +82,10 @@ public class GsonTool {
 
     /*****************
      * 將json數組转换为对象
-     *
      * @param jsonArray 数组
      * @param cls       对象
      * @param <T>       泛型
-     * @return
+     * @return 对象数组
      */
     public static <T> List<T> jsonArrayToModels(String jsonArray, Class<T> cls) {
         try {
@@ -108,6 +111,9 @@ public class GsonTool {
      * @return 对象
      */
     public static <T> T jsonStringToModel(JSONObject jsonObject, Class<T> cls) {
+        if (jsonObject == null) {
+            return null;
+        }
         return gson.fromJson(jsonObject.toString(), cls);
     }
 
@@ -120,6 +126,9 @@ public class GsonTool {
      * @return 对象
      */
     public static <T> T jsonStringToModel(String jsonStr, Class<T> cls) {
+        if (StringTool.isEmpty(jsonStr)) {
+            return null;
+        }
         return gson.fromJson(jsonStr, cls);
     }
 
@@ -133,6 +142,9 @@ public class GsonTool {
      * @return 字符串
      */
     public static <T> String modelToString(T t, Class<T> cls) {
+        if (t == null) {
+            return null;
+        }
         return gson.toJson(t, cls);
     }
 
@@ -145,6 +157,9 @@ public class GsonTool {
      */
     public static <T> String modelToString(List<T> t, Class<T> cls) {
         JSONArray array = new JSONArray();
+        if (t == null || t.isEmpty()) {
+            return array.toString();
+        }
         for (int s = 0; s < t.size(); s++) {
             try {
                 array.put(new JSONObject(gson.toJson(t.get(s), cls)));

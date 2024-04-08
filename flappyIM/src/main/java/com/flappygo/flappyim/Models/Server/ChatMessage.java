@@ -13,6 +13,7 @@ import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Tools.StringTool;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -54,8 +55,8 @@ public class ChatMessage {
     //删除消息
     public final static int ACTION_TYPE_DELETE = 2;
 
-
-    public ChatMessage() {}
+    public ChatMessage() {
+    }
 
     private String messageId;
 
@@ -291,18 +292,14 @@ public class ChatMessage {
     public void setChatText(String text) {
         if (text != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_TEXT);
-            String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(text, null));
         }
     }
 
     //获取文本消息
     public String getChatText() {
         if (getMessageType().intValue() == MSG_TYPE_TEXT) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return new String(Base64.decode(str.getBytes(), Base64.DEFAULT));
-            }
+            return decrypt(getMessageContent(), null);
         }
         return null;
     }
@@ -311,18 +308,15 @@ public class ChatMessage {
     public void setChatSystem(ChatSystem chatSystem) {
         if (chatSystem != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_SYSTEM);
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatSystem, ChatSystem.class).getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatSystem, ChatSystem.class), null));
         }
     }
 
     //获取系统消息
     public ChatSystem getChatSystem() {
         if (getMessageType().intValue() == MSG_TYPE_SYSTEM) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatSystem.class);
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatSystem.class);
         }
         return null;
     }
@@ -331,18 +325,15 @@ public class ChatMessage {
     public void setChatImage(ChatImage chatImage) {
         if (chatImage != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_IMG);
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatImage, ChatImage.class).getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatImage, ChatImage.class), null));
         }
     }
 
     //获取图片消息
     public ChatImage getChatImage() {
         if (getMessageType().intValue() == MSG_TYPE_IMG) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatImage.class);
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatImage.class);
         }
         return null;
     }
@@ -351,18 +342,15 @@ public class ChatMessage {
     public void setChatVoice(ChatVoice chatVoice) {
         if (chatVoice != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_VOICE);
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatVoice, ChatVoice.class).getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatVoice, ChatVoice.class), null));
         }
     }
 
     //获取语音消息
     public ChatVoice getChatVoice() {
         if (getMessageType().intValue() == MSG_TYPE_VOICE) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatVoice.class);
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatVoice.class);
         }
         return null;
     }
@@ -372,8 +360,7 @@ public class ChatMessage {
         //设置文本消息
         if (chatLocation != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_LOCATE);
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatLocation, ChatLocation.class).getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatLocation, ChatLocation.class), null));
         }
     }
 
@@ -381,10 +368,8 @@ public class ChatMessage {
     public ChatLocation getChatLocation() {
         //获取位置消息
         if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatLocation.class);
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatLocation.class);
         }
         return null;
     }
@@ -394,18 +379,15 @@ public class ChatMessage {
         //设置文本消息
         if (chatVideo != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_VIDEO);
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatVideo, ChatVideo.class).getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatVideo, ChatVideo.class), null));
         }
     }
 
     //获取视频消息
     public ChatVideo getChatVideo() {
         if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatVideo.class);
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatVideo.class);
         }
         return null;
     }
@@ -414,18 +396,15 @@ public class ChatMessage {
     public void setChatFile(ChatFile chatFile) {
         if (chatFile != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_FILE);
-            String strBase64 = Base64.encodeToString(GsonTool.modelToString(chatFile, ChatFile.class).getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatFile, ChatFile.class), null));
         }
     }
 
     //获取文件消息
     public ChatFile getChatFile() {
         if (getMessageType().intValue() == MSG_TYPE_FILE) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(new String(Base64.decode(str.getBytes(), Base64.DEFAULT)), ChatFile.class);
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatFile.class);
         }
         return null;
     }
@@ -434,18 +413,14 @@ public class ChatMessage {
     public void setChatCustom(String text) {
         if (text != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_CUSTOM);
-            String strBase64 = Base64.encodeToString(text.getBytes(), Base64.DEFAULT);
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(text, null));
         }
     }
 
     //获取自定义消息
     public String getChatCustom() {
         if (getMessageType().intValue() == MSG_TYPE_CUSTOM) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return new String(Base64.decode(str.getBytes(), Base64.DEFAULT));
-            }
+            return decrypt(getMessageContent(), null);
         }
         return null;
     }
@@ -454,26 +429,45 @@ public class ChatMessage {
     public void setChatAction(ChatAction chatAction) {
         if (chatAction != null) {
             messageType = new BigDecimal(ChatMessage.MSG_TYPE_ACTION);
-            String strBase64 = Base64.encodeToString(
-                    GsonTool.modelToString(chatAction, ChatAction.class).getBytes(),
-                    Base64.DEFAULT
-            );
-            setMessageContent(strBase64);
+            setMessageContent(encrypt(GsonTool.modelToString(chatAction, ChatAction.class), null));
         }
     }
 
     //获取文件消息
     public ChatAction getChatAction() {
         if (getMessageType().intValue() == MSG_TYPE_ACTION) {
-            String str = getMessageContent();
-            if (!StringTool.isEmpty(str)) {
-                return GsonTool.jsonStringToModel(
-                        new String(Base64.decode(str.getBytes(), Base64.DEFAULT)),
-                        ChatAction.class
-                );
-            }
+            String content = decrypt(getMessageContent(), null);
+            return GsonTool.jsonStringToModel(content, ChatAction.class);
         }
         return null;
+    }
+
+    /*******
+     * 加密数据
+     * @param data 数据
+     * @param key  秘钥
+     * @return 加密数据
+     */
+    private String encrypt(String data, String key) {
+        if (StringTool.isEmpty(data)) {
+            return null;
+        }
+        String retStr = Base64.encodeToString(data.getBytes(), Base64.DEFAULT);
+        return retStr.replace("\n", "");
+    }
+
+    /*******
+     * 解密数据
+     * @param data 数据
+     * @param key  秘钥
+     * @return 加密数据
+     */
+    private String decrypt(String data, String key) {
+        if (StringTool.isEmpty(data)) {
+            return null;
+        }
+        String retStr = new String(Base64.decode(data.getBytes(), Base64.DEFAULT));
+        return retStr.replace("\n", "");
     }
 
 }
