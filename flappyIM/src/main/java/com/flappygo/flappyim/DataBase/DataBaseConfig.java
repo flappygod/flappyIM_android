@@ -6,7 +6,7 @@ package com.flappygo.flappyim.DataBase;
  */
 public class DataBaseConfig {
     //数据库名称
-    public static String DB_NAME = "com.flappygo.flappyim.db";
+    public static String DB_NAME = "com.flappy.im.database";
     //数据库版本
     public static int DB_VERSION = 2;
     //消息表
