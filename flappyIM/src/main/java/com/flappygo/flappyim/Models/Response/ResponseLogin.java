@@ -3,6 +3,7 @@ package com.flappygo.flappyim.Models.Response;
 
 import com.flappygo.flappyim.Models.Server.ChatRoute;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Session.FlappySessionData;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,14 +13,14 @@ public class ResponseLogin implements Serializable {
 
     //构造器
     public ResponseLogin(String serverStr) {
-        String str[] = serverStr.split(":");
+        String[] str = serverStr.split(":");
         //服务器地址
         serverIP = str[0];
         //服务器端口
         serverPort = str[1];
         //注册到服务器上的topic
         serverTopic = str[2];
-        //注册到服务器上的groupid
+        //注册到服务器上的group id
         serverGroup = str[3];
     }
 
@@ -42,7 +43,7 @@ public class ResponseLogin implements Serializable {
     private ChatRoute route;
 
     //用户会话
-    private List<SessionData> sessions;
+    private List<FlappySessionData> sessions;
 
 
     public String getServerIP() {
@@ -93,11 +94,11 @@ public class ResponseLogin implements Serializable {
         this.route = route;
     }
 
-    public List<SessionData> getSessions() {
+    public List<FlappySessionData> getSessions() {
         return sessions;
     }
 
-    public void setSessions(List<SessionData> sessions) {
+    public void setSessions(List<FlappySessionData> sessions) {
         this.sessions = sessions;
     }
 }

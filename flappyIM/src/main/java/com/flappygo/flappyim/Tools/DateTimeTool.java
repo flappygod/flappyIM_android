@@ -14,11 +14,9 @@ import java.util.Locale;
  */
 public class DateTimeTool {
 
-
     //定义格式
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
     //将时间格式化为字符串
     public static String dateToStr(Date date) {
@@ -33,7 +31,6 @@ public class DateTimeTool {
         return null;
     }
 
-
     //字符串转换为时间
     public static Date strToDate(String str) {
         //不为空进行处理
@@ -46,6 +43,4 @@ public class DateTimeTool {
         }
         return null;
     }
-
-
 }

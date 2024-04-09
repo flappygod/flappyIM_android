@@ -24,19 +24,19 @@ public class DataManager {
     }
 
     // 首选项名称
-    private final static String PREFERENCE_NAME = "com.flappygo.flappyim.data";
+    private final static String PREFERENCE_NAME = "com.flappy.im.data";
 
     // 用户信息保存
-    private final static String KEY_FOR_USER = "com.flappygo.flappyim.data.KEY_FOR_USER";
+    private final static String KEY_FOR_USER = "com.flappy.im.data.KEY_FOR_USER";
 
     // 推送ID的保存
-    private final static String KEY_FOR_PUSH_ID = "com.flappygo.flappyim.data.KEY_FOR_PUSH_ID";
+    private final static String KEY_FOR_PUSH_ID = "com.flappy.im.data.KEY_FOR_PUSH_ID";
 
     // 推送设置信息
-    private final static String KEY_FOR_PUSH_SETTING = "com.flappygo.flappyim.data.KEY_FOR_PUSH_SETTING";
+    private final static String KEY_FOR_PUSH_SETTING = "com.flappy.im.data.KEY_FOR_PUSH_SETTING";
 
     // 消息被点击
-    private final static String KEY_FOR_MESSAGE_CLICK = "com.flappygo.flappyim.data.KEY_FOR_MESSAGE_CLICK";
+    private final static String KEY_FOR_MESSAGE_CLICK = "com.flappy.im.data.KEY_FOR_MESSAGE_CLICK";
 
 
     //进行缓存

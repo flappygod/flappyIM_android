@@ -1,10 +1,10 @@
 package com.flappygo.flappyim.Thread;
 
-import com.flappygo.flappyim.Callback.FlappyDeadCallback;
+import com.flappygo.flappyim.Callback.FlappyNettyListener;
 import com.flappygo.flappyim.Config.FlappyConfig;
 
 //netty线程被关闭的通知
-public abstract class NettyThreadDead implements FlappyDeadCallback {
+public abstract class NettyThreadDeadListener implements FlappyNettyListener {
 
     //只执行一次
     private boolean once = false;
@@ -27,7 +27,7 @@ public abstract class NettyThreadDead implements FlappyDeadCallback {
     abstract protected void threadDeadRetryNetty();
 
     @Override
-    public void dead() {
+    public void disconnected() {
         synchronized (this) {
             if (enable && !once) {
                 once = true;

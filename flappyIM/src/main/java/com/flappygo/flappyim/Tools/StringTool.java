@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by yang on 2015/10/29.
+/******
+ * 字符串工具类
  */
 public class StringTool {
 

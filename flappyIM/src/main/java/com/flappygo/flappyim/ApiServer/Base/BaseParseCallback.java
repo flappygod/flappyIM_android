@@ -2,6 +2,7 @@ package com.flappygo.flappyim.ApiServer.Base;
 
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
+
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
@@ -13,7 +14,9 @@ import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
  */
 public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
 
-    //实体对象
+    /******
+     * 实体对象
+     */
     private final Class<T> entityClass;
 
 
@@ -80,9 +83,8 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
         BaseParser<T> parser = new BaseParser<T>(data, entityClass);
         //解析成功
         if (parser.isParseSuccess()) {
-            //此处可以对sign进行必要的验证
+            //状态成功
             if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
-                //假如设置了验证，而且
                 stateTrue(parser.getBaseApiModel().getData(), tag);
             }
             //状态错误

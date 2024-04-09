@@ -1,7 +1,6 @@
 package com.flappygo.flappyim.ApiServer.Base;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
-
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
 import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
 
@@ -12,7 +11,9 @@ import java.util.List;
  */
 public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String> {
 
-    ///解析字符串的class
+    /******
+     * 解析字符串的class
+     */
     private final Class<T> entityClass;
 
     /******
@@ -47,18 +48,10 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
 
     /******
      * 网络错误
-     *
      * @param e   exception
      * @param tag 线程tag
      */
     protected abstract void netError(Exception e, String tag);
-
-    /******
-     * 秘钥验证失败
-     * @param e   错误
-     * @param tag 线程tag
-     */
-    protected abstract void signError(Exception e, String tag);
 
 
     /******
@@ -80,10 +73,8 @@ public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String
         BaseListParser<T> parser = new BaseListParser<T>(data, entityClass);
         //解析成功
         if (parser.isParseSuccess()) {
-            //解析成功
             //此处可以对sign进行必要的验证
             if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
-                //假如设置了验证，而且
                 stateTrue(parser.getBaseApiModel().getData(), tag);
             }
             //状态错误

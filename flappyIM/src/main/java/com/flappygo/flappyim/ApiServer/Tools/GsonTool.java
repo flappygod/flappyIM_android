@@ -19,7 +19,9 @@ import java.util.List;
 
 public class GsonTool {
 
-    //GSON对象
+    /******
+     * GSON对象
+     */
     private static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
 
@@ -152,7 +154,7 @@ public class GsonTool {
      * 将列表对象转换为字符串
      * @param t  对象列表
      * @param cls  class
-     * @param <T>  fanxing
+     * @param <T>  泛型
      * @return 字符串
      */
     public static <T> String modelToString(List<T> t, Class<T> cls) {

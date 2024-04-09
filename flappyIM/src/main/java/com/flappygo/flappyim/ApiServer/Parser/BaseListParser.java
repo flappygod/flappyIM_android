@@ -1,18 +1,19 @@
 package com.flappygo.flappyim.ApiServer.Parser;
 
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Tools.StringTool;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import org.json.JSONArray;
+
 import java.util.List;
 
-/**
- * Created by yang on 2016/5/27.
+/******
+ * 基础列表解析器
  */
 public class BaseListParser<T> {
 
@@ -25,18 +26,16 @@ public class BaseListParser<T> {
     //解析错误时候的报错代码
     private Exception exception;
 
-    //判断加密是否正确
-    private boolean signRight;
-
 
     /******
      * 基本列表解析对象
      * @param dataStr 数据
      * @param cls     列表中的对象类型
      */
+    @SuppressWarnings("unchecked")
     public BaseListParser(String dataStr, Class<T> cls) {
         try {
-            baseApiModel = new BaseApiModel<List<T>>();
+            baseApiModel = new BaseApiModel<>();
             //创建
             JSONObject jb = new JSONObject(dataStr);
             //获取到Array数据
@@ -49,29 +48,34 @@ public class BaseListParser<T> {
             baseApiModel.setSign(jb.optString("sign"));
             //返回的总页码
             baseApiModel.setPageCount(jb.optInt("pageCount"));
-            //所有的都先默认为true
-            signRight = true;
             //解析数组
             JSONArray data = new JSONArray(strData);
-            //列表解析
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-            List<T> rs = new ArrayList<T>();
+            //列表
+            List<T> arrayList = new ArrayList<>();
+            //长度
             for (int s = 0; s < data.length(); s++) {
+                //字符串
                 if (cls == String.class) {
-                    rs.add((T) data.get(s).toString());
-                } else if (cls == JSONObject.class) {
-                    rs.add((T) data.getJSONObject(s));
-                } else {
+                    arrayList.add((T) data.get(s).toString());
+                }
+                //json对象
+                else if (cls == JSONObject.class) {
+                    arrayList.add((T) data.getJSONObject(s));
+                }
+                //其他对象
+                else {
                     String str = data.getJSONObject(s).toString();
-                    rs.add(gson.fromJson(str, cls));
+                    arrayList.add(GsonTool.jsonStringToModel(str, cls));
                 }
             }
             //解析成功
-            baseApiModel.setData(rs);
+            baseApiModel.setData(arrayList);
+            //解析成功
             parseSuccess = true;
         } catch (Exception ex) {
             //解析失败
             parseSuccess = false;
+            //错误信息
             exception = ex;
         }
     }
@@ -107,14 +111,5 @@ public class BaseListParser<T> {
         this.exception = exception;
     }
 
-    //判断签名是否正确
-    public boolean isSignRight() {
-        return signRight;
-    }
-
-    //判断签名是否正确
-    public void setSignRight(boolean signRight) {
-        this.signRight = signRight;
-    }
 
 }

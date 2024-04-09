@@ -5,7 +5,9 @@ import com.flappygo.flappyim.Callback.FlappyIMCallback;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-//Holder login call back
+/******
+ * 登录回调Holder
+ */
 public class HolderLoginCallback {
 
     //单例模式

@@ -3,7 +3,7 @@ package com.flappygo.flappyim.DataBase;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 
-import com.flappygo.flappyim.Models.Response.SessionData;
+import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
@@ -377,15 +377,15 @@ public class Database {
      */
     private void updateSessionMemberLatestRead(String userId, String sessionId, String tableSequence) {
         //会话Data
-        SessionData sessionData = getUserSessionByID(sessionId);
+        FlappySessionData flappySessionData = getUserSessionByID(sessionId);
         //更新会话最近已读
-        List<ChatUser> chatUserList = sessionData.getUsers();
+        List<ChatUser> chatUserList = flappySessionData.getUsers();
         for (ChatUser user : chatUserList) {
             if (user.getUserId().equals(userId)) {
                 user.setSessionMemberLatestRead(tableSequence);
             }
         }
-        insertSession(sessionData, MessageNotifyManager.getInstance().getHandlerSession());
+        insertSession(flappySessionData, MessageNotifyManager.getInstance().getHandlerSession());
     }
 
     /******
@@ -410,7 +410,7 @@ public class Database {
      * @param handlerSession 插入会话后的handler
      * @return 是否成功
      */
-    public boolean insertSession(SessionData session,
+    public boolean insertSession(FlappySessionData session,
                                  HandlerSession handlerSession) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
@@ -542,15 +542,15 @@ public class Database {
 
     /******
      * 插入多个会话
-     * @param  sessionDataList  会话列表
+     * @param  flappySessionDataList  会话列表
      */
-    public void insertSessions(List<SessionData> sessionDataList) {
-        if (sessionDataList == null || sessionDataList.size() == 0) {
+    public void insertSessions(List<FlappySessionData> flappySessionDataList) {
+        if (flappySessionDataList == null || flappySessionDataList.size() == 0) {
             return;
         }
         db.beginTransaction();
-        for (SessionData sessionData : sessionDataList) {
-            insertSession(sessionData, MessageNotifyManager.getInstance().getHandlerSession());
+        for (FlappySessionData flappySessionData : flappySessionDataList) {
+            insertSession(flappySessionData, MessageNotifyManager.getInstance().getHandlerSession());
         }
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -585,7 +585,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public SessionData getUserSessionByID(String sessionId) {
+    public FlappySessionData getUserSessionByID(String sessionId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -603,7 +603,7 @@ public class Database {
         );
         //获取数据
         if (cursor.moveToFirst()) {
-            SessionData info = new SessionData();
+            FlappySessionData info = new FlappySessionData();
             info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
             info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
             info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
@@ -631,7 +631,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public SessionData getUserSessionByExtendID(String sessionExtendID) {
+    public FlappySessionData getUserSessionByExtendID(String sessionExtendID) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -649,7 +649,7 @@ public class Database {
         );
         //获取数据
         if (cursor.moveToFirst()) {
-            SessionData info = new SessionData();
+            FlappySessionData info = new FlappySessionData();
             info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
             info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
             info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
@@ -677,7 +677,7 @@ public class Database {
      * @return 所有的会话数据
      */
     @SuppressLint("Range")
-    public List<SessionData> getUserSessions() {
+    public List<FlappySessionData> getUserSessions() {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -694,14 +694,14 @@ public class Database {
                 null);
 
         //获取数据
-        List<SessionData> sessions = new ArrayList<>();
+        List<FlappySessionData> sessions = new ArrayList<>();
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
             return sessions;
         }
         while (!cursor.isAfterLast()) {
-            SessionData info = new SessionData();
+            FlappySessionData info = new FlappySessionData();
             info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
             info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
             info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));

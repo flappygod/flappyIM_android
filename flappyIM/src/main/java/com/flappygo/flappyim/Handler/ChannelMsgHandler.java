@@ -3,10 +3,10 @@ package com.flappygo.flappyim.Handler;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.Models.Response.SessionData;
+import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Thread.NettyThreadDead;
+import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
 
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -39,7 +39,7 @@ import java.util.List;
 public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.FlappyResponse> {
 
     //登录的回调
-    private HandlerLoginCallback handlerLogin;
+    private HandlerLogin handlerLogin;
 
     //用户数据
     private final ChatUser user;
@@ -51,7 +51,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final Flappy.FlappyRequest heart;
 
     //回调
-    private final NettyThreadDead deadCallback;
+    private final NettyThreadDeadListener deadCallback;
 
     //更新的sessions
     private final List<String> updateSessions = new ArrayList<>();
@@ -60,7 +60,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     public volatile boolean isActive = false;
 
     //回调
-    public ChannelMsgHandler(HandlerLoginCallback handler, NettyThreadDead deadCallback, ChatUser user) {
+    public ChannelMsgHandler(HandlerLogin handler, NettyThreadDeadListener deadCallback, ChatUser user) {
         //心跳
         this.heart = Flappy.FlappyRequest.newBuilder().setType(FlappyRequest.REQ_PING).build();
         //handler
@@ -115,8 +115,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
 
-    ///发送心跳并检查心跳
-    ///发送心跳并检查心跳
+    /******
+     * 发送心跳并检查心跳
+     * @param ctx ctx
+     * @param evt evt
+     */
     private void sendHeartBeatRequest(ChannelHandlerContext ctx, Object evt) {
         if (evt instanceof IdleStateEvent) {
             //发送心跳包
@@ -133,8 +136,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
-    ///发送登录请求
-    ///发送登录请求
+    /******
+     * 发送登录请求
+     * @param ctx ctx
+     */
     private void sendLoginRequest(ChannelHandlerContext ctx) {
         //创建builder
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
@@ -157,7 +162,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         ctx.writeAndFlush(builder.build());
     }
 
-    //登录成功返回处理
+    /******
+     * 登录成功返回处理
+     * @param ctx ctx
+     * @param response 回复
+     */
     private void receiveLogin(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
 
         //保存用户成功的登录信息
@@ -234,7 +243,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
-    //收到新的消息
+    /******
+     * 收到新的消息
+     * @param ctx ctx
+     * @param response 回复
+     */
     private void receiveMessage(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
         Database database = Database.getInstance().open();
         //设置
@@ -261,7 +274,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         checkSessionNeedUpdate(ctx);
     }
 
-    //收到会话更新的消息
+    /******
+     * 收到会话更新的消息
+     * @param ctx ctx
+     * @param response 回复
+     */
     private void receiveUpdate(ChannelHandlerContext ctx, Flappy.FlappyResponse response) {
         //进行会话更新
         List<Flappy.Session> session = response.getSessionsList();
@@ -270,7 +287,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //数据开始
         for (int s = 0; s < session.size(); s++) {
             //更新数据
-            SessionData data = new SessionData(session.get(s));
+            FlappySessionData data = new FlappySessionData(session.get(s));
             //插入数据
             database.insertSession(data, MessageNotifyManager.getInstance().getHandlerSession());
             //消息标记为已经处理
@@ -291,7 +308,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         database.close();
     }
 
-    //用户下线
+    /******
+     * 用户下线
+     * @param context 上下文
+     */
     private void closeChannel(ChannelHandlerContext context) {
 
         //活跃状态设置为true
@@ -305,7 +325,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //创建消息
             Message message = new Message();
             //失败
-            message.what = HandlerLoginCallback.LOGIN_FAILURE;
+            message.what = HandlerLogin.LOGIN_FAILURE;
             //错误
             message.obj = new Exception("channel closed");
             //发送消息
@@ -315,32 +335,39 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //线程非正常退出
         if (deadCallback != null) {
-            deadCallback.dead();
+            deadCallback.disconnected();
         }
         //关闭与服务器的连接
         context.close();
     }
 
-    //检查会话是否需要更新
+    /******
+     * 检查会话是否需要更新
+     * @param ctx ctx
+     */
     private void checkSessionNeedUpdate(ChannelHandlerContext ctx) {
 
         //获取所有数据
         Database database = Database.getInstance().open();
-        //获取系统消息
+        //获取系统消息没有被执行的
         List<ChatMessage> latestMessages = database.getNotActionSystemMessage();
         //开始处理
         database.close();
-
+        //需要更新的
         HashMap<String, String> needUpdate = new HashMap<>();
         //遍历
         for (int s = 0; s < latestMessages.size(); s++) {
+            //已经被添加进入的
             String former = needUpdate.get(latestMessages.get(s).getMessageSession());
             if (former == null) {
+                //没有就添加
                 needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysTime());
             } else {
-                //获取会话
+                //已经存在了
                 long stamp = StringTool.strToDecimal(former).longValue();
+                //比较添加，并使用最新的时间作为依据
                 long newStamp = StringTool.strToDecimal(latestMessages.get(s).getChatSystem().getSysTime()).longValue();
+                //并使用最新的时间作为依据
                 if (newStamp > stamp) {
                     needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysTime());
                 }
@@ -370,33 +397,46 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
 
-    //修改收到的状态
+    /******
+     * 修改收到的状态
+     * @param msg    消息
+     * @param former 之前的消息
+     */
     private void messageArrivedState(ChatMessage msg, ChatMessage former) {
-        //更新发送或者
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        //如果是自己发送的，代表发送成功
         if (chatUser.getUserId().equals(msg.getMessageSendId())) {
             msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENT));
-        } else {
+        }
+        //如果是别人发送的，代表到达目的设备
+        else {
             msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
         }
-        //保留之前的阅读状态
+        //保留之前的已读状态
         if (former != null) {
             msg.setMessageReadState(former.getMessageReadState());
         }
     }
 
-    //消息已经到达
+    /******
+     * 消息已经到达
+     * @param cxt  上下文
+     * @param chatMessage 消息
+     * @param former 之前存在的同一个消息
+     */
     private void messageArrivedReceipt(ChannelHandlerContext cxt, ChatMessage chatMessage, ChatMessage former) {
 
         //保存最近一条的偏移量
         ChatUser user = DataManager.getInstance().getLoginUser();
+        //最近一条为空
         if (user.getLatest() == null) {
             user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
-        } else {
-            user.setLatest(
-                    Long.toString(Math.max(chatMessage.getMessageTableSeq().longValue(),
-                            StringTool.strToLong(user.getLatest()))));
         }
+        //设置最大的那个值
+        else {
+            user.setLatest(Long.toString(Math.max(chatMessage.getMessageTableSeq().longValue(), StringTool.strToLong(user.getLatest()))));
+        }
+        //保存用户信息
         DataManager.getInstance().saveLoginUser(user);
 
         //不是自己，而且确实是最新的消息
@@ -419,7 +459,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
-    //检查旧消息进行发送
+    /******
+     * 检查旧消息进行发送
+     */
     private void checkFormerMessagesToSend() {
         List<ChatMessage> formerMessageList = MessageNotifyManager.getInstance().getAllUnSendMessages();
         for (ChatMessage message : formerMessageList) {
@@ -427,7 +469,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
-    //发送消息
+    /******
+     * 发送消息
+     * @param chatMessage  消息
+     * @param callback     发送消息的回调
+     */
     public void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
         //多次发送，之前的发送全部直接给他失败
@@ -447,7 +493,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
 
-    //发送消息
+    /******
+     * 发送消息
+     * @param chatMessage 消息
+     */
     public void sendMessageIfActive(final ChatMessage chatMessage) {
         try {
             synchronized (this) {

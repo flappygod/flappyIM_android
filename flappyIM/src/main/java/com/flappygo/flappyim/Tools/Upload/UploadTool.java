@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.Tools.Upload;
 
-
 import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 import java.io.DataOutputStream;
@@ -16,40 +15,48 @@ import java.util.Map;
 import java.io.File;
 import java.net.URL;
 
-/**
- * Created by yang on 2016/7/28.
+/******
+ * 上传工具类
  */
 public class UploadTool {
 
-    //tag
+    //TAG
     private static String TAG = "UploadTool";
+
     //读取超时时间
-    private static int readTimeOut = 60 * 1000;
+    private final static int readTimeOut = 60 * 1000;
+
     //链接超时时间
-    private static int connectTimeOut = 60 * 1000;
+    private final static int connectTimeOut = 60 * 1000;
+
     //body类型
-    private static String CONTENT_TYPE = "multipart/form-data";
+    private final static String CONTENT_TYPE = "multipart/form-data";
 
 
-    /****************
+    /*******
      * 上传文件
      *
      * @param urlPath     上传的路径
      * @param mParams     上传的参数
      * @param mFileParams 上传的文件
-     * @return
+     * @return 结果
      */
-    public static String postFile(String urlPath, Map<String, Object> mParams, List<UploadModel> mFileParams) throws Exception {
+    public static String postFile(String urlPath,
+                                  Map<String, Object> mParams,
+                                  List<UploadModel> mFileParams) throws Exception {
         return postFile(urlPath, mParams, mFileParams, null);
     }
 
 
-    /********************
+    /*******
      * @param urlPath     上传的路径
      * @param mParams     上传的参数
      * @param mFileParams 上传的文件
      */
-    public static String postFile(String urlPath, Map<String, Object> mParams, List<UploadModel> mFileParams, UploadHandler handler) throws Exception {
+    public static String postFile(String urlPath,
+                                  Map<String, Object> mParams,
+                                  List<UploadModel> mFileParams,
+                                  UploadHandler handler) throws Exception {
         // 前缀
         String PREFIX = "--";
         // 换行
@@ -88,9 +95,9 @@ public class UploadTool {
         // 获取输出流
         DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
         // StringBuffer
-        StringBuilder sb = null;
+        StringBuilder sb;
         // 返回值
-        String result = "";
+        String result;
         // 发送param参数
         String paramStr;
         // 发送非文件参数
@@ -144,11 +151,10 @@ public class UploadTool {
                 sb.append(LINE_END);
                 // 写入文件相应信息
                 dos.write(sb.toString().getBytes());
-
+                //文件
                 File fileF = new File(filePath);
                 //转换为流数据
                 InputStream is = new FileInputStream(fileF);
-
                 //mem
                 byte[] bytes = new byte[1024];
                 //长度
@@ -185,7 +191,6 @@ public class UploadTool {
                 dos.write(LINE_END.getBytes());
                 dos.flush();
             }
-
             //写入结尾
             byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINE_END).getBytes();
             //写入结尾

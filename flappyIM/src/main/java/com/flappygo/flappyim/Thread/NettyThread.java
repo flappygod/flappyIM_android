@@ -1,10 +1,11 @@
 package com.flappygo.flappyim.Thread;
 
 
+import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 
-import com.flappygo.flappyim.Handler.HandlerLoginCallback;
+import com.flappygo.flappyim.Handler.HandlerLogin;
 
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
@@ -28,10 +29,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.bootstrap.Bootstrap;
+
 import java.net.InetSocketAddress;
 
 
-//用于和服务器保持长连接的线程
+/******
+ * 用于和服务器保持长连接的线程
+ */
 public class NettyThread extends Thread {
 
 
@@ -39,13 +43,16 @@ public class NettyThread extends Thread {
     private ChannelFuture channelFuture;
 
     //登录的回调
-    private HandlerLoginCallback loginHandler;
+    private HandlerLogin loginHandler;
 
     //线程死亡的回调
-    private final NettyThreadDead deadCallback;
+    private final NettyThreadDeadListener deadCallback;
 
     //group
     private EventLoopGroup group;
+
+    //bootstrap
+    private Bootstrap bootstrap;
 
     //消息的handler
     private final ChannelMsgHandler channelMsgHandler;
@@ -67,8 +74,8 @@ public class NettyThread extends Thread {
             ChatUser user,
             String serverIP,
             int serverPort,
-            HandlerLoginCallback loginHandler,
-            NettyThreadDead deadCallback) {
+            HandlerLogin loginHandler,
+            NettyThreadDeadListener deadCallback) {
         this.serverIP = serverIP;
         this.serverPort = serverPort;
         this.loginHandler = loginHandler;
@@ -82,41 +89,35 @@ public class NettyThread extends Thread {
     }
 
     //连接服务器
-    private void connect() {
-        //开始连接
-        try {
-            //连接
-            group = new NioEventLoopGroup();
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(group)
-                    .channel(NioSocketChannel.class)
-                    .option(ChannelOption.SO_KEEPALIVE, true)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel channel) {
-                            ChannelPipeline p = channel.pipeline();
-                            //用于心跳,12秒钟没有事件就开始心跳
-                            p.addLast(new IdleStateHandler(0, FlappyConfig.getInstance().IdleSeconds, 0))
-                                    .addLast(new ProtobufVarint32FrameDecoder())
-                                    .addLast(new ProtobufDecoder(Flappy.FlappyResponse.getDefaultInstance()))
-                                    .addLast(new ProtobufVarint32LengthFieldPrepender())
-                                    .addLast(new ProtobufEncoder())
-                                    .addLast(channelMsgHandler);
-                        }
-                    });
-            channelFuture = bootstrap.connect(
-                    new InetSocketAddress(
-                            serverIP,
-                            serverPort)).sync();
-        } catch (Exception e) {
-            //出现错误直接关闭
-            closeConnection(e);
-        }
+    private void startConnect() throws InterruptedException {
+        //连接
+        group = new NioEventLoopGroup();
+        bootstrap = new Bootstrap();
+        ChannelHandler handler = new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel channel) {
+                ChannelPipeline p = channel.pipeline();
+                //用于心跳,12秒钟没有事件就开始心跳
+                p.addLast(new IdleStateHandler(0, FlappyConfig.getInstance().IdleSeconds, 0))
+                        //解决粘包半包问题
+                        .addLast(new ProtobufVarint32FrameDecoder())
+                        //解析
+                        .addLast(new ProtobufDecoder(Flappy.FlappyResponse.getDefaultInstance()))
+                        //解析
+                        .addLast(new ProtobufVarint32LengthFieldPrepender())
+                        //解析
+                        .addLast(new ProtobufEncoder())
+                        //解析
+                        .addLast(channelMsgHandler);
+            }
+        };
+        bootstrap.group(group).channel(NioSocketChannel.class).option(ChannelOption.SO_KEEPALIVE, true).handler(handler);
+        channelFuture = bootstrap.connect(new InetSocketAddress(serverIP, serverPort)).sync();
     }
 
 
     //关闭连接
-    public void closeConnection(Exception ex) {
+    public void closeConnect(Exception ex) {
         //登录失败
         loginFailure(ex);
         try {
@@ -130,10 +131,13 @@ public class NettyThread extends Thread {
                 group.shutdownGracefully();
                 group = null;
             }
+            //设置为空
+            bootstrap = null;
         } catch (Exception e) {
             //清空当前数据
-            channelFuture = null;
             group = null;
+            bootstrap = null;
+            channelFuture = null;
         }
     }
 
@@ -142,7 +146,7 @@ public class NettyThread extends Thread {
         synchronized (this) {
             //NSThread 现成死亡
             if (deadCallback != null) {
-                deadCallback.dead();
+                deadCallback.disconnected();
             }
             //登录的handler发送失败信息
             if (loginHandler != null) {
@@ -158,12 +162,17 @@ public class NettyThread extends Thread {
         //正常退出
         deadCallback.disable();
         //关闭连接
-        closeConnection(new Exception("NETTY 线程被关闭"));
+        closeConnect(new Exception("NETTY 线程被关闭"));
     }
 
     //运行
     public void run() {
-        connect();
+        //开始连接
+        try {
+            startConnect();
+        } catch (Exception e) {
+            closeConnect(e);
+        }
     }
 
 }

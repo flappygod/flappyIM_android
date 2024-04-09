@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
-//收到消息的
+/*****
+ * 消息接收Holder
+ */
 public class HolderMessageSession {
 
     //global message tag

@@ -13,6 +13,7 @@ public class ChatVoice implements Serializable {
     //声音有多少秒
     private String seconds;
 
+
     public String getSendPath() {
         return sendPath;
     }

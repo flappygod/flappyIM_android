@@ -4,10 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
-import android.util.Log;
-
-import com.flappygo.flappyim.FlappyImService;
-import com.flappygo.flappyim.Tools.Upload.LXImageWH;
 
 import java.io.File;
 import java.io.FileOutputStream;

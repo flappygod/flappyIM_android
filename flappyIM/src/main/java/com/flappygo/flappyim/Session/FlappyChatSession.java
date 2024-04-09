@@ -5,7 +5,6 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
-import com.flappygo.flappyim.Models.Response.SessionData;
 import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
@@ -14,7 +13,7 @@ import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Models.Request.ChatFile;
-import com.flappygo.flappyim.Tools.Upload.LXImageWH;
+import com.flappygo.flappyim.Tools.Upload.ImageReadWH;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -38,17 +37,17 @@ public class FlappyChatSession extends FlappyBaseSession {
     private final List<MessageListener> listenerList = new ArrayList<>();
 
     //会话
-    private SessionData session;
+    private FlappySessionData session;
 
 
     //通过session data 创建
-    public FlappyChatSession(SessionData session) {
+    public FlappyChatSession(FlappySessionData session) {
         this.session = session;
     }
 
 
     //获取会话数据
-    public SessionData getSession() {
+    public FlappySessionData getSession() {
         return session;
     }
 
@@ -143,7 +142,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         try {
             //图片大小
-            LXImageWH imageSize = ImageReadTool.getImageSize(path);
+            ImageReadWH imageSize = ImageReadTool.getImageSize(path);
             //设置宽度
             chatImage.setWidth(Integer.toString(imageSize.getWidth()));
             //设置高度
@@ -635,10 +634,10 @@ public class FlappyChatSession extends FlappyBaseSession {
     private String getPeerID() {
         switch (getSession().getSessionType().intValue()) {
             ///群聊会话
-            case SessionData.TYPE_GROUP:
+            case FlappySessionData.TYPE_GROUP:
                 return getSession().getSessionId();
             ///单聊会话
-            case SessionData.TYPE_SINGLE: {
+            case FlappySessionData.TYPE_SINGLE: {
                 for (ChatUser chatUser : getSession().getUsers()) {
                     if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                         return chatUser.getUserId();
@@ -647,7 +646,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                 break;
             }
             ///系统会话
-            case SessionData.TYPE_SYSTEM:
+            case FlappySessionData.TYPE_SYSTEM:
                 return "0";
             ///WHAT??
             default:
@@ -661,10 +660,10 @@ public class FlappyChatSession extends FlappyBaseSession {
         //查找
         switch (getSession().getSessionType().intValue()) {
             ///群聊会话
-            case SessionData.TYPE_GROUP:
+            case FlappySessionData.TYPE_GROUP:
                 return getSession().getSessionExtendId();
             ///单聊会话
-            case SessionData.TYPE_SINGLE: {
+            case FlappySessionData.TYPE_SINGLE: {
                 for (ChatUser chatUser : getSession().getUsers()) {
                     if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                         return chatUser.getUserExtendId();
@@ -673,7 +672,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                 break;
             }
             ///系统会话
-            case SessionData.TYPE_SYSTEM:
+            case FlappySessionData.TYPE_SYSTEM:
                 return "0";
             ///WHAT??
             default:

@@ -2,9 +2,9 @@ package com.flappygo.flappyim.Service;
 
 
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.Handler.HandlerLoginCallback;
+import com.flappygo.flappyim.Handler.HandlerLogin;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
-import com.flappygo.flappyim.Thread.NettyThreadDead;
+import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.StringTool;
 
@@ -47,7 +47,7 @@ public class FlappySocketService {
 
 
     //根据当前的信息重新连接
-    public void startConnect(String uuid, final ResponseLogin loginResponse, NettyThreadDead nettyThreadDead) {
+    public void startConnect(String uuid, final ResponseLogin loginResponse, NettyThreadDeadListener nettyThreadDeadListener) {
 
         synchronized (this) {
 
@@ -67,7 +67,7 @@ public class FlappySocketService {
             }
 
             //装饰登录
-            HandlerLoginCallback loginCallback = new HandlerLoginCallback(
+            HandlerLogin loginCallback = new HandlerLogin(
                     HolderLoginCallback.getInstance().getLoginCallBack(uuid),
                     loginResponse
             );
@@ -84,7 +84,7 @@ public class FlappySocketService {
                     //登录回调
                     loginCallback,
                     //回调
-                    nettyThreadDead
+                    nettyThreadDeadListener
             );
 
             //开始这个线程

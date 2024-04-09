@@ -2,6 +2,7 @@ package com.flappygo.flappyim.Tools;
 
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import android.util.Base64;
 import javax.crypto.Cipher;
 
@@ -105,6 +106,4 @@ public class AESTool {
         //ret string
         return new String(original, "utf-8");
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.Models.Response;
+package com.flappygo.flappyim.Session;
 
 import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
@@ -10,14 +10,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class SessionData extends ChatSession implements Serializable {
+public class FlappySessionData extends ChatSession implements Serializable {
 
     //constructor
-    public SessionData() {
+    public FlappySessionData() {
     }
 
     //session data
-    public SessionData(Flappy.Session session) {
+    public FlappySessionData(Flappy.Session session) {
         setSessionId(Long.toString(session.getSessionId()));
         setSessionExtendId(session.getSessionExtendId());
         setSessionType(new BigDecimal(session.getSessionType()));
@@ -49,10 +49,12 @@ public class SessionData extends ChatSession implements Serializable {
         this.users = users;
     }
 
+    //未读消息数量
     public int getUnReadMessageCount() {
         return unReadMessageCount;
     }
 
+    //设置未读消息数量
     public void setUnReadMessageCount(int unReadMessageCount) {
         this.unReadMessageCount = unReadMessageCount;
     }

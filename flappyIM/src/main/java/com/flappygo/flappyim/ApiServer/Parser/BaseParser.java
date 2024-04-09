@@ -2,7 +2,6 @@ package com.flappygo.flappyim.ApiServer.Parser;
 
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-
 import org.json.JSONObject;
 
 //Base parser
@@ -15,6 +14,7 @@ public class BaseParser<T> {
     //解析错误时候的报错代码
     private Exception exception;
 
+    @SuppressWarnings("unchecked")
     public BaseParser(String dataStr, Class<T> cls) {
         try {
             baseApiModel = new BaseApiModel<T>();
@@ -30,7 +30,6 @@ public class BaseParser<T> {
             baseApiModel.setPageCount(jb.optInt("pageCount"));
             //获取到Array数据
             String strData = jb.optString("data");
-
             //假如是String
             if (cls == String.class) {
                 baseApiModel.setData((T) strData);

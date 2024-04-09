@@ -1,17 +1,8 @@
 package com.flappygo.flappyim.Tools.Upload;
 
 
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.BitmapFactory.Options;
-import android.graphics.drawable.Drawable;
 import android.graphics.BitmapFactory;
-
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 
 import java.io.File;
 
@@ -22,19 +13,6 @@ public class ImageReadTool {
 
     private static final String TAG = "ImageReadTool";
 
-    /************
-     * 判断文件是否存在
-     * @param path 路径
-     * @return 是否存在
-     */
-    public static boolean isFileExists(String path) {
-        try {
-            File file = new File(path);
-            return file.exists();
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     /*********
      * 判断文件是否存在
@@ -50,134 +28,13 @@ public class ImageReadTool {
         }
     }
 
-    /***************
-     * 获取图片的宽高
-     * @param filePath 文件路径
-     * @return 宽高
-     */
-    public static LXImageWH getImageWH(String filePath) {
-        // 创建设置
-        Options options = new Options();
-        // 设置inJustDecodeBounds为true后，decodeFile并不分配空间，此时计算原始图片的长度和宽度
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, options);
-        LXImageWH ret = new LXImageWH();
-        ret.setWidth(options.outWidth);
-        ret.setHeight(options.outHeight);
-        return ret;
-    }
-
-
-    /**********************
-     * 获取文件drawable
-     *
-     * @param context 上下文
-     * @param path    文件路径
-     * @param setting 读取图片的参数设置
-     * @return drawable
-     */
-    public synchronized static Drawable readFileDrawable(Context context,
-                                                         String path,
-                                                         LXImageReadOption setting) {
-
-        try {
-            // 如果为空就返回空的
-            if (path == null) {
-                return null;
-            }
-            // 上下文为空返回
-            if (context == null) {
-                return null;
-            }
-            // 获取输入流
-            FileInputStream fin = new FileInputStream(path);
-            // 通过读取图片的大小设置获取option
-            Options option = getOption(path, setting);
-            // 真正的解析图片
-            Bitmap bm = BitmapFactory.decodeStream(fin, null, option);
-            // 如果有设置
-            if (setting != null) {
-                if (setting.isScaleFill()) {
-                    bm = imageScale(bm, setting);
-                } else {
-                    bm = imageScaleMax(bm, setting);
-                }
-            }
-            //进行转换
-            if (setting != null && setting.getRadiusOption() != null) {
-                bm = BitmapRadiusTool.toRoundCorner(bm, setting.getRadiusOption());
-            }
-            // 返回drawable
-            return new BitmapDrawable(context.getResources(), bm);
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    /******
-     * 获取文件Bitmap
-     * @param setting 设置
-     */
-    public synchronized static Bitmap readFileBitmap(String path, LXImageReadOption setting) throws Exception {
-        try {
-            // 文件没找到
-            if (path == null) {
-                throw new Exception("the path is a null");
-            }
-            File file = new File(path);
-            // 文件是文件夹
-            if (file.isDirectory()) {
-                throw new Exception("the bitmap file is a dictionary");
-            }
-            // 获取输入流
-            FileInputStream fin = new FileInputStream(path);
-            // 通过读取图片的大小设置获取option
-            Options option = getOption(path, setting);
-            // 真正的解析图片
-            Bitmap bm = BitmapFactory.decodeStream(fin, null, option);
-            // 如果有设置
-            if (setting != null) {
-                if (setting.isScaleFill()) {
-                    bm = imageScale(bm, setting);
-                } else {
-                    bm = imageScaleMax(bm, setting);
-                }
-            }
-            //进行转换
-            if (setting != null && setting.getRadiusOption() != null) {
-                bm = BitmapRadiusTool.toRoundCorner(bm, setting.getRadiusOption());
-            }
-            return bm;
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
-    /******
-     * 直接读取文件的bitmap
-     * @param path 文件地址
-     * @return 图片
-     */
-    public synchronized static Bitmap readFileBitmap(String path) throws Exception {
-        try {
-            // 如果为空就返回空的
-            if (path == null) {
-                throw new Exception("the path is a null");
-            }
-            FileInputStream fin = new FileInputStream(path);
-            return BitmapFactory.decodeStream(fin);
-        } catch (FileNotFoundException e) {
-            return null;
-        }
-    }
-
 
     /******
      * 获取图片的大小数据
      * @param path 大小
      * @return 图像大小
      */
-    public synchronized static LXImageWH getImageSize(String path) throws Exception {
+    public synchronized static ImageReadWH getImageSize(String path) throws Exception {
         if (isFileExistsAntNotDic(path)) {
             // 创建设置
             Options options = new Options();
@@ -189,144 +46,12 @@ public class ImageReadTool {
             int imageHeight = options.outHeight;
             // 宽度
             int imageWidth = options.outWidth;
-
-            return new LXImageWH(imageWidth, imageHeight);
+            // 宽高
+            return new ImageReadWH(imageWidth, imageHeight);
         } else {
             throw new Exception("file not exists or is dictionary");
         }
     }
 
-
-    /**********************
-     * 不同文件不同设置防止大图造成out of memory
-     * @param path    输出图片宽度
-     * @param setting 设置
-     */
-    public synchronized static Options getOption(String path,
-                                                 LXImageReadOption setting) {
-        // 创建设置
-        Options options = new Options();
-        // 设置inJustDecodeBounds为true后，decodeFile并不分配空间，此时计算原始图片的长度和宽度
-        options.inJustDecodeBounds = true;
-        // 取得参数
-        BitmapFactory.decodeFile(path, options);
-        // 高度
-        int imageHeight = options.outHeight;
-        // 宽度
-        int imageWidth = options.outWidth;
-        options.inDither = false;
-        // 设置加载图片的颜色数为16bit，默认是RGB_8888，表示24bit颜色和透明通道，但一般用不上
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        // 设置图片的格式
-        if (setting != null && setting.getInPreferredConfig() != null) {
-            options.inPreferredConfig = setting.getInPreferredConfig();
-        }
-        // 默认为1
-        options.inSampleSize = 1;
-        // 根据要求设置缩放大小
-        if (imageWidth != 0 && imageHeight != 0 && setting != null) {
-            // 获取缩放的比例
-            options.inSampleSize = computeSampleSize(options, -1, setting.getMaxHeight() * setting.getMaxWidth());
-        }
-        options.inJustDecodeBounds = false;
-        // 最后把标志复原
-        return options;
-    }
-
-    /**********************
-     * 图片大小转换
-     *
-     * @param setting 设置
-     * @param bitmap  输入位图
-     */
-    public synchronized static Bitmap imageScaleMax(Bitmap bitmap,
-                                                    LXImageReadOption setting) {
-        int dst_w = setting.getMaxWidth();
-        int dst_h = setting.getMaxHeight();
-
-        if (dst_w <= 0 || dst_h <= 0)
-            return bitmap;
-        float src_w = bitmap.getWidth();
-        float src_h = bitmap.getHeight();
-        float scale_w;
-        float scale_h;
-        if (src_w / src_h > dst_w / dst_h)
-        // 用宽来缩放
-        {
-            scale_w = ((float) dst_w) / src_w;
-            scale_h = ((float) dst_w) / src_w;
-        } else {
-            scale_w = ((float) dst_h) / src_h;
-            scale_h = ((float) dst_h) / src_h;
-        }
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale_w, scale_h);
-        return Bitmap.createBitmap(bitmap, 0, 0, (int) src_w,
-                (int) src_h, matrix, true);
-    }
-
-    /******
-     * 图片大小转换
-     * @param setting 设置
-     * @param bitmap  输入位图
-     */
-
-    public synchronized static Bitmap imageScale(Bitmap bitmap,
-                                                 LXImageReadOption setting) {
-        int dst_w = setting.getMaxWidth();
-        int dst_h = setting.getMaxHeight();
-        if (dst_w <= 0 || dst_h <= 0)
-            return bitmap;
-        int src_w = bitmap.getWidth();
-        int src_h = bitmap.getHeight();
-        float scale_w = ((float) dst_w) / src_w;
-        float scale_h = ((float) dst_h) / src_h;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale_w, scale_h);
-        return Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,
-                true);
-    }
-
-    /******
-     * 计算出缩放大小
-     * @param options 配置
-     * @param minSideLength  minSideLength
-     * @param maxNumOfPixels maxNumOfPixels
-     * @return 缩放大小
-     */
-    public static int computeSampleSize(Options options, int minSideLength, int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
-        int roundedSize;
-        if (initialSize <= 8) {
-            roundedSize = 1;
-            while (roundedSize < initialSize) {
-                roundedSize <<= 1;
-            }
-        } else {
-            roundedSize = (initialSize + 7) / 8 * 8;
-        }
-        return roundedSize;
-    }
-
-    private static int computeInitialSampleSize(Options options,
-                                                int minSideLength, int maxNumOfPixels) {
-        double w = options.outWidth;
-        double h = options.outHeight;
-        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math
-                .sqrt(w * h / maxNumOfPixels));
-        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(
-                Math.floor(w / minSideLength), Math.floor(h / minSideLength));
-        if (upperBound < lowerBound) {
-            return lowerBound;
-        }
-        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-            return 1;
-        } else if (minSideLength == -1) {
-            return lowerBound;
-        } else {
-            return upperBound;
-        }
-    }
 
 }

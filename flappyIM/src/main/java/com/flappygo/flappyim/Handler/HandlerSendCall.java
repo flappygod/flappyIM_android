@@ -7,7 +7,9 @@ import android.os.Message;
 import android.os.Handler;
 import android.os.Looper;
 
-//用户发送消息时候的handler
+/******
+ * 用户发送消息时候的handler
+ */
 public class HandlerSendCall extends Handler {
 
     //发送失败

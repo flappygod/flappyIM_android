@@ -42,6 +42,7 @@ public class HandlerMessage extends Handler {
 
 
     //执行消息
+    @SuppressWarnings("unchecked")
     public void handleMessage(Message message) {
         //消息被创建
         if (message.what == MSG_SEND) {

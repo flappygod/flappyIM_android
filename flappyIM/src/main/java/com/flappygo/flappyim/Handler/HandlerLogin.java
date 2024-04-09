@@ -6,12 +6,14 @@ import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
+import android.os.Looper;
 
 
-//登陆的回调
-public class HandlerLoginCallback extends Handler {
+/******
+ * 登陆的回调
+ */
+public class HandlerLogin extends Handler {
 
 
     //登录成功
@@ -32,8 +34,8 @@ public class HandlerLoginCallback extends Handler {
     }
 
     //返回
-    public HandlerLoginCallback(FlappyIMCallback<ResponseLogin> callback,
-                                ResponseLogin loginResponse) {
+    public HandlerLogin(FlappyIMCallback<ResponseLogin> callback,
+                        ResponseLogin loginResponse) {
         super(Looper.getMainLooper());
         this.callback = callback;
         this.loginResponse = loginResponse;
