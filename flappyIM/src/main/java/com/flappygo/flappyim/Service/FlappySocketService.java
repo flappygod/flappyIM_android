@@ -1,29 +1,36 @@
 package com.flappygo.flappyim.Service;
 
-
-import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.Handler.HandlerLogin;
-import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
+import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Holder.HolderLoginCallback;
+import com.flappygo.flappyim.Handler.HandlerLogin;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.Tools.StringTool;
 
 
-//应用的服务
+/******
+ * 应用的Socket服务
+ */
 public class FlappySocketService {
 
-    //当前的服务实例
+    //线程
+    private NettyThread clientThread;
+
+
+    /******
+     * 当前的服务实例
+     */
     private static final class InstanceHolder {
         static final FlappySocketService instance = new FlappySocketService();
     }
 
-    //获取当前开启的服务
+    /******
+     * 获取当前开启的服务
+     * @return 单例
+     */
     public static FlappySocketService getInstance() {
         return InstanceHolder.instance;
     }
-
-    //线程
-    private NettyThread clientThread;
 
 
     /******
@@ -46,7 +53,12 @@ public class FlappySocketService {
     }
 
 
-    //根据当前的信息重新连接
+    /******
+     * 根据当前的信息重新连接
+     * @param uuid                    UUID
+     * @param loginResponse           登录回调
+     * @param nettyThreadDeadListener 死亡的监听
+     */
     public void startConnect(String uuid, final ResponseLogin loginResponse, NettyThreadDeadListener nettyThreadDeadListener) {
 
         synchronized (this) {
@@ -93,7 +105,9 @@ public class FlappySocketService {
     }
 
 
-    //下线了
+    /******
+     * 下线了
+     */
     public void offline() {
         synchronized (this) {
             if (clientThread != null) {

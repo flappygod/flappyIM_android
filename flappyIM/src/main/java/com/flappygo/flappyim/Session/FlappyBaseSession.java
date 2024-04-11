@@ -4,6 +4,7 @@ import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
 import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
+import com.flappygo.flappyim.Handler.MessageNotifyManager;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
@@ -16,7 +17,6 @@ import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Tools.Upload.UploadTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Handler.MessageNotifyManager;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
 import com.flappygo.flappyim.DataBase.Database;
@@ -36,6 +36,10 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
+
+/******
+ * 基础会话方法
+ */
 public class FlappyBaseSession {
 
     ///获取当前的消息handler

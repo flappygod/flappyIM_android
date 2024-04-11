@@ -30,7 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.io.File;
 
-//单聊的会话
+/******
+ * 单聊的会话
+ */
 public class FlappyChatSession extends FlappyBaseSession {
 
     //保留的监听列表

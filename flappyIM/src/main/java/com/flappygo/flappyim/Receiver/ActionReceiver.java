@@ -9,11 +9,12 @@ import android.util.Log;
 
 import static android.content.Intent.CATEGORY_LAUNCHER;
 
-import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Datas.DataManager;
+import com.flappygo.flappyim.FlappyImService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -41,7 +42,7 @@ public class ActionReceiver extends BroadcastReceiver {
                 context.startActivity(main);
             }
         } catch (Exception ex) {
-            Log.e("主界面跳转失败", ex.getMessage());
+            Log.e("主界面跳转失败", Objects.requireNonNull(ex.getMessage()));
         }
 
         //通知消息发送
@@ -49,6 +50,7 @@ public class ActionReceiver extends BroadcastReceiver {
             //获取到相应的
             Bundle bundle = intent.getExtras();
             //消息
+            assert bundle != null;
             String msg = bundle.getString("msg");
             //通知消息
             if (msg != null) {
@@ -59,7 +61,7 @@ public class ActionReceiver extends BroadcastReceiver {
             }
         } catch (Exception ex) {
             //打印消息
-            Log.e("消息保存失败", ex.getMessage());
+            Log.e("消息保存失败", Objects.requireNonNull(ex.getMessage()));
         }
     }
 

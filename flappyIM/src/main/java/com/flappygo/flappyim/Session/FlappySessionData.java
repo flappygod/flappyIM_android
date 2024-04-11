@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+/******
+ * 群聊的会话
+ */
 public class FlappySessionData extends ChatSession implements Serializable {
 
     //constructor
