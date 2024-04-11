@@ -1,10 +1,10 @@
 package com.flappygo.flappyim.Thread;
 
-import com.flappygo.flappyim.Callback.FlappyNettyListener;
+import com.flappygo.flappyim.Listener.NettyConnectListener;
 import com.flappygo.flappyim.Config.FlappyConfig;
 
 //netty线程被关闭的通知
-public abstract class NettyThreadDeadListener implements FlappyNettyListener {
+public abstract class NettyThreadDeadListener implements NettyConnectListener {
 
     //只执行一次
     private boolean once = false;

@@ -2,19 +2,25 @@ package com.flappygo.flappyim.ApiServer.Models;
 
 import java.io.Serializable;
 
-/**
- * Created by yang on 2016/5/27.
+/********
+ * 基础api对象
+ * @param <T> 类型
  */
 public class BaseApiModel<T> implements Serializable {
 
+
     //请求返回的编码
     private String code;
+
     //加密秘钥
     private String msg;
+
     //加密秘钥
     private String sign;
+
     //总页码
     private int pageCount;
+
     //请求返回的数据内容
     private T data;
 

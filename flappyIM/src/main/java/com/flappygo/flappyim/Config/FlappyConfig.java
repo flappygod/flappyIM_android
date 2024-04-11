@@ -18,12 +18,10 @@ public class FlappyConfig {
     final public int autoRetryNetty = 3;
 
     //链接的http服务器器的地址192.168.124.105
-    //public String serverUrl = "http://192.168.124.127";
-    public String serverUrl = "http://49.234.106.91";
+    public String serverUrl = "http://139.224.204.128";
 
     //上传地址
-    //public String serverUploadUrl = "http://192.168.124.127";
-    public String serverUploadUrl = "http://49.234.106.91";
+    public String serverUploadUrl = "http://139.224.204.128";
 
     //单例模式
     private static final class InstanceHolder {
@@ -37,7 +35,10 @@ public class FlappyConfig {
 
     //单例模式
     private FlappyConfig() {
-        setServerUrl("http://49.234.106.91", "http://49.234.106.91");
+        setServerUrl(
+                "http://139.224.204.128",
+                "139.224.204.128"
+        );
     }
 
     //上传文件的地址

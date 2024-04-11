@@ -80,7 +80,7 @@ public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
      */
     public void success(String data, String tag) {
         //基础解析器为空
-        BaseParser<T> parser = new BaseParser<T>(data, entityClass);
+        BaseParser<T> parser = new BaseParser<>(data, entityClass);
         //解析成功
         if (parser.isParseSuccess()) {
             //状态成功

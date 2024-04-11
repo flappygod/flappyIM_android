@@ -2,9 +2,10 @@ package com.flappygo.flappyim.ApiServer.Tools;
 
 import com.flappygo.flappyim.Tools.StringTool;
 import com.google.gson.GsonBuilder;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
