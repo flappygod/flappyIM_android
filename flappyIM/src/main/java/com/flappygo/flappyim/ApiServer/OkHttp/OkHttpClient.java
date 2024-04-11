@@ -154,8 +154,8 @@ public class OkHttpClient {
      * @return 结果
      * @throws IOException 网络错误
      */
-    public String postParam(String url, HashMap<String, Objects> data) throws IOException {
-        return postJson(url, data, new HashMap<>());
+    public String postParam(String url, HashMap<String, String> data) throws IOException {
+        return postParam(url, data, new HashMap<>());
     }
 
 
@@ -218,7 +218,7 @@ public class OkHttpClient {
     public void postParam(String url,
                           HashMap<String, String> data,
                           OkHttpAsyncCallback callback) {
-        postJson(url, data, new HashMap<>(), callback);
+        postParam(url, data, new HashMap<>(), callback);
     }
 
     /******
