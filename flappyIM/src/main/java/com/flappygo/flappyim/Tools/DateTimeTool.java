@@ -2,15 +2,11 @@ package com.flappygo.flappyim.Tools;
 
 import android.annotation.SuppressLint;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-/**
- * Created by yang on 2016/8/12.
- * version  1.0.0
+/******
+ * 日期时间工具类
  */
 public class DateTimeTool {
 

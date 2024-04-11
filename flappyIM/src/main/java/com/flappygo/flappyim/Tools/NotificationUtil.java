@@ -1,31 +1,39 @@
 package com.flappygo.flappyim.Tools;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
-import android.media.RingtoneManager;
-import android.os.Build;
+import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
+import com.flappygo.flappyim.Receiver.ActionReceiver;
+import com.flappygo.flappyim.FlappyImService;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.FlappyImService;
-import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.R;
-import com.flappygo.flappyim.Receiver.ActionReceiver;
+import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 
+import androidx.annotation.RequiresApi;
+
+import android.content.ContextWrapper;
+import android.media.RingtoneManager;
+import android.graphics.PixelFormat;
+import android.app.PendingIntent;
+import android.app.Notification;
+
+import com.flappygo.flappyim.R;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.content.Intent;
+import android.os.Build;
+
+
+/******
+ * 通知工具类
+ */
 public class NotificationUtil extends ContextWrapper {
 
     private NotificationManager mManager;

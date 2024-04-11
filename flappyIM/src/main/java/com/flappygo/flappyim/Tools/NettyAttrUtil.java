@@ -4,6 +4,9 @@ import io.netty.util.AttributeKey;
 import io.netty.channel.Channel;
 import io.netty.util.Attribute;
 
+/******
+ * Netty属性工具
+ */
 public class NettyAttrUtil {
 
     //创建时间
