@@ -5,8 +5,8 @@ import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Listener.SessionListener;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
+import android.os.Looper;
 
 /******
  * 会话更新的监听

@@ -2,6 +2,9 @@ package com.flappygo.flappyim.Listener;
 
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 
+/******
+ * 消息的监听
+ */
 public interface MessageListener {
 
     //发送消息

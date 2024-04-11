@@ -1,6 +1,9 @@
 package com.flappygo.flappyim.Callback;
 
-//发送消息的返回信息
+/******
+ * 发送消息的返回信息
+ * @param <T> 发送回调
+ */
 public interface FlappySendCallback<T> {
 
     //成功

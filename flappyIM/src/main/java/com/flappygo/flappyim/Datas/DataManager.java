@@ -82,7 +82,6 @@ public class DataManager {
 
     //保存用户信息
     public void savePushSetting(PushSetting setting) {
-
         PushSetting update = getPushSetting();
         update = (update == null) ? new PushSetting() : update;
         update.setRoutePushType(setting.getRoutePushType() == null ? update.getRoutePushType() : setting.getRoutePushType());

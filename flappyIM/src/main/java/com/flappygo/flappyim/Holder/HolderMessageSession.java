@@ -50,8 +50,8 @@ public class HolderMessageSession {
     }
 
     //移除监听
-    public boolean removeSessionListener(SessionListener sessionListener) {
-        return sessionListeners.remove(sessionListener);
+    public void removeSessionListener(SessionListener sessionListener) {
+        sessionListeners.remove(sessionListener);
     }
 
     //添加总的监听
