@@ -1,7 +1,13 @@
 package com.flappygo.flappyim.Session;
 
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTaskClient;
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncTask;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
+
+import com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask.LXAsyncTaskClient;
+import com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Handler.MessageNotifyManager;
@@ -30,17 +36,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
-
 
 /******
  * 基础会话方法
  */
 public class FlappyBaseSession {
+
+    //Client
+    private static final LXAsyncTaskClient client = new LXAsyncTaskClient(10);
 
     ///获取当前的消息handler
     ChannelMsgHandler getCurrentChannelMessageHandler() {
@@ -120,10 +123,8 @@ public class FlappyBaseSession {
 
     //上传图片并发送
     protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
-        //client
-        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
-        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
                 //取得消息体
@@ -186,10 +187,8 @@ public class FlappyBaseSession {
 
     //上传音频文件并发送
     protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
-        //client
-        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
-        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
 
@@ -257,10 +256,8 @@ public class FlappyBaseSession {
 
     //上传视频并发送
     protected void uploadVideoAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
-        //client
-        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
-        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
 
@@ -336,10 +333,8 @@ public class FlappyBaseSession {
 
     //上传音频文件并发送
     protected void uploadFileAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
-        //client
-        LXAsyncTaskClient client = new LXAsyncTaskClient(1);
         //发送
-        client.excute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
 

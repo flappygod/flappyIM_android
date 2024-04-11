@@ -3,7 +3,7 @@ package com.flappygo.flappyim.ApiServer.Base;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
+import com.flappygo.flappyim.ApiServer.OkHttp.OkHttpAsyncCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
 
@@ -12,7 +12,7 @@ import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
  * 基础解析
  * @param <T> 类型
  */
-public abstract class BaseParseCallback<T> implements LXAsyncCallback<String> {
+public abstract class BaseParseCallback<T> implements OkHttpAsyncCallback {
 
     /******
      * 实体对象

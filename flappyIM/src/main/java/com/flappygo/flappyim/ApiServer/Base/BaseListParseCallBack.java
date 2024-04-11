@@ -1,7 +1,7 @@
 package com.flappygo.flappyim.ApiServer.Base;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
-import com.flappygo.lilin.lxhttpclient.Asynctask.LXAsyncCallback;
+import com.flappygo.flappyim.ApiServer.OkHttp.OkHttpAsyncCallback;
 import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /******
  * 基础回调，返回列表类型的数据
  */
-public abstract class BaseListParseCallBack<T> implements LXAsyncCallback<String> {
+public abstract class BaseListParseCallBack<T> implements OkHttpAsyncCallback {
 
     /******
      * 解析字符串的class
