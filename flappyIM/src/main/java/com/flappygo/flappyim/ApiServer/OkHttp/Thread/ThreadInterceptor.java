@@ -4,9 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**********
- * 
- * 横切
- * @author lijunlin
+ * 横切线程任务
  */
 public class ThreadInterceptor implements InvocationHandler {
 
