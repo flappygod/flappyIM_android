@@ -29,9 +29,9 @@ import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.Push.ConfigPushMsg;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Tools.RunTool;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Push.PushSetting;
+import com.flappygo.flappyim.Tools.RunTool;
 import com.flappygo.flappyim.Tools.NetTool;
 
 import android.content.BroadcastReceiver;
