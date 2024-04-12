@@ -2,9 +2,7 @@ package com.flappygo.flappyim.Tools.Secret;
 
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.Cipher;
-
 import java.security.*;
 
 
@@ -51,7 +49,7 @@ public class RSATool {
      * @param data             数据
      * @param privateKeyStr    字符串
      */
-    public static String decryptWithPrivate(String privateKeyStr, String data) throws Exception {
+    public static String decryptWithPrivatePKCS8(String privateKeyStr, String data) throws Exception {
 
         // 移除PEM字符串中的首尾标识符和换行符
         privateKeyStr = privateKeyStr
