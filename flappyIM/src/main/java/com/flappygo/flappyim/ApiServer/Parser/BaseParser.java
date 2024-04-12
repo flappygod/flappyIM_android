@@ -54,8 +54,6 @@ public class BaseParser<T> {
         baseApiModel.setCode(jb.optString("code"));
         //解析code
         baseApiModel.setMsg(jb.optString("msg"));
-        //返回的消息
-        baseApiModel.setSign(jb.optString("sign"));
         //返回的总页码
         baseApiModel.setPageCount(jb.optInt("pageCount"));
         //获取到Array数据

@@ -15,9 +15,6 @@ public class BaseApiModel<T> implements Serializable {
     //加密秘钥
     private String msg;
 
-    //加密秘钥
-    private String sign;
-
     //总页码
     private int pageCount;
 
@@ -46,14 +43,6 @@ public class BaseApiModel<T> implements Serializable {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
     }
 
     public T getData() {

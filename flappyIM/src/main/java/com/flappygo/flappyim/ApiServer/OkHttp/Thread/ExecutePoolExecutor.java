@@ -71,7 +71,9 @@ public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
                 .setThreadListener(new ThreadInterceptor.ThreadListener() {
                     @Override
                     public void death(Thread thread) {
-                        //线程执行完成的时候自动从列表中移除
+                        /******
+                         * 线程执行完成的时候自动从列表中移除
+                         */
                         removeThreadFromHashMap(thread);
                     }
 

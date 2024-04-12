@@ -53,7 +53,7 @@ public class OkHttpClient {
      * @return 结果
      * @throws IOException 网络错误
      */
-    public String postJson(String url, Map data) throws IOException {
+    public String postJson(String url, Map<String,Object> data) throws IOException {
         return postJson(url, data, new HashMap<>());
     }
 
@@ -67,7 +67,7 @@ public class OkHttpClient {
      * @throws IOException 网络错误
      */
     public String postJson(String url,
-                           Map data,
+                           Map<String,Object> data,
                            HashMap<String, String> header) throws IOException {
 
         //创建请求体（RequestBody），这里以JSON字符串为例
@@ -107,7 +107,7 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void postJson(String url,
-                         Map data,
+                         Map<String,Object> data,
                          OkHttpAsyncCallback callback) {
         postJson(url, data, new HashMap<>(), callback);
     }
@@ -120,18 +120,18 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void postJson(String url,
-                         Map data,
+                         Map<String,Object> data,
                          HashMap<String, String> header,
                          OkHttpAsyncCallback callback) {
-        ArrayList<Object> dataList = new ArrayList<Object>();
+        ArrayList<Object> dataList = new ArrayList<>();
         dataList.add(url);
         dataList.add(data);
         dataList.add(header);
         taskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
             @Override
-            public String run(ArrayList data, String tag) throws Exception {
+            public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);
-                Map dataParam = (Map) data.get(1);
+                Map<String,Object> dataParam = (Map<String,Object>) data.get(1);
                 HashMap<String, String> headerParam = (HashMap<String, String>) data.get(2);
                 return OkHttpClient.getInstance().postJson(url, dataParam, headerParam);
             }
@@ -238,7 +238,7 @@ public class OkHttpClient {
         dataList.add(header);
         taskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
             @Override
-            public String run(ArrayList data, String tag) throws Exception {
+            public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);
                 HashMap<String, String> dataParam = (HashMap<String, String>) data.get(1);
                 HashMap<String, String> headerParam = (HashMap<String, String>) data.get(2);
@@ -343,7 +343,7 @@ public class OkHttpClient {
         dataList.add(header);
         taskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
             @Override
-            public String run(ArrayList data, String tag) throws Exception {
+            public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);
                 HashMap<String, String> dataParam = (HashMap<String, String>) data.get(1);
                 HashMap<String, String> headerParam = (HashMap<String, String>) data.get(2);
