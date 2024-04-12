@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.Tools;
+package com.flappygo.flappyim.Tools.Secret;
 
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;

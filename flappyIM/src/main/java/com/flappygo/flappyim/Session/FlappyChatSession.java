@@ -17,7 +17,7 @@ import com.flappygo.flappyim.Tools.Upload.ImageReadWH;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Tools.IDGenerateTool;
+import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.VideoTool;
 

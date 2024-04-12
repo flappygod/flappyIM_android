@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.Tools;
+package com.flappygo.flappyim.Tools.Secret;
 
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
