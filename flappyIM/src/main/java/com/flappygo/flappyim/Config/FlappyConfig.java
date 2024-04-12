@@ -3,19 +3,19 @@ package com.flappygo.flappyim.Config;
 public class FlappyConfig {
 
     //安卓设备
-    final public String device = "Android";
+    public String device = "Android";
 
     //当前是正式环境
     public String pushPlat = "Google";
 
     //12秒
-    final public int IdleSeconds = 12;
+    public int IdleSeconds = 12;
 
     //自动登录间隔时间
-    final public int autoLoginSpace = 1000 * 6;
+    public int autoLoginSpace = 1000 * 6;
 
     //自动重试netty次数
-    final public int autoRetryNetty = 3;
+    public int autoRetryNetty = 3;
 
     //链接的http服务器器的地址192.168.124.105
     public String serverUrl = "http://139.224.204.128";
@@ -42,110 +42,92 @@ public class FlappyConfig {
     }
 
     //上传文件的地址
-    public String fileUpload;
+    public String fileUpload() {
+        return serverUploadUrl + "/upload/fileUpload";
+    }
 
     //上传视频的地址
-    public String videoUpload;
+    public String videoUpload() {
+        return serverUploadUrl + "/upload/videoUpload";
+    }
 
     //创建账户
-    public String register;
+    public String register() {
+        return serverUrl + "/api/register";
+    }
 
     //更新账户
-    public String updateUser;
+    public String updateUser() {
+        return serverUrl + "/api/updateUser";
+    }
 
     //登录接口的地址
-    public String login;
+    public String login() {
+        return serverUrl + "/api/login";
+    }
 
     //更新推送信息
-    public String changePush;
+    public String changePush() {
+        return serverUrl + "/api/changePush";
+    }
 
     //退出登录的接口地址
-    public String logout;
+    public String logout() {
+        return serverUrl + "/api/logout";
+    }
 
     //自动登录
-    public String autoLogin;
+    public String autoLogin() {
+        return serverUrl + "/api/autoLogin";
+    }
 
     //创建单聊会话
-    public String createSingleSession;
+    public String createSingleSession() {
+        return serverUrl + "/api/createSingleSession";
+    }
 
     //获取单聊会话
-    public String getSingleSession;
+    public String getSingleSession() {
+        return serverUrl + "/api/getSingleSession";
+    }
 
     //创建群组会话
-    public String createGroupSession;
+    public String createGroupSession() {
+        return serverUrl + "/api/createGroupSession";
+    }
 
     //获取群组会话
-    public String getSessionByExtendID;
+    public String getSessionByExtendID() {
+        return serverUrl + "/api/getSessionByExtendID";
+    }
 
     //获取用户的所有会话
-    public String getUserSessions;
+    public String getUserSessions() {
+        return serverUrl + "/api/getUserSessions";
+    }
 
     //向会话中添加人员
-    public String addUserToSession;
+    public String addUserToSession() {
+        return serverUrl + "/api/addUserToSession";
+    }
 
     //向会话中移除人员
-    public String delUserInSession;
+    public String delUserInSession() {
+        return serverUrl + "/api/delUserInSession";
+    }
 
 
     //服务器的地址
     public void setServerUrl(String serverUrl, String serverUploadUrl) {
-
         //不能为空
         if (serverUrl == null || serverUploadUrl == null) {
             throw new RuntimeException("服务器地址不能为空");
         }
-
         //服务器地址
         this.serverUrl = serverUrl;
 
         //资源文件上传地址
         this.serverUploadUrl = serverUploadUrl;
-
-        //上传文件的地址
-        fileUpload = serverUploadUrl + "/upload/fileUpload";
-
-        //视频文件上传的地址
-        videoUpload = serverUploadUrl + "/upload/videoUpload";
-
-        //创建账户
-        register = serverUrl + "/api/register";
-
-        //update user
-        updateUser = serverUrl + "/api/updateUser";
-
-        //登录接口的地址
-        login = serverUrl + "/api/login";
-
-        //修改推送信息
-        changePush = serverUrl + "/api/changePush";
-
-        //退出登录的接口地址
-        logout = serverUrl + "/api/logout";
-
-        //自动登录
-        autoLogin = serverUrl + "/api/autoLogin";
-
-        //创建单聊会话
-        createSingleSession = serverUrl + "/api/createSingleSession";
-
-        //获取单聊会话
-        getSingleSession = serverUrl + "/api/getSingleSession";
-
-        //创建群组会话
-        createGroupSession = serverUrl + "/api/createGroupSession";
-
-        //获取群组会话
-        getSessionByExtendID = serverUrl + "/api/getSessionByExtendID";
-
-        //获取用户的所有会话
-        getUserSessions = serverUrl + "/api/getUserSessions";
-
-        //向会话中添加人员
-        addUserToSession = serverUrl + "/api/addUserToSession";
-
-        //向会话中移除人员
-        delUserInSession = serverUrl + "/api/delUserInSession";
-
     }
 
 }

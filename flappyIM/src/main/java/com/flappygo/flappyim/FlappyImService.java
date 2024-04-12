@@ -504,7 +504,7 @@ public class FlappyImService {
         //设备ID
         hashMap.put("pushId", deviceToken);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush(),
                 hashMap,
                 new BaseParseCallback<PushSetting>(PushSetting.class) {
                     @Override
@@ -572,7 +572,7 @@ public class FlappyImService {
             hashMap.put("pushType", pushSettings.getRoutePushType());
         }
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush(),
                 hashMap,
                 new BaseParseCallback<PushSetting>(PushSetting.class) {
                     @Override
@@ -662,7 +662,7 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().register,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().register(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override
@@ -723,7 +723,7 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUser,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUser(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override
@@ -785,7 +785,7 @@ public class FlappyImService {
             //设备ID
             hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login,
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login(),
                     hashMap,
                     new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                         @Override
@@ -928,7 +928,7 @@ public class FlappyImService {
             //设备ID
             hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().autoLogin,
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().autoLogin(),
                     hashMap,
                     new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                         //出现异常
@@ -1106,7 +1106,7 @@ public class FlappyImService {
             hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
 
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().logout,
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().logout(),
                     hashMap,
                     new BaseParseCallback<String>(String.class) {
                         @Override
@@ -1174,7 +1174,7 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userTwo", peerUser);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(),
                 hashMap,
                 new BaseParseCallback<FlappySessionData>(FlappySessionData.class) {
                     @Override
@@ -1262,7 +1262,7 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userTwo", peerUser);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(),
                 hashMap,
                 new BaseParseCallback<FlappySessionData>(FlappySessionData.class) {
                     @Override
@@ -1326,7 +1326,7 @@ public class FlappyImService {
         hashMap.put("sessionName", groupName);
 
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(),
                 hashMap,
                 new BaseParseCallback<FlappySessionData>(FlappySessionData.class) {
 
@@ -1397,7 +1397,7 @@ public class FlappyImService {
         //用户ID
         hashMap.put("extendID", extendID);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendID,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendID(),
                 hashMap,
                 new BaseParseCallback<FlappySessionData>(FlappySessionData.class) {
                     @Override
@@ -1503,7 +1503,7 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessions,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessions(),
                 hashMap,
                 new BaseListParseCallBack<FlappySessionData>(FlappySessionData.class) {
                     @Override
@@ -1586,7 +1586,7 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userID", userID);
         hashMap.put("extendID", groupID);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override
@@ -1640,7 +1640,7 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userID", userID);
         hashMap.put("extendID", groupID);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession,
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
                     @Override

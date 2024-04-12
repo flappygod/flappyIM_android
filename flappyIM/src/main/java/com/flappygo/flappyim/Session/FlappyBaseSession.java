@@ -35,6 +35,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 /******
@@ -142,7 +143,7 @@ public class FlappyBaseSession {
                 //添加
                 files.add(uploadModel);
                 //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, paramMap, files);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload(), paramMap, files);
                 //返回数据
                 BaseApiModel<String> baseApiModel = new BaseApiModel<>();
                 //创建
@@ -151,13 +152,11 @@ public class FlappyBaseSession {
                 baseApiModel.setCode(jb.optString("code"));
                 //解析code
                 baseApiModel.setMsg(jb.optString("msg"));
-                //返回的消息
-                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                if (jb.optJSONArray("data") != null && jb.optJSONArray("data").length() > 0) {
-                    baseApiModel.setData(jb.optJSONArray("data").getString(0));
+                if (jb.optJSONArray("data") != null && Objects.requireNonNull(jb.optJSONArray("data")).length() > 0) {
+                    baseApiModel.setData(Objects.requireNonNull(jb.optJSONArray("data")).getString(0));
                 }
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
@@ -208,7 +207,7 @@ public class FlappyBaseSession {
                 //添加
                 files.add(uploadModel);
                 //上传
-                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, getParamMap, files);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload(), getParamMap, files);
 
                 //返回数据
                 BaseApiModel<String> baseApiModel = new BaseApiModel<>();
@@ -218,13 +217,11 @@ public class FlappyBaseSession {
                 baseApiModel.setCode(jb.optString("code"));
                 //解析code
                 baseApiModel.setMsg(jb.optString("msg"));
-                //返回的消息
-                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                if (jb.optJSONArray("data") != null && jb.optJSONArray("data").length() > 0) {
-                    baseApiModel.setData(jb.optJSONArray("data").getString(0));
+                if (jb.optJSONArray("data") != null && Objects.requireNonNull(jb.optJSONArray("data")).length() > 0) {
+                    baseApiModel.setData(Objects.requireNonNull(jb.optJSONArray("data")).getString(0));
                 }
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
@@ -288,7 +285,7 @@ public class FlappyBaseSession {
 
 
                 //返回的字符串
-                String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload, new HashMap<>(), files);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload(), new HashMap<>(), files);
                 //返回数据
                 BaseApiModel<ResponseUpload> baseApiModel = new BaseApiModel<>();
                 //创建
@@ -297,8 +294,6 @@ public class FlappyBaseSession {
                 baseApiModel.setCode(jb.optString("code"));
                 //解析code
                 baseApiModel.setMsg(jb.optString("msg"));
-                //返回的消息
-                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
@@ -355,7 +350,7 @@ public class FlappyBaseSession {
                 //添加
                 files.add(uploadModel);
                 //上传
-                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload, paramMap, files);
+                String str = UploadTool.postFile(FlappyConfig.getInstance().fileUpload(), paramMap, files);
 
                 //返回数据
                 BaseApiModel<String> baseApiModel = new BaseApiModel<>();
@@ -365,13 +360,11 @@ public class FlappyBaseSession {
                 baseApiModel.setCode(jb.optString("code"));
                 //解析code
                 baseApiModel.setMsg(jb.optString("msg"));
-                //返回的消息
-                baseApiModel.setSign(jb.optString("sign"));
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                if (jb.optJSONArray("data") != null && jb.optJSONArray("data").length() > 0) {
-                    baseApiModel.setData(jb.optJSONArray("data").getString(0));
+                if (jb.optJSONArray("data") != null && Objects.requireNonNull(jb.optJSONArray("data")).length() > 0) {
+                    baseApiModel.setData(Objects.requireNonNull(jb.optJSONArray("data")).getString(0));
                 }
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
