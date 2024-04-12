@@ -14,36 +14,6 @@ import java.security.*;
 public class RSATool {
 
 
-    /******
-     * 生成公钥私钥
-     */
-    public static void generateKeyPair() throws Exception {
-        // 初始化密钥对生成器
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048, new SecureRandom());
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-        // 获取公钥和私钥
-        PublicKey publicKey = keyPair.getPublic();
-        PrivateKey privateKey = keyPair.getPrivate();
-
-        // 将公钥和私钥转换为Base64编码的字符串
-        String publicKeyString = android.util.Base64.encodeToString(publicKey.getEncoded(), android.util.Base64.DEFAULT);
-        String privateKeyString = android.util.Base64.encodeToString(privateKey.getEncoded(), android.util.Base64.DEFAULT);
-
-        // 打印Base64编码的公钥和私钥字符串
-        System.out.println("公钥(Base64编码): " + publicKeyString);
-        System.out.println("私钥(Base64编码): " + privateKeyString);
-
-        // 如果需要，可以添加PEM格式的首尾标识符
-        String publicKeyPEM = "-----BEGIN PUBLIC KEY-----\n" + formatPEMString(publicKeyString) + "-----END PUBLIC KEY-----";
-        String privateKeyPEM = "-----BEGIN PRIVATE KEY-----\n" + formatPEMString(privateKeyString) + "-----END PRIVATE KEY-----";
-
-        System.out.println("公钥(publicKeyPEM): " + publicKeyPEM + "\n");
-        System.out.println("私钥(privateKeyPEM): " + privateKeyPEM + "\n");
-    }
-
-
     /*******
      * 公钥加密数据
      * @param data         数据
@@ -72,7 +42,7 @@ public class RSATool {
         //获取数组
         byte[] encryptedBytes = encryptCipher.doFinal(originalBytes);
         //返回
-        return bytesToHex(encryptedBytes);
+        return android.util.Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT);
     }
 
 
@@ -108,67 +78,11 @@ public class RSATool {
         decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
 
         //解密字符串
-        byte[] decryptedBytes = decryptCipher.doFinal(hexToBytes(data));
+        byte[] decryptedBytes = decryptCipher.doFinal(android.util.Base64.decode(data, android.util.Base64.DEFAULT));
 
         //解密字符串
         return new String(decryptedBytes);
     }
 
-
-    /******
-     * 辅助方法，用于将字节数组转换为十六进制字符串
-     * @param bytes 字节数组
-     * @return 字符串
-     */
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
-    }
-
-    /******
-     * 辅助方法，用于将十六进制字符串转换为字节数组
-     * @param hexString 字符串
-     * @return 字节数组
-     */
-    public static byte[] hexToBytes(String hexString) {
-        if (hexString.length() % 2 != 0) {
-            throw new IllegalArgumentException("输入的十六进制字符串长度应该是偶数");
-        }
-
-        byte[] bytes = new byte[hexString.length() / 2];
-        for (int i = 0; i < hexString.length(); i += 2) {
-            int firstDigit = Character.digit(hexString.charAt(i), 16);
-            int secondDigit = Character.digit(hexString.charAt(i + 1), 16);
-            if (firstDigit == -1 || secondDigit == -1) {
-                throw new IllegalArgumentException("输入的字符串包含非法字符");
-            }
-            bytes[i / 2] = (byte) ((firstDigit << 4) + secondDigit);
-        }
-        return bytes;
-    }
-
-
-    /******
-     * 辅助方法，用于将Base64编码的字符串格式化为PEM格式
-     * @param base64String Base64字符串
-     * @return 格式化的字符串
-     */
-    private static String formatPEMString(String base64String) {
-        // 按照64个字符一行的标准格式化Base64编码的字符串
-        StringBuilder pemFormattedString = new StringBuilder();
-        int index = 0;
-        while (index < base64String.length()) {
-            pemFormattedString.append(base64String, index, Math.min(index + 64, base64String.length())).append("\n");
-            index += 64;
-        }
-        return pemFormattedString.toString();
-    }
 
 }
