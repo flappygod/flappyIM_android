@@ -34,13 +34,13 @@ import android.os.Build;
 /******
  * 通知工具类
  */
-public class NotificationUtil extends ContextWrapper {
+public class NotificationTool extends ContextWrapper {
 
     private NotificationManager mManager;
     public static final String sID = "channel_1";
     public static final String sName = "channel_name_1";
 
-    public NotificationUtil(Context context) {
+    public NotificationTool(Context context) {
         super(context);
     }
 

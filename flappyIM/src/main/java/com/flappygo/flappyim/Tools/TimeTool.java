@@ -8,7 +8,7 @@ import java.util.Date;
 /******
  * 日期时间工具类
  */
-public class DateTimeTool {
+public class TimeTool {
 
     //定义格式
     @SuppressLint("SimpleDateFormat")

@@ -11,7 +11,7 @@ import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Tools.DateTimeTool;
+import com.flappygo.flappyim.Tools.TimeTool;
 import com.flappygo.flappyim.Tools.StringTool;
 
 import java.math.BigDecimal;
@@ -266,8 +266,8 @@ public class ChatMessage {
         messageSecretSend = msg.getMessageSecretSend();
         messageSecretReceive = msg.getMessageSecretReceive();
         isDelete = new BigDecimal(msg.getIsDelete());
-        messageDate = DateTimeTool.strToDate(msg.getMessageDate());
-        deleteDate = DateTimeTool.strToDate(msg.getDeleteDate());
+        messageDate = TimeTool.strToDate(msg.getMessageDate());
+        deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
 
     //转换为protoc消息
@@ -304,11 +304,11 @@ public class ChatMessage {
         if (getMessageSecretReceive() != null)
             msgBuilder.setMessageSecretReceive(getMessageSecretReceive());
         if (getMessageDate() != null)
-            msgBuilder.setMessageDate(DateTimeTool.dateToStr(getMessageDate()));
+            msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
             msgBuilder.setIsDelete(StringTool.decimalToInt(getIsDelete()));
         if (getDeleteDate() != null)
-            msgBuilder.setDeleteDate(DateTimeTool.dateToStr(getDeleteDate()));
+            msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 
         return msgBuilder.build();
     }

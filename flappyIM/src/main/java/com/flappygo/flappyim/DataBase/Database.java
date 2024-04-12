@@ -10,7 +10,7 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Handler.HandlerSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Tools.DateTimeTool;
+import com.flappygo.flappyim.Tools.TimeTool;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
 
@@ -178,13 +178,13 @@ public class Database {
                 values.put("messageSecretReceive", chatMessage.getMessageSecretReceive());
             }
             if (chatMessage.getMessageDate() != null) {
-                values.put("messageDate", DateTimeTool.dateToStr(chatMessage.getMessageDate()));
+                values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             }
             if (chatMessage.getIsDelete() != null) {
                 values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
             }
             if (chatMessage.getDeleteDate() != null) {
-                values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
+                values.put("deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
             }
             values.put("messageInsertUser", chatUser.getUserExtendId());
             //消息的时间戳
@@ -246,13 +246,13 @@ public class Database {
                 values.put("messageSecretReceive", chatMessage.getMessageSecretReceive());
             }
             if (chatMessage.getMessageDate() != null) {
-                values.put("messageDate", DateTimeTool.dateToStr(chatMessage.getMessageDate()));
+                values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             }
             if (chatMessage.getIsDelete() != null) {
                 values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
             }
             if (chatMessage.getDeleteDate() != null) {
-                values.put("deleteDate", DateTimeTool.dateToStr(chatMessage.getDeleteDate()));
+                values.put("deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
             }
             //更新消息信息
             db.update(
@@ -458,7 +458,7 @@ public class Database {
                 values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
             }
             if (session.getSessionCreateDate() != null) {
-                values.put("sessionCreateDate", DateTimeTool.dateToStr(session.getSessionCreateDate()));
+                values.put("sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
             }
             if (session.getSessionCreateUser() != null) {
                 values.put("sessionCreateUser", session.getSessionCreateUser());
@@ -467,7 +467,7 @@ public class Database {
                 values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
             }
             if (session.getDeleteDate() != null) {
-                values.put("sessionDeletedDate", DateTimeTool.dateToStr(session.getDeleteDate()));
+                values.put("sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
             }
             if (session.getUsers() != null) {
                 values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
@@ -505,7 +505,7 @@ public class Database {
                 values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
             }
             if (session.getSessionCreateDate() != null) {
-                values.put("sessionCreateDate", DateTimeTool.dateToStr(session.getSessionCreateDate()));
+                values.put("sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
             }
             if (session.getSessionCreateUser() != null) {
                 values.put("sessionCreateUser", session.getSessionCreateUser());
@@ -514,7 +514,7 @@ public class Database {
                 values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
             }
             if (session.getDeleteDate() != null) {
-                values.put("sessionDeletedDate", DateTimeTool.dateToStr(session.getDeleteDate()));
+                values.put("sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
             }
             if (session.getUsers() != null) {
                 values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
@@ -612,10 +612,10 @@ public class Database {
             info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
             info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
             info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
-            info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
+            info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
             info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
             info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(sessionId));
             cursor.close();
@@ -658,10 +658,10 @@ public class Database {
             info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
             info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
             info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
-            info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
+            info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
             info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
             //转换为array
             info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
@@ -710,10 +710,10 @@ public class Database {
             info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
             info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
             info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
-            info.setSessionCreateDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
+            info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
             info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
             info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
             sessions.add(info);
@@ -776,9 +776,9 @@ public class Database {
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
 
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             list.add(info);
             cursor.moveToNext();
         }
@@ -848,9 +848,9 @@ public class Database {
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
 
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             list.add(info);
             cursor.moveToNext();
         }
@@ -902,9 +902,9 @@ public class Database {
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
 
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             cursor.close();
             return info;
         }
@@ -968,9 +968,9 @@ public class Database {
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
 
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             cursor.close();
             return info;
         }
@@ -1026,9 +1026,9 @@ public class Database {
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
 
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             list.add(info);
             cursor.moveToNext();
         }
@@ -1083,9 +1083,9 @@ public class Database {
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
 
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-            info.setMessageDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+            info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-            info.setDeleteDate(DateTimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+            info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             list.add(info);
             cursor.moveToNext();
         }

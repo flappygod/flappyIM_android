@@ -4,7 +4,7 @@ import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Tools.DateTimeTool;
+import com.flappygo.flappyim.Tools.TimeTool;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,9 +30,9 @@ public class FlappySessionData extends ChatSession implements Serializable {
         setSessionOffset(session.getSessionOffset());
         setSessionStamp(new BigDecimal(session.getSessionStamp()));
         setSessionCreateUser(session.getSessionCreateUser());
-        setSessionCreateDate(DateTimeTool.strToDate(session.getSessionCreateDate()));
+        setSessionCreateDate(TimeTool.strToDate(session.getSessionCreateDate()));
         setIsDelete(new BigDecimal(session.getIsDelete()));
-        setDeleteDate(DateTimeTool.strToDate(session.getDeleteDate()));
+        setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
         setUsers(GsonTool.jsonArrayToModels(session.getUsers(), ChatUser.class));
     }
 

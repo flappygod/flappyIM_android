@@ -12,7 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.Tools.NettyAttrUtil;
+import com.flappygo.flappyim.Tools.NettyAttrTool;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 
@@ -125,11 +125,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //发送心跳包
             ctx.writeAndFlush(heart).addListeners((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
-                    NettyAttrUtil.updateReaderTime(ctx.channel(), System.currentTimeMillis());
+                    NettyAttrTool.updateReaderTime(ctx.channel(), System.currentTimeMillis());
                 }
             });
             //检查心跳，出现异常关闭socket
-            Long formerTime = NettyAttrUtil.getReaderTime(ctx.channel());
+            Long formerTime = NettyAttrTool.getReaderTime(ctx.channel());
             if (formerTime != null && System.currentTimeMillis() - formerTime > 30 * 1000) {
                 closeChannel(ctx);
             }

@@ -7,7 +7,7 @@ import io.netty.util.Attribute;
 /******
  * Netty属性工具
  */
-public class NettyAttrUtil {
+public class NettyAttrTool {
 
     //创建时间
     private static final AttributeKey<String> ATTR_KEY_READER_TIME = AttributeKey.valueOf("readerTime");

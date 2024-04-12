@@ -21,7 +21,7 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Tools.NotificationUtil;
+import com.flappygo.flappyim.Tools.NotificationTool;
 import com.flappygo.flappyim.Push.PushMsgLanPack;
 import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Thread.NettyThread;
@@ -29,7 +29,7 @@ import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.Push.ConfigPushMsg;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Tools.RunningTool;
+import com.flappygo.flappyim.Tools.RunTool;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.Tools.NetTool;
@@ -326,8 +326,8 @@ public class FlappyImService {
             return;
         }
         //正在后台
-        if (RunningTool.isBackground(FlappyImService.this.getAppContext())) {
-            NotificationUtil util = new NotificationUtil(FlappyImService.this.getAppContext());
+        if (RunTool.isBackground(FlappyImService.this.getAppContext())) {
+            NotificationTool util = new NotificationTool(FlappyImService.this.getAppContext());
             String privacy = pushSetting.getRoutePushPrivacy();
             String language = pushSetting.getRoutePushLanguage();
             //推送类型普通

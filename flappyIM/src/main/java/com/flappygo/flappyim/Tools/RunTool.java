@@ -9,7 +9,7 @@ import java.util.List;
 /******
  * 运行工具类
  */
-public class RunningTool {
+public class RunTool {
 
     //判断是否在后台
     public static boolean isBackground(Context context) {
