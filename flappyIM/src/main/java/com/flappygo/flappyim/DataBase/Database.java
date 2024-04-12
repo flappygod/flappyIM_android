@@ -3,13 +3,13 @@ package com.flappygo.flappyim.DataBase;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 
+import com.flappygo.flappyim.Handler.MessageNotifyManager;
 import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Handler.HandlerSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Handler.MessageNotifyManager;
 import com.flappygo.flappyim.Tools.DateTimeTool;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
