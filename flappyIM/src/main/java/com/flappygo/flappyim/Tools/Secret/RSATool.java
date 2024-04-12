@@ -20,27 +20,36 @@ public class RSATool {
     public static String encryptWithPublicKey(String publicKeyStr, String data) throws Exception {
         //要加密的原始数据
         byte[] originalBytes = data.getBytes();
+
         //移除PEM字符串中的首尾标识符和换行符
         publicKeyStr = publicKeyStr
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
                 .replaceAll("\\s", "");
+
         //对字符串进行Base64解码
         byte[] publicKeyBytes = android.util.Base64.decode(publicKeyStr, android.util.Base64.DEFAULT);
+
         //生成X509EncodedKeySpec对象
         X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+
         //获取KeyFactory对象
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
         //从KeySpec对象生成PublicKey
         PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
         //使用公钥加密
-        Cipher encryptCipher = Cipher.getInstance("RSA");
+        Cipher encryptCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+
         //开始加密
         encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
         //获取数组
         byte[] encryptedBytes = encryptCipher.doFinal(originalBytes);
+
         //返回
-        return android.util.Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT);
+        return android.util.Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT).replace("\n","");
     }
 
 
@@ -70,7 +79,7 @@ public class RSATool {
         PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
         //使用私钥解密
-        Cipher decryptCipher = Cipher.getInstance("RSA");
+        Cipher decryptCipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 
         //初始化
         decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
