@@ -37,64 +37,11 @@ public class MainActivity extends Activity {
 
     private FlappyChatSession mySession;
 
-    //我们的公钥字符串
-    private String publicKeyStr = "-----BEGIN PUBLIC KEY-----\n" +
-            "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA/EUkiEsrSMsdS3Eb8d5+\n" +
-            "RuJlcCa9sQ9nImZ7glnTT9pGfyPPqW5HFcKamNsd1PRb+VFr6OK01i1neakLjHA4\n" +
-            "XGBxDg6JKdAdWakk+xMib5OZnhDEin9wGNBmTLCJLreN+vJkj0Knb6D9ClLgHWkl\n" +
-            "6mcQUvkU59ckr7NcG4/h9pbFWVigDrDitlpTRZBxOhUH9cOcRlu5nCc2r07hQRvk\n" +
-            "ZUBCfg5Gs0liXJsUfeCigpqvKYpFTx2Iz48uRUD9bJKVHyvI3girTR32flbt0pmi\n" +
-            "8k/1/Rs74+g6YD1/RC/Bc03eOXfdHQMsy1XjN94sjHNhHgLPE+1TKXjEeOpnb8Gk\n" +
-            "kQIDAQAB\n" +
-            "-----END PUBLIC KEY-----";
-
-
-    //我们的私钥字符串
-    private String privateKeyPKCS8 = "-----BEGIN PRIVATE KEY-----\n" +
-            "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD8RSSISytIyx1L\n" +
-            "cRvx3n5G4mVwJr2xD2ciZnuCWdNP2kZ/I8+pbkcVwpqY2x3U9Fv5UWvo4rTWLWd5\n" +
-            "qQuMcDhcYHEODokp0B1ZqST7EyJvk5meEMSKf3AY0GZMsIkut4368mSPQqdvoP0K\n" +
-            "UuAdaSXqZxBS+RTn1ySvs1wbj+H2lsVZWKAOsOK2WlNFkHE6FQf1w5xGW7mcJzav\n" +
-            "TuFBG+RlQEJ+DkazSWJcmxR94KKCmq8pikVPHYjPjy5FQP1skpUfK8jeCKtNHfZ+\n" +
-            "Vu3SmaLyT/X9Gzvj6DpgPX9EL8FzTd45d90dAyzLVeM33iyMc2EeAs8T7VMpeMR4\n" +
-            "6mdvwaSRAgMBAAECggEAOiDAezs+3QYYWPLWKpRG6pRuJTp4CR1weUe9+9owy7yS\n" +
-            "8+bPic3kSUpPDxumMxSfQMKXJ9FdM+DAcBMYmyKcigSa6E9HIcBXkvpbkBLno2gS\n" +
-            "RI6+it80eDNE7zTaV05qQ8GolC4aoKkqxT81bvF0kB9xbn0AaS90v5uHhL5RpdzA\n" +
-            "vSNPRm39Cxz2+TuWdqDIVi9iWMVGE3093C15a7pxQKt2ztrbN40YOIQB6d/CB077\n" +
-            "SDC5Iqzpj5qdeJFPqkUTDYSIN4uq7y3FpiqJueYsorjRzUnTuTh1ehAa7e4Wi+c7\n" +
-            "/HKhokcrS6viMW1wdoBvGP3uaDCrgl2BfQbbgbQgVQKBgQD/GHVP5kdzdVlWBdkB\n" +
-            "zp+ph9OVJkU77oATHiKdXjea/TKlZVAqhJZrvqIZ/StGg+svbBYlTCmv3YU7A71o\n" +
-            "R5S4dEeTLj9KVDMPutwb/vg4r5GJIPIiJxjeCkZ4uYYgrk2P3D2uxDOvItPzgo/U\n" +
-            "x9jvP24olwSu0paUzzMfymitBwKBgQD9Kh6w163y2sewMkOAicPxw6vV9d2Ve9L0\n" +
-            "jPaIUfeLjaRHkNcHcUzcuGF3ceFrrMD75buTC2k5AbMz8ZHRmrKJVfu6NASrqvDj\n" +
-            "edFhivCXWy6BpFeZ4X3+ZJ53OXWxwZBEzu8uhJoqWzN3J1Flam9BruSKckc5o776\n" +
-            "cKGFT0TTpwKBgQDx3oPktSgMLjj9WmAO2ZYDTTjtUzMUByhCeDFD2sCIYQhzUCN5\n" +
-            "nOtuz3qtf6FXo98LwMUiqhtgl34qnXoqdKxrVD1FLPVviXQ8tuTaWp+KR9WLGsTa\n" +
-            "Yw2uAjodX3Lwa7Q48g8+NOP4a+JhIes0SiTDe/X74GzdQejqwabsvqMPYwKBgFZe\n" +
-            "BjZifi95v+I2Y5z4YuaZ0Ief50ZWBfP0Gy8Kd58eZUsc+J7LYmNya53qNfMb7oKB\n" +
-            "L2rM28rc75vq78pIMlxz/vrZQDaojKGuL2ZNliKsssL7o/8VVHxzKzSVX7eSx3sR\n" +
-            "9bsy9b05e+dMfJJSqz4HQmSQ9AeP+1lJD3GBR4PFAoGBAM9m39+MCa1by4kTOt3R\n" +
-            "aTXW19hDKeHSQ5jNxxxTwi5adxiqoFvGcVwn069b3pKas8Uhr/Pwxh4pTYucF/nD\n" +
-            "vow9xlu2lma/DKnCSi4X6KyHF+kIzu9n6e8wVqDcPo8IUG1SbShQgDlY6YQu3qzW\n" +
-            "i8gv8gVianXQTrYb8RtyUene\n" +
-            "-----END PRIVATE KEY-----";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        try {
-            String encryptStr= RSATool.encryptWithPublicKey(publicKeyStr,"四川雅安河道现大熊猫尸体");
-            System.out.println("加密:"+encryptStr + "\n");
-            String decryptStr=RSATool.decryptWithPrivatePKCS8(privateKeyPKCS8,"Gw7JoQi+XVG9wM68aRvy42VcI9DIH7BmXC63ZhtBqiU0eR6BpGLEZFupFUkZtu/vXbrUTFoR91ktdrx9QEOYuI0yjA8KQaXfgzlxuHwkMb5wBFniSM4DsLUX97Sc/ojAEJxzqkKP9aAy5JCRi00rqrk0bcoqxvwjZ7o3ta4oD1Y7V0+2bOTeJ1Y8XBW9CMluPTuYzND31xKy4sSLlMtOyh5VyEGbQYkRObrH4fpWJ/X2dsbCTz0/G2JBh0hFdI6j3KEW93S6vnS5bNop0ifBwgH3439oREUiEc1Ra1B6MA1nYUsm78gldwSlV7b6MpWTvf+MvHG1XKBKWDC3aSadQA==");
-            System.out.println("解密:"+decryptStr+ "\n");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
 
         FlappyImService.getInstance().setPushPlatform("Google");
         //服务初始
