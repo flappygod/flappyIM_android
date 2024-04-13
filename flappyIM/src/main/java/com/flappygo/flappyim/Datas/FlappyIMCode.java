@@ -16,5 +16,7 @@ public class FlappyIMCode {
     public final static String RESULT_NOT_LOGIN = "5";
     //当前用户未登录
     public final static String RESULT_PARSE_ERROR = "6";
+    //当前用户未登录
+    public final static String RESULT_DATABASE_ERROR = "7";
 
 }

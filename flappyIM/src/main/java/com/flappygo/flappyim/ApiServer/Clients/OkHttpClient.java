@@ -37,7 +37,7 @@ public class OkHttpClient {
     /******
      * 创建请求池
      */
-    public final LXAsyncTaskClient taskClient = new LXAsyncTaskClient(5);
+    public final LXAsyncTaskClient httpTaskClient = new LXAsyncTaskClient(5);
 
 
     /******
@@ -127,7 +127,7 @@ public class OkHttpClient {
         dataList.add(url);
         dataList.add(data);
         dataList.add(header);
-        taskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
+        httpTaskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
             @Override
             public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);
@@ -236,7 +236,7 @@ public class OkHttpClient {
         dataList.add(url);
         dataList.add(data);
         dataList.add(header);
-        taskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
+        httpTaskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
             @Override
             public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);
@@ -341,7 +341,7 @@ public class OkHttpClient {
         dataList.add(url);
         dataList.add(data);
         dataList.add(header);
-        taskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
+        httpTaskClient.execute(new LXAsyncTask<ArrayList<Object>, String>() {
             @Override
             public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);

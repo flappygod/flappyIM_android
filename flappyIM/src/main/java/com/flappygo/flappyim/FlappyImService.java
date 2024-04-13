@@ -1,12 +1,15 @@
 package com.flappygo.flappyim;
 
+
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
-import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
-import com.flappygo.flappyim.Thread.NettyThreadListener;
+import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
+import com.flappygo.flappyim.Thread.NettyThreadListener;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Listener.KickedOutListener;
@@ -54,6 +57,7 @@ import java.util.Objects;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_DATABASE_ERROR;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_NORMAL;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_HIDE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_CUSTOM;
@@ -78,6 +82,13 @@ import androidx.annotation.NonNull;
  * FlappyImService总服务
  */
 public class FlappyImService {
+
+
+    /******
+     * 创建请求池
+     */
+    public final LXAsyncTaskClient asyncTaskClient = new LXAsyncTaskClient(5);
+
 
     /******
      * 单例模式
@@ -430,10 +441,27 @@ public class FlappyImService {
         this.appContext = appContext.getApplicationContext();
         //添加总体的监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
-        //清空当前正在发送的消息
-        Database database = Database.getInstance().open();
-        database.clearSendingMessage();
-        database.close();
+        //异步线程，清空异常数据
+        asyncTaskClient.execute(new LXAsyncTask<Object, Object>() {
+            @Override
+            public Object run(Object input, String tag) {
+                //清空当前正在发送的消息
+                Database database = Database.getInstance().open();
+                database.clearSendingMessage();
+                database.close();
+                return true;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+
+            }
+
+            @Override
+            public void success(Object data, String tag) {
+
+            }
+        });
     }
 
     /******
@@ -1228,28 +1256,53 @@ public class FlappyImService {
         if (checkLogin(callback)) {
             return;
         }
+
         //检查聊天对象
         if (checkPeerUserNotAvailable(peerUser, callback)) {
             return;
         }
+
         //根据默认规则拼接出session的extendId
         String extendID = StringTool.getTwoUserString(
                 peerUser,
                 DataManager.getInstance().getLoginUser().getUserExtendId()
         );
-        //数据库
-        Database database = Database.getInstance().open();
-        //获取数据
-        FlappySessionData data = database.getUserSessionByExtendID(extendID);
-        //关闭
-        database.close();
-        //返回session
-        if (data != null) {
-            callback.success(new FlappyChatSession(data));
-        } else {
-            //从网络获取数据
-            getSingleSessionHttp(peerUser, callback);
-        }
+
+        //异步操作数据库
+        asyncTaskClient.execute(new LXAsyncTask<String, FlappySessionData>() {
+            @Override
+            public FlappySessionData run(String input, String tag) {
+                //数据库
+                Database database = Database.getInstance().open();
+                //获取数据
+                FlappySessionData data = database.getUserSessionByExtendID(extendID);
+                //关闭
+                database.close();
+                //本地
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                //从网络获取数据
+                getSingleSessionHttp(peerUser, callback);
+            }
+
+            @Override
+            public void success(FlappySessionData data, String tag) {
+                //成功的回调
+                if (data != null) {
+                    if (callback != null) {
+                        callback.success(new FlappyChatSession(data));
+                    }
+                }
+                //没有找到去网上找
+                else {
+                    getSingleSessionHttp(peerUser, callback);
+                }
+            }
+        });
+
     }
 
 
@@ -1376,18 +1429,38 @@ public class FlappyImService {
      * @param extendID 群组ID
      * @param callback 回调
      */
-    public void getSessionByExtendID(String extendID, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSessionByExtendID(String extendID,
+            final FlappyIMCallback<FlappyChatSession> callback) {
+        //检查登录
         if (checkLogin(callback)) {
             return;
         }
-        Database database = Database.getInstance().open();
-        FlappySessionData data = database.getUserSessionByExtendID(extendID);
-        database.close();
-        if (data == null) {
-            getSessionByExtendIDHttp(extendID, callback);
-            return;
-        }
-        callback.success(new FlappyChatSession(data));
+        //查询本地是否包含
+        asyncTaskClient.execute(new LXAsyncTask<String, FlappySessionData>() {
+            @Override
+            public FlappySessionData run(String input, String tag) {
+                Database database = Database.getInstance().open();
+                FlappySessionData data = database.getUserSessionByExtendID(extendID);
+                database.close();
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                getSessionByExtendIDHttp(extendID, callback);
+            }
+
+            @Override
+            public void success(FlappySessionData data, String tag) {
+                if (data != null) {
+                    if (callback != null) {
+                        callback.success(new FlappyChatSession(data));
+                    }
+                } else {
+                    getSessionByExtendIDHttp(extendID, callback);
+                }
+            }
+        });
     }
 
 
@@ -1396,7 +1469,8 @@ public class FlappyImService {
      * @param extendID 群组ID
      * @param callback 回调
      */
-    public void getSessionByExtendIDHttp(String extendID, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSessionByExtendIDHttp(String extendID,
+            final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1424,16 +1498,16 @@ public class FlappyImService {
                     }
 
                     @Override
-                    public void stateTrue(FlappySessionData data, String tag) {
+                    protected void netError(Exception e, String tag) {
                         if (callback != null) {
-                            callback.success(new FlappyChatSession(data));
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
                         }
                     }
 
                     @Override
-                    protected void netError(Exception e, String tag) {
+                    public void stateTrue(FlappySessionData data, String tag) {
                         if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                            callback.success(new FlappyChatSession(data));
                         }
                     }
                 }
@@ -1450,52 +1524,69 @@ public class FlappyImService {
         if (checkLogin(callback)) {
             return;
         }
-        //数据库
-        Database database = Database.getInstance().open();
-        List<FlappySessionData> data = database.getUserSessions();
-        database.close();
-
-        //数据为空，去网上拿
-        if (data == null || data.isEmpty()) {
-            getUserSessionsHttp(callback);
-            return;
-        }
-
-        //数据不为空
-        List<FlappyChatSession> sessions = new ArrayList<>();
-
-        //创建FlappyChatSession对象
-        for (int s = 0; s < data.size(); s++) {
-            sessions.add(new FlappyChatSession(data.get(s)));
-        }
-
-        //进行最后一条消息整体排序
-        Collections.sort(sessions, new Comparator<FlappyChatSession>() {
+        //异步执行开始
+        asyncTaskClient.execute(new LXAsyncTask<Object, List<FlappyChatSession>>() {
             @Override
-            public int compare(FlappyChatSession one, FlappyChatSession two) {
-                if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
-                    return -1;
+            public List<FlappyChatSession> run(Object input, String tag) {
+                //数据库
+                Database database = Database.getInstance().open();
+                List<FlappySessionData> data = database.getUserSessions();
+                database.close();
+
+                //数据为空，去网上拿
+                if (data == null || data.isEmpty()) {
+                    getUserSessionsHttp(callback);
+                    return new ArrayList<>();
                 }
-                if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
-                    return 1;
+
+                //数据不为空
+                List<FlappyChatSession> sessions = new ArrayList<>();
+
+                //创建FlappyChatSession对象
+                for (int s = 0; s < data.size(); s++) {
+                    sessions.add(new FlappyChatSession(data.get(s)));
                 }
-                ChatMessage msgOne = one.getLatestMessage();
-                ChatMessage msgTwo = two.getLatestMessage();
-                if (msgOne == null) {
-                    return 1;
+
+                //进行最后一条消息整体排序
+                Collections.sort(sessions, (one, two) -> {
+                    if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                        return -1;
+                    }
+                    if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                        return 1;
+                    }
+                    ChatMessage msgOne = one.getLatestMessage();
+                    ChatMessage msgTwo = two.getLatestMessage();
+                    if (msgOne == null) {
+                        return 1;
+                    }
+                    if (msgTwo == null) {
+                        return -1;
+                    }
+                    return Long.compare(
+                            msgTwo.getMessageTableSeq().longValue(),
+                            msgOne.getMessageTableSeq().longValue()
+                    );
+                });
+                return sessions;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                //失败
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_DATABASE_ERROR));
                 }
-                if (msgTwo == null) {
-                    return -1;
+            }
+
+            @Override
+            public void success(List<FlappyChatSession> data, String tag) {
+                //成功
+                if (callback != null) {
+                    callback.success(data);
                 }
-                return Long.compare(
-                        msgTwo.getMessageTableSeq().longValue(),
-                        msgOne.getMessageTableSeq().longValue()
-                );
             }
         });
-
-        //返回成功
-        callback.success(sessions);
     }
 
 
@@ -1544,28 +1635,25 @@ public class FlappyImService {
                             for (int s = 0; s < data.size(); s++) {
                                 sessions.add(new FlappyChatSession(data.get(s)));
                             }
-                            Collections.sort(sessions, new Comparator<FlappyChatSession>() {
-                                @Override
-                                public int compare(FlappyChatSession one, FlappyChatSession two) {
-                                    if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
-                                        return -1;
-                                    }
-                                    if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
-                                        return 1;
-                                    }
-                                    ChatMessage msgOne = one.getLatestMessage();
-                                    ChatMessage msgTwo = two.getLatestMessage();
-                                    if (msgOne == null) {
-                                        return 1;
-                                    }
-                                    if (msgTwo == null) {
-                                        return -1;
-                                    }
-                                    return Long.compare(
-                                            msgTwo.getMessageTableSeq().longValue(),
-                                            msgOne.getMessageTableSeq().longValue()
-                                    );
+                            Collections.sort(sessions, (one, two) -> {
+                                if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                                    return -1;
                                 }
+                                if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                                    return 1;
+                                }
+                                ChatMessage msgOne = one.getLatestMessage();
+                                ChatMessage msgTwo = two.getLatestMessage();
+                                if (msgOne == null) {
+                                    return 1;
+                                }
+                                if (msgTwo == null) {
+                                    return -1;
+                                }
+                                return Long.compare(
+                                        msgTwo.getMessageTableSeq().longValue(),
+                                        msgOne.getMessageTableSeq().longValue()
+                                );
                             });
                             callback.success(sessions);
                         }

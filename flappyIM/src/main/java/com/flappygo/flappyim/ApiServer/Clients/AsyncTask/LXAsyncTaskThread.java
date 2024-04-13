@@ -75,7 +75,6 @@ public class LXAsyncTaskThread<M,T>extends Thread {
 
     /******
      * 设置Handler
-     * @return handler
      */
     public void setHandler(LXAsyncTaskHandler<M,T> handler) {
         this.handler = handler;
@@ -110,7 +109,7 @@ public class LXAsyncTaskThread<M,T>extends Thread {
      * @param task 任务
      * @return 是否取消成功
      */
-    public boolean cancelTask(LXAsyncTask<M,T> task) {
+    public boolean cancelTask(LXAsyncTask<?,?> task) {
         if (handler.getTask() == task) {
             handler.setCallBackEnable(false);
             return true;
@@ -118,6 +117,7 @@ public class LXAsyncTaskThread<M,T>extends Thread {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     public void run() {
         try {
             Object object = task.run((M) taskInput, taskTag);

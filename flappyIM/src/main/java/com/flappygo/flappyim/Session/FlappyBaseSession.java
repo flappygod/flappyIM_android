@@ -44,7 +44,7 @@ import java.util.Objects;
 public class FlappyBaseSession {
 
     //Client
-    private static final LXAsyncTaskClient<ChatMessage, ChatMessage> client = new LXAsyncTaskClient<ChatMessage, ChatMessage>(10);
+    private static final LXAsyncTaskClient sessionClient = new LXAsyncTaskClient(10);
 
     ///获取当前的消息handler
     ChannelMsgHandler getCurrentChannelMessageHandler() {
@@ -74,7 +74,7 @@ public class FlappyBaseSession {
         msg.setMessageTableSeq(bigDecimal);
 
         //执行插入数据库操作
-        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
                 //插入消息
@@ -148,7 +148,7 @@ public class FlappyBaseSession {
     //上传图片并发送
     protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //发送
-        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
                 //取得消息体
@@ -210,7 +210,7 @@ public class FlappyBaseSession {
     //上传音频文件并发送
     protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //发送
-        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
 
@@ -277,7 +277,7 @@ public class FlappyBaseSession {
     //上传视频并发送
     protected void uploadVideoAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //发送
-        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
 
@@ -350,7 +350,7 @@ public class FlappyBaseSession {
     //上传音频文件并发送
     protected void uploadFileAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //发送
-        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String s) throws Exception {
 
