@@ -143,7 +143,7 @@ public class OkHttpClient {
             public void success(String data, String tag) {
                 callback.success(data, tag);
             }
-        }, dataList, String.valueOf(System.currentTimeMillis()));
+        }, dataList);
     }
 
 
@@ -252,7 +252,7 @@ public class OkHttpClient {
             public void success(String data, String tag) {
                 callback.success(data, tag);
             }
-        }, dataList, String.valueOf(System.currentTimeMillis()));
+        }, dataList);
     }
 
 
@@ -357,7 +357,7 @@ public class OkHttpClient {
             public void success(String data, String tag) {
                 callback.success(data, tag);
             }
-        }, dataList, String.valueOf(System.currentTimeMillis()));
+        }, dataList);
     }
 
 }

@@ -73,7 +73,7 @@ public class FlappyBaseSession {
         bigDecimal = bigDecimal.add(new BigDecimal(1));
         msg.setMessageTableSeq(bigDecimal);
 
-        //执行插入数据库操作
+        //更新数据
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
@@ -95,7 +95,7 @@ public class FlappyBaseSession {
             public void success(ChatMessage data, String tag) {
 
             }
-        }, msg, null);
+        }, msg);
 
 
         //通知消息发送成功
@@ -105,9 +105,31 @@ public class FlappyBaseSession {
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
-        Database database = Database.getInstance().open();
-        database.insertMessage(msg);
-        database.close();
+
+        //更新数据
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+            @Override
+            public ChatMessage run(ChatMessage data, String tag) {
+                Database database = Database.getInstance().open();
+                database.insertMessage(data);
+                database.close();
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                if (e != null) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void success(ChatMessage data, String tag) {
+
+            }
+        }, msg);
+
+
         //通知消息发送失败
         MessageNotifyManager.getInstance().notifyMessageFailure(msg);
     }
@@ -115,9 +137,28 @@ public class FlappyBaseSession {
     //将消息的状态更新为已经发送
     private void updateMsgSent(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
-        Database database = Database.getInstance().open();
-        database.insertMessage(msg);
-        database.close();
+        //更新数据
+        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+            @Override
+            public ChatMessage run(ChatMessage data, String tag) {
+                Database database = Database.getInstance().open();
+                database.insertMessage(data);
+                database.close();
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                if (e != null) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void success(ChatMessage data, String tag) {
+
+            }
+        }, msg);
     }
 
     //发送消息
@@ -203,7 +244,7 @@ public class FlappyBaseSession {
                 updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
-        }, msg, null);
+        }, msg);
     }
 
 
@@ -270,7 +311,7 @@ public class FlappyBaseSession {
                 //设置真实的信息
                 sendMessage(msg, callback);
             }
-        }, msg, null);
+        }, msg);
     }
 
 
@@ -343,7 +384,7 @@ public class FlappyBaseSession {
                 updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
-        }, msg, null);
+        }, msg);
     }
 
 
@@ -411,7 +452,7 @@ public class FlappyBaseSession {
                 updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
-        }, msg, null);
+        }, msg);
     }
 
 }
