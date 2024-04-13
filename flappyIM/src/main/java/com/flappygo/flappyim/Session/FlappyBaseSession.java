@@ -66,15 +66,18 @@ public class FlappyBaseSession {
     public void insertMessage(ChatMessage msg) {
         //设置状态
         msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
+
         //设置消息的TableSeq,这里这个值并不是最终值，最终以服务端成功后的返回值为准
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
         bigDecimal = bigDecimal.add(new BigDecimal(1));
         msg.setMessageTableSeq(bigDecimal);
+
         //插入消息
         Database database = Database.getInstance().open();
         database.insertMessage(msg);
         database.close();
+
         //通知消息发送成功
         MessageNotifyManager.getInstance().notifyMessageSend(msg);
     }

@@ -446,16 +446,9 @@ public class FlappyImService {
             String serverPath,
             String uploadPath
     ) {
-        //获取application
-        this.appContext = appContext.getApplicationContext();
+        init(appContext);
         //更新服务器地址和资源文件上传地址
         FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
-        //添加总体的监听,定义全局防止多次重复添加这个监听
-        HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
-        //清空当前正在发送的消息
-        Database database = Database.getInstance().open();
-        database.clearSendingMessage();
-        database.close();
     }
 
     /******
