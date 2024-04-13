@@ -1,10 +1,8 @@
 package com.flappygo.flappyim.Handler;
 
-import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_ALL;
-import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_DATA_ALL;
-import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_DATA_MEMBER;
 import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_MEMBER_DEL;
 import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_MEMBER_GET;
+import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_ALL;
 
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
