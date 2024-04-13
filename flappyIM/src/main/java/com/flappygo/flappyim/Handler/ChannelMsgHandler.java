@@ -1,8 +1,15 @@
 package com.flappygo.flappyim.Handler;
 
+import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_ALL;
+import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_DATA_ALL;
+import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_DATA_MEMBER;
+import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_MEMBER_DEL;
+import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SESSION_MEMBER_GET;
+
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -353,28 +360,47 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         List<ChatMessage> latestMessages = database.getNotActionSystemMessage();
         //开始处理
         database.close();
-        //需要更新的
-        HashMap<String, String> needUpdate = new HashMap<>();
-        //遍历
-        for (int s = 0; s < latestMessages.size(); s++) {
-            //已经被添加进入的
-            String former = needUpdate.get(latestMessages.get(s).getMessageSession());
-            if (former == null) {
-                //没有就添加
-                needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysTime());
-            } else {
-                //已经存在了
-                long stamp = StringTool.strToDecimal(former).longValue();
-                //比较添加，并使用最新的时间作为依据
-                long newStamp = StringTool.strToDecimal(latestMessages.get(s).getChatSystem().getSysTime()).longValue();
-                //并使用最新的时间作为依据
-                if (newStamp > stamp) {
-                    needUpdate.put(latestMessages.get(s).getMessageSession(), latestMessages.get(s).getChatSystem().getSysTime());
-                }
+
+        //区分更新
+        List<ChatMessage> actionUpdateSessionAll = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionMember = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionMemberDel = new ArrayList<>();
+        for (ChatMessage item : latestMessages) {
+            if (item.getChatSystem().getSysAction() == UPDATE_SESSION_ALL) {
+                actionUpdateSessionAll.add(item);
+            }
+            if (item.getChatSystem().getSysAction() == UPDATE_SESSION_MEMBER_GET) {
+                actionUpdateSessionMember.add(item);
+            }
+            if (item.getChatSystem().getSysAction() == UPDATE_SESSION_MEMBER_DEL) {
+                actionUpdateSessionMemberDel.add(item);
+            }
+        }
+        //全量更新
+        if (!actionUpdateSessionAll.isEmpty()) {
+            updateSessionAll(ctx, actionUpdateSessionAll);
+        }
+        //用户更新
+        if (!actionUpdateSessionMember.isEmpty()) {
+            updateSessionMember(ctx, actionUpdateSessionMember);
+        }
+        //用户更新
+        if (!actionUpdateSessionMemberDel.isEmpty()) {
+            updateSessionMemberDel(actionUpdateSessionMemberDel);
+        }
+    }
+
+
+    //更新所有会话
+    private void updateSessionAll(ChannelHandlerContext ctx, List<ChatMessage> messages) {
+        List<String> updateSessions = new ArrayList<>();
+        for (int s = 0; s < messages.size(); s++) {
+            if (!updateSessions.contains(messages.get(s).getMessageSession())) {
+                updateSessions.add(messages.get(s).getMessageSession());
             }
         }
         //遍历
-        for (String key : needUpdate.keySet()) {
+        for (String key : updateSessions) {
             //包含
             if (!updateSessions.contains(key)) {
                 //添加sessions
@@ -382,7 +408,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //更新消息
                 Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
                         .setUpdateID(key)
-                        .setUpdateType(FlappyRequest.UPDATE_SESSION_SINGLE)
+                        .setUpdateType(UPDATE_SESSION_ALL)
                         .build();
 
                 //创建登录请求消息
@@ -394,6 +420,65 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 ctx.writeAndFlush(builder.build());
             }
         }
+    }
+
+    //更新用户数据
+    private void updateSessionMember(ChannelHandlerContext ctx, List<ChatMessage> messages) {
+        List<String> updateIds = new ArrayList<>();
+        for (int s = 0; s < messages.size(); s++) {
+            if (!updateIds.contains(messages.get(s).getMessageSession())) {
+                String item = messages.get(s).getMessageSession() + "," + messages.get(s).getChatSystem().getSysData();
+                updateIds.add(item);
+            }
+        }
+        //遍历
+        for (String key : updateIds) {
+            //包含
+            if (!updateIds.contains(key)) {
+                //添加sessions
+                updateIds.add(key);
+                //更新消息
+                Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
+                        .setUpdateID(key)
+                        .setUpdateType(UPDATE_SESSION_MEMBER_GET)
+                        .build();
+
+                //创建登录请求消息
+                Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                        .setUpdate(reqUpdate)
+                        .setType(FlappyRequest.REQ_UPDATE);
+
+                //发送需要更新的消息
+                ctx.writeAndFlush(builder.build());
+            }
+        }
+    }
+
+    /******
+     * 删除用户
+     * @param messages 消息
+     */
+    private void updateSessionMemberDel(List<ChatMessage> messages) {
+        //数据库开启
+        Database database = Database.getInstance().open();
+        //遍历消息
+        for (ChatMessage item : messages) {
+            //找到会话
+            FlappySessionData session = database.getUserSessionByID(item.getMessageSession());
+
+            //找到用户并移除
+            List<ChatUser> users = session.getUsers();
+            for (int s = 0; s < users.size(); s++) {
+                if (users.get(s).getUserId().equals(item.getChatSystem().getSysData())) {
+                    users.remove(s);
+                    s--;
+                }
+            }
+            //会话更新
+            database.insertSession(session, MessageNotifyManager.getInstance().getHandlerSession());
+        }
+        //关闭数据库
+        database.close();
     }
 
 

@@ -29,9 +29,18 @@ public class FlappyRequest {
     public final static int RECEIPT_MSG_READ = 2;
 
 
-    /*更新类型*/
-    //更新信息
-    public final static int UPDATE_SESSION_SINGLE = 1;
+    /***更新类型***/
+    //什么也不做
+    public final static int UPDATE_DO_NOTHING = 0;
+
+    //更新单条会话(所有数据)
+    public final static int UPDATE_SESSION_ALL = 1;
+
+    //用户信息更新(获取)
+    public final static int UPDATE_SESSION_MEMBER_GET = 2;
+
+    //用户信息更新(删除)
+    public final static int UPDATE_SESSION_MEMBER_DEL = 3;
 
 
 }
