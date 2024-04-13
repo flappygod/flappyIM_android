@@ -1,11 +1,9 @@
 package com.flappygo.flappyim.Thread;
 
 
-import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 
-import com.flappygo.flappyim.Handler.HandlerLogin;
 
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
@@ -17,6 +15,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 
+import com.flappygo.flappyim.Handler.HandlerLogin;
 import io.netty.handler.timeout.IdleStateHandler;
 
 import com.flappygo.flappyim.Config.FlappyConfig;
@@ -25,6 +24,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
