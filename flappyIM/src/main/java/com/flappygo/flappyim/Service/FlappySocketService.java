@@ -1,6 +1,6 @@
 package com.flappygo.flappyim.Service;
 
-import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
+import com.flappygo.flappyim.Thread.NettyThreadListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Handler.HandlerLogin;
@@ -57,9 +57,9 @@ public class FlappySocketService {
      * 根据当前的信息重新连接
      * @param uuid                    UUID
      * @param loginResponse           登录回调
-     * @param nettyThreadDeadListener 死亡的监听
+     * @param nettyThreadListener 死亡的监听
      */
-    public void startConnect(String uuid, final ResponseLogin loginResponse, NettyThreadDeadListener nettyThreadDeadListener) {
+    public void startConnect(String uuid, final ResponseLogin loginResponse, NettyThreadListener nettyThreadListener) {
 
         synchronized (this) {
 
@@ -96,7 +96,7 @@ public class FlappySocketService {
                     //登录回调
                     loginCallback,
                     //回调
-                    nettyThreadDeadListener
+                    nettyThreadListener
             );
 
             //开始这个线程

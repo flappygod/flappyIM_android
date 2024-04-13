@@ -26,10 +26,8 @@ public class NetTool {
         if (networkInfo == null) {
             return false;
         }
-        if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE || networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-            return true;
-        }
-        return false;
+        return networkInfo.getType() == ConnectivityManager.TYPE_MOBILE ||
+                networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
     }
 
 

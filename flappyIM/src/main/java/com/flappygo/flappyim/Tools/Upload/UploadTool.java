@@ -20,8 +20,6 @@ import java.net.URL;
  */
 public class UploadTool {
 
-    //TAG
-    private static String TAG = "UploadTool";
 
     //读取超时时间
     private final static int readTimeOut = 60 * 1000;

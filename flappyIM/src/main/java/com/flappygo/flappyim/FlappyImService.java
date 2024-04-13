@@ -3,7 +3,7 @@ package com.flappygo.flappyim;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
-import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
+import com.flappygo.flappyim.Thread.NettyThreadListener;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
@@ -850,7 +850,7 @@ public class FlappyImService {
         synchronized (this) {
 
             //重置次数
-            NettyThreadDeadListener.reset();
+            NettyThreadListener.reset();
             //转换
             String loginReqUDID = Long.toString(System.currentTimeMillis());
             //添加登录回调
@@ -881,7 +881,7 @@ public class FlappyImService {
             FlappySocketService.getInstance().startConnect(
                     loginReqUDID,
                     response,
-                    new NettyThreadDeadListener() {
+                    new NettyThreadListener() {
                         @Override
                         //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                         public void threadDeadRetryHttp() {
@@ -1040,7 +1040,7 @@ public class FlappyImService {
             isRunningAutoLogin = true;
 
             //重置死亡状态
-            NettyThreadDeadListener.reset();
+            NettyThreadListener.reset();
 
             //保存数据
             ChatUser chatUser = DataManager.getInstance().getLoginUser();
@@ -1076,7 +1076,7 @@ public class FlappyImService {
             FlappySocketService.getInstance().startConnect(
                     loginReqUDID,
                     response,
-                    new NettyThreadDeadListener() {
+                    new NettyThreadListener() {
                         //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                         @Override
                         public void threadDeadRetryHttp() {

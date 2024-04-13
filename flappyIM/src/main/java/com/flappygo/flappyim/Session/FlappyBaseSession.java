@@ -44,7 +44,7 @@ import java.util.Objects;
 public class FlappyBaseSession {
 
     //Client
-    private static final LXAsyncTaskClient client = new LXAsyncTaskClient(10);
+    private static final LXAsyncTaskClient<ChatMessage, ChatMessage> client = new LXAsyncTaskClient<ChatMessage, ChatMessage>(10);
 
     ///获取当前的消息handler
     ChannelMsgHandler getCurrentChannelMessageHandler() {
@@ -260,9 +260,7 @@ public class FlappyBaseSession {
 
                 //取得图片信息
                 ChatVideo video = data.getChatVideo();
-
                 ArrayList<UploadModel> files = new ArrayList<>();
-
 
                 //封面图片添加
                 UploadModel overFileModel = new UploadModel();

@@ -46,7 +46,7 @@ public class NettyThread extends Thread {
     private HandlerLogin loginHandler;
 
     //线程死亡的回调
-    private final NettyThreadDeadListener deadCallback;
+    private final NettyThreadListener deadCallback;
 
     //group
     private EventLoopGroup group;
@@ -75,7 +75,7 @@ public class NettyThread extends Thread {
             String serverIP,
             int serverPort,
             HandlerLogin loginHandler,
-            NettyThreadDeadListener deadCallback) {
+            NettyThreadListener deadCallback) {
         this.serverIP = serverIP;
         this.serverPort = serverPort;
         this.loginHandler = loginHandler;

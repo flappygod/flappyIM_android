@@ -4,7 +4,7 @@ import com.flappygo.flappyim.Listener.NettyConnectListener;
 import com.flappygo.flappyim.Config.FlappyConfig;
 
 //netty线程被关闭的通知
-public abstract class NettyThreadDeadListener implements NettyConnectListener {
+public abstract class NettyThreadListener implements NettyConnectListener {
 
     //只执行一次
     private boolean once = false;

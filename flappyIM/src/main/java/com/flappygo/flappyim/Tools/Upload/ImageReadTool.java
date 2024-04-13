@@ -11,7 +11,6 @@ import java.io.File;
  */
 public class ImageReadTool {
 
-    private static final String TAG = "ImageReadTool";
 
 
     /*********

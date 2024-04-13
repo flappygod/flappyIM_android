@@ -6,7 +6,7 @@ import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
+import com.flappygo.flappyim.Thread.NettyThreadListener;
 
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -51,7 +51,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final Flappy.FlappyRequest heart;
 
     //回调
-    private final NettyThreadDeadListener deadCallback;
+    private final NettyThreadListener deadCallback;
 
     //更新的sessions
     private final List<String> updateSessions = new ArrayList<>();
@@ -60,7 +60,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     public volatile boolean isActive = false;
 
     //回调
-    public ChannelMsgHandler(HandlerLogin handler, NettyThreadDeadListener deadCallback, ChatUser user) {
+    public ChannelMsgHandler(HandlerLogin handler, NettyThreadListener deadCallback, ChatUser user) {
         //心跳
         this.heart = Flappy.FlappyRequest.newBuilder().setType(FlappyRequest.REQ_PING).build();
         //handler

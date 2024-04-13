@@ -39,7 +39,7 @@ public class FlappyChatSession extends FlappyBaseSession {
     private final List<MessageListener> listenerList = new ArrayList<>();
 
     //会话
-    private FlappySessionData session;
+    private final FlappySessionData session;
 
 
     //通过session data 创建
