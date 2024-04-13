@@ -76,12 +76,16 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
  */
 public class FlappyImService {
 
-    //单例模式
+    /******
+     * 单例模式
+     */
     private static final class InstanceHolder {
         static final FlappyImService instance = new FlappyImService();
     }
 
-    //单例Manager
+    /******
+     * 单例模式
+     */
     public static FlappyImService getInstance() {
         return InstanceHolder.instance;
     }
