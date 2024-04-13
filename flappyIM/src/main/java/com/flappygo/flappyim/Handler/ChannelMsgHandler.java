@@ -472,6 +472,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     s--;
                 }
             }
+
             //会话更新
             database.insertSession(session, MessageNotifyManager.getInstance().getHandlerSession());
         }
