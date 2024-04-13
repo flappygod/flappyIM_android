@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask;
+package com.flappygo.flappyim.ApiServer.Clients.AsyncTask;
 
 import androidx.annotation.NonNull;
 import android.os.Handler;
@@ -64,6 +64,7 @@ public class LXAsyncTaskHandler<M,T> extends Handler {
     /*************
      * 发送过来的消息
      */
+    @SuppressWarnings("unchecked")
     public void handleMessage(@NonNull Message message) {
         if (!callBackEnable) {
             return;

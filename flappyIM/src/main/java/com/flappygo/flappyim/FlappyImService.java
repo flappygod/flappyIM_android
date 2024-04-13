@@ -1,10 +1,10 @@
 package com.flappygo.flappyim;
 
-import com.flappygo.flappyim.ApiServer.Base.BaseListParseCallBack;
+import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
-import com.flappygo.flappyim.ApiServer.Base.BaseParseCallback;
+import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
 import com.flappygo.flappyim.Thread.NettyThreadDeadListener;
-import com.flappygo.flappyim.ApiServer.OkHttp.OkHttpClient;
+import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.Holder.HolderMessageSession;

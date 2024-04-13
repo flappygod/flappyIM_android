@@ -1,8 +1,8 @@
-package com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask;
+package com.flappygo.flappyim.ApiServer.Clients.AsyncTask;
 
 
 
-import com.flappygo.flappyim.ApiServer.OkHttp.Thread.ExecutePoolExecutor;
+import com.flappygo.flappyim.ApiServer.Clients.Thread.ExecutePoolExecutor;
 import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
  * 异步线程执行
  * @author lijunlin
  */
-public class LXAsyncTaskClient {
+public class LXAsyncTaskClient<M,T> {
 
     /******
      * 线程池
@@ -31,7 +31,7 @@ public class LXAsyncTaskClient {
      * 执行某个异步任务
      * @param task 异步任务
      */
-    public void execute(LXAsyncTask task) {
+    public void execute(LXAsyncTask<M,T> task) {
         execute(task, null);
     }
 
@@ -40,7 +40,7 @@ public class LXAsyncTaskClient {
      * @param task 异步任务
      * @param taskTag  线程taskTag
      */
-    public void execute(LXAsyncTask task, String taskTag) {
+    public void execute(LXAsyncTask<M,T> task, String taskTag) {
         execute(task, null, taskTag);
     }
 
@@ -50,7 +50,7 @@ public class LXAsyncTaskClient {
      * @param taskInput 传入的参数
      * @param taskTag      线程taskTag
      */
-    public void execute(LXAsyncTask task, Object taskInput, String taskTag) {
+    public void execute(LXAsyncTask<M,T> task, Object taskInput, String taskTag) {
         execute(task, taskInput, taskTag, null);
     }
 
@@ -61,9 +61,9 @@ public class LXAsyncTaskClient {
      * @param context    线程的归属
      * @param taskTag    线程taskTag
      */
-    public void execute(LXAsyncTask task, Object taskInput, String taskTag, Context context) {
+    public void execute(LXAsyncTask<M,T> task, Object taskInput, String taskTag, Context context) {
         //创建一个线程
-        LXAsyncTaskThread thread = new LXAsyncTaskThread(context, taskInput, taskTag, task);
+        LXAsyncTaskThread<M,T> thread = new LXAsyncTaskThread<M,T>(context, taskInput, taskTag, task);
         // 执行线程
         threadPool.execute(thread);
     }
@@ -71,6 +71,7 @@ public class LXAsyncTaskClient {
     /*******
      * 禁止当前的所有线程执行回调操作
      */
+    @SuppressWarnings("unchecked")
     public void cancelAllTask() {
         //线程池中取出所有的线程
         List<Thread> threads = threadPool.getAllThread();
@@ -81,7 +82,7 @@ public class LXAsyncTaskClient {
             // 下载的线程
             if (thread instanceof LXAsyncTaskThread) {
                 // 不再执行回调了
-                ((LXAsyncTaskThread) thread).setCallBackEnable(false);
+                ((LXAsyncTaskThread<M,T>) thread).setCallBackEnable(false);
                 // 从当前的任务中移除这个线程
                 threadPool.remove(thread);
             }
@@ -92,6 +93,7 @@ public class LXAsyncTaskClient {
      * 通过线程的taskTag关闭线程
      * @param taskTag 线程tag
      */
+    @SuppressWarnings("unchecked")
     public void cancelTaskByTaskTag(String taskTag) {
         //线程池中取出所有的线程
         List<Thread> threads = threadPool.getAllThread();
@@ -101,10 +103,10 @@ public class LXAsyncTaskClient {
             Thread thread = threads.get(s);
             // 下载的线程
             if (thread instanceof LXAsyncTaskThread) {
-                String men = ((LXAsyncTaskThread) thread).getTaskTag();
+                String men = ((LXAsyncTaskThread<M,T>) thread).getTaskTag();
                 if (men != null && men.equals(taskTag)) {
                     // 不再执行回调了
-                    ((LXAsyncTaskThread) thread).setCallBackEnable(false);
+                    ((LXAsyncTaskThread<M,T>) thread).setCallBackEnable(false);
                     // 从当前的任务中移除这个线程
                     threadPool.remove(thread);
                 }
@@ -117,6 +119,7 @@ public class LXAsyncTaskClient {
      * 通过上下文关闭
      * @param context 上下文，这里我们使用了hashCode
      */
+    @SuppressWarnings("unchecked")
     public void cancelTask(Context context) {
         //获取所有线程
         List<Thread> threads = threadPool.getAllThread();
@@ -125,10 +128,10 @@ public class LXAsyncTaskClient {
             Thread thread = threads.get(s);
             // 下载的线程
             if (thread instanceof LXAsyncTaskThread) {
-                Context men = ((LXAsyncTaskThread) thread).getTaskContext();
+                Context men = ((LXAsyncTaskThread<M,T>) thread).getTaskContext();
                 if (men == context) {
                     // 不再执行回调了
-                    ((LXAsyncTaskThread) thread).setCallBackEnable(false);
+                    ((LXAsyncTaskThread<M,T>) thread).setCallBackEnable(false);
                     // 从当前的任务中移除这个线程
                     threadPool.remove(thread);
                 }
@@ -140,7 +143,8 @@ public class LXAsyncTaskClient {
      * 撤销某个任务
      * @param task 某个任务
      */
-    public void cancelTask(LXAsyncTask task) {
+    @SuppressWarnings("unchecked")
+    public void cancelTask(LXAsyncTask<M,T> task) {
         // 获取所有线程
         List<Thread> threads = threadPool.getAllThread();
         //进行遍历
@@ -149,7 +153,7 @@ public class LXAsyncTaskClient {
             // 下载的线程
             if (thread instanceof LXAsyncTaskThread) {
                 // 判断是否移除成功
-                boolean isRemoved = ((LXAsyncTaskThread) thread).cancelTask(task);
+                boolean isRemoved = ((LXAsyncTaskThread<M,T>) thread).cancelTask(task);
                 if (isRemoved) {
                     // 从当前的线程池中移除这个任务
                     threadPool.remove(thread);
@@ -163,12 +167,13 @@ public class LXAsyncTaskClient {
      * 获取当前正在进行的任务
      * @return 任务列表
      */
-    public List<LXAsyncTask> getAllTask() {
-        List<LXAsyncTask> tasks = new ArrayList<>();
+    @SuppressWarnings("unchecked")
+    public List<LXAsyncTask<M,T>> getAllTask() {
+        List<LXAsyncTask<M,T>> tasks = new ArrayList<>();
         List<Thread> threads = threadPool.getAllThread();
         for (int s = 0; s < threads.size(); s++) {
             if (threads.get(s) instanceof LXAsyncTaskThread) {
-                LXAsyncTaskThread men = (LXAsyncTaskThread) threads.get(s);
+                LXAsyncTaskThread<M,T> men = (LXAsyncTaskThread<M,T>) threads.get(s);
                 tasks.add(men.getTask());
             }
         }

@@ -6,8 +6,8 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
-import com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask.LXAsyncTaskClient;
-import com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask.LXAsyncTask;
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Handler.MessageNotifyManager;

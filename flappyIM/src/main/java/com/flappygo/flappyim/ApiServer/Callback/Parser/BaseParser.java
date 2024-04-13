@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.ApiServer.Parser;
+package com.flappygo.flappyim.ApiServer.Callback.Parser;
 
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;

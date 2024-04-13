@@ -1,27 +1,33 @@
 package com.flappygo.flappyim.Config;
 
+/******
+ * 基础配置项
+ */
 public class FlappyConfig {
 
     //安卓设备
-    public String device = "Android";
-
-    //当前是正式环境
-    public String pushPlat = "Google";
+    public final String device = "Android";
 
     //12秒
-    public int IdleSeconds = 12;
+    public final int IdleSeconds = 12;
 
     //自动登录间隔时间
-    public int autoLoginSpace = 1000 * 6;
+    public final int autoLoginSpace = 1000 * 6;
 
     //自动重试netty次数
-    public int autoRetryNetty = 3;
+    public final int autoRetryNetty = 3;
+
+    //当前是正式环境
+    public final String pushPlat = "Google";
+
+    //RSA加密的公钥
+    public String rsaPublicKey = "";
 
     //链接的http服务器器的地址192.168.124.105
-    public String serverUrl = "http://139.224.204.128";
+    public String serverUrl = "";
 
     //上传地址
-    public String serverUploadUrl = "http://139.224.204.128";
+    public String serverUploadUrl = "";
 
     //单例模式
     private static final class InstanceHolder {
@@ -35,10 +41,7 @@ public class FlappyConfig {
 
     //单例模式
     private FlappyConfig() {
-        setServerUrl(
-                "http://139.224.204.128",
-                "139.224.204.128"
-        );
+        setServerUrl("http://139.224.204.128", "139.224.204.128");
     }
 
     //上传文件的地址
@@ -116,8 +119,11 @@ public class FlappyConfig {
         return serverUrl + "/api/delUserInSession";
     }
 
-
-    //服务器的地址
+    /******
+     * 服务器的地址
+     * @param serverUrl       服务器地址
+     * @param serverUploadUrl 上传文件地址
+     */
     public void setServerUrl(String serverUrl, String serverUploadUrl) {
         //不能为空
         if (serverUrl == null || serverUploadUrl == null) {
@@ -130,4 +136,11 @@ public class FlappyConfig {
         this.serverUploadUrl = serverUploadUrl;
     }
 
+    /******
+     * 设置RSA公钥对于加密
+     * @param rsaPublicKey RSA公钥
+     */
+    public void setRsaPublicKey(String rsaPublicKey) {
+        this.rsaPublicKey = rsaPublicKey;
+    }
 }

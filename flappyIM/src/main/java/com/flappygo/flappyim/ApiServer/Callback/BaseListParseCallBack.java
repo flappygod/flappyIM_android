@@ -1,9 +1,9 @@
-package com.flappygo.flappyim.ApiServer.Base;
+package com.flappygo.flappyim.ApiServer.Callback;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
-import com.flappygo.flappyim.ApiServer.OkHttp.OkHttpAsyncCallback;
-import com.flappygo.flappyim.ApiServer.Parser.BaseListParser;
+import com.flappygo.flappyim.ApiServer.Clients.OkHttpAsyncCallback;
+import com.flappygo.flappyim.ApiServer.Callback.Parser.BaseListParser;
 
 import java.util.List;
 

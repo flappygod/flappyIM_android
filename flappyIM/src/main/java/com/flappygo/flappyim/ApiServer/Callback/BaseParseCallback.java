@@ -1,11 +1,11 @@
-package com.flappygo.flappyim.ApiServer.Base;
+package com.flappygo.flappyim.ApiServer.Callback;
 
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
-import com.flappygo.flappyim.ApiServer.OkHttp.OkHttpAsyncCallback;
+import com.flappygo.flappyim.ApiServer.Clients.OkHttpAsyncCallback;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
-import com.flappygo.flappyim.ApiServer.Parser.BaseParser;
+import com.flappygo.flappyim.ApiServer.Callback.Parser.BaseParser;
 
 
 /******

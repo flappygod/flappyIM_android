@@ -315,8 +315,8 @@ public class Database {
      * @param tableSequence 表序号
      */
     private void updateMessageRead(String userId,
-                                   String sessionId,
-                                   String tableSequence) {
+            String sessionId,
+            String tableSequence) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -346,7 +346,7 @@ public class Database {
      * @param messageId     消息ID
      */
     private void updateMessageDelete(String sessionId,
-                                     String messageId) {
+            String messageId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -393,29 +393,27 @@ public class Database {
      * @param messages 消息列表
      */
     public void insertMessages(List<ChatMessage> messages) {
-        if (messages == null || messages.size() == 0) {
-            return;
+        if (messages != null && !messages.isEmpty()) {
+            db.beginTransaction();
+            for (ChatMessage msg : messages) {
+                insertMessage(msg);
+            }
+            db.setTransactionSuccessful();
+            db.endTransaction();
         }
-        db.beginTransaction();
-        for (ChatMessage msg : messages) {
-            insertMessage(msg);
-        }
-        db.setTransactionSuccessful();
-        db.endTransaction();
     }
 
     /******
      * 插入数据
      * @param session        会话
      * @param handlerSession 插入会话后的handler
-     * @return 是否成功
      */
-    public boolean insertSession(FlappySessionData session,
-                                 HandlerSession handlerSession) {
+    public void insertSession(FlappySessionData session,
+            HandlerSession handlerSession) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
-            return false;
+            return;
         }
 
         //检查是否有记录
@@ -480,9 +478,7 @@ public class Database {
                 msg.what = HandlerSession.SESSION_UPDATE;
                 msg.obj = session;
                 handlerSession.sendMessage(msg);
-                return true;
             }
-            return false;
         } else {
             cursor.close();
             ContentValues values = new ContentValues();
@@ -534,9 +530,7 @@ public class Database {
                 msg.what = HandlerSession.SESSION_UPDATE;
                 msg.obj = session;
                 handlerSession.sendMessage(msg);
-                return true;
             }
-            return false;
         }
     }
 

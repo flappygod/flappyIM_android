@@ -1,4 +1,4 @@
-package com.flappygo.flappyim.ApiServer.OkHttp.Thread;
+package com.flappygo.flappyim.ApiServer.Clients.Thread;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

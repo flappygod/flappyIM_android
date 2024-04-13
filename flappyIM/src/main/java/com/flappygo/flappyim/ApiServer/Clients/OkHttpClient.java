@@ -1,7 +1,7 @@
-package com.flappygo.flappyim.ApiServer.OkHttp;
+package com.flappygo.flappyim.ApiServer.Clients;
 
-import com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask.LXAsyncTaskClient;
-import com.flappygo.flappyim.ApiServer.OkHttp.AsyncTask.LXAsyncTask;
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 
 import org.json.JSONObject;
 import java.io.IOException;
