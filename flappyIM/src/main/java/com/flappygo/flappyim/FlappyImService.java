@@ -34,6 +34,7 @@ import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.Tools.RunTool;
 import com.flappygo.flappyim.Tools.NetTool;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -69,6 +70,8 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NOT_LOGIN;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_FAILURE;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
+
+import androidx.annotation.NonNull;
 
 
 /******
@@ -245,6 +248,7 @@ public class FlappyImService {
     /******
      * 注册网络监听的广播
      */
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void initReceiver() {
         synchronized (this) {
             if (!receiverRegistered) {
@@ -439,8 +443,8 @@ public class FlappyImService {
      * @param uploadPath 资源服务器地址
      */
     public void init(Context appContext,
-                     String serverPath,
-                     String uploadPath
+            String serverPath,
+            String uploadPath
     ) {
         //获取application
         this.appContext = appContext.getApplicationContext();
@@ -452,6 +456,14 @@ public class FlappyImService {
         Database database = Database.getInstance().open();
         database.clearSendingMessage();
         database.close();
+    }
+
+    /******
+     * 数据登录加密公钥
+     * @param publicKey 公钥
+     */
+    public void setRsaPublicKey(String publicKey) {
+        FlappyConfig.getInstance().setRsaPublicKey(publicKey);
     }
 
     /******
@@ -496,7 +508,7 @@ public class FlappyImService {
      */
     private void updateDeviceToken(String deviceToken) {
         //没有登录不处理
-        if (DataManager.getInstance().getLoginUser() == null || DataManager.getInstance().getLoginUser().isLogin() == 0) {
+        if (!DataManager.getInstance().isLogin()) {
             return;
         }
         //创建这个HashMap
@@ -541,10 +553,10 @@ public class FlappyImService {
      * @param callback      回调
      */
     public void changePushSettings(PushSetting pushSettings,
-                                   final FlappyIMCallback<PushSetting> callback) {
+            final FlappyIMCallback<PushSetting> callback) {
 
         ///没有登录直接设置
-        if (DataManager.getInstance().getLoginUser() == null || DataManager.getInstance().getLoginUser().isLogin() == 0) {
+        if (!DataManager.getInstance().isLogin()) {
             //保存推送信息
             DataManager.getInstance().savePushSetting(pushSettings);
             if (callback != null) {
@@ -630,7 +642,7 @@ public class FlappyImService {
     private void resendUpdateDeviceToken(String deviceToken) {
         ///直到成功为止
         final Handler handler = new Handler(Looper.getMainLooper()) {
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 updateDeviceToken(deviceToken);
             }
         };
@@ -650,10 +662,10 @@ public class FlappyImService {
      * @param callback    回调
      */
     public void createAccount(String userID,
-                              String userName,
-                              String userAvatar,
-                              String userData,
-                              final FlappyIMCallback<String> callback) {
+            String userName,
+            String userAvatar,
+            String userData,
+            final FlappyIMCallback<String> callback) {
 
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
@@ -712,10 +724,10 @@ public class FlappyImService {
      * @param callback    回调
      */
     public void updateAccount(String userID,
-                              String userName,
-                              String userAvatar,
-                              String userData,
-                              final FlappyIMCallback<String> callback) {
+            String userName,
+            String userAvatar,
+            String userData,
+            final FlappyIMCallback<String> callback) {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //设置index
@@ -771,8 +783,8 @@ public class FlappyImService {
      */
     public void login(String userExtendID, final FlappyIMCallback<ResponseLogin> callback) {
         synchronized (this) {
-            //可以登录
-            if (!checkLoginEnable(callback)) {
+            //不可以登录
+            if (checkLoginBusy(callback)) {
                 return;
             }
             isRunningLogin = true;
@@ -1092,8 +1104,8 @@ public class FlappyImService {
             if (checkLogin(callback)) {
                 return;
             }
-            //可以登录
-            if (!checkLoginEnable(callback)) {
+            //不可以登录
+            if (checkLoginBusy(callback)) {
                 return;
             }
             //创建这个HashMap
@@ -1310,9 +1322,9 @@ public class FlappyImService {
      * @param callback  回调
      */
     public void createGroupSession(List<String> users,
-                                   String groupID,
-                                   String groupName,
-                                   final FlappyIMCallback<FlappyChatSession> callback) {
+            String groupID,
+            String groupName,
+            final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1722,8 +1734,8 @@ public class FlappyImService {
      * @param callback 回调
      * @return 成功、失败
      */
-    private boolean checkLogin(FlappyIMCallback callback) {
-        if (DataManager.getInstance().getLoginUser() == null) {
+    private boolean checkLogin(FlappyIMCallback<?> callback) {
+        if (!DataManager.getInstance().isLogin()) {
             if (callback != null) {
                 callback.failure(new Exception("Not login"), Integer.parseInt(RESULT_NOT_LOGIN));
             }
@@ -1737,14 +1749,17 @@ public class FlappyImService {
      * @param callback 检查登录可用
      * @return 是否可用
      */
-    private boolean checkLoginEnable(FlappyIMCallback callback) {
+    private boolean checkLoginBusy(FlappyIMCallback<?> callback) {
         if (isRunningLogin) {
             if (callback != null) {
-                callback.failure(new Exception("Other thread is running login"), Integer.parseInt(RESULT_FAILURE));
+                callback.failure(
+                        new Exception("Other thread is running login"),
+                        Integer.parseInt(RESULT_FAILURE)
+                );
             }
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     /******

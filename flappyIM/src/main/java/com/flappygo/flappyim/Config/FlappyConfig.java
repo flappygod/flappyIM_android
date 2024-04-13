@@ -18,7 +18,7 @@ public class FlappyConfig {
     public final int autoRetryNetty = 3;
 
     //当前是正式环境
-    public final String pushPlat = "Google";
+    public String pushPlat = "Google";
 
     //RSA加密的公钥
     public String rsaPublicKey = "";

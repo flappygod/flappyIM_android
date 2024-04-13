@@ -42,6 +42,13 @@ public class DataManager {
     //进行缓存
     private ChatUser chatUser;
 
+
+    //判断是否已经登录
+    public boolean isLogin() {
+        return getLoginUser() != null && getLoginUser().isLogin() != 0;
+    }
+
+
     //保存用户信息
     public void saveLoginUser(ChatUser user) {
         chatUser = user;
