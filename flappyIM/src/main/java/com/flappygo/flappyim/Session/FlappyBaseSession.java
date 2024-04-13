@@ -73,10 +73,30 @@ public class FlappyBaseSession {
         bigDecimal = bigDecimal.add(new BigDecimal(1));
         msg.setMessageTableSeq(bigDecimal);
 
-        //插入消息
-        Database database = Database.getInstance().open();
-        database.insertMessage(msg);
-        database.close();
+        //执行插入数据库操作
+        client.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+            @Override
+            public ChatMessage run(ChatMessage data, String tag) {
+                //插入消息
+                Database database = Database.getInstance().open();
+                database.insertMessage(data);
+                database.close();
+                return data;
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                if (e != null) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void success(ChatMessage data, String tag) {
+
+            }
+        }, msg, null);
+
 
         //通知消息发送成功
         MessageNotifyManager.getInstance().notifyMessageSend(msg);
