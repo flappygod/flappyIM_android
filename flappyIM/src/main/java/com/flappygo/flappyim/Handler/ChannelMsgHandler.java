@@ -7,7 +7,6 @@ import static com.flappygo.flappyim.Models.Request.Base.FlappyRequest.UPDATE_SES
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
-import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Session.FlappySessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 
 import android.os.Message;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -59,7 +57,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final NettyThreadListener deadCallback;
 
     //更新的sessions
-    private final List<String> updateSessions = new ArrayList<>();
+    private final List<String> updatingIdLists = new ArrayList<>();
 
     //检查是否是active状态的
     public volatile boolean isActive = false;
@@ -308,7 +306,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 }
             }
             //移除正在更新
-            updateSessions.remove(data.getSessionId());
+            updatingIdLists.remove(response.getUpdate().getUpdateID());
         }
         database.close();
     }
@@ -391,21 +389,21 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //更新所有会话
     private void updateSessionAll(ChannelHandlerContext ctx, List<ChatMessage> messages) {
-        List<String> updateSessions = new ArrayList<>();
+        List<String> updateIdList = new ArrayList<>();
         for (int s = 0; s < messages.size(); s++) {
-            if (!updateSessions.contains(messages.get(s).getMessageSession())) {
-                updateSessions.add(messages.get(s).getMessageSession());
+            if (!updateIdList.contains(messages.get(s).getMessageSession())) {
+                updateIdList.add(messages.get(s).getMessageSession());
             }
         }
         //遍历
-        for (String key : updateSessions) {
+        for (String updateId : updateIdList) {
             //包含
-            if (!updateSessions.contains(key)) {
+            if (!updatingIdLists.contains(updateId)) {
                 //添加sessions
-                updateSessions.add(key);
+                updatingIdLists.add(updateId);
                 //更新消息
                 Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
-                        .setUpdateID(key)
+                        .setUpdateID(updateId)
                         .setUpdateType(UPDATE_SESSION_ALL)
                         .build();
 
@@ -422,22 +420,22 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
     //更新用户数据
     private void updateSessionMember(ChannelHandlerContext ctx, List<ChatMessage> messages) {
-        List<String> updateIds = new ArrayList<>();
+        List<String> updateIdList = new ArrayList<>();
         for (int s = 0; s < messages.size(); s++) {
-            if (!updateIds.contains(messages.get(s).getMessageSession())) {
-                String item = messages.get(s).getMessageSession() + "," + messages.get(s).getChatSystem().getSysData();
-                updateIds.add(item);
+            if (!updateIdList.contains(messages.get(s).getMessageSession())) {
+                updateIdList.add(messages.get(s).getMessageSession() + "," + messages.get(s).getMessageSession());
             }
         }
         //遍历
-        for (String key : updateIds) {
+        for (String updateId : updateIdList) {
             //包含
-            if (!updateIds.contains(key)) {
+            if (!updatingIdLists.contains(updateId)) {
                 //添加sessions
-                updateIds.add(key);
+                updatingIdLists.add(updateId);
+
                 //更新消息
                 Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
-                        .setUpdateID(key)
+                        .setUpdateID(updateId)
                         .setUpdateType(UPDATE_SESSION_MEMBER_GET)
                         .build();
 

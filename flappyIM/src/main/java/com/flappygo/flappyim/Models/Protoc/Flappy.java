@@ -1675,6 +1675,33 @@ public final class Flappy {
      */
     SessionOrBuilder getSessionsOrBuilder(
         int index);
+
+    /**
+     * <pre>
+     *更新信息
+     * </pre>
+     *
+     * <code>.ReqUpdate update = 4;</code>
+     * @return Whether the update field is set.
+     */
+    boolean hasUpdate();
+    /**
+     * <pre>
+     *更新信息
+     * </pre>
+     *
+     * <code>.ReqUpdate update = 4;</code>
+     * @return The update.
+     */
+    ReqUpdate getUpdate();
+    /**
+     * <pre>
+     *更新信息
+     * </pre>
+     *
+     * <code>.ReqUpdate update = 4;</code>
+     */
+    ReqUpdateOrBuilder getUpdateOrBuilder();
   }
   /**
    * Protobuf type {@code FlappyResponse}
@@ -1745,6 +1772,19 @@ public final class Flappy {
               }
               sessions_.add(
                   input.readMessage(Session.parser(), extensionRegistry));
+              break;
+            }
+            case 34: {
+              ReqUpdate.Builder subBuilder = null;
+              if (update_ != null) {
+                subBuilder = update_.toBuilder();
+              }
+              update_ = input.readMessage(ReqUpdate.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(update_);
+                update_ = subBuilder.buildPartial();
+              }
+
               break;
             }
             default: {
@@ -1922,6 +1962,44 @@ public final class Flappy {
       return sessions_.get(index);
     }
 
+    public static final int UPDATE_FIELD_NUMBER = 4;
+    private ReqUpdate update_;
+    /**
+     * <pre>
+     *更新信息
+     * </pre>
+     *
+     * <code>.ReqUpdate update = 4;</code>
+     * @return Whether the update field is set.
+     */
+    @Override
+    public boolean hasUpdate() {
+      return update_ != null;
+    }
+    /**
+     * <pre>
+     *更新信息
+     * </pre>
+     *
+     * <code>.ReqUpdate update = 4;</code>
+     * @return The update.
+     */
+    @Override
+    public ReqUpdate getUpdate() {
+      return update_ == null ? ReqUpdate.getDefaultInstance() : update_;
+    }
+    /**
+     * <pre>
+     *更新信息
+     * </pre>
+     *
+     * <code>.ReqUpdate update = 4;</code>
+     */
+    @Override
+    public ReqUpdateOrBuilder getUpdateOrBuilder() {
+      return getUpdate();
+    }
+
     private byte memoizedIsInitialized = -1;
     @Override
     public final boolean isInitialized() {
@@ -1945,6 +2023,9 @@ public final class Flappy {
       for (int i = 0; i < sessions_.size(); i++) {
         output.writeMessage(3, sessions_.get(i));
       }
+      if (update_ != null) {
+        output.writeMessage(4, getUpdate());
+      }
       unknownFields.writeTo(output);
     }
 
@@ -1965,6 +2046,10 @@ public final class Flappy {
       for (int i = 0; i < sessions_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, sessions_.get(i));
+      }
+      if (update_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, getUpdate());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1987,6 +2072,11 @@ public final class Flappy {
           .equals(other.getMsgList())) return false;
       if (!getSessionsList()
           .equals(other.getSessionsList())) return false;
+      if (hasUpdate() != other.hasUpdate()) return false;
+      if (hasUpdate()) {
+        if (!getUpdate()
+            .equals(other.getUpdate())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -2007,6 +2097,10 @@ public final class Flappy {
       if (getSessionsCount() > 0) {
         hash = (37 * hash) + SESSIONS_FIELD_NUMBER;
         hash = (53 * hash) + getSessionsList().hashCode();
+      }
+      if (hasUpdate()) {
+        hash = (37 * hash) + UPDATE_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdate().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -2157,6 +2251,12 @@ public final class Flappy {
         } else {
           sessionsBuilder_.clear();
         }
+        if (updateBuilder_ == null) {
+          update_ = null;
+        } else {
+          update_ = null;
+          updateBuilder_ = null;
+        }
         return this;
       }
 
@@ -2202,6 +2302,11 @@ public final class Flappy {
           result.sessions_ = sessions_;
         } else {
           result.sessions_ = sessionsBuilder_.build();
+        }
+        if (updateBuilder_ == null) {
+          result.update_ = update_;
+        } else {
+          result.update_ = updateBuilder_.build();
         }
         onBuilt();
         return result;
@@ -2305,6 +2410,9 @@ public final class Flappy {
               sessionsBuilder_.addAllMessages(other.sessions_);
             }
           }
+        }
+        if (other.hasUpdate()) {
+          mergeUpdate(other.getUpdate());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -3001,6 +3109,161 @@ public final class Flappy {
           sessions_ = null;
         }
         return sessionsBuilder_;
+      }
+
+      private ReqUpdate update_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder> updateBuilder_;
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       * @return Whether the update field is set.
+       */
+      public boolean hasUpdate() {
+        return updateBuilder_ != null || update_ != null;
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       * @return The update.
+       */
+      public ReqUpdate getUpdate() {
+        if (updateBuilder_ == null) {
+          return update_ == null ? ReqUpdate.getDefaultInstance() : update_;
+        } else {
+          return updateBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      public Builder setUpdate(ReqUpdate value) {
+        if (updateBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          update_ = value;
+          onChanged();
+        } else {
+          updateBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      public Builder setUpdate(
+          ReqUpdate.Builder builderForValue) {
+        if (updateBuilder_ == null) {
+          update_ = builderForValue.build();
+          onChanged();
+        } else {
+          updateBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      public Builder mergeUpdate(ReqUpdate value) {
+        if (updateBuilder_ == null) {
+          if (update_ != null) {
+            update_ =
+              ReqUpdate.newBuilder(update_).mergeFrom(value).buildPartial();
+          } else {
+            update_ = value;
+          }
+          onChanged();
+        } else {
+          updateBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      public Builder clearUpdate() {
+        if (updateBuilder_ == null) {
+          update_ = null;
+          onChanged();
+        } else {
+          update_ = null;
+          updateBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      public ReqUpdate.Builder getUpdateBuilder() {
+        
+        onChanged();
+        return getUpdateFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      public ReqUpdateOrBuilder getUpdateOrBuilder() {
+        if (updateBuilder_ != null) {
+          return updateBuilder_.getMessageOrBuilder();
+        } else {
+          return update_ == null ?
+              ReqUpdate.getDefaultInstance() : update_;
+        }
+      }
+      /**
+       * <pre>
+       *更新信息
+       * </pre>
+       *
+       * <code>.ReqUpdate update = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder>
+          getUpdateFieldBuilder() {
+        if (updateBuilder_ == null) {
+          updateBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder>(
+                  getUpdate(),
+                  getParentForChildren(),
+                  isClean());
+          update_ = null;
+        }
+        return updateBuilder_;
       }
       @Override
       public final Builder setUnknownFields(
@@ -14284,40 +14547,40 @@ public final class Flappy {
       "\n\014flappy.proto\"\210\001\n\rFlappyRequest\022\014\n\004type" +
       "\030\001 \001(\005\022\025\n\003msg\030\002 \001(\0132\010.Message\022\030\n\005login\030\003" +
       " \001(\0132\t.ReqLogin\022\032\n\006update\030\004 \001(\0132\n.ReqUpd" +
-      "ate\022\034\n\007receipt\030\005 \001(\0132\013.ReqReceipt\"Q\n\016Fla" +
+      "ate\022\034\n\007receipt\030\005 \001(\0132\013.ReqReceipt\"m\n\016Fla" +
       "ppyResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003(\0132\010" +
-      ".Message\022\032\n\010sessions\030\003 \003(\0132\010.Session\"Z\n\010" +
-      "ReqLogin\022\016\n\006userID\030\001 \001(\t\022\016\n\006device\030\002 \001(\t" +
-      "\022\016\n\006pushId\030\003 \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006secr" +
-      "et\030\005 \001(\t\"1\n\tReqUpdate\022\022\n\nupdateType\030\001 \001(" +
-      "\005\022\020\n\010updateID\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013rec" +
-      "eiptType\030\001 \001(\005\022\021\n\treceiptID\030\002 \001(\t\"\242\002\n\007Se" +
-      "ssion\022\021\n\tsessionId\030\001 \001(\003\022\027\n\017sessionExten" +
-      "dId\030\002 \001(\t\022\023\n\013sessionType\030\003 \001(\005\022\023\n\013sessio" +
-      "nInfo\030\004 \001(\t\022\023\n\013sessionName\030\005 \001(\t\022\024\n\014sess" +
-      "ionImage\030\006 \001(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n" +
-      "\014sessionStamp\030\010 \001(\003\022\031\n\021sessionCreateDate" +
-      "\030\t \001(\t\022\031\n\021sessionCreateUser\030\n \001(\t\022\020\n\010isD" +
-      "elete\030\013 \001(\005\022\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users" +
-      "\030\r \001(\t\"\312\003\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\026\n" +
-      "\016messageSession\030\002 \001(\t\022\032\n\022messageSessionT" +
-      "ype\030\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\005\022" +
-      "\027\n\017messageTableSeq\030\005 \001(\003\022\023\n\013messageType\030" +
-      "\006 \001(\005\022\025\n\rmessageSendId\030\007 \001(\003\022\033\n\023messageS" +
-      "endExtendId\030\010 \001(\t\022\030\n\020messageReceiveId\030\t " +
-      "\001(\003\022\036\n\026messageReceiveExtendId\030\n \001(\t\022\026\n\016m" +
-      "essageContent\030\013 \001(\t\022\030\n\020messageSendState\030" +
-      "\014 \001(\005\022\030\n\020messageReadState\030\r \001(\005\022\031\n\021messa" +
-      "geSecretSend\030\016 \001(\t\022\034\n\024messageSecretRecei" +
-      "ve\030\017 \001(\t\022\023\n\013messageDate\030\020 \001(\t\022\020\n\010isDelet" +
-      "e\030\021 \001(\005\022\022\n\ndeleteDate\030\022 \001(\t\"I\n\013FlappyKaf" +
-      "ka\022\014\n\004type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022" +
-      "\025\n\003msg\030\003 \001(\0132\010.Message\"\253\001\n\005Route\022\016\n\006user" +
-      "ID\030\001 \001(\003\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t" +
-      "\022\020\n\010pushType\030\004 \001(\t\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014" +
-      "pushLanguage\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022" +
-      "\025\n\rpushNoDisturb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006pr" +
-      "oto3"
+      ".Message\022\032\n\010sessions\030\003 \003(\0132\010.Session\022\032\n\006" +
+      "update\030\004 \001(\0132\n.ReqUpdate\"Z\n\010ReqLogin\022\016\n\006" +
+      "userID\030\001 \001(\t\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003" +
+      " \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006secret\030\005 \001(\t\"1\n\t" +
+      "ReqUpdate\022\022\n\nupdateType\030\001 \001(\005\022\020\n\010updateI" +
+      "D\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013receiptType\030\001 \001" +
+      "(\005\022\021\n\treceiptID\030\002 \001(\t\"\242\002\n\007Session\022\021\n\tses" +
+      "sionId\030\001 \001(\003\022\027\n\017sessionExtendId\030\002 \001(\t\022\023\n" +
+      "\013sessionType\030\003 \001(\005\022\023\n\013sessionInfo\030\004 \001(\t\022" +
+      "\023\n\013sessionName\030\005 \001(\t\022\024\n\014sessionImage\030\006 \001" +
+      "(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n\014sessionStam" +
+      "p\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t\022\031\n\021se" +
+      "ssionCreateUser\030\n \001(\t\022\020\n\010isDelete\030\013 \001(\005\022" +
+      "\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\312\003\n\007M" +
+      "essage\022\021\n\tmessageId\030\001 \001(\t\022\026\n\016messageSess" +
+      "ion\030\002 \001(\t\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n" +
+      "\024messageSessionOffset\030\004 \001(\005\022\027\n\017messageTa" +
+      "bleSeq\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005\022\025\n\rmes" +
+      "sageSendId\030\007 \001(\003\022\033\n\023messageSendExtendId\030" +
+      "\010 \001(\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036\n\026messa" +
+      "geReceiveExtendId\030\n \001(\t\022\026\n\016messageConten" +
+      "t\030\013 \001(\t\022\030\n\020messageSendState\030\014 \001(\005\022\030\n\020mes" +
+      "sageReadState\030\r \001(\005\022\031\n\021messageSecretSend" +
+      "\030\016 \001(\t\022\034\n\024messageSecretReceive\030\017 \001(\t\022\023\n\013" +
+      "messageDate\030\020 \001(\t\022\020\n\010isDelete\030\021 \001(\005\022\022\n\nd" +
+      "eleteDate\030\022 \001(\t\"I\n\013FlappyKafka\022\014\n\004type\030\001" +
+      " \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\013" +
+      "2\010.Message\"\253\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\016\n\006" +
+      "device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022\020\n\010pushType" +
+      "\030\004 \001(\t\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pushLanguage" +
+      "\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022\025\n\rpushNoDis" +
+      "turb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -14334,7 +14597,7 @@ public final class Flappy {
     internal_static_FlappyResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_FlappyResponse_descriptor,
-        new String[] { "Type", "Msg", "Sessions", });
+        new String[] { "Type", "Msg", "Sessions", "Update", });
     internal_static_ReqLogin_descriptor =
       getDescriptor().getMessageTypes().get(2);
     internal_static_ReqLogin_fieldAccessorTable = new
