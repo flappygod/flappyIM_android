@@ -1535,7 +1535,6 @@ public class FlappyImService {
 
                 //数据为空，去网上拿
                 if (data == null || data.isEmpty()) {
-                    getUserSessionsHttp(callback);
                     return new ArrayList<>();
                 }
 
@@ -1581,9 +1580,12 @@ public class FlappyImService {
 
             @Override
             public void success(List<FlappyChatSession> data, String tag) {
-                //成功
-                if (callback != null) {
-                    callback.success(data);
+                if(data!=null&&!data.isEmpty()){
+                    if (callback != null) {
+                        callback.success(data);
+                    }
+                }else{
+                    getUserSessionsHttp(callback);
                 }
             }
         });
