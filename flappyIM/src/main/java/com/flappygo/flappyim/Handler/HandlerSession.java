@@ -1,7 +1,7 @@
 package com.flappygo.flappyim.Handler;
 
 import com.flappygo.flappyim.Holder.HolderMessageSession;
-import com.flappygo.flappyim.Session.FlappySessionData;
+import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Listener.SessionListener;
 
 import android.os.Handler;
@@ -21,13 +21,23 @@ public class HandlerSession extends Handler {
     //消息更新了
     public static final int SESSION_UPDATE = 1;
 
+    //消息更新了
+    public static final int SESSION_DELETE = 2;
+
     //执行消息
     public void handleMessage(Message message) {
         if (message.what == SESSION_UPDATE) {
-            FlappySessionData flappySessionData = (FlappySessionData) message.obj;
+            SessionModel sessionModel = (SessionModel) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
                 SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
-                listener.sessionUpdate(flappySessionData);
+                listener.sessionUpdate(sessionModel);
+            }
+        }
+        if (message.what == SESSION_DELETE) {
+            SessionModel sessionModel = (SessionModel) message.obj;
+            for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
+                SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
+                listener.sessionDelete(sessionModel);
             }
         }
     }

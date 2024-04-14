@@ -1,6 +1,6 @@
 package com.flappygo.flappyim.Listener;
 
-import com.flappygo.flappyim.Session.FlappySessionData;
+import com.flappygo.flappyim.DataBase.Models.SessionModel;
 
 /******
  * 会话监听
@@ -8,6 +8,8 @@ import com.flappygo.flappyim.Session.FlappySessionData;
 public interface SessionListener {
 
     //更新
-    void sessionUpdate(FlappySessionData session);
+    void sessionUpdate(SessionModel session);
 
+    //删除
+    void sessionDelete(SessionModel session);
 }

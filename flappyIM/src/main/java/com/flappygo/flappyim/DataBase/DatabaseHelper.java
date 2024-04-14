@@ -5,9 +5,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 //数据库创建
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    //创建消息表
     public final String createTableMessage = "CREATE TABLE " + DataBaseConfig.TABLE_MESSAGE + "(" +
             // 消息ID
             "messageId" + " varchar ," +
@@ -53,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " primary key (messageId,messageInsertUser)" + ")";
 
 
+    //创建会话表
     public final String createTableSession = "CREATE TABLE " + DataBaseConfig.TABLE_SESSION + "(" +
             // 会话ID
             "sessionId" + " varchar ," +
@@ -85,6 +91,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // 消息ID
             + " primary key (sessionId,sessionInsertUser)" + ")";
 
+
+    //创建会话用户表
+    public final String createTableSessionMember = "CREATE TABLE " + DataBaseConfig.TABLE_SESSION_MEMBER + "(" +
+            //用户ID
+            "userId" + " varchar ," +
+            //用户外部ID
+            "userExtendId" + " varchar," +
+            //用户名称
+            "userName" + " varchar," +
+            //用户头像
+            "userAvatar" + " varchar," +
+            //用户数据
+            "userData" + " varchar," +
+            //用户创建时间
+            "userCreateDate" + " varchar," +
+            //用户登录时间
+            "userLoginDate" + " varchar," +
+            //会话ID
+            "sessionId" + " varchar," +
+            //用户最近阅读
+            "sessionMemberLatestRead" + " varchar," +
+            //用户在会话中的附加名称
+            "sessionMemberMarkName" + " varchar," +
+            //用户设置会话免打扰
+            "sessionMemberNoDisturb" + " integer," +
+            //用户加入会话的时间
+            "sessionJoinDate" + " varchar," +
+            //用户离开会话的时间
+            "sessionLeaveDate" + " varchar," +
+            //用户是否离开会话
+            "isLeave" + " integer," +
+            //当前插入的用户
+            "sessionInsertUser" + " varchar,"
+            // 消息ID
+            + " primary key (userId,sessionId,sessionInsertUser)" + ")";
+
+
     //data helper
     public DatabaseHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -95,18 +138,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // 创建数据库表
         db.execSQL(createTableMessage);
         db.execSQL(createTableSession);
+        db.execSQL(createTableSessionMember);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // /用于升级数据库
+        //用于升级数据库
         if (newVersion != oldVersion) {
             try {
                 // 创建数据库表
                 db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_MESSAGE + ";");
                 db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_SESSION + ";");
+                db.execSQL("DROP TABLE IF EXISTS " + DataBaseConfig.TABLE_SESSION_MEMBER + ";");
                 db.execSQL(createTableMessage);
                 db.execSQL(createTableSession);
+                db.execSQL(createTableSessionMember);
                 db.setVersion(newVersion);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());

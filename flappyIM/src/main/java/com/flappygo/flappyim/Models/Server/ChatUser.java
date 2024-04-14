@@ -4,30 +4,37 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+
+/******
+ * 会话用户
+ */
 public class ChatUser implements Serializable {
 
+    //用户ID
     private String userId;
 
+    //用户外部ID
     private String userExtendId;
 
+    //用户名称
     private String userName;
 
+    //用户头像
     private String userAvatar;
 
+    //用户数据
     private String userData;
 
+    //用户创建时间
     private Date userCreateDate;
 
+    //用户登录时间
     private Date userLoginDate;
 
-    private String sessionMemberLatestRead;
-
-    private BigDecimal isDelete;
-
-    private Date deleteDate;
-
+    /***以下参数进用于当前用户存储***/
+    /***以下参数进用于当前用户存储***/
     //最后更新的时间戳
-    private String  latest;
+    private String latest;
 
     //当前的登录信息
     private int login;
@@ -86,30 +93,6 @@ public class ChatUser implements Serializable {
 
     public void setUserCreateDate(Date userCreateDate) {
         this.userCreateDate = userCreateDate;
-    }
-
-    public String getSessionMemberLatestRead() {
-        return sessionMemberLatestRead;
-    }
-
-    public void setSessionMemberLatestRead(String sessionMemberLatestRead) {
-        this.sessionMemberLatestRead = sessionMemberLatestRead;
-    }
-
-    public BigDecimal getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(BigDecimal isDelete) {
-        this.isDelete = isDelete;
-    }
-
-    public Date getDeleteDate() {
-        return deleteDate;
-    }
-
-    public void setDeleteDate(Date deleteDate) {
-        this.deleteDate = deleteDate;
     }
 
     public String getUserData() {

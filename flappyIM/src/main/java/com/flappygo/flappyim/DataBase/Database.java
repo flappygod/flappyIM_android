@@ -3,20 +3,20 @@ package com.flappygo.flappyim.DataBase;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 
+import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
 import com.flappygo.flappyim.Handler.MessageNotifyManager;
-import com.flappygo.flappyim.Session.FlappySessionData;
+import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Handler.HandlerSession;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Tools.TimeTool;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
 
 import android.database.sqlite.SQLiteDatabase;
 
 import com.flappygo.flappyim.FlappyImService;
+import com.flappygo.flappyim.Tools.TimeTool;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -105,165 +105,168 @@ public class Database {
         );
     }
 
+
+    /******
+     * 插入一个列表的消息
+     * @param messages 消息列表
+     */
+    public void insertMessages(List<ChatMessage> messages) {
+        if (messages == null || messages.isEmpty()) {
+            return;
+        }
+        db.beginTransaction();
+        for (ChatMessage msg : messages) {
+            insertMessage(msg);
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+
     /******
      * 插入单条消息
      * @param chatMessage  消息
      */
     public void insertMessage(ChatMessage chatMessage) {
+
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
             return;
         }
 
-        //检查是否有记录
-        Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE, null,
-                "messageId=? and messageInsertUser=?",
-                new String[]{
-                        chatMessage.getMessageId(),
-                        chatUser.getUserExtendId()
-                },
-                null,
-                null,
-                null
-        );
+        //创建插入信息
+        ContentValues values = new ContentValues();
+        if (chatMessage.getMessageId() != null) {
+            values.put("messageId", chatMessage.getMessageId());
+        }
+        if (chatMessage.getMessageSession() != null) {
+            values.put("messageSession", chatMessage.getMessageSession());
+        }
+        if (chatMessage.getMessageSessionType() != null) {
+            values.put("messageSessionType", StringTool.decimalToInt(chatMessage.getMessageSessionType()));
+        }
+        if (chatMessage.getMessageSessionOffset() != null) {
+            values.put("messageSessionOffset", StringTool.decimalToInt(chatMessage.getMessageSessionOffset()));
+        }
+        if (chatMessage.getMessageTableSeq() != null) {
+            values.put("messageTableSeq", StringTool.decimalToInt(chatMessage.getMessageTableSeq()));
+        }
+        if (chatMessage.getMessageType() != null) {
+            values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
+        }
+        if (chatMessage.getMessageSendId() != null) {
+            values.put("messageSendId", chatMessage.getMessageSendId());
+        }
+        if (chatMessage.getMessageSendExtendId() != null) {
+            values.put("messageSendExtendId", chatMessage.getMessageSendExtendId());
+        }
+        if (chatMessage.getMessageReceiveId() != null) {
+            values.put("messageReceiveId", chatMessage.getMessageReceiveId());
+        }
+        if (chatMessage.getMessageReceiveExtendId() != null) {
+            values.put("messageReceiveExtendId", chatMessage.getMessageReceiveExtendId());
+        }
+        if (chatMessage.getMessageContent() != null) {
+            values.put("messageContent", chatMessage.getMessageContent());
+        }
+        if (chatMessage.getMessageSendState() != null) {
+            values.put("messageSendState", StringTool.decimalToInt(chatMessage.getMessageSendState()));
+        }
+        if (chatMessage.getMessageReadState() != null) {
+            values.put("messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
+        }
+        if (chatMessage.getMessageSecretSend() != null) {
+            values.put("messageSecretSend", chatMessage.getMessageSecretSend());
+        }
+        if (chatMessage.getMessageSecretReceive() != null) {
+            values.put("messageSecretReceive", chatMessage.getMessageSecretReceive());
+        }
+        if (chatMessage.getMessageDate() != null) {
+            values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
+        }
+        if (chatMessage.getIsDelete() != null) {
+            values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
+        }
+        if (chatMessage.getDeleteDate() != null) {
+            values.put("deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
+        }
 
-        //没有记录就插入数据
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            ContentValues values = new ContentValues();
-            if (chatMessage.getMessageId() != null) {
-                values.put("messageId", chatMessage.getMessageId());
-            }
-            if (chatMessage.getMessageSession() != null) {
-                values.put("messageSession", chatMessage.getMessageSession());
-            }
-            if (chatMessage.getMessageSessionType() != null) {
-                values.put("messageSessionType", StringTool.decimalToInt(chatMessage.getMessageSessionType()));
-            }
-            if (chatMessage.getMessageSessionOffset() != null) {
-                values.put("messageSessionOffset", StringTool.decimalToInt(chatMessage.getMessageSessionOffset()));
-            }
-            if (chatMessage.getMessageTableSeq() != null) {
-                values.put("messageTableSeq", StringTool.decimalToInt(chatMessage.getMessageTableSeq()));
-            }
-            if (chatMessage.getMessageType() != null) {
-                values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
-            }
-            if (chatMessage.getMessageSendId() != null) {
-                values.put("messageSendId", chatMessage.getMessageSendId());
-            }
-            if (chatMessage.getMessageSendExtendId() != null) {
-                values.put("messageSendExtendId", chatMessage.getMessageSendExtendId());
-            }
-            if (chatMessage.getMessageReceiveId() != null) {
-                values.put("messageReceiveId", chatMessage.getMessageReceiveId());
-            }
-            if (chatMessage.getMessageReceiveExtendId() != null) {
-                values.put("messageReceiveExtendId", chatMessage.getMessageReceiveExtendId());
-            }
-            if (chatMessage.getMessageContent() != null) {
-                values.put("messageContent", chatMessage.getMessageContent());
-            }
-            if (chatMessage.getMessageSendState() != null) {
-                values.put("messageSendState", StringTool.decimalToInt(chatMessage.getMessageSendState()));
-            }
-            if (chatMessage.getMessageReadState() != null) {
-                values.put("messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
-            }
-            if (chatMessage.getMessageSecretSend() != null) {
-                values.put("messageSecretSend", chatMessage.getMessageSecretSend());
-            }
-            if (chatMessage.getMessageSecretReceive() != null) {
-                values.put("messageSecretReceive", chatMessage.getMessageSecretReceive());
-            }
-            if (chatMessage.getMessageDate() != null) {
-                values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
-            }
-            if (chatMessage.getIsDelete() != null) {
-                values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
-            }
-            if (chatMessage.getDeleteDate() != null) {
-                values.put("deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
-            }
-            values.put("messageInsertUser", chatUser.getUserExtendId());
-            //消息的时间戳
-            values.put("messageStamp", System.currentTimeMillis());
-            //插入消息数据
-            db.insert(
-                    DataBaseConfig.TABLE_MESSAGE,
-                    null,
-                    values
-            );
-        }
-        ///已经存在记录就更新数据
-        else {
-            cursor.close();
-            ContentValues values = new ContentValues();
-            if (chatMessage.getMessageId() != null) {
-                values.put("messageId", chatMessage.getMessageId());
-            }
-            if (chatMessage.getMessageSession() != null) {
-                values.put("messageSession", chatMessage.getMessageSession());
-            }
-            if (chatMessage.getMessageSessionType() != null) {
-                values.put("messageSessionType", StringTool.decimalToInt(chatMessage.getMessageSessionType()));
-            }
-            if (chatMessage.getMessageSessionOffset() != null) {
-                values.put("messageSessionOffset", StringTool.decimalToInt(chatMessage.getMessageSessionOffset()));
-            }
-            if (chatMessage.getMessageTableSeq() != null) {
-                values.put("messageTableSeq", StringTool.decimalToInt(chatMessage.getMessageTableSeq()));
-            }
-            if (chatMessage.getMessageType() != null) {
-                values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
-            }
-            if (chatMessage.getMessageSendId() != null) {
-                values.put("messageSendId", chatMessage.getMessageSendId());
-            }
-            if (chatMessage.getMessageSendExtendId() != null) {
-                values.put("messageSendExtendId", chatMessage.getMessageSendExtendId());
-            }
-            if (chatMessage.getMessageReceiveId() != null) {
-                values.put("messageReceiveId", chatMessage.getMessageReceiveId());
-            }
-            if (chatMessage.getMessageReceiveExtendId() != null) {
-                values.put("messageReceiveExtendId", chatMessage.getMessageReceiveExtendId());
-            }
-            if (chatMessage.getMessageContent() != null) {
-                values.put("messageContent", chatMessage.getMessageContent());
-            }
-            if (chatMessage.getMessageSendState() != null) {
-                values.put("messageSendState", StringTool.decimalToInt(chatMessage.getMessageSendState()));
-            }
-            if (chatMessage.getMessageReadState() != null) {
-                values.put("messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
-            }
-            if (chatMessage.getMessageSecretSend() != null) {
-                values.put("messageSecretSend", chatMessage.getMessageSecretSend());
-            }
-            if (chatMessage.getMessageSecretReceive() != null) {
-                values.put("messageSecretReceive", chatMessage.getMessageSecretReceive());
-            }
-            if (chatMessage.getMessageDate() != null) {
-                values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
-            }
-            if (chatMessage.getIsDelete() != null) {
-                values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
-            }
-            if (chatMessage.getDeleteDate() != null) {
-                values.put("deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
-            }
-            //更新消息信息
-            db.update(
-                    DataBaseConfig.TABLE_MESSAGE,
-                    values,
-                    "messageId=?",
-                    new String[]{chatMessage.getMessageId()
-                    });
-        }
+        //插入用户
+        values.put("messageInsertUser", chatUser.getUserExtendId());
+
+        //消息Stamp
+        values.put("messageStamp", System.currentTimeMillis());
+
+        //插入消息数据
+        db.insertWithOnConflict(
+                DataBaseConfig.TABLE_MESSAGE,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_REPLACE
+        );
     }
 
+    /******
+     * 更新消息已读(系统消息的已读状态不做处理)
+     * @param userId        用户ID
+     * @param sessionId     会话ID
+     * @param tableSequence 表序号
+     */
+    private void updateMessageRead(String userId,
+            String sessionId,
+            String tableSequence) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+        //设置已读消息
+        ContentValues values = new ContentValues();
+        //设置已读
+        values.put("messageReadState", 1);
+        //更新已读消息
+        db.update(
+                DataBaseConfig.TABLE_MESSAGE,
+                values,
+                "messageInsertUser=? and messageSendId!=? and messageType != 0 and messageSession=? and messageTableSeq <= ? ",
+                new String[]{
+                        chatUser.getUserExtendId(),
+                        userId,
+                        sessionId,
+                        tableSequence,
+                }
+        );
+    }
+
+    /******
+     * 更新消息已读
+     * @param sessionId     会话ID
+     * @param messageId     消息ID
+     */
+    private void updateMessageDelete(String sessionId,
+            String messageId) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+        //设置已读消息
+        ContentValues values = new ContentValues();
+        //设置已读
+        values.put("isDelete", 1);
+        //更新已读消息
+        db.update(
+                DataBaseConfig.TABLE_MESSAGE,
+                values,
+                "messageInsertUser=? and messageSession=? and messageId = ?",
+                new String[]{
+                        chatUser.getUserExtendId(),
+                        sessionId,
+                        messageId,
+                }
+        );
+    }
 
     /******
      * 处理动作消息
@@ -308,247 +311,6 @@ public class Database {
         }
     }
 
-    /******
-     * 更新消息已读
-     * @param userId        用户ID
-     * @param sessionId     会话ID
-     * @param tableSequence 表序号
-     */
-    private void updateMessageRead(String userId,
-            String sessionId,
-            String tableSequence) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        //设置已读消息
-        ContentValues values = new ContentValues();
-        //设置已读
-        values.put("messageReadState", 1);
-        //更新已读消息
-        db.update(
-                DataBaseConfig.TABLE_MESSAGE,
-                values,
-                "messageInsertUser=? and messageSendId!=? and messageSession=? and messageTableSeq <= ? ",
-                new String[]{
-                        chatUser.getUserExtendId(),
-                        userId,
-                        sessionId,
-                        tableSequence,
-                }
-        );
-    }
-
-    /******
-     * 更新消息已读
-     * @param sessionId     会话ID
-     * @param messageId     消息ID
-     */
-    private void updateMessageDelete(String sessionId,
-            String messageId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        //设置已读消息
-        ContentValues values = new ContentValues();
-        //设置已读
-        values.put("isDelete", 1);
-        //更新已读消息
-        db.update(
-                DataBaseConfig.TABLE_MESSAGE,
-                values,
-                "messageInsertUser=? and messageSession=? and messageId = ?",
-                new String[]{
-                        chatUser.getUserExtendId(),
-                        sessionId,
-                        messageId,
-                }
-        );
-    }
-
-    /******
-     * 更新用户消息最近已读
-     * @param userId        用户ID
-     * @param sessionId     会话ID
-     * @param tableSequence 表序号
-     */
-    private void updateSessionMemberLatestRead(String userId, String sessionId, String tableSequence) {
-        //会话Data
-        FlappySessionData flappySessionData = getUserSessionByID(sessionId);
-        //更新会话最近已读
-        List<ChatUser> chatUserList = flappySessionData.getUsers();
-        for (ChatUser user : chatUserList) {
-            if (user.getUserId().equals(userId)) {
-                user.setSessionMemberLatestRead(tableSequence);
-            }
-        }
-        insertSession(flappySessionData, MessageNotifyManager.getInstance().getHandlerSession());
-    }
-
-    /******
-     * 插入一个列表的消息
-     * @param messages 消息列表
-     */
-    public void insertMessages(List<ChatMessage> messages) {
-        if (messages != null && !messages.isEmpty()) {
-            db.beginTransaction();
-            for (ChatMessage msg : messages) {
-                insertMessage(msg);
-            }
-            db.setTransactionSuccessful();
-            db.endTransaction();
-        }
-    }
-
-    /******
-     * 插入数据
-     * @param session        会话
-     * @param handlerSession 插入会话后的handler
-     */
-    public void insertSession(FlappySessionData session,
-            HandlerSession handlerSession) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-
-        //检查是否有记录
-        Cursor cursor = db.query(
-                DataBaseConfig.TABLE_SESSION,
-                null,
-                "sessionId=? and sessionInsertUser=? ",
-                new String[]{session.getSessionId(), chatUser.getUserExtendId()},
-                null,
-                null,
-                null
-        );
-
-        //没有记录
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            ContentValues values = new ContentValues();
-            if (session.getSessionId() != null) {
-                values.put("sessionId", session.getSessionId());
-            }
-            if (session.getSessionExtendId() != null) {
-                values.put("sessionExtendId", session.getSessionExtendId());
-            }
-            if (session.getSessionType() != null) {
-                values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
-            }
-            if (session.getSessionInfo() != null) {
-                values.put("sessionInfo", session.getSessionInfo());
-            }
-            if (session.getSessionName() != null) {
-                values.put("sessionName", session.getSessionName());
-            }
-            if (session.getSessionImage() != null) {
-                values.put("sessionImage", session.getSessionImage());
-            }
-            if (session.getSessionOffset() != null) {
-                values.put("sessionOffset", session.getSessionOffset());
-            }
-            if (session.getSessionStamp() != null) {
-                values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
-            }
-            if (session.getSessionCreateDate() != null) {
-                values.put("sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
-            }
-            if (session.getSessionCreateUser() != null) {
-                values.put("sessionCreateUser", session.getSessionCreateUser());
-            }
-            if (session.getIsDelete() != null) {
-                values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
-            }
-            if (session.getDeleteDate() != null) {
-                values.put("sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
-            }
-            if (session.getUsers() != null) {
-                values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
-            }
-            values.put("sessionInsertUser", chatUser.getUserExtendId());
-            //插入数据
-            long ret = db.insert(DataBaseConfig.TABLE_SESSION, null, values);
-            if (ret > 0) {
-                Message msg = new Message();
-                msg.what = HandlerSession.SESSION_UPDATE;
-                msg.obj = session;
-                handlerSession.sendMessage(msg);
-            }
-        } else {
-            cursor.close();
-            ContentValues values = new ContentValues();
-            if (session.getSessionType() != null) {
-                values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
-            }
-            if (session.getSessionInfo() != null) {
-                values.put("sessionInfo", session.getSessionInfo());
-            }
-            if (session.getSessionName() != null) {
-                values.put("sessionName", session.getSessionName());
-            }
-            if (session.getSessionImage() != null) {
-                values.put("sessionImage", session.getSessionImage());
-            }
-            if (session.getSessionOffset() != null) {
-                values.put("sessionOffset", session.getSessionOffset());
-            }
-            if (session.getSessionStamp() != null) {
-                values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
-            }
-            if (session.getSessionCreateDate() != null) {
-                values.put("sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
-            }
-            if (session.getSessionCreateUser() != null) {
-                values.put("sessionCreateUser", session.getSessionCreateUser());
-            }
-            if (session.getIsDelete() != null) {
-                values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
-            }
-            if (session.getDeleteDate() != null) {
-                values.put("sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
-            }
-            if (session.getUsers() != null) {
-                values.put("users", GsonTool.modelToString(session.getUsers(), ChatUser.class));
-            }
-            //插入者
-            values.put("sessionInsertUser", chatUser.getUserExtendId());
-            //更新消息信息
-            long ret = db.update(
-                    DataBaseConfig.TABLE_SESSION,
-                    values,
-                    "sessionId=? and sessionInsertUser=? ",
-                    new String[]{session.getSessionId(), chatUser.getUserExtendId()}
-            );
-            //更新成功
-            if (ret > 0) {
-                Message msg = new Message();
-                msg.what = HandlerSession.SESSION_UPDATE;
-                msg.obj = session;
-                handlerSession.sendMessage(msg);
-            }
-        }
-    }
-
-    /******
-     * 插入多个会话
-     * @param  flappySessionDataList  会话列表
-     */
-    public void insertSessions(List<FlappySessionData> flappySessionDataList) {
-        if (flappySessionDataList == null || flappySessionDataList.size() == 0) {
-            return;
-        }
-        db.beginTransaction();
-        for (FlappySessionData flappySessionData : flappySessionDataList) {
-            insertSession(flappySessionData, MessageNotifyManager.getInstance().getHandlerSession());
-        }
-        db.setTransactionSuccessful();
-        db.endTransaction();
-    }
 
     /******
      * 获取未读消息数量
@@ -573,13 +335,116 @@ public class Database {
         return count;
     }
 
+
+    /******
+     * 插入多个会话
+     * @param  sessionModelList  会话列表
+     */
+    public void insertSessions(List<SessionModel> sessionModelList) {
+        if (sessionModelList == null || sessionModelList.isEmpty()) {
+            return;
+        }
+        db.beginTransaction();
+        for (SessionModel sessionModel : sessionModelList) {
+            insertSession(sessionModel, MessageNotifyManager.getInstance().getHandlerSession());
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    /******
+     * 插入数据
+     * @param session        会话
+     * @param handlerSession 插入会话后的handler
+     */
+    public void insertSession(SessionModel session, HandlerSession handlerSession) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+
+
+        //创建会话信息
+        ContentValues values = new ContentValues();
+        if (session.getSessionId() != null) {
+            values.put("sessionId", session.getSessionId());
+        }
+        if (session.getSessionExtendId() != null) {
+            values.put("sessionExtendId", session.getSessionExtendId());
+        }
+        if (session.getSessionType() != null) {
+            values.put("sessionType", StringTool.decimalToInt(session.getSessionType()));
+        }
+        if (session.getSessionInfo() != null) {
+            values.put("sessionInfo", session.getSessionInfo());
+        }
+        if (session.getSessionName() != null) {
+            values.put("sessionName", session.getSessionName());
+        }
+        if (session.getSessionImage() != null) {
+            values.put("sessionImage", session.getSessionImage());
+        }
+        if (session.getSessionOffset() != null) {
+            values.put("sessionOffset", session.getSessionOffset());
+        }
+        if (session.getSessionStamp() != null) {
+            values.put("sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
+        }
+        if (session.getSessionCreateDate() != null) {
+            values.put("sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
+        }
+        if (session.getSessionCreateUser() != null) {
+            values.put("sessionCreateUser", session.getSessionCreateUser());
+        }
+        if (session.getIsDelete() != null) {
+            values.put("sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
+        }
+        if (session.getDeleteDate() != null) {
+            values.put("sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
+        }
+        values.put("sessionInsertUser", chatUser.getUserExtendId());
+
+        //插入数据
+        db.insertWithOnConflict(
+                DataBaseConfig.TABLE_SESSION,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_REPLACE
+        );
+
+        //插入用户数据
+        if (session.getUsers() != null && !session.getUsers().isEmpty()) {
+            insertSessionMemberList(session.getUsers());
+        }
+
+        //通知消息更新
+        Message msg = new Message();
+        msg.what = HandlerSession.SESSION_UPDATE;
+        msg.obj = session;
+        handlerSession.sendMessage(msg);
+    }
+
+    /******
+     * 插入会话用户列表
+     * @param sessionMemberModelList 会话用户列表
+     */
+    private void insertSessionMemberList(List<SessionMemberModel> sessionMemberModelList) {
+        if (sessionMemberModelList != null && !sessionMemberModelList.isEmpty()) {
+            for (SessionMemberModel memberModel : sessionMemberModelList) {
+                insertSessionMember(memberModel);
+            }
+        }
+    }
+
+
     /******
      * 获取当前用户的会话
      * @param sessionId  会话ID
      * @return 会话
      */
     @SuppressLint("Range")
-    public FlappySessionData getUserSessionByID(String sessionId) {
+    public SessionModel getUserSessionByID(String sessionId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -590,14 +455,17 @@ public class Database {
                 DataBaseConfig.TABLE_SESSION,
                 null,
                 "sessionId=? and sessionInsertUser=? ",
-                new String[]{sessionId, chatUser.getUserExtendId()},
+                new String[]{
+                        sessionId,
+                        chatUser.getUserExtendId()
+                },
                 null,
                 null,
                 null
         );
         //获取数据
         if (cursor.moveToFirst()) {
-            FlappySessionData info = new FlappySessionData();
+            SessionModel info = new SessionModel();
             info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
             info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
             info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
@@ -610,8 +478,8 @@ public class Database {
             info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-            info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(sessionId));
+            info.setUsers(getSessionMemberList(info.getSessionId()));
             cursor.close();
             return info;
         }
@@ -620,12 +488,185 @@ public class Database {
     }
 
     /******
+     * 删除用户会话
+     * @param sessionId 会话ID
+     */
+    public void deleteUserSession(String sessionId) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+        //删除会话数据
+        db.delete(
+                DataBaseConfig.TABLE_SESSION,
+                "sessionId=? and sessionInsertUser=?",
+                new String[]{
+                        sessionId,
+                        chatUser.getUserExtendId()
+                }
+        );
+        //删除会话消息
+        db.delete(
+                DataBaseConfig.TABLE_MESSAGE,
+                "messageSession=? and sessionInsertUser=?",
+                new String[]{
+                        sessionId,
+                        chatUser.getUserExtendId()
+                }
+        );
+    }
+
+
+    /******
+     * 插入会话用户
+     * @param member 会话用户
+     */
+    public void insertSessionMember(SessionMemberModel member) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+
+        //创建values
+        ContentValues values = new ContentValues();
+        if (member.getUserId() != null) {
+            values.put("userId", member.getUserId());
+        }
+        if (member.getUserExtendId() != null) {
+            values.put("userExtendId", member.getUserExtendId());
+        }
+        if (member.getUserName() != null) {
+            values.put("userName", member.getUserName());
+        }
+        if (member.getUserAvatar() != null) {
+            values.put("userAvatar", member.getUserAvatar());
+        }
+        if (member.getUserData() != null) {
+            values.put("userData", member.getUserData());
+        }
+        if (member.getUserCreateDate() != null) {
+            values.put("userCreateDate", TimeTool.dateToStr(member.getUserCreateDate()));
+        }
+        if (member.getUserLoginDate() != null) {
+            values.put("userLoginDate", TimeTool.dateToStr(member.getUserLoginDate()));
+        }
+        if (member.getSessionId() != null) {
+            values.put("sessionId", member.getSessionId());
+        }
+        if (member.getSessionMemberLatestRead() != null) {
+            values.put("sessionMemberLatestRead", member.getSessionMemberLatestRead());
+        }
+        if (member.getSessionMemberMarkName() != null) {
+            values.put("sessionMemberMarkName", member.getSessionMemberMarkName());
+        }
+        if (member.getSessionMemberNoDisturb() != null) {
+            values.put("sessionMemberNoDisturb", member.getSessionMemberNoDisturb());
+        }
+        if (member.getSessionJoinDate() != null) {
+            values.put("sessionJoinDate", TimeTool.dateToStr(member.getSessionJoinDate()));
+        }
+        if (member.getSessionLeaveDate() != null) {
+            values.put("sessionLeaveDate", TimeTool.dateToStr(member.getSessionLeaveDate()));
+        }
+        if (member.getIsLeave() != null) {
+            values.put("isLeave", member.getIsLeave());
+        }
+        values.put("sessionInsertUser", chatUser.getUserExtendId());
+        //没有记录
+        db.insertWithOnConflict(
+                DataBaseConfig.TABLE_SESSION_MEMBER,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_REPLACE
+        );
+    }
+
+
+    /******
+     * 获取会话用户列表
+     * @param sessionId 会话ID
+     */
+    @SuppressLint("Range")
+    public List<SessionMemberModel> getSessionMemberList(String sessionId) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return new ArrayList<>();
+        }
+        //获取session中未读的系统消息
+        Cursor cursor = db.query(
+                DataBaseConfig.TABLE_SESSION_MEMBER,
+                null,
+                "sessionId = ? and sessionInsertUser= ?",
+                new String[]{
+                        sessionId,
+                        chatUser.getUserExtendId()
+                },
+                null,
+                null,
+                null
+        );
+        //获取数据
+        List<SessionMemberModel> list = new ArrayList<>();
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return list;
+        }
+        //获取所有数据
+        while (!cursor.isAfterLast()) {
+            SessionMemberModel info = new SessionMemberModel();
+            info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
+            info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
+            info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
+            info.setUserAvatar(cursor.getString(cursor.getColumnIndex("userAvatar")));
+            info.setUserData(cursor.getString(cursor.getColumnIndex("userData")));
+            info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
+            info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
+            info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+            info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
+            info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
+            info.setSessionMemberNoDisturb(cursor.getInt(cursor.getColumnIndex("sessionMemberNoDisturb")));
+            info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
+            info.setSessionLeaveDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionLeaveDate"))));
+            info.setIsLeave(cursor.getInt(cursor.getColumnIndex("isLeave")));
+            list.add(info);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
+
+    /******
+     * 更新用户消息最近已读
+     * @param userId        用户ID
+     * @param sessionId     会话ID
+     * @param tableSequence 表序号
+     */
+    private void updateSessionMemberLatestRead(String userId, String sessionId, String tableSequence) {
+        //会话Data
+        SessionModel sessionModel = getUserSessionByID(sessionId);
+        //更新会话最近已读
+        List<SessionMemberModel> chatUserList = sessionModel.getUsers();
+        for (SessionMemberModel user : chatUserList) {
+            if (user.getUserId().equals(userId)) {
+                user.setSessionMemberLatestRead(tableSequence);
+            }
+        }
+        insertSession(sessionModel, MessageNotifyManager.getInstance().getHandlerSession());
+    }
+
+
+    /******
      * 获取当前用户的会话
      * @param sessionExtendID  会话外部ID
      * @return 会话
      */
     @SuppressLint("Range")
-    public FlappySessionData getUserSessionByExtendID(String sessionExtendID) {
+    public SessionModel getUserSessionByExtendID(String sessionExtendID) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -643,7 +684,7 @@ public class Database {
         );
         //获取数据
         if (cursor.moveToFirst()) {
-            FlappySessionData info = new FlappySessionData();
+            SessionModel info = new SessionModel();
             info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
             info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
             info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
@@ -656,9 +697,8 @@ public class Database {
             info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-            //转换为array
-            info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
+            info.setUsers(getSessionMemberList(info.getSessionId()));
             cursor.close();
             return info;
         }
@@ -671,7 +711,7 @@ public class Database {
      * @return 所有的会话数据
      */
     @SuppressLint("Range")
-    public List<FlappySessionData> getUserSessions() {
+    public List<SessionModel> getUserSessions() {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -688,14 +728,14 @@ public class Database {
                 null);
 
         //获取数据
-        List<FlappySessionData> sessions = new ArrayList<>();
+        List<SessionModel> sessions = new ArrayList<>();
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
             return sessions;
         }
         while (!cursor.isAfterLast()) {
-            FlappySessionData info = new FlappySessionData();
+            SessionModel info = new SessionModel();
             info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
             info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
             info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
@@ -708,8 +748,8 @@ public class Database {
             info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-            info.setUsers(GsonTool.jsonArrayToModels(cursor.getString(cursor.getColumnIndex("users")), ChatUser.class));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
+            info.setUsers(getSessionMemberList(info.getSessionId()));
             sessions.add(info);
             cursor.moveToNext();
         }
@@ -765,10 +805,8 @@ public class Database {
             info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
             info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
             info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-
             info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
-
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
             info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -837,10 +875,8 @@ public class Database {
             info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
             info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
             info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-
             info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
-
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
             info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -891,10 +927,8 @@ public class Database {
             info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
             info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
             info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-
             info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
-
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
             info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -957,10 +991,8 @@ public class Database {
             info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
             info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
             info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-
             info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
-
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
             info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1015,10 +1047,8 @@ public class Database {
             info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
             info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
             info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-
             info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
-
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
             info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1072,10 +1102,8 @@ public class Database {
             info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
             info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
             info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-
             info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
             info.setMessageSecretReceive(cursor.getString(cursor.getColumnIndex("messageSecretReceive")));
-
             info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
             info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));

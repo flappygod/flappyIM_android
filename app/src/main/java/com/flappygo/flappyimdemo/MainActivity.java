@@ -20,10 +20,9 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.Session.FlappySessionData;
+import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Session.FlappyChatSession;
-import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.lcw.library.imagepicker.ImagePicker;
 
 import java.util.ArrayList;
@@ -80,7 +79,7 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().addSessionListener(new SessionListener() {
             @Override
-            public void sessionUpdate(FlappySessionData session) {
+            public void sessionUpdate(SessionModel session) {
 
             }
         });

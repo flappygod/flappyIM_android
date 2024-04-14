@@ -1,8 +1,7 @@
-package com.flappygo.flappyim.Session;
+package com.flappygo.flappyim.DataBase.Models;
 
 import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
-import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.TimeTool;
 
@@ -13,14 +12,14 @@ import java.util.List;
 /******
  * 群聊的会话
  */
-public class FlappySessionData extends ChatSession implements Serializable {
+public class SessionModel extends ChatSession implements Serializable {
 
     //constructor
-    public FlappySessionData() {
+    public SessionModel() {
     }
 
     //session data
-    public FlappySessionData(Flappy.Session session) {
+    public SessionModel(Flappy.Session session) {
         setSessionId(Long.toString(session.getSessionId()));
         setSessionExtendId(session.getSessionExtendId());
         setSessionType(new BigDecimal(session.getSessionType()));
@@ -33,22 +32,22 @@ public class FlappySessionData extends ChatSession implements Serializable {
         setSessionCreateDate(TimeTool.strToDate(session.getSessionCreateDate()));
         setIsDelete(new BigDecimal(session.getIsDelete()));
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
-        setUsers(GsonTool.jsonArrayToModels(session.getUsers(), ChatUser.class));
+        setUsers(GsonTool.jsonArrayToModels(session.getUsers(), SessionMemberModel.class));
     }
 
     //用户信息
-    List<ChatUser> users;
+    List<SessionMemberModel> users;
 
     //未读消息数量
     int unReadMessageCount;
 
     //获取用户
-    public List<ChatUser> getUsers() {
+    public List<SessionMemberModel> getUsers() {
         return users;
     }
 
     //设置用户
-    public void setUsers(List<ChatUser> users) {
+    public void setUsers(List<SessionMemberModel> users) {
         this.users = users;
     }
 
