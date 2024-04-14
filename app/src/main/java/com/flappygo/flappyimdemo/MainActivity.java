@@ -82,6 +82,11 @@ public class MainActivity extends Activity {
             public void sessionUpdate(SessionModel session) {
 
             }
+
+            @Override
+            public void sessionDelete(SessionModel session) {
+
+            }
         });
 
         FlappyImService.getInstance().setKickedOutListener(new KickedOutListener() {
