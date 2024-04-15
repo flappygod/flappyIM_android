@@ -593,7 +593,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         this.sendMessageIfActive(chatMessage);
     }
 
-
     /******
      * 发送消息
      * @param chatMessage 消息
@@ -601,27 +600,28 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     public void sendMessageIfActive(final ChatMessage chatMessage) {
         try {
             synchronized (this) {
-                if (!isActive) {
-                    return;
+                if (isActive) {
+                    //消息创建
+                    Flappy.Message message = chatMessage.toProtocMessage(Flappy.Message.newBuilder());
+                    //消息
+                    Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                            .setMsg(message)
+                            .setType(FlappyRequest.REQ_MSG);
+                    //写Flush
+                    ChannelFuture future = currentActiveContext.writeAndFlush(builder.build());
+                    //添加监听
+                    future.addListener((ChannelFutureListener) channelFuture -> {
+                        if (!channelFuture.isSuccess()) {
+                            MessageNotifyManager.getInstance().messageSendFailure(
+                                    chatMessage,
+                                    new Exception("连接已经断开")
+                            );
+                        }
+                    });
                 }
-                Flappy.Message message = chatMessage.toProtocMessage(Flappy.Message.newBuilder());
-                Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
-                        .setMsg(message)
-                        .setType(FlappyRequest.REQ_MSG);
-                ChannelFuture future = currentActiveContext.writeAndFlush(builder.build());
-                future.addListener((ChannelFutureListener) channelFuture -> {
-                    if (!channelFuture.isSuccess()) {
-                        MessageNotifyManager.getInstance().messageSendFailure(
-                                chatMessage,
-                                new Exception("连接已经断开")
-                        );
-                    }
-                });
             }
         } catch (Exception ex) {
             MessageNotifyManager.getInstance().messageSendFailure(chatMessage, ex);
         }
     }
-
-
 }
