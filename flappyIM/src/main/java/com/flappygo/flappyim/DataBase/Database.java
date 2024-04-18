@@ -92,6 +92,7 @@ public class Database {
      * 清空正在发送中的消息为发送失败
      */
     public void clearSendingMessage() {
+        open();
         ContentValues values = new ContentValues();
         values.put("messageSendState", SEND_STATE_FAILURE);
         db.update(
@@ -100,6 +101,7 @@ public class Database {
                 "messageSendState = 0",
                 null
         );
+        close();
     }
 
 
@@ -111,12 +113,14 @@ public class Database {
         if (messages == null || messages.isEmpty()) {
             return;
         }
+        open();
         db.beginTransaction();
         for (ChatMessage msg : messages) {
             insertMessage(msg);
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        close();
     }
 
 
@@ -132,6 +136,7 @@ public class Database {
             return;
         }
 
+        open();
         //创建插入信息
         ContentValues values = new ContentValues();
         if (chatMessage.getMessageId() != null) {
@@ -202,6 +207,8 @@ public class Database {
                 values,
                 SQLiteDatabase.CONFLICT_REPLACE
         );
+
+        close();
     }
 
     /******
@@ -218,6 +225,7 @@ public class Database {
         if (chatUser == null) {
             return;
         }
+        open();
         //设置已读消息
         ContentValues values = new ContentValues();
         //设置已读
@@ -234,6 +242,7 @@ public class Database {
                         tableSequence,
                 }
         );
+        close();
     }
 
     /******
@@ -248,6 +257,7 @@ public class Database {
         if (chatUser == null) {
             return;
         }
+        open();
         //设置已读消息
         ContentValues values = new ContentValues();
         //设置已读
@@ -263,6 +273,7 @@ public class Database {
                         messageId,
                 }
         );
+        close();
     }
 
     /******
@@ -315,6 +326,9 @@ public class Database {
      * @return 未读消息数量
      */
     public int getNotReadSessionMessageCountBySessionId(String sessionID) {
+
+        open();
+
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE +
                 " WHERE messageInsertUser = ? " +
@@ -329,6 +343,8 @@ public class Database {
             count = cursor.getInt(0);
         }
         cursor.close();
+
+        close();
         return count;
     }
 
@@ -341,12 +357,14 @@ public class Database {
         if (sessionModelList == null || sessionModelList.isEmpty()) {
             return;
         }
+        open();
         db.beginTransaction();
         for (SessionModel sessionModel : sessionModelList) {
             insertSession(sessionModel, MessageNotifyManager.getInstance().getHandlerSession());
         }
         db.setTransactionSuccessful();
         db.endTransaction();
+        close();
     }
 
     /******
@@ -362,6 +380,7 @@ public class Database {
         }
 
 
+        open();
         //创建会话信息
         ContentValues values = new ContentValues();
         if (session.getSessionId() != null) {
@@ -417,6 +436,8 @@ public class Database {
             }
         }
 
+        close();
+
         //通知消息更新
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_UPDATE;
@@ -437,6 +458,10 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
+
+
+        open();
+
         //请求数据
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION,
@@ -468,9 +493,11 @@ public class Database {
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(sessionId));
             info.setMemberList(getSessionMemberList(info.getSessionId()));
             cursor.close();
+            close();
             return info;
         }
         cursor.close();
+        close();
         return null;
     }
 
@@ -484,6 +511,7 @@ public class Database {
         if (chatUser == null) {
             return;
         }
+        open();
         //删除会话数据
         db.delete(
                 DataBaseConfig.TABLE_SESSION,
@@ -502,6 +530,7 @@ public class Database {
                         chatUser.getUserExtendId()
                 }
         );
+        close();
     }
 
 
@@ -516,6 +545,7 @@ public class Database {
             return;
         }
 
+        open();
         //创建values
         ContentValues values = new ContentValues();
         if (member.getUserId() != null) {
@@ -568,6 +598,7 @@ public class Database {
                 values,
                 SQLiteDatabase.CONFLICT_REPLACE
         );
+        close();
     }
 
     /******
@@ -582,6 +613,7 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
+        open();
         //获取session中未读的系统消息
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION_MEMBER,
@@ -598,6 +630,8 @@ public class Database {
         );
         //没有就关闭
         if (!cursor.moveToFirst()) {
+            cursor.close();
+            close();
             return null;
         }
         //获取所有数据
@@ -618,8 +652,11 @@ public class Database {
             info.setSessionLeaveDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionLeaveDate"))));
             info.setIsLeave(cursor.getInt(cursor.getColumnIndex("isLeave")));
             cursor.close();
+            close();
             return info;
         }
+        cursor.close();
+        close();
         return null;
     }
 
@@ -634,6 +671,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
+        open();
         //获取session中未读的系统消息
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION_MEMBER,
@@ -652,6 +690,7 @@ public class Database {
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
+            close();
             return list;
         }
         //获取所有数据
@@ -675,6 +714,7 @@ public class Database {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return list;
     }
 
@@ -687,12 +727,15 @@ public class Database {
      */
     private void updateSessionMemberLatestRead(String userId, String sessionId, String tableSequence) {
         //会话Data
+        open();
         SessionMemberModel memberModel = getSessionMember(sessionId, userId);
         if (memberModel == null) {
+            close();
             return;
         }
         memberModel.setSessionMemberLatestRead(tableSequence);
         insertSessionMember(memberModel);
+        close();
     }
 
 
@@ -708,6 +751,7 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
+        open();
         //请求数据
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION,
@@ -736,9 +780,11 @@ public class Database {
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
             info.setMemberList(getSessionMemberList(info.getSessionId()));
             cursor.close();
+            close();
             return info;
         }
         cursor.close();
+        close();
         return null;
     }
 
@@ -753,6 +799,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
+        open();
         //获取用户的会话
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_SESSION,
@@ -768,6 +815,7 @@ public class Database {
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
+            close();
             return sessions;
         }
         while (!cursor.isAfterLast()) {
@@ -790,6 +838,7 @@ public class Database {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return sessions;
     }
 
@@ -808,6 +857,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
+        open();
         List<ChatMessage> list = new ArrayList<>();
         //获取这条消息之前的消息，并且不包含自身
         Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
@@ -824,6 +874,7 @@ public class Database {
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
+            close();
             return list;
         }
         while (!cursor.isAfterLast()) {
@@ -851,6 +902,7 @@ public class Database {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return list;
     }
 
@@ -863,6 +915,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
+        open();
         //首先查询所有的这个seq的消息，可能有很多发送失败的消息，而这里的消息也是经过排序好的
         ChatMessage chatMessage = getMessageByID(messageID, false);
         List<ChatMessage> chatMessages = new ArrayList<>();
@@ -893,6 +946,7 @@ public class Database {
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
+            close();
             return list;
         }
         //获取数据
@@ -921,6 +975,7 @@ public class Database {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         chatMessages.addAll(list);
         if (chatMessages.size() > size) {
             chatMessages = chatMessages.subList(0, size);
@@ -937,6 +992,7 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
+        open();
         //查询最近一条消息
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_MESSAGE,
@@ -973,6 +1029,7 @@ public class Database {
             return info;
         }
         cursor.close();
+        close();
         return null;
     }
 
@@ -988,6 +1045,7 @@ public class Database {
         if (chatUser == null) {
             return null;
         }
+        open();
         Cursor cursor;
         //获取当前用户的消息
         if (showActionMsg) {
@@ -1034,9 +1092,11 @@ public class Database {
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
             cursor.close();
+            close();
             return info;
         }
         cursor.close();
+        close();
         return null;
     }
 
@@ -1050,6 +1110,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
+        open();
         //获取session中未读的系统消息
         Cursor cursor = db.query(
                 DataBaseConfig.TABLE_MESSAGE,
@@ -1065,6 +1126,7 @@ public class Database {
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
+            close();
             return list;
         }
         //获取所有数据
@@ -1093,6 +1155,7 @@ public class Database {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return list;
     }
 
@@ -1105,6 +1168,7 @@ public class Database {
         if (chatUser == null) {
             return new ArrayList<>();
         }
+        open();
         //当前用户的消息拿出来
         List<ChatMessage> list = new ArrayList<>();
         //获取这条消息之前的消息，并且不包含自身
@@ -1120,6 +1184,7 @@ public class Database {
         //没有就关闭
         if (!cursor.moveToFirst()) {
             cursor.close();
+            close();
             return list;
         }
         //获取所有数据
@@ -1148,6 +1213,7 @@ public class Database {
             cursor.moveToNext();
         }
         cursor.close();
+        close();
         return list;
     }
 }

@@ -445,9 +445,7 @@ public class FlappyImService {
             @Override
             public Object run(Object input, String tag) {
                 //清空当前正在发送的消息
-                Database database = Database.getInstance().open();
-                database.clearSendingMessage();
-                database.close();
+                Database.getInstance().clearSendingMessage();
                 return true;
             }
 
@@ -1271,14 +1269,8 @@ public class FlappyImService {
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                //数据库
-                Database database = Database.getInstance().open();
                 //获取数据
-                SessionModel data = database.getUserSessionByExtendID(extendID);
-                //关闭
-                database.close();
-                //本地
-                return data;
+                return Database.getInstance().getUserSessionByExtendID(extendID);
             }
 
             @Override
@@ -1438,10 +1430,7 @@ public class FlappyImService {
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                Database database = Database.getInstance().open();
-                SessionModel data = database.getUserSessionByExtendID(extendID);
-                database.close();
-                return data;
+                return Database.getInstance().getUserSessionByExtendID(extendID);
             }
 
             @Override
@@ -1528,9 +1517,7 @@ public class FlappyImService {
             @Override
             public List<FlappyChatSession> run(Object input, String tag) {
                 //数据库
-                Database database = Database.getInstance().open();
-                List<SessionModel> data = database.getUserSessions();
-                database.close();
+                List<SessionModel> data = Database.getInstance().getUserSessions();
 
                 //数据为空，去网上拿
                 if (data == null || data.isEmpty()) {

@@ -282,7 +282,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送定位信息
     public ChatMessage sendLocation(ChatLocation location,
-                                    final FlappySendCallback<ChatMessage> callback) {
+            final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -312,7 +312,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送短视频
     public ChatMessage sendLocalVideo(String path,
-                                      final FlappySendCallback<ChatMessage> callback) {
+            final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -366,7 +366,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送视频信息
     public ChatMessage sendVideo(ChatVideo chatVideo,
-                                 final FlappySendCallback<ChatMessage> callback) {
+            final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -398,8 +398,8 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送本地的音频
     public ChatMessage sendLocalFile(String path,
-                                     String name,
-                                     final FlappySendCallback<ChatMessage> callback) {
+            String name,
+            final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -472,7 +472,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //发送消息
     public ChatMessage sendCustom(String text,
-                                  FlappySendCallback<ChatMessage> callback) {
+            FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -557,7 +557,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //设置消息已读sequence
     public ChatMessage deleteSessionMessage(String messageId,
-                                            FlappySendCallback<ChatMessage> callback) {
+            FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -601,7 +601,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //重发消息
     public void resendMessage(final ChatMessage chatMessage,
-                              final FlappySendCallback<ChatMessage> callback) {
+            final FlappySendCallback<ChatMessage> callback) {
         //文本消息
         if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
             sendMessage(chatMessage, callback);
@@ -686,29 +686,20 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取最后一条消息
     public ChatMessage getLatestMessage() {
-        Database database = Database.getInstance().open();
-        ChatMessage chatMessage = database.getSessionLatestMessage(getSession().getSessionId());
-        database.close();
-        return chatMessage;
+        return Database.getInstance().getSessionLatestMessage(getSession().getSessionId());
     }
 
     //获取这条消息之前的消息
     public List<ChatMessage> getFormerMessages(String messageId, int size) {
-        Database database = Database.getInstance().open();
-        List<ChatMessage> chatMessages = database.getSessionFormerMessages(getSession().getSessionId(),
+        return Database.getInstance().getSessionFormerMessages(getSession().getSessionId(),
                 messageId,
                 size);
-        database.close();
-        return chatMessages;
     }
 
 
     //获取未读消息的数量
     public int getUnReadMessageCount() {
-        Database database = Database.getInstance().open();
-        int count = database.getNotReadSessionMessageCountBySessionId(getSession().getSessionId());
-        database.close();
-        return count;
+        return Database.getInstance().getNotReadSessionMessageCountBySessionId(getSession().getSessionId());
     }
 
 

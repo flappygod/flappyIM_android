@@ -78,9 +78,7 @@ public class FlappyBaseSession {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
                 //插入消息
-                Database database = Database.getInstance().open();
-                database.insertMessage(data);
-                database.close();
+                Database.getInstance().insertMessage(data);
                 return data;
             }
 
@@ -110,9 +108,7 @@ public class FlappyBaseSession {
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
-                Database database = Database.getInstance().open();
-                database.insertMessage(data);
-                database.close();
+                Database.getInstance().insertMessage(data);
                 return data;
             }
 
@@ -141,9 +137,7 @@ public class FlappyBaseSession {
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
-                Database database = Database.getInstance().open();
-                database.insertMessage(data);
-                database.close();
+                Database.getInstance().insertMessage(data);
                 return data;
             }
 
