@@ -3,18 +3,21 @@ package com.flappygo.flappyim.ApiServer.Clients;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 
+import okhttp3.RequestBody;
+
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.HashMap;
-import java.util.Map;
 
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
+
+import java.util.Map;
 
 
 /******
@@ -53,7 +56,7 @@ public class OkHttpClient {
      * @return 结果
      * @throws IOException 网络错误
      */
-    public String postJson(String url, Map<String,Object> data) throws IOException {
+    public String postJson(String url, Map<String, Object> data) throws IOException {
         return postJson(url, data, new HashMap<>());
     }
 
@@ -67,8 +70,8 @@ public class OkHttpClient {
      * @throws IOException 网络错误
      */
     public String postJson(String url,
-                           Map<String,Object> data,
-                           HashMap<String, String> header) throws IOException {
+            Map<String, Object> data,
+            HashMap<String, String> header) throws IOException {
 
         //创建请求体（RequestBody），这里以JSON字符串为例
         RequestBody body = RequestBody.create(new JSONObject(data).toString().getBytes());
@@ -107,8 +110,8 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void postJson(String url,
-                         Map<String,Object> data,
-                         OkHttpAsyncCallback callback) {
+            Map<String, Object> data,
+            OkHttpAsyncCallback callback) {
         postJson(url, data, new HashMap<>(), callback);
     }
 
@@ -120,9 +123,9 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void postJson(String url,
-                         Map<String,Object> data,
-                         HashMap<String, String> header,
-                         OkHttpAsyncCallback callback) {
+            Map<String, Object> data,
+            HashMap<String, String> header,
+            OkHttpAsyncCallback callback) {
         ArrayList<Object> dataList = new ArrayList<>();
         dataList.add(url);
         dataList.add(data);
@@ -131,14 +134,16 @@ public class OkHttpClient {
             @Override
             public String run(ArrayList<Object> data, String tag) throws Exception {
                 String url = (String) data.get(0);
-                Map<String,Object> dataParam = (Map<String,Object>) data.get(1);
+                Map<String, Object> dataParam = (Map<String, Object>) data.get(1);
                 HashMap<String, String> headerParam = (HashMap<String, String>) data.get(2);
                 return OkHttpClient.getInstance().postJson(url, dataParam, headerParam);
             }
+
             @Override
             public void failure(Exception e, String tag) {
                 callback.failure(e, tag);
             }
+
             @Override
             public void success(String data, String tag) {
                 callback.success(data, tag);
@@ -168,8 +173,8 @@ public class OkHttpClient {
      * @throws IOException 网络错误
      */
     public String postParam(String url,
-                            HashMap<String, String> data,
-                            HashMap<String, String> header) throws IOException {
+            HashMap<String, String> data,
+            HashMap<String, String> header) throws IOException {
 
         // 创建一个FormBody.Builder对象
         FormBody.Builder formBuilder = new FormBody.Builder();
@@ -216,8 +221,8 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void postParam(String url,
-                          HashMap<String, String> data,
-                          OkHttpAsyncCallback callback) {
+            HashMap<String, String> data,
+            OkHttpAsyncCallback callback) {
         postParam(url, data, new HashMap<>(), callback);
     }
 
@@ -229,9 +234,9 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void postParam(String url,
-                          HashMap<String, String> data,
-                          HashMap<String, String> header,
-                          OkHttpAsyncCallback callback) {
+            HashMap<String, String> data,
+            HashMap<String, String> header,
+            OkHttpAsyncCallback callback) {
         ArrayList<Object> dataList = new ArrayList<>();
         dataList.add(url);
         dataList.add(data);
@@ -244,10 +249,12 @@ public class OkHttpClient {
                 HashMap<String, String> headerParam = (HashMap<String, String>) data.get(2);
                 return OkHttpClient.getInstance().postParam(url, dataParam, headerParam);
             }
+
             @Override
             public void failure(Exception e, String tag) {
                 callback.failure(e, tag);
             }
+
             @Override
             public void success(String data, String tag) {
                 callback.success(data, tag);
@@ -277,8 +284,8 @@ public class OkHttpClient {
      * @throws IOException 网络错误
      */
     public String requestGet(String url,
-                             HashMap<String, String> data,
-                             HashMap<String, String> header) throws IOException {
+            HashMap<String, String> data,
+            HashMap<String, String> header) throws IOException {
         // 创建HttpUrl.Builder对象
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
 
@@ -321,8 +328,8 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void requestGet(String url,
-                           HashMap<String, String> data,
-                           OkHttpAsyncCallback callback) {
+            HashMap<String, String> data,
+            OkHttpAsyncCallback callback) {
         requestGet(url, data, new HashMap<>(), callback);
     }
 
@@ -334,9 +341,9 @@ public class OkHttpClient {
      * @param callback 回调
      */
     public void requestGet(String url,
-                           HashMap<String, String> data,
-                           HashMap<String, String> header,
-                           OkHttpAsyncCallback callback) {
+            HashMap<String, String> data,
+            HashMap<String, String> header,
+            OkHttpAsyncCallback callback) {
         ArrayList<Object> dataList = new ArrayList<>();
         dataList.add(url);
         dataList.add(data);
@@ -349,10 +356,12 @@ public class OkHttpClient {
                 HashMap<String, String> headerParam = (HashMap<String, String>) data.get(2);
                 return OkHttpClient.getInstance().requestGet(url, dataParam, headerParam);
             }
+
             @Override
             public void failure(Exception e, String tag) {
                 callback.failure(e, tag);
             }
+
             @Override
             public void success(String data, String tag) {
                 callback.success(data, tag);
