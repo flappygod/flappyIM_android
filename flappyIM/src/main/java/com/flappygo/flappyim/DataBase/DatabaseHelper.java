@@ -84,8 +84,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sessionDeleted" + " integer," +
             // 删除时间
             "sessionDeletedDate" + " varchar," +
-            // 会话用户列表
-            "users" + " varchar," +
             // 当前插入的用户
             "sessionInsertUser" + " varchar,"
             // 消息ID

@@ -12,19 +12,25 @@ import java.util.Date;
  */
 public class SessionMemberModel extends ChatUser {
 
-
+    //会话ID
     private String sessionId;
 
+    //最近阅读
     private String sessionMemberLatestRead;
 
+    //标记名称
     private String sessionMemberMarkName;
 
+    //会话免打扰
     private Integer sessionMemberNoDisturb;
 
+    //用户加入时间
     private Date sessionJoinDate;
 
+    //用户离开时间
     private Date sessionLeaveDate;
 
+    //用户是否离开
     private Integer isLeave;
 
     public String getSessionId() {

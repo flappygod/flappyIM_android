@@ -7,10 +7,17 @@ package com.flappygo.flappyim.Callback;
  */
 public interface FlappyIMCallback<T> {
 
-    //成功
+    /******
+     * 成功
+     * @param data 数据
+     */
     void success(T data);
 
-    //失败
+    /******
+     * 失败
+     * @param ex   异常
+     * @param code 代码
+     */
     void failure(Exception ex, int code);
 
 }

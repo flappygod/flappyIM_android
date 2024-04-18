@@ -414,8 +414,8 @@ public class Database {
         );
 
         //插入用户数据
-        if (session.getUsers() != null && !session.getUsers().isEmpty()) {
-            insertSessionMemberList(session.getUsers());
+        if (session.getMemberList() != null && !session.getMemberList().isEmpty()) {
+            insertSessionMemberList(session.getMemberList());
         }
 
         //通知消息更新
@@ -479,7 +479,7 @@ public class Database {
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(sessionId));
-            info.setUsers(getSessionMemberList(info.getSessionId()));
+            info.setMemberList(getSessionMemberList(info.getSessionId()));
             cursor.close();
             return info;
         }
@@ -650,7 +650,7 @@ public class Database {
         //会话Data
         SessionModel sessionModel = getUserSessionByID(sessionId);
         //更新会话最近已读
-        List<SessionMemberModel> chatUserList = sessionModel.getUsers();
+        List<SessionMemberModel> chatUserList = sessionModel.getMemberList();
         for (SessionMemberModel user : chatUserList) {
             if (user.getUserId().equals(userId)) {
                 user.setSessionMemberLatestRead(tableSequence);
@@ -698,7 +698,7 @@ public class Database {
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
-            info.setUsers(getSessionMemberList(info.getSessionId()));
+            info.setMemberList(getSessionMemberList(info.getSessionId()));
             cursor.close();
             return info;
         }
@@ -749,7 +749,7 @@ public class Database {
             info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
             info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
             info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
-            info.setUsers(getSessionMemberList(info.getSessionId()));
+            info.setMemberList(getSessionMemberList(info.getSessionId()));
             sessions.add(info);
             cursor.moveToNext();
         }

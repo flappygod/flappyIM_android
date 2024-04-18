@@ -14,11 +14,11 @@ import java.util.List;
  */
 public class SessionModel extends ChatSession implements Serializable {
 
-    //constructor
+    //构造器
     public SessionModel() {
     }
 
-    //session data
+    //构造器
     public SessionModel(Flappy.Session session) {
         setSessionId(Long.toString(session.getSessionId()));
         setSessionExtendId(session.getSessionExtendId());
@@ -32,23 +32,25 @@ public class SessionModel extends ChatSession implements Serializable {
         setSessionCreateDate(TimeTool.strToDate(session.getSessionCreateDate()));
         setIsDelete(new BigDecimal(session.getIsDelete()));
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
-        setUsers(GsonTool.jsonArrayToModels(session.getUsers(), SessionMemberModel.class));
+        setMemberList(
+                GsonTool.jsonArrayToModels(session.getUsers(), SessionMemberModel.class)
+        );
     }
 
     //用户信息
-    List<SessionMemberModel> users;
+    List<SessionMemberModel> memberList;
 
     //未读消息数量
     int unReadMessageCount;
 
     //获取用户
-    public List<SessionMemberModel> getUsers() {
-        return users;
+    public List<SessionMemberModel> getMemberList() {
+        return memberList;
     }
 
     //设置用户
-    public void setUsers(List<SessionMemberModel> users) {
-        this.users = users;
+    public void setMemberList(List<SessionMemberModel> memberList) {
+        this.memberList = memberList;
     }
 
     //未读消息数量
