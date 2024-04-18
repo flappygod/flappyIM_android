@@ -32,25 +32,25 @@ public class SessionModel extends ChatSession implements Serializable {
         setSessionCreateDate(TimeTool.strToDate(session.getSessionCreateDate()));
         setIsDelete(new BigDecimal(session.getIsDelete()));
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
-        setMemberList(
+        setUsers(
                 GsonTool.jsonArrayToModels(session.getUsers(), SessionMemberModel.class)
         );
     }
 
     //用户信息
-    List<SessionMemberModel> memberList;
+    List<SessionMemberModel> users;
 
     //未读消息数量
     int unReadMessageCount;
 
     //获取用户
-    public List<SessionMemberModel> getMemberList() {
-        return memberList;
+    public List<SessionMemberModel> getUsers() {
+        return users;
     }
 
     //设置用户
-    public void setMemberList(List<SessionMemberModel> memberList) {
-        this.memberList = memberList;
+    public void setUsers(List<SessionMemberModel> users) {
+        this.users = users;
     }
 
     //未读消息数量

@@ -641,7 +641,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                 return getSession().getSessionId();
             ///单聊会话
             case SessionModel.TYPE_SINGLE: {
-                for (ChatUser chatUser : getSession().getMemberList()) {
+                for (ChatUser chatUser : getSession().getUsers()) {
                     if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                         return chatUser.getUserId();
                     }
@@ -667,7 +667,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                 return getSession().getSessionExtendId();
             ///单聊会话
             case SessionModel.TYPE_SINGLE: {
-                for (ChatUser chatUser : getSession().getMemberList()) {
+                for (ChatUser chatUser : getSession().getUsers()) {
                     if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                         return chatUser.getUserExtendId();
                     }

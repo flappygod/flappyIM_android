@@ -448,8 +448,8 @@ public class Database {
             );
 
             //插入用户数据
-            if (session.getMemberList() != null && !session.getMemberList().isEmpty()) {
-                for (SessionMemberModel memberModel : session.getMemberList()) {
+            if (session.getUsers() != null && !session.getUsers().isEmpty()) {
+                for (SessionMemberModel memberModel : session.getUsers()) {
                     insertSessionMember(memberModel);
                 }
             }
@@ -509,7 +509,7 @@ public class Database {
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(sessionId));
-                info.setMemberList(getSessionMemberList(info.getSessionId()));
+                info.setUsers(getSessionMemberList(info.getSessionId()));
                 cursor.close();
                 return info;
             }
@@ -810,7 +810,7 @@ public class Database {
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
-                info.setMemberList(getSessionMemberList(info.getSessionId()));
+                info.setUsers(getSessionMemberList(info.getSessionId()));
                 cursor.close();
                 return info;
             }
@@ -866,7 +866,7 @@ public class Database {
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getNotReadSessionMessageCountBySessionId(info.getSessionId()));
-                info.setMemberList(getSessionMemberList(info.getSessionId()));
+                info.setUsers(getSessionMemberList(info.getSessionId()));
                 sessions.add(info);
                 cursor.moveToNext();
             }
