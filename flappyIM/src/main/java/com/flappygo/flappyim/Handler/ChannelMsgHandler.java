@@ -367,7 +367,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
             //用户加入是自己也全量更新
             if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_ADD_MEMBER) {
-                ChatUser chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), ChatUser.class);
+                SessionMemberModel chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
                 if (chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionUpdateSessionAll.add(item);
                 } else {
@@ -376,7 +376,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
             //用户删除是自己删除会话
             if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
-                ChatUser chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), ChatUser.class);
+                SessionMemberModel chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
                 if (chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionDeleteSession.add(item);
                 } else {
@@ -391,21 +391,21 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //全量更新
         if (!actionUpdateSessionAll.isEmpty()) {
-            updateSessionRequest(ctx, actionUpdateSessionAll);
+            updateSessionAll(ctx, actionUpdateSessionAll);
         }
         //用户更新
         if (!actionUpdateSessionMember.isEmpty()) {
             updateSessionMemberUpdate(ctx, actionUpdateSessionMember);
         }
-        //全量更新
+        //用户删除
         if (!actionUpdateSessionMember.isEmpty()) {
-            updateSessionMemberDelete(ctx, actionUpdateSessionMember);
+            updateSessionMemberDelete(ctx, actionDeleteSession);
         }
     }
 
 
     //更新所有会话
-    private void updateSessionRequest(ChannelHandlerContext ctx, List<ChatMessage> messages) {
+    private void updateSessionAll(ChannelHandlerContext ctx, List<ChatMessage> messages) {
 
         //获取更新Session并去重,且判断正在进行中的更新
         List<String> updateIdList = new ArrayList<>();

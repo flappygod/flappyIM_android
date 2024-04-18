@@ -32,8 +32,5 @@ public class FlappyRequest {
     /***更新类型***/
     public final static int REQ_UPDATE_SESSION_ALL = 1;
 
-    //增量更新会话用户信息
-    public final static int REQ_UPDATE_SESSION_MEMBER = 2;
-
 
 }

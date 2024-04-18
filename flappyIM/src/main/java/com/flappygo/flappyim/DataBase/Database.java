@@ -496,7 +496,7 @@ public class Database {
         //删除会话消息
         db.delete(
                 DataBaseConfig.TABLE_MESSAGE,
-                "messageSession=? and sessionInsertUser=?",
+                "messageSession=? and messageInsertUser=?",
                 new String[]{
                         sessionId,
                         chatUser.getUserExtendId()
