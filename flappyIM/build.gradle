@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         versionCode 3
-        versionName "3.4.1"
+        versionName "3.4.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
