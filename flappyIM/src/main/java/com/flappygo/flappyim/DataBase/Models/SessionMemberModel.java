@@ -2,7 +2,6 @@ package com.flappygo.flappyim.DataBase.Models;
 
 import com.flappygo.flappyim.Models.Server.ChatUser;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /******
