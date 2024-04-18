@@ -58,12 +58,9 @@ public class Database {
     private Database() {
     }
 
-    //加锁
-    private static final Object lock = new Object();
-
     //打开数据库
     public Database open() {
-        synchronized (lock) {
+        synchronized (this) {
             openCount++;
             if (db == null && dbHelper == null) {
                 dbHelper = new DatabaseHelper(
@@ -80,7 +77,7 @@ public class Database {
 
     //关闭数据库
     public void close() {
-        synchronized (lock) {
+        synchronized (this) {
             openCount--;
             if (openCount == 0) {
                 db.close();
@@ -415,7 +412,9 @@ public class Database {
 
         //插入用户数据
         if (session.getMemberList() != null && !session.getMemberList().isEmpty()) {
-            insertSessionMemberList(session.getMemberList());
+            for (SessionMemberModel memberModel : session.getMemberList()) {
+                insertSessionMember(memberModel);
+            }
         }
 
         //通知消息更新
@@ -423,18 +422,6 @@ public class Database {
         msg.what = HandlerSession.SESSION_UPDATE;
         msg.obj = session;
         handlerSession.sendMessage(msg);
-    }
-
-    /******
-     * 插入会话用户列表
-     * @param sessionMemberModelList 会话用户列表
-     */
-    private void insertSessionMemberList(List<SessionMemberModel> sessionMemberModelList) {
-        if (sessionMemberModelList != null && !sessionMemberModelList.isEmpty()) {
-            for (SessionMemberModel memberModel : sessionMemberModelList) {
-                insertSessionMember(memberModel);
-            }
-        }
     }
 
 
@@ -583,6 +570,58 @@ public class Database {
         );
     }
 
+    /******
+     * 获取会话用户
+     * @param sessionId 会话ID
+     * @param memberId  用户ID
+     */
+    @SuppressLint("Range")
+    public SessionMemberModel getSessionMember(String sessionId, String memberId) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return null;
+        }
+        //获取session中未读的系统消息
+        Cursor cursor = db.query(
+                DataBaseConfig.TABLE_SESSION_MEMBER,
+                null,
+                "sessionId = ? and userId = ? and sessionInsertUser= ?",
+                new String[]{
+                        sessionId,
+                        memberId,
+                        chatUser.getUserExtendId()
+                },
+                null,
+                null,
+                null
+        );
+        //没有就关闭
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
+        //获取所有数据
+        if (!cursor.isAfterLast()) {
+            SessionMemberModel info = new SessionMemberModel();
+            info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
+            info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
+            info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
+            info.setUserAvatar(cursor.getString(cursor.getColumnIndex("userAvatar")));
+            info.setUserData(cursor.getString(cursor.getColumnIndex("userData")));
+            info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
+            info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
+            info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+            info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
+            info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
+            info.setSessionMemberNoDisturb(cursor.getInt(cursor.getColumnIndex("sessionMemberNoDisturb")));
+            info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
+            info.setSessionLeaveDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionLeaveDate"))));
+            info.setIsLeave(cursor.getInt(cursor.getColumnIndex("isLeave")));
+            cursor.close();
+            return info;
+        }
+        return null;
+    }
 
     /******
      * 获取会话用户列表
@@ -648,15 +687,12 @@ public class Database {
      */
     private void updateSessionMemberLatestRead(String userId, String sessionId, String tableSequence) {
         //会话Data
-        SessionModel sessionModel = getUserSessionByID(sessionId);
-        //更新会话最近已读
-        List<SessionMemberModel> chatUserList = sessionModel.getMemberList();
-        for (SessionMemberModel user : chatUserList) {
-            if (user.getUserId().equals(userId)) {
-                user.setSessionMemberLatestRead(tableSequence);
-            }
+        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        if (memberModel == null) {
+            return;
         }
-        insertSession(sessionModel, MessageNotifyManager.getInstance().getHandlerSession());
+        memberModel.setSessionMemberLatestRead(tableSequence);
+        insertSessionMember(memberModel);
     }
 
 
