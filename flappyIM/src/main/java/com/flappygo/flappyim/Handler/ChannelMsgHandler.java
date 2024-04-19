@@ -3,6 +3,7 @@ package com.flappygo.flappyim.Handler;
 
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
+import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -348,36 +349,38 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         List<ChatMessage> actionUpdateSessionMember = new ArrayList<>();
         List<ChatMessage> actionDeleteSession = new ArrayList<>();
         for (ChatMessage item : latestMessages) {
+
+            ChatSystem chatSystem = item.getChatSystem();
             //全量更新
-            if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_NOTHING) {
+            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_NOTHING) {
                 //保存消息状态数据
                 item.setMessageReadState(new BigDecimal(1));
                 Database.getInstance().insertMessage(item);
             }
             //全量更新
-            if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_UPDATE_SESSION) {
+            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_UPDATE_SESSION) {
                 actionUpdateSessionAll.add(item);
             }
             //用户加入是自己也全量更新
-            if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_ADD_MEMBER) {
+            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_ADD_MEMBER) {
                 SessionMemberModel chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
-                if (chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+                if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionUpdateSessionAll.add(item);
                 } else {
                     actionUpdateSessionMember.add(item);
                 }
             }
             //用户删除是自己删除会话
-            if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
+            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
                 SessionMemberModel chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
-                if (chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+                if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionDeleteSession.add(item);
                 } else {
                     actionUpdateSessionMember.add(item);
                 }
             }
             //用户加入/删除增量更新
-            if (item.getChatSystem().getSysAction() == ChatMessage.SYSTEM_MSG_UPDATE_MEMBER) {
+            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_UPDATE_MEMBER) {
                 actionUpdateSessionMember.add(item);
             }
         }

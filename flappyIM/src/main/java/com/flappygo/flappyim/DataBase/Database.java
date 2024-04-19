@@ -1232,7 +1232,7 @@ public class Database {
                     new String[]{chatUser.getUserExtendId()},
                     null,
                     null,
-                    "messageTableSeq DESC"
+                    "messageTableSeq ASC"
             );
             //没有就关闭
             if (!cursor.moveToFirst()) {
