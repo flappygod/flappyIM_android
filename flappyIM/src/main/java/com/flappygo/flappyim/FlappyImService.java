@@ -1,6 +1,8 @@
 package com.flappygo.flappyim;
 
 
+import static androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED;
+
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
@@ -47,6 +49,7 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 
+import android.os.Build;
 import android.os.Message;
 import android.os.Handler;
 import android.os.Looper;
@@ -269,7 +272,11 @@ public class FlappyImService {
                 timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
                 timeFilter.addAction("android.net.wifi.STATE_CHANGE");
                 timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-                getAppContext().registerReceiver(netReceiver, timeFilter);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    getAppContext().registerReceiver(netReceiver, timeFilter, Context.RECEIVER_NOT_EXPORTED);
+                }else{
+                    getAppContext().registerReceiver(netReceiver, timeFilter);
+                }
                 receiverRegistered = true;
             }
         }
