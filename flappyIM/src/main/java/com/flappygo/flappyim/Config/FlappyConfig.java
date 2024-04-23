@@ -21,13 +21,13 @@ public class FlappyConfig {
     public String pushPlat = "Google";
 
     //RSA加密的公钥
-    public String rsaPublicKey = "";
+    public String rsaPublicKey;
 
     //链接的http服务器器的地址192.168.124.105
-    public String serverUrl = "";
+    public String serverUrl;
 
     //上传地址
-    public String serverUploadUrl = "";
+    public String serverUploadUrl;
 
     //单例模式
     private static final class InstanceHolder {
