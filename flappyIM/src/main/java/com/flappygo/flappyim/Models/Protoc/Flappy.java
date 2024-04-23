@@ -8545,20 +8545,10 @@ public final class Flappy {
      *消息会话
      * </pre>
      *
-     * <code>string messageSession = 2;</code>
+     * <code>int64 messageSession = 2;</code>
      * @return The messageSession.
      */
-    String getMessageSession();
-    /**
-     * <pre>
-     *消息会话
-     * </pre>
-     *
-     * <code>string messageSession = 2;</code>
-     * @return The bytes for messageSession.
-     */
-    com.google.protobuf.ByteString
-        getMessageSessionBytes();
+    long getMessageSession();
 
     /**
      * <pre>
@@ -8804,7 +8794,6 @@ public final class Flappy {
     }
     private Message() {
       messageId_ = "";
-      messageSession_ = "";
       messageSendExtendId_ = "";
       messageReceiveExtendId_ = "";
       messageContent_ = "";
@@ -8850,10 +8839,9 @@ public final class Flappy {
               messageId_ = s;
               break;
             }
-            case 18: {
-              String s = input.readStringRequireUtf8();
+            case 16: {
 
-              messageSession_ = s;
+              messageSession_ = input.readInt64();
               break;
             }
             case 24: {
@@ -9024,49 +9012,18 @@ public final class Flappy {
     }
 
     public static final int MESSAGESESSION_FIELD_NUMBER = 2;
-    private volatile Object messageSession_;
+    private long messageSession_;
     /**
      * <pre>
      *消息会话
      * </pre>
      *
-     * <code>string messageSession = 2;</code>
+     * <code>int64 messageSession = 2;</code>
      * @return The messageSession.
      */
     @Override
-    public String getMessageSession() {
-      Object ref = messageSession_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        messageSession_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     *消息会话
-     * </pre>
-     *
-     * <code>string messageSession = 2;</code>
-     * @return The bytes for messageSession.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getMessageSessionBytes() {
-      Object ref = messageSession_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        messageSession_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getMessageSession() {
+      return messageSession_;
     }
 
     public static final int MESSAGESESSIONTYPE_FIELD_NUMBER = 3;
@@ -9543,8 +9500,8 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageId_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, messageId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSession_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, messageSession_);
+      if (messageSession_ != 0L) {
+        output.writeInt64(2, messageSession_);
       }
       if (messageSessionType_ != 0) {
         output.writeInt32(3, messageSessionType_);
@@ -9606,8 +9563,9 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageId_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, messageId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSession_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, messageSession_);
+      if (messageSession_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, messageSession_);
       }
       if (messageSessionType_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -9683,8 +9641,8 @@ public final class Flappy {
 
       if (!getMessageId()
           .equals(other.getMessageId())) return false;
-      if (!getMessageSession()
-          .equals(other.getMessageSession())) return false;
+      if (getMessageSession()
+          != other.getMessageSession()) return false;
       if (getMessageSessionType()
           != other.getMessageSessionType()) return false;
       if (getMessageSessionOffset()
@@ -9731,7 +9689,8 @@ public final class Flappy {
       hash = (37 * hash) + MESSAGEID_FIELD_NUMBER;
       hash = (53 * hash) + getMessageId().hashCode();
       hash = (37 * hash) + MESSAGESESSION_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageSession().hashCode();
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getMessageSession());
       hash = (37 * hash) + MESSAGESESSIONTYPE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageSessionType();
       hash = (37 * hash) + MESSAGESESSIONOFFSET_FIELD_NUMBER;
@@ -9902,7 +9861,7 @@ public final class Flappy {
         super.clear();
         messageId_ = "";
 
-        messageSession_ = "";
+        messageSession_ = 0L;
 
         messageSessionType_ = 0;
 
@@ -10032,9 +9991,8 @@ public final class Flappy {
           messageId_ = other.messageId_;
           onChanged();
         }
-        if (!other.getMessageSession().isEmpty()) {
-          messageSession_ = other.messageSession_;
-          onChanged();
+        if (other.getMessageSession() != 0L) {
+          setMessageSession(other.getMessageSession());
         }
         if (other.getMessageSessionType() != 0) {
           setMessageSessionType(other.getMessageSessionType());
@@ -10216,63 +10174,30 @@ public final class Flappy {
         return this;
       }
 
-      private Object messageSession_ = "";
+      private long messageSession_ ;
       /**
        * <pre>
        *消息会话
        * </pre>
        *
-       * <code>string messageSession = 2;</code>
+       * <code>int64 messageSession = 2;</code>
        * @return The messageSession.
        */
-      public String getMessageSession() {
-        Object ref = messageSession_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          messageSession_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      @Override
+      public long getMessageSession() {
+        return messageSession_;
       }
       /**
        * <pre>
        *消息会话
        * </pre>
        *
-       * <code>string messageSession = 2;</code>
-       * @return The bytes for messageSession.
-       */
-      public com.google.protobuf.ByteString
-          getMessageSessionBytes() {
-        Object ref = messageSession_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          messageSession_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       *消息会话
-       * </pre>
-       *
-       * <code>string messageSession = 2;</code>
+       * <code>int64 messageSession = 2;</code>
        * @param value The messageSession to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageSession(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setMessageSession(long value) {
+        
         messageSession_ = value;
         onChanged();
         return this;
@@ -10282,32 +10207,12 @@ public final class Flappy {
        *消息会话
        * </pre>
        *
-       * <code>string messageSession = 2;</code>
+       * <code>int64 messageSession = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageSession() {
         
-        messageSession_ = getDefaultInstance().getMessageSession();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *消息会话
-       * </pre>
-       *
-       * <code>string messageSession = 2;</code>
-       * @param value The bytes for messageSession to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageSessionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        messageSession_ = value;
+        messageSession_ = 0L;
         onChanged();
         return this;
       }
@@ -12742,20 +12647,10 @@ public final class Flappy {
      *推送类型
      * </pre>
      *
-     * <code>string pushType = 4;</code>
+     * <code>int32 pushType = 4;</code>
      * @return The pushType.
      */
-    String getPushType();
-    /**
-     * <pre>
-     *推送类型
-     * </pre>
-     *
-     * <code>string pushType = 4;</code>
-     * @return The bytes for pushType.
-     */
-    com.google.protobuf.ByteString
-        getPushTypeBytes();
+    int getPushType();
 
     /**
      * <pre>
@@ -12852,7 +12747,6 @@ public final class Flappy {
     private Route() {
       device_ = "";
       pushId_ = "";
-      pushType_ = "";
       pushPlat_ = "";
       pushLanguage_ = "";
       time_ = "";
@@ -12905,10 +12799,9 @@ public final class Flappy {
               pushId_ = s;
               break;
             }
-            case 34: {
-              String s = input.readStringRequireUtf8();
+            case 32: {
 
-              pushType_ = s;
+              pushType_ = input.readInt32();
               break;
             }
             case 42: {
@@ -13081,49 +12974,18 @@ public final class Flappy {
     }
 
     public static final int PUSHTYPE_FIELD_NUMBER = 4;
-    private volatile Object pushType_;
+    private int pushType_;
     /**
      * <pre>
      *推送类型
      * </pre>
      *
-     * <code>string pushType = 4;</code>
+     * <code>int32 pushType = 4;</code>
      * @return The pushType.
      */
     @Override
-    public String getPushType() {
-      Object ref = pushType_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        pushType_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     *推送类型
-     * </pre>
-     *
-     * <code>string pushType = 4;</code>
-     * @return The bytes for pushType.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getPushTypeBytes() {
-      Object ref = pushType_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        pushType_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getPushType() {
+      return pushType_;
     }
 
     public static final int PUSHPLAT_FIELD_NUMBER = 5;
@@ -13317,8 +13179,8 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushId_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pushId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushType_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, pushType_);
+      if (pushType_ != 0) {
+        output.writeInt32(4, pushType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushPlat_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, pushPlat_);
@@ -13354,8 +13216,9 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushId_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pushId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushType_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, pushType_);
+      if (pushType_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, pushType_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(pushPlat_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, pushPlat_);
@@ -13395,8 +13258,8 @@ public final class Flappy {
           .equals(other.getDevice())) return false;
       if (!getPushId()
           .equals(other.getPushId())) return false;
-      if (!getPushType()
-          .equals(other.getPushType())) return false;
+      if (getPushType()
+          != other.getPushType()) return false;
       if (!getPushPlat()
           .equals(other.getPushPlat())) return false;
       if (!getPushLanguage()
@@ -13426,7 +13289,7 @@ public final class Flappy {
       hash = (37 * hash) + PUSHID_FIELD_NUMBER;
       hash = (53 * hash) + getPushId().hashCode();
       hash = (37 * hash) + PUSHTYPE_FIELD_NUMBER;
-      hash = (53 * hash) + getPushType().hashCode();
+      hash = (53 * hash) + getPushType();
       hash = (37 * hash) + PUSHPLAT_FIELD_NUMBER;
       hash = (53 * hash) + getPushPlat().hashCode();
       hash = (37 * hash) + PUSHLANGUAGE_FIELD_NUMBER;
@@ -13576,7 +13439,7 @@ public final class Flappy {
 
         pushId_ = "";
 
-        pushType_ = "";
+        pushType_ = 0;
 
         pushPlat_ = "";
 
@@ -13682,9 +13545,8 @@ public final class Flappy {
           pushId_ = other.pushId_;
           onChanged();
         }
-        if (!other.getPushType().isEmpty()) {
-          pushType_ = other.pushType_;
-          onChanged();
+        if (other.getPushType() != 0) {
+          setPushType(other.getPushType());
         }
         if (!other.getPushPlat().isEmpty()) {
           pushPlat_ = other.pushPlat_;
@@ -13968,63 +13830,30 @@ public final class Flappy {
         return this;
       }
 
-      private Object pushType_ = "";
+      private int pushType_ ;
       /**
        * <pre>
        *推送类型
        * </pre>
        *
-       * <code>string pushType = 4;</code>
+       * <code>int32 pushType = 4;</code>
        * @return The pushType.
        */
-      public String getPushType() {
-        Object ref = pushType_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          pushType_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      @Override
+      public int getPushType() {
+        return pushType_;
       }
       /**
        * <pre>
        *推送类型
        * </pre>
        *
-       * <code>string pushType = 4;</code>
-       * @return The bytes for pushType.
-       */
-      public com.google.protobuf.ByteString
-          getPushTypeBytes() {
-        Object ref = pushType_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          pushType_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       *推送类型
-       * </pre>
-       *
-       * <code>string pushType = 4;</code>
+       * <code>int32 pushType = 4;</code>
        * @param value The pushType to set.
        * @return This builder for chaining.
        */
-      public Builder setPushType(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
+      public Builder setPushType(int value) {
+        
         pushType_ = value;
         onChanged();
         return this;
@@ -14034,32 +13863,12 @@ public final class Flappy {
        *推送类型
        * </pre>
        *
-       * <code>string pushType = 4;</code>
+       * <code>int32 pushType = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearPushType() {
         
-        pushType_ = getDefaultInstance().getPushType();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *推送类型
-       * </pre>
-       *
-       * <code>string pushType = 4;</code>
-       * @param value The bytes for pushType to set.
-       * @return This builder for chaining.
-       */
-      public Builder setPushTypeBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        pushType_ = value;
+        pushType_ = 0;
         onChanged();
         return this;
       }
@@ -14564,7 +14373,7 @@ public final class Flappy {
       "ssionCreateUser\030\n \001(\t\022\020\n\010isDelete\030\013 \001(\005\022" +
       "\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\312\003\n\007M" +
       "essage\022\021\n\tmessageId\030\001 \001(\t\022\026\n\016messageSess" +
-      "ion\030\002 \001(\t\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n" +
+      "ion\030\002 \001(\003\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n" +
       "\024messageSessionOffset\030\004 \001(\005\022\027\n\017messageTa" +
       "bleSeq\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005\022\025\n\rmes" +
       "sageSendId\030\007 \001(\003\022\033\n\023messageSendExtendId\030" +
@@ -14578,7 +14387,7 @@ public final class Flappy {
       " \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\013" +
       "2\010.Message\"\253\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\016\n\006" +
       "device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022\020\n\010pushType" +
-      "\030\004 \001(\t\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pushLanguage" +
+      "\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pushLanguage" +
       "\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022\025\n\rpushNoDis" +
       "turb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006proto3"
     };

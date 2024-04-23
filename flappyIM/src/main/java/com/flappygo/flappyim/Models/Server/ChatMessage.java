@@ -270,7 +270,7 @@ public class ChatMessage {
     //消息
     public ChatMessage(Flappy.Message msg) {
         messageId = msg.getMessageId();
-        messageSession = msg.getMessageSession();
+        messageSession = String.valueOf(msg.getMessageSession());
         messageSessionType = new BigDecimal(msg.getMessageSessionType());
         messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
         messageTableSeq = new BigDecimal(msg.getMessageTableSeq());
@@ -295,7 +295,7 @@ public class ChatMessage {
         if (getMessageId() != null)
             msgBuilder.setMessageId(getMessageId());
         if (getMessageSession() != null)
-            msgBuilder.setMessageSession(getMessageSession());
+            msgBuilder.setMessageSession(StringTool.strToLong(getMessageSession()));
         if (getMessageSessionType() != null)
             msgBuilder.setMessageSessionType(StringTool.decimalToInt(getMessageSessionType()));
         if (getMessageSessionOffset() != null)

@@ -21,6 +21,8 @@ message FlappyResponse{
   repeated Message  msg = 2;
   //会话列表
   repeated Session  sessions = 3;
+  //更新信息
+  ReqUpdate         update = 4;
 }
 
 
@@ -86,7 +88,7 @@ message Message{
   //消息ID
   string messageId = 1;
   //消息会话
-  string messageSession = 2;
+  int64 messageSession = 2;
   //消息会话类型
   int32  messageSessionType = 3;
   //消息会话偏移量
@@ -140,7 +142,7 @@ message Route{
   //推送ID
   string pushId = 3;
   //推送类型
-  string pushType = 4;
+  int32 pushType = 4;
   //推送平台类型
   string pushPlat = 5;
   //推送平台语言
