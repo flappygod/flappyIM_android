@@ -23,7 +23,7 @@ public class IDGenerateTool {
      * @param length 长度
      * @return 随机字符串
      */
-    private static String getRandomStr(int length) {
+    public static String getRandomStr(int length) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int intVal = (int) (Math.random() * 26 + 97);

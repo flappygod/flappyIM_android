@@ -1,7 +1,7 @@
 package com.flappygo.flappyim.Models.Server;
 
-import android.util.Base64;
 
+import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
@@ -10,11 +10,15 @@ import com.flappygo.flappyim.Models.Request.ChatVoice;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Request.ChatFile;
+import com.flappygo.flappyim.Tools.Secret.AESTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Tools.TimeTool;
 import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.Tools.TimeTool;
 
 import java.math.BigDecimal;
+
+import android.util.Base64;
+
 import java.util.Date;
 
 
@@ -66,7 +70,6 @@ public class ChatMessage {
 
     //用户信息增加(获取)
     public final static int SYSTEM_MSG_ADD_MEMBER = 4;
-
 
 
     //已读消息
@@ -332,186 +335,251 @@ public class ChatMessage {
         return msgBuilder.build();
     }
 
-    //设置文本消息
-    public void setChatText(String text) {
-        if (text != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_TEXT);
-            setMessageContent(encrypt(text, null));
-        }
-    }
 
-    //获取文本消息
-    public String getChatText() {
-        if (getMessageType().intValue() == MSG_TYPE_TEXT) {
-            return decrypt(getMessageContent(), null);
-        }
-        return null;
-    }
-
-    //设置系统消息
+    /******
+     * 设置系统消息
+     * @param chatSystem 系统消息
+     */
     public void setChatSystem(ChatSystem chatSystem) {
-        if (chatSystem != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_SYSTEM);
-            setMessageContent(encrypt(GsonTool.modelToString(chatSystem, ChatSystem.class), null));
-        }
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_SYSTEM);
+        setMessageContent(encrypt(chatSystem, ChatSystem.class, null));
     }
 
-    //获取系统消息
+    /******
+     * 获取系统消息
+     * @return 系统消息
+     */
     public ChatSystem getChatSystem() {
         if (getMessageType().intValue() == MSG_TYPE_SYSTEM) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatSystem.class);
+            return decrypt(ChatSystem.class);
         }
         return null;
     }
 
-    //设置图片消息
-    public void setChatImage(ChatImage chatImage) {
-        if (chatImage != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_IMG);
-            setMessageContent(encrypt(GsonTool.modelToString(chatImage, ChatImage.class), null));
-        }
+    /******
+     * 设置动作消息
+     * @param chatAction 动作消息
+     */
+    public void setChatAction(ChatAction chatAction) {
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_ACTION);
+        setMessageContent(encrypt(chatAction, ChatAction.class, null));
     }
 
-    //获取图片消息
+    /******
+     * 获取动作消息
+     * @return 动作消息
+     */
+    public ChatAction getChatAction() {
+        if (getMessageType().intValue() == MSG_TYPE_ACTION) {
+            return decrypt(ChatAction.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置文本消息
+     * @param text 文本消息，加密
+     */
+    public void setChatText(String text) {
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_TEXT);
+        setMessageContent(encrypt(text, String.class, secret));
+    }
+
+    /******
+     * 获取文本消息
+     * @return 文本消息
+     */
+    public String getChatText() {
+        if (getMessageType().intValue() == MSG_TYPE_TEXT) {
+            return decrypt(String.class);
+        }
+        return null;
+    }
+
+
+    /******
+     * 设置图片消息
+     * @param chatImage 图片消息
+     */
+    public void setChatImage(ChatImage chatImage) {
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_IMG);
+        setMessageContent(encrypt(chatImage, ChatImage.class, secret));
+    }
+
+    /******
+     * 获取图片消息
+     * @return 图片消息
+     */
     public ChatImage getChatImage() {
         if (getMessageType().intValue() == MSG_TYPE_IMG) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatImage.class);
+            return decrypt(ChatImage.class);
         }
         return null;
     }
 
-    //设置语音消息
+    /******
+     * 设置语音消息
+     * @param chatVoice 语音消息
+     */
     public void setChatVoice(ChatVoice chatVoice) {
-        if (chatVoice != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_VOICE);
-            setMessageContent(encrypt(GsonTool.modelToString(chatVoice, ChatVoice.class), null));
-        }
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_VOICE);
+        setMessageContent(encrypt(chatVoice, ChatVoice.class, secret));
     }
 
-    //获取语音消息
+    /******
+     * 获取语音消息
+     * @return 语音消息
+     */
     public ChatVoice getChatVoice() {
         if (getMessageType().intValue() == MSG_TYPE_VOICE) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatVoice.class);
+            return decrypt(ChatVoice.class);
         }
         return null;
     }
 
-    //设置定位消息
+    /******
+     * 设置定位消息
+     * @param chatLocation 定位消息
+     */
     public void setChatLocation(ChatLocation chatLocation) {
-        //设置文本消息
-        if (chatLocation != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_LOCATE);
-            setMessageContent(encrypt(GsonTool.modelToString(chatLocation, ChatLocation.class), null));
-        }
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_LOCATE);
+        setMessageContent(encrypt(chatLocation, ChatLocation.class, secret));
     }
 
-    //获取定位消息
+    /******
+     * 获取定位消息
+     * @return 定位消息
+     */
     public ChatLocation getChatLocation() {
         //获取位置消息
         if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatLocation.class);
+            return decrypt(ChatLocation.class);
         }
         return null;
     }
 
-    //设置视频消息
+    /******
+     * 设置视频消息
+     * @param chatVideo 视频消息
+     */
     public void setChatVideo(ChatVideo chatVideo) {
-        //设置文本消息
-        if (chatVideo != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_VIDEO);
-            setMessageContent(encrypt(GsonTool.modelToString(chatVideo, ChatVideo.class), null));
-        }
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_VIDEO);
+        setMessageContent(encrypt(chatVideo, ChatVideo.class, secret));
     }
 
-    //获取视频消息
+    /******
+     * 获取视频消息
+     * @return 视频消息
+     */
     public ChatVideo getChatVideo() {
         if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatVideo.class);
+            return decrypt(ChatVideo.class);
         }
         return null;
     }
 
-    //设置文件消息
+    /******
+     * 设置文件消息
+     * @param chatFile 文件消息
+     */
     public void setChatFile(ChatFile chatFile) {
-        if (chatFile != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_FILE);
-            setMessageContent(encrypt(GsonTool.modelToString(chatFile, ChatFile.class), null));
-        }
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_FILE);
+        setMessageContent(encrypt(chatFile, ChatFile.class, secret));
     }
 
-    //获取文件消息
+    /******
+     * 获取文件消息
+     * @return 文件消息
+     */
     public ChatFile getChatFile() {
         if (getMessageType().intValue() == MSG_TYPE_FILE) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatFile.class);
+            return decrypt(ChatFile.class);
         }
         return null;
     }
 
-    //设置自定义消息
+    /******
+     * 设置自定义消息
+     * @param text 自定义消息
+     */
     public void setChatCustom(String text) {
-        if (text != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_CUSTOM);
-            setMessageContent(encrypt(text, null));
-        }
+        String secret = IDGenerateTool.getRandomStr(16);
+        messageType = new BigDecimal(ChatMessage.MSG_TYPE_CUSTOM);
+        setMessageContent(encrypt(text, String.class, secret));
     }
 
-    //获取自定义消息
+    /******
+     * 获取自定义消息
+     * @return 自定义消息
+     */
     public String getChatCustom() {
         if (getMessageType().intValue() == MSG_TYPE_CUSTOM) {
-            return decrypt(getMessageContent(), null);
+            return decrypt(String.class);
         }
         return null;
     }
 
-    //设置文件消息
-    public void setChatAction(ChatAction chatAction) {
-        if (chatAction != null) {
-            messageType = new BigDecimal(ChatMessage.MSG_TYPE_ACTION);
-            setMessageContent(encrypt(GsonTool.modelToString(chatAction, ChatAction.class), null));
-        }
-    }
-
-    //获取文件消息
-    public ChatAction getChatAction() {
-        if (getMessageType().intValue() == MSG_TYPE_ACTION) {
-            String content = decrypt(getMessageContent(), null);
-            return GsonTool.jsonStringToModel(content, ChatAction.class);
-        }
-        return null;
-    }
 
     /*******
      * 加密数据
-     * @param data 数据
-     * @param key  秘钥
-     * @return 加密数据
+     * @param data   数据
+     * @param tClass 类对象
+     * @param secret 秘钥
+     * @return 加密字符串
+     * @param <T> 类型
      */
-    private String encrypt(String data, String key) {
-        if (StringTool.isEmpty(data)) {
+    private <T> String encrypt(T data, Class<T> tClass, String secret) {
+        try {
+            ///设置发送秘钥
+            setMessageSecretSend(secret);
+            ///设置json字符串
+            String jsonStr = GsonTool.modelToString(data, tClass);
+            ///空的
+            if (StringTool.isEmpty(secret)) {
+                //默认Base64解密
+                return Base64.encodeToString(jsonStr.getBytes(), Base64.DEFAULT).replace("\n", "");
+            } else {
+                ///加密数据
+                return AESTool.EncryptECB(jsonStr, secret);
+            }
+        } catch (Exception exception) {
             return null;
         }
-        String retStr = Base64.encodeToString(data.getBytes(), Base64.DEFAULT);
-        return retStr.replace("\n", "");
     }
 
     /*******
      * 解密数据
-     * @param data 数据
-     * @param key  秘钥
+     * @param tClass 类型
      * @return 加密数据
      */
-    private String decrypt(String data, String key) {
-        if (StringTool.isEmpty(data)) {
+    private <T> T decrypt(Class<T> tClass) {
+        try {
+            ///先获取接收的秘钥
+            String secret = getMessageSecretReceive();
+            ///再获取发送的秘钥
+            if (StringTool.isEmpty(secret)) {
+                secret = getMessageSecretSend();
+            }
+            ///获取数据
+            String data = getMessageContent();
+            ///没有秘钥
+            if (StringTool.isEmpty(secret)) {
+                String jsonData = new String(Base64.decode(data.getBytes(), Base64.DEFAULT)).replace("\n", "");
+                return GsonTool.jsonStringToModel(jsonData, tClass);
+            }
+            ///解密数据
+            String jsonData = AESTool.DecryptECB(data, secret);
+            ///返回对象
+            return GsonTool.jsonStringToModel(jsonData, tClass);
+        } catch (Exception exception) {
             return null;
         }
-        String retStr = new String(Base64.decode(data.getBytes(), Base64.DEFAULT));
-        return retStr.replace("\n", "");
     }
 
 }

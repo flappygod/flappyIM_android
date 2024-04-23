@@ -132,6 +132,9 @@ public class GsonTool {
         if (StringTool.isEmpty(jsonStr)) {
             return null;
         }
+        if (cls == String.class) {
+            return (T) jsonStr;
+        }
         return gson.fromJson(jsonStr, cls);
     }
 
@@ -147,6 +150,9 @@ public class GsonTool {
     public static <T> String modelToString(T t, Class<T> cls) {
         if (t == null) {
             return null;
+        }
+        if (cls == String.class) {
+            return (String) t;
         }
         return gson.toJson(t, cls);
     }
@@ -172,7 +178,6 @@ public class GsonTool {
         }
         return array.toString();
     }
-
 
     /******
      * 列表转换
