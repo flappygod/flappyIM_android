@@ -561,11 +561,7 @@ public class ChatMessage {
     private <T> T decrypt(Class<T> tClass) {
         try {
             ///先获取接收的秘钥
-            String secret = getMessageSecretReceive();
-            ///再获取发送的秘钥
-            if (StringTool.isEmpty(secret)) {
-                secret = getMessageSecretSend();
-            }
+            String secret = getMessageSecretSend();
             ///获取数据
             String data = getMessageContent();
             ///没有秘钥

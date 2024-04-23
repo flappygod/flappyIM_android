@@ -16,6 +16,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Config.FlappyConfig;
+import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Tools.NettyAttrTool;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -24,6 +25,8 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
+import com.flappygo.flappyim.Tools.Secret.AESTool;
+import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.FlappyImService;
 
@@ -62,6 +65,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //检查是否是active状态的
     public volatile boolean isActive = false;
 
+    //秘钥
+    private final String secret;
+
     //回调
     public ChannelMsgHandler(HandlerLogin handler, NettyThreadListener deadCallback, ChatUser user) {
         //心跳
@@ -72,6 +78,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         this.deadCallback = deadCallback;
         //用户数据
         this.user = user;
+        //秘钥
+        this.secret = IDGenerateTool.getRandomStr(16);
     }
 
 
@@ -143,12 +151,24 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * 发送登录请求
      * @param ctx ctx
      */
-    private void sendLoginRequest(ChannelHandlerContext ctx) {
+    private void sendLoginRequest(ChannelHandlerContext ctx) throws Exception {
         //创建builder
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
                 .setDevice(FlappyConfig.getInstance().device)
                 .setUserID(this.user.getUserId())
                 .setPushId(StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
+
+        //如果是空
+        if (StringTool.isEmpty(FlappyConfig.getInstance().rsaPublicKey)) {
+            //设置secret
+            loginInfoBuilder.setSecret(this.secret);
+        } else {
+            //设置secret RSA
+            loginInfoBuilder.setSecret(RSATool.encryptWithPublicKey(
+                    FlappyConfig.getInstance().rsaPublicKey,
+                    this.secret
+            ));
+        }
 
         //设置最近的消息偏移量作为请求消息数据
         ChatUser user = DataManager.getInstance().getLoginUser();
@@ -197,6 +217,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             List<ChatMessage> messages = new ArrayList<>();
             for (int s = 0; s < response.getMsgCount(); s++) {
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
+                if (!StringTool.isEmpty(chatMessage.getMessageSecretSend())) {
+                    try {
+                        chatMessage.setMessageSecretSend(AESTool.DecryptECB(
+                                chatMessage.getMessageSecretSend(),
+                                secret
+                        ));
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
                 messages.add(chatMessage);
             }
 
@@ -252,6 +282,17 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         for (int s = 0; s < response.getMsgCount(); s++) {
             //得到真正的消息对象
             ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s));
+            //秘钥解析
+            if (!StringTool.isEmpty(chatMessage.getMessageSecretSend())) {
+                try {
+                    chatMessage.setMessageSecretSend(AESTool.DecryptECB(
+                            chatMessage.getMessageSecretSend(),
+                            secret
+                    ));
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
             //判断数据库是否存在
             ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId(), true);
             //消息到达后的状态改变
@@ -454,8 +495,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             msg.obj = Database.getInstance().getUserSessionByID(message.getMessageSession());
             MessageNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
         }
-
-
     }
 
     /******
@@ -484,7 +523,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             msg.obj = sessionModel;
             MessageNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
         }
-
     }
 
 
@@ -546,7 +584,6 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //发送回执，发送回执后，所有之前的消息都会被列为已经收到，因为端口是阻塞的
             cxt.writeAndFlush(builder.build());
-
         }
     }
 
