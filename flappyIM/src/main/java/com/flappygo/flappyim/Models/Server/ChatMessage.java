@@ -23,6 +23,7 @@ import android.util.Base64;
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
 
 
 public class ChatMessage {
@@ -299,60 +300,56 @@ public class ChatMessage {
     }
 
     ///转换为json数据
-    public JSONObject toJson() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("messageId", messageId);
-            jsonObject.put("messageSession", messageSession);
-            jsonObject.put("messageSessionType", messageSessionType);
-            jsonObject.put("messageSessionOffset", messageSessionOffset);
-            jsonObject.put("messageTableSeq", messageTableSeq);
-            jsonObject.put("messageType", messageType);
-            jsonObject.put("messageSendId", messageSendId);
-            jsonObject.put("messageSendExtendId", messageSendExtendId);
-            jsonObject.put("messageReceiveId", messageReceiveId);
-            jsonObject.put("messageReceiveExtendId", messageReceiveExtendId);
-            jsonObject.put("messageSendState", messageSendState);
-            jsonObject.put("messageReadState", messageReadState);
-            jsonObject.put("messageSecretSend", messageSecretSend);
-            jsonObject.put("messageContent", messageContent);
-            ///转换为json数据
-            switch (messageType.intValue()) {
-                case MSG_TYPE_SYSTEM:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatSystem(), ChatSystem.class));
-                    break;
-                case MSG_TYPE_TEXT:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatText(), String.class));
-                    break;
-                case MSG_TYPE_IMG:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatImage(), ChatImage.class));
-                    break;
-                case MSG_TYPE_VOICE:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatVoice(), ChatVoice.class));
-                    break;
-                case MSG_TYPE_LOCATE:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatLocation(), ChatLocation.class));
-                    break;
-                case MSG_TYPE_VIDEO:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatVideo(), ChatVideo.class));
-                    break;
-                case MSG_TYPE_FILE:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatFile(), ChatFile.class));
-                    break;
-                case MSG_TYPE_CUSTOM:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatCustom(), String.class));
-                    break;
-                case MSG_TYPE_ACTION:
-                    jsonObject.put("messageData", GsonTool.modelToString(getChatAction(), ChatAction.class));
-                    break;
-            }
-            jsonObject.put("isDelete", isDelete);
-            jsonObject.put("messageDate", messageDate);
-            jsonObject.put("deleteDate", deleteDate);
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("messageId", messageId);
+        map.put("messageSession", messageSession);
+        map.put("messageSessionType", messageSessionType);
+        map.put("messageSessionOffset", messageSessionOffset);
+        map.put("messageTableSeq", messageTableSeq);
+        map.put("messageType", messageType);
+        map.put("messageSendId", messageSendId);
+        map.put("messageSendExtendId", messageSendExtendId);
+        map.put("messageReceiveId", messageReceiveId);
+        map.put("messageReceiveExtendId", messageReceiveExtendId);
+        map.put("messageSendState", messageSendState);
+        map.put("messageReadState", messageReadState);
+        map.put("messageSecretSend", messageSecretSend);
+        map.put("messageContent", messageContent);
+        ///转换为json数据
+        switch (messageType.intValue()) {
+            case MSG_TYPE_SYSTEM:
+                map.put("messageData", GsonTool.modelToString(getChatSystem(), ChatSystem.class));
+                break;
+            case MSG_TYPE_TEXT:
+                map.put("messageData", GsonTool.modelToString(getChatText(), String.class));
+                break;
+            case MSG_TYPE_IMG:
+                map.put("messageData", GsonTool.modelToString(getChatImage(), ChatImage.class));
+                break;
+            case MSG_TYPE_VOICE:
+                map.put("messageData", GsonTool.modelToString(getChatVoice(), ChatVoice.class));
+                break;
+            case MSG_TYPE_LOCATE:
+                map.put("messageData", GsonTool.modelToString(getChatLocation(), ChatLocation.class));
+                break;
+            case MSG_TYPE_VIDEO:
+                map.put("messageData", GsonTool.modelToString(getChatVideo(), ChatVideo.class));
+                break;
+            case MSG_TYPE_FILE:
+                map.put("messageData", GsonTool.modelToString(getChatFile(), ChatFile.class));
+                break;
+            case MSG_TYPE_CUSTOM:
+                map.put("messageData", GsonTool.modelToString(getChatCustom(), String.class));
+                break;
+            case MSG_TYPE_ACTION:
+                map.put("messageData", GsonTool.modelToString(getChatAction(), ChatAction.class));
+                break;
         }
-        return jsonObject;
+        map.put("isDelete", isDelete);
+        map.put("messageDate", messageDate);
+        map.put("deleteDate", deleteDate);
+        return map;
     }
 
 
