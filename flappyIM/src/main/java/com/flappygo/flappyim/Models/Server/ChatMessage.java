@@ -15,10 +15,10 @@ import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TimeTool;
 
+import org.json.JSONException;
 import java.math.BigDecimal;
-
 import android.util.Base64;
-
+import org.json.JSONObject;
 import java.util.Date;
 
 
@@ -294,6 +294,63 @@ public class ChatMessage {
         messageDate = TimeTool.strToDate(msg.getMessageDate());
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
+
+
+    ///转换为json数据
+    public JSONObject toJson() throws JSONException {
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("messageId",messageId);
+        jsonObject.put("messageSession",messageSession);
+        jsonObject.put("messageSessionType",messageSessionType);
+        jsonObject.put("messageSessionOffset",messageSessionOffset);
+        jsonObject.put("messageTableSeq",messageTableSeq);
+        jsonObject.put("messageType",messageType);
+        jsonObject.put("messageSendId",messageSendId);
+        jsonObject.put("messageSendExtendId",messageSendExtendId);
+        jsonObject.put("messageReceiveId",messageReceiveId);
+        jsonObject.put("messageReceiveExtendId",messageReceiveExtendId);
+        jsonObject.put("messageSendState",messageSendState);
+        jsonObject.put("messageReadState",messageReadState);
+        jsonObject.put("messageSecretSend",messageSecretSend);
+        jsonObject.put("messageContent",messageContent);
+
+        ///转换为json数据
+        switch (messageType.intValue()){
+            case  MSG_TYPE_SYSTEM:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatSystem(),ChatSystem.class));
+                break;
+            case  MSG_TYPE_TEXT:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatText(),String.class));
+                break;
+            case  MSG_TYPE_IMG:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatImage(),ChatImage.class));
+                break;
+            case  MSG_TYPE_VOICE:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatVoice(),ChatVoice.class));
+                break;
+            case  MSG_TYPE_LOCATE:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatLocation(),ChatLocation.class));
+                break;
+            case  MSG_TYPE_VIDEO:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatVideo(),ChatVideo.class));
+                break;
+            case  MSG_TYPE_FILE:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatFile(),ChatFile.class));
+                break;
+            case  MSG_TYPE_CUSTOM:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatCustom(),String.class));
+                break;
+            case  MSG_TYPE_ACTION:
+                jsonObject.put("messageData",GsonTool.modelToString(getChatAction(),ChatAction.class));
+                break;
+        }
+
+        jsonObject.put("isDelete",isDelete);
+        jsonObject.put("messageDate",messageDate);
+        jsonObject.put("deleteDate",deleteDate);
+        return jsonObject;
+    }
+
 
 
     //转换为protoc消息
