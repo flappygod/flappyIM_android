@@ -20,9 +20,6 @@ public class FlappyConfig {
     //当前是正式环境
     public String pushPlat = "Google";
 
-    //RSA加密的公钥
-    public String rsaPublicKey;
-
     //链接的http服务器器的地址192.168.124.105
     public String serverUrl;
 
@@ -136,11 +133,4 @@ public class FlappyConfig {
         this.serverUploadUrl = serverUploadUrl;
     }
 
-    /******
-     * 设置RSA公钥对于加密
-     * @param rsaPublicKey RSA公钥
-     */
-    public void setRsaPublicKey(String rsaPublicKey) {
-        this.rsaPublicKey = rsaPublicKey;
-    }
 }

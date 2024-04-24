@@ -32,6 +32,9 @@ public class DataManager {
     // 推送ID的保存
     private final static String KEY_FOR_PUSH_ID = "com.flappy.im.data.KEY_FOR_PUSH_ID";
 
+    // RSA Public key
+    private final static String KEY_FOR_RSA_KEY = "com.flappy.im.data.KEY_FOR_RSA_KEY";
+
     // 推送设置信息
     private final static String KEY_FOR_PUSH_SETTING = "com.flappy.im.data.KEY_FOR_PUSH_SETTING";
 
@@ -153,6 +156,28 @@ public class DataManager {
         );
         return mSharedPreferences.getString(KEY_FOR_PUSH_ID, StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
     }
+
+
+    //保存RSA
+    public void saveRSAKey(String rsaKey) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_RSA_KEY, rsaKey);
+        editor.apply();
+    }
+
+    //获取用户的推送ID
+    public String getRSAKey() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        return mSharedPreferences.getString(KEY_FOR_RSA_KEY, StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
+    }
+
 
     //保存会话
     public void saveChatSession(String key, FlappyChatSession chatSession) {

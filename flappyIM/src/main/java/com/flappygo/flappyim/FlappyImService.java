@@ -274,7 +274,7 @@ public class FlappyImService {
                 timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     getAppContext().registerReceiver(netReceiver, timeFilter, Context.RECEIVER_NOT_EXPORTED);
-                }else{
+                } else {
                     getAppContext().registerReceiver(netReceiver, timeFilter);
                 }
                 receiverRegistered = true;
@@ -488,7 +488,15 @@ public class FlappyImService {
      * @param publicKey 公钥
      */
     public void setRsaPublicKey(String publicKey) {
-        FlappyConfig.getInstance().setRsaPublicKey(publicKey);
+        DataManager.getInstance().saveRSAKey(publicKey);
+    }
+
+
+    /******
+     * 数据登录加密公钥
+     */
+    public String getRsaPublicKey() {
+        return DataManager.getInstance().getRSAKey();
     }
 
     /******
@@ -1573,11 +1581,11 @@ public class FlappyImService {
 
             @Override
             public void success(List<FlappyChatSession> data, String tag) {
-                if(data!=null&&!data.isEmpty()){
+                if (data != null && !data.isEmpty()) {
                     if (callback != null) {
                         callback.success(data);
                     }
-                }else{
+                } else {
                     getUserSessionsHttp(callback);
                 }
             }

@@ -108,8 +108,6 @@ public class ChatMessage {
 
     private String messageSecretSend;
 
-    private String messageSecretReceive;
-
     private Date messageDate;
 
     private BigDecimal isDelete;
@@ -230,14 +228,6 @@ public class ChatMessage {
         this.messageSecretSend = messageSecretSend;
     }
 
-    public String getMessageSecretReceive() {
-        return messageSecretReceive;
-    }
-
-    public void setMessageSecretReceive(String messageSecretReceive) {
-        this.messageSecretReceive = messageSecretReceive;
-    }
-
     public Date getMessageDate() {
         return messageDate;
     }
@@ -270,8 +260,9 @@ public class ChatMessage {
         this.messageStamp = messageStamp;
     }
 
+
     //消息
-    public ChatMessage(Flappy.Message msg) {
+    public ChatMessage(Flappy.Message msg, String secret) {
         messageId = msg.getMessageId();
         messageSession = String.valueOf(msg.getMessageSession());
         messageSessionType = new BigDecimal(msg.getMessageSessionType());
@@ -285,15 +276,28 @@ public class ChatMessage {
         messageContent = msg.getMessageContent();
         messageSendState = new BigDecimal(msg.getMessageSendState());
         messageReadState = new BigDecimal(msg.getMessageReadState());
+
+        ///不为空时设置
         messageSecretSend = msg.getMessageSecretSend();
-        messageSecretReceive = msg.getMessageSecretReceive();
+        if (!StringTool.isEmpty(msg.getMessageSecretSend())) {
+            try {
+                messageSecretSend = AESTool.DecryptECB(
+                        msg.getMessageSecretSend(),
+                        secret
+                );
+            } catch (Exception ex) {
+                messageSecretSend = msg.getMessageSecretSend();
+            }
+        }
+
         isDelete = new BigDecimal(msg.getIsDelete());
         messageDate = TimeTool.strToDate(msg.getMessageDate());
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
 
+
     //转换为protoc消息
-    public Flappy.Message toProtocMessage(Flappy.Message.Builder msgBuilder) {
+    public Flappy.Message toProtocMessage(Flappy.Message.Builder msgBuilder, String secret) {
         //转换消息
         if (getMessageId() != null)
             msgBuilder.setMessageId(getMessageId());
@@ -321,10 +325,13 @@ public class ChatMessage {
             msgBuilder.setMessageSendState(StringTool.decimalToInt(getMessageSendState()));
         if (getMessageReadState() != null)
             msgBuilder.setMessageReadState(StringTool.decimalToInt(getMessageReadState()));
-        if (getMessageSecretSend() != null)
-            msgBuilder.setMessageSecretSend(getMessageSecretSend());
-        if (getMessageSecretReceive() != null)
-            msgBuilder.setMessageSecretReceive(getMessageSecretReceive());
+        if (!StringTool.isEmpty(getMessageSecretSend())) {
+            try {
+                msgBuilder.setMessageSecretSend(AESTool.EncryptECB(getMessageSecretSend(), secret));
+            } catch (Exception exception) {
+                msgBuilder.setMessageSecretSend(getMessageSecretSend());
+            }
+        }
         if (getMessageDate() != null)
             msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
