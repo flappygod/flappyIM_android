@@ -175,7 +175,7 @@ public class DataManager {
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
-        return mSharedPreferences.getString(KEY_FOR_RSA_KEY, StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
+        return mSharedPreferences.getString(KEY_FOR_RSA_KEY, null);
     }
 
 
