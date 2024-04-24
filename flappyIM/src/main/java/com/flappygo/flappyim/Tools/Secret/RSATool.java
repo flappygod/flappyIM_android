@@ -1,5 +1,7 @@
 package com.flappygo.flappyim.Tools.Secret;
 
+import android.util.Base64;
+
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
@@ -49,7 +51,7 @@ public class RSATool {
         byte[] encryptedBytes = encryptCipher.doFinal(originalBytes);
 
         //返回
-        return android.util.Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT).replace("\n","");
+        return android.util.Base64.encodeToString(encryptedBytes, Base64.NO_WRAP);
     }
 
 

@@ -607,7 +607,7 @@ public class ChatMessage {
             ///空的
             if (StringTool.isEmpty(secret)) {
                 //默认Base64解密
-                return Base64.encodeToString(jsonStr.getBytes(), Base64.DEFAULT).replace("\n", "");
+                return Base64.encodeToString(jsonStr.getBytes(), Base64.NO_WRAP);
             } else {
                 ///加密数据
                 return AESTool.EncryptECB(jsonStr, secret);
@@ -630,7 +630,7 @@ public class ChatMessage {
             String data = getMessageContent();
             ///没有秘钥
             if (StringTool.isEmpty(secret)) {
-                String jsonData = new String(Base64.decode(data.getBytes(), Base64.DEFAULT)).replace("\n", "");
+                String jsonData = new String(Base64.decode(data.getBytes(), Base64.NO_WRAP));
                 return GsonTool.jsonStringToModel(jsonData, tClass);
             }
             ///解密数据

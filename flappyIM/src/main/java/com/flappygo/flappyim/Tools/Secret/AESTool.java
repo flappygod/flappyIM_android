@@ -32,7 +32,7 @@ public class AESTool {
         //Encrypt
         byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
         //base64
-        return Base64.encodeToString(encrypted, Base64.DEFAULT).replace("\n", "");
+        return Base64.encodeToString(encrypted, Base64.NO_WRAP);
     }
 
     //Decrypt CBC
@@ -54,11 +54,11 @@ public class AESTool {
         //set
         cipher.init(Cipher.DECRYPT_MODE, sKeySpec, zeroIv);
         //base 64
-        byte[] encrypted1 = Base64.decode(sSrc, Base64.DEFAULT);
+        byte[] encrypted1 = Base64.decode(sSrc, Base64.NO_WRAP);
         //original
         byte[] original = cipher.doFinal(encrypted1);
         //set string
-        return new String(original, "utf-8").replace("\n", "");
+        return new String(original, "utf-8");
     }
 
     //Encrypt ECB
@@ -80,7 +80,7 @@ public class AESTool {
         //Encrypt
         byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
         //base64
-        return Base64.encodeToString(encrypted, Base64.DEFAULT).replace("\n", "");
+        return Base64.encodeToString(encrypted, Base64.NO_WRAP);
     }
 
     //Decrypt ECB
@@ -100,10 +100,10 @@ public class AESTool {
         //Decrypt
         cipher.init(Cipher.DECRYPT_MODE, sKeySpec);
         //base64
-        byte[] encrypted1 = Base64.decode(sSrc, Base64.DEFAULT);
+        byte[] encrypted1 = Base64.decode(sSrc, Base64.NO_WRAP);
         //Decrypt
         byte[] original = cipher.doFinal(encrypted1);
         //ret string
-        return new String(original, "utf-8").replace("\n", "");
+        return new String(original, "utf-8");
     }
 }
