@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 //数据库创建
 public class DatabaseHelper extends SQLiteOpenHelper {
