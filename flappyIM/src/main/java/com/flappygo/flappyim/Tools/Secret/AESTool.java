@@ -32,7 +32,7 @@ public class AESTool {
         //Encrypt
         byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
         //base64
-        return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        return Base64.encodeToString(encrypted, Base64.DEFAULT).replace("\n", "");
     }
 
     //Decrypt CBC
@@ -58,7 +58,7 @@ public class AESTool {
         //original
         byte[] original = cipher.doFinal(encrypted1);
         //set string
-        return new String(original, "utf-8");
+        return new String(original, "utf-8").replace("\n", "");
     }
 
     //Encrypt ECB
@@ -80,7 +80,7 @@ public class AESTool {
         //Encrypt
         byte[] encrypted = cipher.doFinal(sSrc.getBytes("utf-8"));
         //base64
-        return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        return Base64.encodeToString(encrypted, Base64.DEFAULT).replace("\n", "");
     }
 
     //Decrypt ECB
@@ -104,6 +104,6 @@ public class AESTool {
         //Decrypt
         byte[] original = cipher.doFinal(encrypted1);
         //ret string
-        return new String(original, "utf-8");
+        return new String(original, "utf-8").replace("\n", "");
     }
 }
