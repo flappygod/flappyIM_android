@@ -112,15 +112,13 @@ message Message{
   //消息是否已经被阅读
   int32 messageReadState = 13;
   //消息发送秘钥
-  string messageSecretSend = 14; 
-  //消息发送秘钥
-  string messageSecretReceive = 15; 
+  string messageSecret = 14; 
   //消息时间
-  string messageDate = 16;
+  string messageDate = 15;
   //消息是否被删除
-  int32 isDelete = 17;
+  int32 isDelete = 16;
   //消息删除日期
-  string deleteDate = 18;
+  string deleteDate = 17;
 }
 
 

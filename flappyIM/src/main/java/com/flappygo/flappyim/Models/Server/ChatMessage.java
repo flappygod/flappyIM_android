@@ -110,7 +110,7 @@ public class ChatMessage {
 
     private BigDecimal messageReadState;
 
-    private String messageSecretSend;
+    private String messageSecret;
 
     private Date messageDate;
 
@@ -224,12 +224,12 @@ public class ChatMessage {
         this.messageReadState = messageReadState;
     }
 
-    public String getMessageSecretSend() {
-        return messageSecretSend;
+    public String getMessageSecret() {
+        return messageSecret;
     }
 
-    public void setMessageSecretSend(String messageSecretSend) {
-        this.messageSecretSend = messageSecretSend;
+    public void setMessageSecret(String messageSecret) {
+        this.messageSecret = messageSecret;
     }
 
     public Date getMessageDate() {
@@ -282,15 +282,15 @@ public class ChatMessage {
         messageReadState = new BigDecimal(msg.getMessageReadState());
 
         ///不为空时设置
-        messageSecretSend = msg.getMessageSecretSend();
-        if (!StringTool.isEmpty(msg.getMessageSecretSend())) {
+        messageSecret = msg.getMessageSecret();
+        if (!StringTool.isEmpty(msg.getMessageSecret())) {
             try {
-                messageSecretSend = AESTool.DecryptECB(
-                        msg.getMessageSecretSend(),
+                messageSecret = AESTool.DecryptECB(
+                        msg.getMessageSecret(),
                         secret
                 );
             } catch (Exception ex) {
-                messageSecretSend = msg.getMessageSecretSend();
+                messageSecret = msg.getMessageSecret();
             }
         }
 
@@ -314,7 +314,7 @@ public class ChatMessage {
         map.put("messageReceiveExtendId", messageReceiveExtendId);
         map.put("messageSendState", messageSendState);
         map.put("messageReadState", messageReadState);
-        map.put("messageSecretSend", messageSecretSend);
+        map.put("messageSecret", messageSecret);
         map.put("messageContent", messageContent);
         ///转换为json数据
         switch (messageType.intValue()) {
@@ -382,11 +382,11 @@ public class ChatMessage {
             msgBuilder.setMessageSendState(StringTool.decimalToInt(getMessageSendState()));
         if (getMessageReadState() != null)
             msgBuilder.setMessageReadState(StringTool.decimalToInt(getMessageReadState()));
-        if (!StringTool.isEmpty(getMessageSecretSend())) {
+        if (!StringTool.isEmpty(getMessageSecret())) {
             try {
-                msgBuilder.setMessageSecretSend(AESTool.EncryptECB(getMessageSecretSend(), secret));
+                msgBuilder.setMessageSecret(AESTool.EncryptECB(getMessageSecret(), secret));
             } catch (Exception exception) {
-                msgBuilder.setMessageSecretSend(getMessageSecretSend());
+                msgBuilder.setMessageSecret(getMessageSecret());
             }
         }
         if (getMessageDate() != null)
@@ -601,7 +601,7 @@ public class ChatMessage {
     private <T> String encrypt(T data, Class<T> tClass, String secret) {
         try {
             ///设置发送秘钥
-            setMessageSecretSend(secret);
+            setMessageSecret(secret);
             ///设置json字符串
             String jsonStr = GsonTool.modelToString(data, tClass);
             ///空的
@@ -625,7 +625,7 @@ public class ChatMessage {
     private <T> T decrypt(Class<T> tClass) {
         try {
             ///先获取接收的秘钥
-            String secret = getMessageSecretSend();
+            String secret = getMessageSecret();
             ///获取数据
             String data = getMessageContent();
             ///没有秘钥

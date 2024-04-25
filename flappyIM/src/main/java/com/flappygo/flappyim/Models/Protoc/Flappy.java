@@ -8695,47 +8695,27 @@ public final class Flappy {
      *消息发送秘钥
      * </pre>
      *
-     * <code>string messageSecretSend = 14;</code>
-     * @return The messageSecretSend.
+     * <code>string messageSecret = 14;</code>
+     * @return The messageSecret.
      */
-    String getMessageSecretSend();
+    String getMessageSecret();
     /**
      * <pre>
      *消息发送秘钥
      * </pre>
      *
-     * <code>string messageSecretSend = 14;</code>
-     * @return The bytes for messageSecretSend.
+     * <code>string messageSecret = 14;</code>
+     * @return The bytes for messageSecret.
      */
     com.google.protobuf.ByteString
-        getMessageSecretSendBytes();
-
-    /**
-     * <pre>
-     *消息发送秘钥
-     * </pre>
-     *
-     * <code>string messageSecretReceive = 15;</code>
-     * @return The messageSecretReceive.
-     */
-    String getMessageSecretReceive();
-    /**
-     * <pre>
-     *消息发送秘钥
-     * </pre>
-     *
-     * <code>string messageSecretReceive = 15;</code>
-     * @return The bytes for messageSecretReceive.
-     */
-    com.google.protobuf.ByteString
-        getMessageSecretReceiveBytes();
+        getMessageSecretBytes();
 
     /**
      * <pre>
      *消息时间
      * </pre>
      *
-     * <code>string messageDate = 16;</code>
+     * <code>string messageDate = 15;</code>
      * @return The messageDate.
      */
     String getMessageDate();
@@ -8744,7 +8724,7 @@ public final class Flappy {
      *消息时间
      * </pre>
      *
-     * <code>string messageDate = 16;</code>
+     * <code>string messageDate = 15;</code>
      * @return The bytes for messageDate.
      */
     com.google.protobuf.ByteString
@@ -8755,7 +8735,7 @@ public final class Flappy {
      *消息是否被删除
      * </pre>
      *
-     * <code>int32 isDelete = 17;</code>
+     * <code>int32 isDelete = 16;</code>
      * @return The isDelete.
      */
     int getIsDelete();
@@ -8765,7 +8745,7 @@ public final class Flappy {
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 18;</code>
+     * <code>string deleteDate = 17;</code>
      * @return The deleteDate.
      */
     String getDeleteDate();
@@ -8774,7 +8754,7 @@ public final class Flappy {
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 18;</code>
+     * <code>string deleteDate = 17;</code>
      * @return The bytes for deleteDate.
      */
     com.google.protobuf.ByteString
@@ -8797,8 +8777,7 @@ public final class Flappy {
       messageSendExtendId_ = "";
       messageReceiveExtendId_ = "";
       messageContent_ = "";
-      messageSecretSend_ = "";
-      messageSecretReceive_ = "";
+      messageSecret_ = "";
       messageDate_ = "";
       deleteDate_ = "";
     }
@@ -8905,27 +8884,21 @@ public final class Flappy {
             case 114: {
               String s = input.readStringRequireUtf8();
 
-              messageSecretSend_ = s;
+              messageSecret_ = s;
               break;
             }
             case 122: {
               String s = input.readStringRequireUtf8();
 
-              messageSecretReceive_ = s;
-              break;
-            }
-            case 130: {
-              String s = input.readStringRequireUtf8();
-
               messageDate_ = s;
               break;
             }
-            case 136: {
+            case 128: {
 
               isDelete_ = input.readInt32();
               break;
             }
-            case 146: {
+            case 138: {
               String s = input.readStringRequireUtf8();
 
               deleteDate_ = s;
@@ -9284,26 +9257,26 @@ public final class Flappy {
       return messageReadState_;
     }
 
-    public static final int MESSAGESECRETSEND_FIELD_NUMBER = 14;
-    private volatile Object messageSecretSend_;
+    public static final int MESSAGESECRET_FIELD_NUMBER = 14;
+    private volatile Object messageSecret_;
     /**
      * <pre>
      *消息发送秘钥
      * </pre>
      *
-     * <code>string messageSecretSend = 14;</code>
-     * @return The messageSecretSend.
+     * <code>string messageSecret = 14;</code>
+     * @return The messageSecret.
      */
     @Override
-    public String getMessageSecretSend() {
-      Object ref = messageSecretSend_;
+    public String getMessageSecret() {
+      Object ref = messageSecret_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        messageSecretSend_ = s;
+        messageSecret_ = s;
         return s;
       }
     }
@@ -9312,78 +9285,32 @@ public final class Flappy {
      *消息发送秘钥
      * </pre>
      *
-     * <code>string messageSecretSend = 14;</code>
-     * @return The bytes for messageSecretSend.
+     * <code>string messageSecret = 14;</code>
+     * @return The bytes for messageSecret.
      */
     @Override
     public com.google.protobuf.ByteString
-        getMessageSecretSendBytes() {
-      Object ref = messageSecretSend_;
+        getMessageSecretBytes() {
+      Object ref = messageSecret_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        messageSecretSend_ = b;
+        messageSecret_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int MESSAGESECRETRECEIVE_FIELD_NUMBER = 15;
-    private volatile Object messageSecretReceive_;
-    /**
-     * <pre>
-     *消息发送秘钥
-     * </pre>
-     *
-     * <code>string messageSecretReceive = 15;</code>
-     * @return The messageSecretReceive.
-     */
-    @Override
-    public String getMessageSecretReceive() {
-      Object ref = messageSecretReceive_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        messageSecretReceive_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     *消息发送秘钥
-     * </pre>
-     *
-     * <code>string messageSecretReceive = 15;</code>
-     * @return The bytes for messageSecretReceive.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getMessageSecretReceiveBytes() {
-      Object ref = messageSecretReceive_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        messageSecretReceive_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int MESSAGEDATE_FIELD_NUMBER = 16;
+    public static final int MESSAGEDATE_FIELD_NUMBER = 15;
     private volatile Object messageDate_;
     /**
      * <pre>
      *消息时间
      * </pre>
      *
-     * <code>string messageDate = 16;</code>
+     * <code>string messageDate = 15;</code>
      * @return The messageDate.
      */
     @Override
@@ -9404,7 +9331,7 @@ public final class Flappy {
      *消息时间
      * </pre>
      *
-     * <code>string messageDate = 16;</code>
+     * <code>string messageDate = 15;</code>
      * @return The bytes for messageDate.
      */
     @Override
@@ -9422,14 +9349,14 @@ public final class Flappy {
       }
     }
 
-    public static final int ISDELETE_FIELD_NUMBER = 17;
+    public static final int ISDELETE_FIELD_NUMBER = 16;
     private int isDelete_;
     /**
      * <pre>
      *消息是否被删除
      * </pre>
      *
-     * <code>int32 isDelete = 17;</code>
+     * <code>int32 isDelete = 16;</code>
      * @return The isDelete.
      */
     @Override
@@ -9437,14 +9364,14 @@ public final class Flappy {
       return isDelete_;
     }
 
-    public static final int DELETEDATE_FIELD_NUMBER = 18;
+    public static final int DELETEDATE_FIELD_NUMBER = 17;
     private volatile Object deleteDate_;
     /**
      * <pre>
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 18;</code>
+     * <code>string deleteDate = 17;</code>
      * @return The deleteDate.
      */
     @Override
@@ -9465,7 +9392,7 @@ public final class Flappy {
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 18;</code>
+     * <code>string deleteDate = 17;</code>
      * @return The bytes for deleteDate.
      */
     @Override
@@ -9536,20 +9463,17 @@ public final class Flappy {
       if (messageReadState_ != 0) {
         output.writeInt32(13, messageReadState_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSecretSend_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, messageSecretSend_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSecretReceive_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 15, messageSecretReceive_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSecret_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 14, messageSecret_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDate_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 16, messageDate_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 15, messageDate_);
       }
       if (isDelete_ != 0) {
-        output.writeInt32(17, isDelete_);
+        output.writeInt32(16, isDelete_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deleteDate_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 18, deleteDate_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 17, deleteDate_);
       }
       unknownFields.writeTo(output);
     }
@@ -9608,21 +9532,18 @@ public final class Flappy {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(13, messageReadState_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSecretSend_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, messageSecretSend_);
-      }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSecretReceive_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, messageSecretReceive_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageSecret_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(14, messageSecret_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDate_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(16, messageDate_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, messageDate_);
       }
       if (isDelete_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(17, isDelete_);
+          .computeInt32Size(16, isDelete_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deleteDate_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(18, deleteDate_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(17, deleteDate_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -9665,10 +9586,8 @@ public final class Flappy {
           != other.getMessageSendState()) return false;
       if (getMessageReadState()
           != other.getMessageReadState()) return false;
-      if (!getMessageSecretSend()
-          .equals(other.getMessageSecretSend())) return false;
-      if (!getMessageSecretReceive()
-          .equals(other.getMessageSecretReceive())) return false;
+      if (!getMessageSecret()
+          .equals(other.getMessageSecret())) return false;
       if (!getMessageDate()
           .equals(other.getMessageDate())) return false;
       if (getIsDelete()
@@ -9716,10 +9635,8 @@ public final class Flappy {
       hash = (53 * hash) + getMessageSendState();
       hash = (37 * hash) + MESSAGEREADSTATE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageReadState();
-      hash = (37 * hash) + MESSAGESECRETSEND_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageSecretSend().hashCode();
-      hash = (37 * hash) + MESSAGESECRETRECEIVE_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageSecretReceive().hashCode();
+      hash = (37 * hash) + MESSAGESECRET_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageSecret().hashCode();
       hash = (37 * hash) + MESSAGEDATE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageDate().hashCode();
       hash = (37 * hash) + ISDELETE_FIELD_NUMBER;
@@ -9885,9 +9802,7 @@ public final class Flappy {
 
         messageReadState_ = 0;
 
-        messageSecretSend_ = "";
-
-        messageSecretReceive_ = "";
+        messageSecret_ = "";
 
         messageDate_ = "";
 
@@ -9934,8 +9849,7 @@ public final class Flappy {
         result.messageContent_ = messageContent_;
         result.messageSendState_ = messageSendState_;
         result.messageReadState_ = messageReadState_;
-        result.messageSecretSend_ = messageSecretSend_;
-        result.messageSecretReceive_ = messageSecretReceive_;
+        result.messageSecret_ = messageSecret_;
         result.messageDate_ = messageDate_;
         result.isDelete_ = isDelete_;
         result.deleteDate_ = deleteDate_;
@@ -10030,12 +9944,8 @@ public final class Flappy {
         if (other.getMessageReadState() != 0) {
           setMessageReadState(other.getMessageReadState());
         }
-        if (!other.getMessageSecretSend().isEmpty()) {
-          messageSecretSend_ = other.messageSecretSend_;
-          onChanged();
-        }
-        if (!other.getMessageSecretReceive().isEmpty()) {
-          messageSecretReceive_ = other.messageSecretReceive_;
+        if (!other.getMessageSecret().isEmpty()) {
+          messageSecret_ = other.messageSecret_;
           onChanged();
         }
         if (!other.getMessageDate().isEmpty()) {
@@ -10849,22 +10759,22 @@ public final class Flappy {
         return this;
       }
 
-      private Object messageSecretSend_ = "";
+      private Object messageSecret_ = "";
       /**
        * <pre>
        *消息发送秘钥
        * </pre>
        *
-       * <code>string messageSecretSend = 14;</code>
-       * @return The messageSecretSend.
+       * <code>string messageSecret = 14;</code>
+       * @return The messageSecret.
        */
-      public String getMessageSecretSend() {
-        Object ref = messageSecretSend_;
+      public String getMessageSecret() {
+        Object ref = messageSecret_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
-          messageSecretSend_ = s;
+          messageSecret_ = s;
           return s;
         } else {
           return (String) ref;
@@ -10875,17 +10785,17 @@ public final class Flappy {
        *消息发送秘钥
        * </pre>
        *
-       * <code>string messageSecretSend = 14;</code>
-       * @return The bytes for messageSecretSend.
+       * <code>string messageSecret = 14;</code>
+       * @return The bytes for messageSecret.
        */
       public com.google.protobuf.ByteString
-          getMessageSecretSendBytes() {
-        Object ref = messageSecretSend_;
+          getMessageSecretBytes() {
+        Object ref = messageSecret_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
-          messageSecretSend_ = b;
+          messageSecret_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -10896,17 +10806,17 @@ public final class Flappy {
        *消息发送秘钥
        * </pre>
        *
-       * <code>string messageSecretSend = 14;</code>
-       * @param value The messageSecretSend to set.
+       * <code>string messageSecret = 14;</code>
+       * @param value The messageSecret to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageSecretSend(
+      public Builder setMessageSecret(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        messageSecretSend_ = value;
+        messageSecret_ = value;
         onChanged();
         return this;
       }
@@ -10915,12 +10825,12 @@ public final class Flappy {
        *消息发送秘钥
        * </pre>
        *
-       * <code>string messageSecretSend = 14;</code>
+       * <code>string messageSecret = 14;</code>
        * @return This builder for chaining.
        */
-      public Builder clearMessageSecretSend() {
+      public Builder clearMessageSecret() {
         
-        messageSecretSend_ = getDefaultInstance().getMessageSecretSend();
+        messageSecret_ = getDefaultInstance().getMessageSecret();
         onChanged();
         return this;
       }
@@ -10929,114 +10839,18 @@ public final class Flappy {
        *消息发送秘钥
        * </pre>
        *
-       * <code>string messageSecretSend = 14;</code>
-       * @param value The bytes for messageSecretSend to set.
+       * <code>string messageSecret = 14;</code>
+       * @param value The bytes for messageSecret to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageSecretSendBytes(
+      public Builder setMessageSecretBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        messageSecretSend_ = value;
-        onChanged();
-        return this;
-      }
-
-      private Object messageSecretReceive_ = "";
-      /**
-       * <pre>
-       *消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecretReceive = 15;</code>
-       * @return The messageSecretReceive.
-       */
-      public String getMessageSecretReceive() {
-        Object ref = messageSecretReceive_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          messageSecretReceive_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       *消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecretReceive = 15;</code>
-       * @return The bytes for messageSecretReceive.
-       */
-      public com.google.protobuf.ByteString
-          getMessageSecretReceiveBytes() {
-        Object ref = messageSecretReceive_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          messageSecretReceive_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       *消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecretReceive = 15;</code>
-       * @param value The messageSecretReceive to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageSecretReceive(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        messageSecretReceive_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecretReceive = 15;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearMessageSecretReceive() {
-        
-        messageSecretReceive_ = getDefaultInstance().getMessageSecretReceive();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecretReceive = 15;</code>
-       * @param value The bytes for messageSecretReceive to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageSecretReceiveBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        messageSecretReceive_ = value;
+        messageSecret_ = value;
         onChanged();
         return this;
       }
@@ -11047,7 +10861,7 @@ public final class Flappy {
        *消息时间
        * </pre>
        *
-       * <code>string messageDate = 16;</code>
+       * <code>string messageDate = 15;</code>
        * @return The messageDate.
        */
       public String getMessageDate() {
@@ -11067,7 +10881,7 @@ public final class Flappy {
        *消息时间
        * </pre>
        *
-       * <code>string messageDate = 16;</code>
+       * <code>string messageDate = 15;</code>
        * @return The bytes for messageDate.
        */
       public com.google.protobuf.ByteString
@@ -11088,7 +10902,7 @@ public final class Flappy {
        *消息时间
        * </pre>
        *
-       * <code>string messageDate = 16;</code>
+       * <code>string messageDate = 15;</code>
        * @param value The messageDate to set.
        * @return This builder for chaining.
        */
@@ -11107,7 +10921,7 @@ public final class Flappy {
        *消息时间
        * </pre>
        *
-       * <code>string messageDate = 16;</code>
+       * <code>string messageDate = 15;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageDate() {
@@ -11121,7 +10935,7 @@ public final class Flappy {
        *消息时间
        * </pre>
        *
-       * <code>string messageDate = 16;</code>
+       * <code>string messageDate = 15;</code>
        * @param value The bytes for messageDate to set.
        * @return This builder for chaining.
        */
@@ -11143,7 +10957,7 @@ public final class Flappy {
        *消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 17;</code>
+       * <code>int32 isDelete = 16;</code>
        * @return The isDelete.
        */
       @Override
@@ -11155,7 +10969,7 @@ public final class Flappy {
        *消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 17;</code>
+       * <code>int32 isDelete = 16;</code>
        * @param value The isDelete to set.
        * @return This builder for chaining.
        */
@@ -11170,7 +10984,7 @@ public final class Flappy {
        *消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 17;</code>
+       * <code>int32 isDelete = 16;</code>
        * @return This builder for chaining.
        */
       public Builder clearIsDelete() {
@@ -11186,7 +11000,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 18;</code>
+       * <code>string deleteDate = 17;</code>
        * @return The deleteDate.
        */
       public String getDeleteDate() {
@@ -11206,7 +11020,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 18;</code>
+       * <code>string deleteDate = 17;</code>
        * @return The bytes for deleteDate.
        */
       public com.google.protobuf.ByteString
@@ -11227,7 +11041,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 18;</code>
+       * <code>string deleteDate = 17;</code>
        * @param value The deleteDate to set.
        * @return This builder for chaining.
        */
@@ -11246,7 +11060,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 18;</code>
+       * <code>string deleteDate = 17;</code>
        * @return This builder for chaining.
        */
       public Builder clearDeleteDate() {
@@ -11260,7 +11074,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 18;</code>
+       * <code>string deleteDate = 17;</code>
        * @param value The bytes for deleteDate to set.
        * @return This builder for chaining.
        */
@@ -14371,7 +14185,7 @@ public final class Flappy {
       "(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n\014sessionStam" +
       "p\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t\022\031\n\021se" +
       "ssionCreateUser\030\n \001(\t\022\020\n\010isDelete\030\013 \001(\005\022" +
-      "\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\312\003\n\007M" +
+      "\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\250\003\n\007M" +
       "essage\022\021\n\tmessageId\030\001 \001(\t\022\026\n\016messageSess" +
       "ion\030\002 \001(\003\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n" +
       "\024messageSessionOffset\030\004 \001(\005\022\027\n\017messageTa" +
@@ -14380,16 +14194,15 @@ public final class Flappy {
       "\010 \001(\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036\n\026messa" +
       "geReceiveExtendId\030\n \001(\t\022\026\n\016messageConten" +
       "t\030\013 \001(\t\022\030\n\020messageSendState\030\014 \001(\005\022\030\n\020mes" +
-      "sageReadState\030\r \001(\005\022\031\n\021messageSecretSend" +
-      "\030\016 \001(\t\022\034\n\024messageSecretReceive\030\017 \001(\t\022\023\n\013" +
-      "messageDate\030\020 \001(\t\022\020\n\010isDelete\030\021 \001(\005\022\022\n\nd" +
-      "eleteDate\030\022 \001(\t\"I\n\013FlappyKafka\022\014\n\004type\030\001" +
-      " \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\013" +
-      "2\010.Message\"\253\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\016\n\006" +
-      "device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022\020\n\010pushType" +
-      "\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pushLanguage" +
-      "\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022\025\n\rpushNoDis" +
-      "turb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006proto3"
+      "sageReadState\030\r \001(\005\022\025\n\rmessageSecret\030\016 \001" +
+      "(\t\022\023\n\013messageDate\030\017 \001(\t\022\020\n\010isDelete\030\020 \001(" +
+      "\005\022\022\n\ndeleteDate\030\021 \001(\t\"I\n\013FlappyKafka\022\014\n\004" +
+      "type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg" +
+      "\030\003 \001(\0132\010.Message\"\253\001\n\005Route\022\016\n\006userID\030\001 \001" +
+      "(\003\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022\020\n\010pu" +
+      "shType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pushLa" +
+      "nguage\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022\025\n\rpus" +
+      "hNoDisturb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -14436,7 +14249,7 @@ public final class Flappy {
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Message_descriptor,
-        new String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecretSend", "MessageSecretReceive", "MessageDate", "IsDelete", "DeleteDate", });
+        new String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecret", "MessageDate", "IsDelete", "DeleteDate", });
     internal_static_FlappyKafka_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_FlappyKafka_fieldAccessorTable = new

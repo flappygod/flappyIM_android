@@ -38,9 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // 是否已读
             "messageReadState" + " integer," +
             // 消息发送秘钥
-            "messageSecretSend" + " varchar," +
-            // 消息接收秘钥
-            "messageSecretReceive" + " varchar," +
+            "messageSecret" + " varchar," +
             // 是否被删除
             "isDelete" + " integer," +
             // 发送日期

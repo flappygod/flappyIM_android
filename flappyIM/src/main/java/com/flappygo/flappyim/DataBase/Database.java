@@ -185,8 +185,8 @@ public class Database {
             if (chatMessage.getMessageReadState() != null) {
                 values.put("messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
             }
-            if (chatMessage.getMessageSecretSend() != null) {
-                values.put("messageSecretSend", chatMessage.getMessageSecretSend());
+            if (chatMessage.getMessageSecret() != null) {
+                values.put("messageSecret", chatMessage.getMessageSecret());
             }
             if (chatMessage.getMessageDate() != null) {
                 values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
@@ -925,7 +925,7 @@ public class Database {
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
                 info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
+                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1001,7 +1001,7 @@ public class Database {
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
                 info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
+                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1060,7 +1060,7 @@ public class Database {
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
                 info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
+                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1128,7 +1128,7 @@ public class Database {
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
                 info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
+                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1188,7 +1188,7 @@ public class Database {
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
                 info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
+                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
@@ -1247,7 +1247,7 @@ public class Database {
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
                 info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
                 info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecretSend(cursor.getString(cursor.getColumnIndex("messageSecretSend")));
+                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
                 info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
