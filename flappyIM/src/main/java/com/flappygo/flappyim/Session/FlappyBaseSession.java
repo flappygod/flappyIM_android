@@ -44,7 +44,7 @@ import java.util.Objects;
 public class FlappyBaseSession {
 
     //Client
-    private static final LXAsyncTaskClient sessionClient = new LXAsyncTaskClient(10);
+    private static final LXAsyncTaskClient sessionClient = new LXAsyncTaskClient(20);
 
     ///获取当前的消息handler
     ChannelMsgHandler getCurrentChannelMessageHandler() {

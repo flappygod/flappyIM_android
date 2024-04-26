@@ -87,7 +87,7 @@ public class FlappyImService {
     /******
      * 创建请求池
      */
-    public final LXAsyncTaskClient asyncTaskClient = new LXAsyncTaskClient(5);
+    public final LXAsyncTaskClient asyncTaskClient = new LXAsyncTaskClient(20);
 
 
     /******

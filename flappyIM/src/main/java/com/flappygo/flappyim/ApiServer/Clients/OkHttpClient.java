@@ -40,7 +40,7 @@ public class OkHttpClient {
     /******
      * 创建请求池
      */
-    public final LXAsyncTaskClient httpTaskClient = new LXAsyncTaskClient(5);
+    public final LXAsyncTaskClient httpTaskClient = new LXAsyncTaskClient(20);
 
 
     /******
