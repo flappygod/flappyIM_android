@@ -20,8 +20,6 @@ import java.math.BigDecimal;
 
 import android.util.Base64;
 
-import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.HashMap;
 
@@ -92,7 +90,7 @@ public class ChatMessage {
 
     private BigDecimal messageSessionOffset;
 
-    private BigDecimal messageTableSeq;
+    private BigDecimal messageTableOffset;
 
     private BigDecimal messageType;
 
@@ -152,12 +150,12 @@ public class ChatMessage {
         this.messageSessionOffset = messageSessionOffset;
     }
 
-    public BigDecimal getMessageTableSeq() {
-        return messageTableSeq;
+    public BigDecimal getMessageTableOffset() {
+        return messageTableOffset;
     }
 
-    public void setMessageTableSeq(BigDecimal messageTableSeq) {
-        this.messageTableSeq = messageTableSeq;
+    public void setMessageTableOffset(BigDecimal messageTableOffset) {
+        this.messageTableOffset = messageTableOffset;
     }
 
     public BigDecimal getMessageType() {
@@ -271,7 +269,7 @@ public class ChatMessage {
         messageSession = String.valueOf(msg.getMessageSession());
         messageSessionType = new BigDecimal(msg.getMessageSessionType());
         messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
-        messageTableSeq = new BigDecimal(msg.getMessageTableSeq());
+        messageTableOffset = new BigDecimal(msg.getMessageTableOffset());
         messageType = new BigDecimal(msg.getMessageType());
         messageSendId = Long.toString(msg.getMessageSendId());
         messageSendExtendId = msg.getMessageSendExtendId();
@@ -306,7 +304,7 @@ public class ChatMessage {
         map.put("messageSession", messageSession);
         map.put("messageSessionType", messageSessionType);
         map.put("messageSessionOffset", messageSessionOffset);
-        map.put("messageTableSeq", messageTableSeq);
+        map.put("messageTableOffset", messageTableOffset);
         map.put("messageType", messageType);
         map.put("messageSendId", messageSendId);
         map.put("messageSendExtendId", messageSendExtendId);
@@ -363,9 +361,9 @@ public class ChatMessage {
         if (getMessageSessionType() != null)
             msgBuilder.setMessageSessionType(StringTool.decimalToInt(getMessageSessionType()));
         if (getMessageSessionOffset() != null)
-            msgBuilder.setMessageSessionOffset(StringTool.decimalToInt(getMessageSessionOffset()));
-        if (getMessageTableSeq() != null)
-            msgBuilder.setMessageTableSeq(StringTool.decimalToInt(getMessageTableSeq()));
+            msgBuilder.setMessageSessionOffset(StringTool.decimalToLong(getMessageSessionOffset()));
+        if (getMessageTableOffset() != null)
+            msgBuilder.setMessageTableOffset(StringTool.decimalToInt(getMessageTableOffset()));
         if (getMessageType() != null)
             msgBuilder.setMessageType(StringTool.decimalToInt(getMessageType()));
         if (getMessageSendId() != null)

@@ -158,8 +158,8 @@ public class Database {
             if (chatMessage.getMessageSessionOffset() != null) {
                 values.put("messageSessionOffset", StringTool.decimalToInt(chatMessage.getMessageSessionOffset()));
             }
-            if (chatMessage.getMessageTableSeq() != null) {
-                values.put("messageTableSeq", StringTool.decimalToInt(chatMessage.getMessageTableSeq()));
+            if (chatMessage.getMessageTableOffset() != null) {
+                values.put("messageTableOffset", StringTool.decimalToInt(chatMessage.getMessageTableOffset()));
             }
             if (chatMessage.getMessageType() != null) {
                 values.put("messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
@@ -220,11 +220,11 @@ public class Database {
      * 更新消息已读(系统消息的已读状态不做处理)
      * @param userId        用户ID
      * @param sessionId     会话ID
-     * @param tableSequence 表序号
+     * @param tableOffset 表序号
      */
     private void updateMessageRead(String userId,
             String sessionId,
-            String tableSequence) {
+            String tableOffset) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -240,12 +240,12 @@ public class Database {
             db.update(
                     DataBaseConfig.TABLE_MESSAGE,
                     values,
-                    "messageInsertUser=? and messageSendId!=? and messageType != 0 and messageSession=? and messageTableSeq <= ? ",
+                    "messageInsertUser=? and messageSendId!=? and messageType != 0 and messageSession=? and messageTableOffset <= ? ",
                     new String[]{
                             chatUser.getUserExtendId(),
                             userId,
                             sessionId,
-                            tableSequence,
+                            tableOffset,
                     }
             );
         } finally {
@@ -310,11 +310,11 @@ public class Database {
                 //获取会话ID
                 String sessionId = action.getActionIds().get(1);
                 //获取TableSequence
-                String tableSequence = action.getActionIds().get(2);
+                String tableOffset = action.getActionIds().get(2);
                 //更新消息已读
-                updateMessageRead(userId, sessionId, tableSequence);
+                updateMessageRead(userId, sessionId, tableOffset);
                 //更新会话任务最新已读
-                updateSessionMemberLatestRead(userId, sessionId, tableSequence);
+                updateSessionMemberLatestRead(userId, sessionId, tableOffset);
                 break;
             }
             //消息删除
@@ -749,9 +749,9 @@ public class Database {
      * 更新用户消息最近已读
      * @param userId        用户ID
      * @param sessionId     会话ID
-     * @param tableSequence 表序号
+     * @param tableOffset 表序号
      */
-    private void updateSessionMemberLatestRead(String userId, String sessionId, String tableSequence) {
+    private void updateSessionMemberLatestRead(String userId, String sessionId, String tableOffset) {
         //会话Data
         open();
         try {
@@ -759,7 +759,7 @@ public class Database {
             if (memberModel == null) {
                 return;
             }
-            memberModel.setSessionMemberLatestRead(tableSequence);
+            memberModel.setSessionMemberLatestRead(tableOffset);
             insertSessionMember(memberModel);
         } finally {
             close();
@@ -879,11 +879,11 @@ public class Database {
     /******
      * 获取当前这个messageTableSeq的所有消息
      * @param messageSession  会话ID
-     * @param messageTableSeq 表序号
+     * @param messageTableOffset 表序号
      * @return 获取消息，这个消息可能有多条，主要是没发成功的
      */
     @SuppressLint("Range")
-    private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableSeq) {
+    private List<ChatMessage> getSessionSeqMessages(String messageSession, String messageTableOffset) {
 
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
@@ -896,10 +896,10 @@ public class Database {
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageTableSeq = ? and messageInsertUser = ? and messageType !=8 ",
+                    "messageSession = ? and messageTableOffset = ? and messageInsertUser = ? and messageType !=8 ",
                     new String[]{
                             messageSession,
-                            messageTableSeq,
+                            messageTableOffset,
                             chatUser.getUserExtendId()
                     },
                     null,
@@ -916,7 +916,7 @@ public class Database {
                 info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
                 info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
                 info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
                 info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
@@ -958,7 +958,7 @@ public class Database {
             List<ChatMessage> chatMessages = new ArrayList<>();
             List<ChatMessage> sessionSeqMessages = getSessionSeqMessages(
                     messageSession,
-                    chatMessage.getMessageTableSeq().toString()
+                    chatMessage.getMessageTableOffset().toString()
             );
             for (int s = 0; s < sessionSeqMessages.size(); s++) {
                 if (sessionSeqMessages.get(s).getMessageStamp().intValue() < chatMessage.getMessageStamp().intValue()) {
@@ -970,15 +970,15 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageTableSeq < ? and messageInsertUser = ? and messageType != 8",
+                    "messageSession = ? and messageTableOffset < ? and messageInsertUser = ? and messageType != 8",
                     new String[]{
                             messageSession,
-                            chatMessage.getMessageTableSeq().toString(),
+                            chatMessage.getMessageTableOffset().toString(),
                             chatUser.getUserExtendId(),
                     },
                     null,
                     null,
-                    "messageTableSeq DESC,messageStamp DESC LIMIT " + size
+                    "messageTableOffset DESC,messageStamp DESC LIMIT " + size
             );
             //没有就关闭
             if (!cursor.moveToFirst()) {
@@ -992,7 +992,7 @@ public class Database {
                 info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
                 info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
                 info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
                 info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
@@ -1042,7 +1042,7 @@ public class Database {
                     new String[]{messageSession, chatUser.getUserExtendId()},
                     null,
                     null,
-                    "messageTableSeq DESC,messageStamp DESC LIMIT 1"
+                    "messageTableOffset DESC,messageStamp DESC LIMIT 1"
             );
             //获取数据
             if (cursor.moveToFirst()) {
@@ -1051,7 +1051,7 @@ public class Database {
                 info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
                 info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
                 info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
                 info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
@@ -1119,7 +1119,7 @@ public class Database {
                 info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
                 info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
                 info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
                 info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
@@ -1163,7 +1163,7 @@ public class Database {
                     new String[]{sessionID, chatUser.getUserExtendId()},
                     null,
                     null,
-                    "messageTableSeq DESC"
+                    "messageTableOffset DESC"
             );
             //获取数据
             List<ChatMessage> list = new ArrayList<>();
@@ -1179,7 +1179,7 @@ public class Database {
                 info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
                 info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
                 info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
                 info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
@@ -1224,7 +1224,7 @@ public class Database {
                     new String[]{chatUser.getUserExtendId()},
                     null,
                     null,
-                    "messageTableSeq ASC"
+                    "messageTableOffset ASC"
             );
             //没有就关闭
             if (!cursor.moveToFirst()) {
@@ -1238,7 +1238,7 @@ public class Database {
                 info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
                 info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
                 info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableSeq(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableSeq"))));
+                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
                 info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));

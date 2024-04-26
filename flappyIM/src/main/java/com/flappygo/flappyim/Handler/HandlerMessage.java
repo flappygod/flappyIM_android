@@ -97,12 +97,12 @@ public class HandlerMessage extends Handler {
             List<String> chatMessage = (List<String>) message.obj;
             String sessionId = chatMessage.get(0);
             String readerId = chatMessage.get(1);
-            String messageTableSeq = chatMessage.get(2);
+            String messageTableOffset = chatMessage.get(2);
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
                 if (sessionId.equals(key) || key.equals(globalMsgTag)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageReadOther(sessionId, readerId, messageTableSeq);
+                        messageListeners.get(x).messageReadOther(sessionId, readerId, messageTableOffset);
                     }
                 }
             }
@@ -112,12 +112,12 @@ public class HandlerMessage extends Handler {
             List<String> chatMessage = (List<String>) message.obj;
             String sessionId = chatMessage.get(0);
             String readerId = chatMessage.get(1);
-            String messageTableSeq = chatMessage.get(2);
+            String messageTableOffset = chatMessage.get(2);
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
                 if (sessionId.equals(key) || key.equals(globalMsgTag)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageReadSelf(sessionId, readerId, messageTableSeq);
+                        messageListeners.get(x).messageReadSelf(sessionId, readerId, messageTableOffset);
                     }
                 }
             }

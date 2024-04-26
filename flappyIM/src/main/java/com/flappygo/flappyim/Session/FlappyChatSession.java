@@ -538,7 +538,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                         Arrays.asList(
                                 DataManager.getInstance().getLoginUser().getUserId(),
                                 session.getSessionId(),
-                                getLatestMessage().getMessageTableSeq().toString()
+                                getLatestMessage().getMessageTableOffset().toString()
                         ))
         );
 

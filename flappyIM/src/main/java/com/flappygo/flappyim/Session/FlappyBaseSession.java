@@ -71,7 +71,7 @@ public class FlappyBaseSession {
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
         bigDecimal = bigDecimal.add(new BigDecimal(1));
-        msg.setMessageTableSeq(bigDecimal);
+        msg.setMessageTableOffset(bigDecimal);
 
         //更新数据
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {

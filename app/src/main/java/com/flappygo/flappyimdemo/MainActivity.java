@@ -133,12 +133,12 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void messageReadOther(String sessionId, String readerId, String tableSequence) {
+            public void messageReadOther(String sessionId, String readerId, String tableOffset) {
 
             }
 
             @Override
-            public void messageReadSelf(String sessionId, String readerId, String tableSequence) {
+            public void messageReadSelf(String sessionId, String readerId, String tableOffset) {
 
             }
 
@@ -218,12 +218,12 @@ public class MainActivity extends Activity {
                             }
 
                             @Override
-                            public void messageReadOther(String sessionId, String readerId, String tableSequence) {
+                            public void messageReadOther(String sessionId, String readerId, String tableOffset) {
 
                             }
 
                             @Override
-                            public void messageReadSelf(String sessionId, String readerId, String tableSequence) {
+                            public void messageReadSelf(String sessionId, String readerId, String tableOffset) {
 
                             }
 
@@ -241,7 +241,7 @@ public class MainActivity extends Activity {
                             messageArrayList.add(chatMessage);
                             messageArrayList.addAll(messages);
                             for (int w = 0; w < messageArrayList.size(); w++) {
-                                System.out.println(messageArrayList.get(w).getMessageTableSeq().toString());
+                                System.out.println(messageArrayList.get(w).getMessageTableOffset().toString());
                             }
                         }
 

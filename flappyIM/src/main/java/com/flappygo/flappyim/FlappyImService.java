@@ -1,8 +1,6 @@
 package com.flappygo.flappyim;
 
 
-import static androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED;
-
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
@@ -320,12 +318,12 @@ public class FlappyImService {
         }
 
         @Override
-        public void messageReadOther(String sessionId, String readerId, String tableSequence) {
+        public void messageReadOther(String sessionId, String readerId, String tableOffset) {
 
         }
 
         @Override
-        public void messageReadSelf(String sessionId, String readerId, String tableSequence) {
+        public void messageReadSelf(String sessionId, String readerId, String tableOffset) {
 
         }
 
@@ -1564,8 +1562,8 @@ public class FlappyImService {
                         return -1;
                     }
                     return Long.compare(
-                            msgTwo.getMessageTableSeq().longValue(),
-                            msgOne.getMessageTableSeq().longValue()
+                            msgTwo.getMessageTableOffset().longValue(),
+                            msgOne.getMessageTableOffset().longValue()
                     );
                 });
                 return sessions;
@@ -1654,8 +1652,8 @@ public class FlappyImService {
                                     return -1;
                                 }
                                 return Long.compare(
-                                        msgTwo.getMessageTableSeq().longValue(),
-                                        msgOne.getMessageTableSeq().longValue()
+                                        msgTwo.getMessageTableOffset().longValue(),
+                                        msgOne.getMessageTableOffset().longValue()
                                 );
                             });
                             callback.success(sessions);

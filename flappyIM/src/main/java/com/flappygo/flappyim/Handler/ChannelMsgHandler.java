@@ -15,7 +15,6 @@ import com.flappygo.flappyim.Models.Server.ChatUser;
 
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import com.flappygo.flappyim.Tools.Secret.AESTool;
 import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Config.FlappyConfig;
@@ -222,9 +221,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //对消息进行排序，然后在插入数据库
             Collections.sort(messages, (chatMessage, t1) -> {
-                if (chatMessage.getMessageTableSeq().intValue() > t1.getMessageTableSeq().intValue()) {
+                if (chatMessage.getMessageTableOffset().intValue() > t1.getMessageTableOffset().intValue()) {
                     return 1;
-                } else if (chatMessage.getMessageTableSeq().intValue() < t1.getMessageTableSeq().intValue()) {
+                } else if (chatMessage.getMessageTableOffset().intValue() < t1.getMessageTableOffset().intValue()) {
                     return -1;
                 }
                 return 0;
@@ -538,11 +537,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         ChatUser user = DataManager.getInstance().getLoginUser();
         //最近一条为空
         if (user.getLatest() == null) {
-            user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableSeq()));
+            user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableOffset()));
         }
         //设置最大的那个值
         else {
-            user.setLatest(Long.toString(Math.max(chatMessage.getMessageTableSeq().longValue(), StringTool.strToLong(user.getLatest()))));
+            user.setLatest(Long.toString(Math.max(chatMessage.getMessageTableOffset().longValue(), StringTool.strToLong(user.getLatest()))));
         }
         //保存用户信息
         DataManager.getInstance().saveLoginUser(user);
@@ -552,7 +551,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //创建消息到达的回执
             Flappy.ReqReceipt receipt = Flappy.ReqReceipt.newBuilder()
-                    .setReceiptID(chatMessage.getMessageTableSeq().toString())
+                    .setReceiptID(chatMessage.getMessageTableOffset().toString())
                     .setReceiptType(FlappyRequest.RECEIPT_MSG_ARRIVE)
                     .build();
 

@@ -8565,20 +8565,20 @@ public final class Flappy {
      *消息会话偏移量
      * </pre>
      *
-     * <code>int32 messageSessionOffset = 4;</code>
+     * <code>int64 messageSessionOffset = 4;</code>
      * @return The messageSessionOffset.
      */
-    int getMessageSessionOffset();
+    long getMessageSessionOffset();
 
     /**
      * <pre>
      *消息序列
      * </pre>
      *
-     * <code>int64 messageTableSeq = 5;</code>
-     * @return The messageTableSeq.
+     * <code>int64 messageTableOffset = 5;</code>
+     * @return The messageTableOffset.
      */
-    long getMessageTableSeq();
+    long getMessageTableOffset();
 
     /**
      * <pre>
@@ -8830,12 +8830,12 @@ public final class Flappy {
             }
             case 32: {
 
-              messageSessionOffset_ = input.readInt32();
+              messageSessionOffset_ = input.readInt64();
               break;
             }
             case 40: {
 
-              messageTableSeq_ = input.readInt64();
+              messageTableOffset_ = input.readInt64();
               break;
             }
             case 48: {
@@ -9015,33 +9015,33 @@ public final class Flappy {
     }
 
     public static final int MESSAGESESSIONOFFSET_FIELD_NUMBER = 4;
-    private int messageSessionOffset_;
+    private long messageSessionOffset_;
     /**
      * <pre>
      *消息会话偏移量
      * </pre>
      *
-     * <code>int32 messageSessionOffset = 4;</code>
+     * <code>int64 messageSessionOffset = 4;</code>
      * @return The messageSessionOffset.
      */
     @Override
-    public int getMessageSessionOffset() {
+    public long getMessageSessionOffset() {
       return messageSessionOffset_;
     }
 
-    public static final int MESSAGETABLESEQ_FIELD_NUMBER = 5;
-    private long messageTableSeq_;
+    public static final int MESSAGETABLEOFFSET_FIELD_NUMBER = 5;
+    private long messageTableOffset_;
     /**
      * <pre>
      *消息序列
      * </pre>
      *
-     * <code>int64 messageTableSeq = 5;</code>
-     * @return The messageTableSeq.
+     * <code>int64 messageTableOffset = 5;</code>
+     * @return The messageTableOffset.
      */
     @Override
-    public long getMessageTableSeq() {
-      return messageTableSeq_;
+    public long getMessageTableOffset() {
+      return messageTableOffset_;
     }
 
     public static final int MESSAGETYPE_FIELD_NUMBER = 6;
@@ -9433,11 +9433,11 @@ public final class Flappy {
       if (messageSessionType_ != 0) {
         output.writeInt32(3, messageSessionType_);
       }
-      if (messageSessionOffset_ != 0) {
-        output.writeInt32(4, messageSessionOffset_);
+      if (messageSessionOffset_ != 0L) {
+        output.writeInt64(4, messageSessionOffset_);
       }
-      if (messageTableSeq_ != 0L) {
-        output.writeInt64(5, messageTableSeq_);
+      if (messageTableOffset_ != 0L) {
+        output.writeInt64(5, messageTableOffset_);
       }
       if (messageType_ != 0) {
         output.writeInt32(6, messageType_);
@@ -9495,13 +9495,13 @@ public final class Flappy {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, messageSessionType_);
       }
-      if (messageSessionOffset_ != 0) {
+      if (messageSessionOffset_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, messageSessionOffset_);
+          .computeInt64Size(4, messageSessionOffset_);
       }
-      if (messageTableSeq_ != 0L) {
+      if (messageTableOffset_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(5, messageTableSeq_);
+          .computeInt64Size(5, messageTableOffset_);
       }
       if (messageType_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -9568,8 +9568,8 @@ public final class Flappy {
           != other.getMessageSessionType()) return false;
       if (getMessageSessionOffset()
           != other.getMessageSessionOffset()) return false;
-      if (getMessageTableSeq()
-          != other.getMessageTableSeq()) return false;
+      if (getMessageTableOffset()
+          != other.getMessageTableOffset()) return false;
       if (getMessageType()
           != other.getMessageType()) return false;
       if (getMessageSendId()
@@ -9613,10 +9613,11 @@ public final class Flappy {
       hash = (37 * hash) + MESSAGESESSIONTYPE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageSessionType();
       hash = (37 * hash) + MESSAGESESSIONOFFSET_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageSessionOffset();
-      hash = (37 * hash) + MESSAGETABLESEQ_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-          getMessageTableSeq());
+          getMessageSessionOffset());
+      hash = (37 * hash) + MESSAGETABLEOFFSET_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getMessageTableOffset());
       hash = (37 * hash) + MESSAGETYPE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageType();
       hash = (37 * hash) + MESSAGESENDID_FIELD_NUMBER;
@@ -9782,9 +9783,9 @@ public final class Flappy {
 
         messageSessionType_ = 0;
 
-        messageSessionOffset_ = 0;
+        messageSessionOffset_ = 0L;
 
-        messageTableSeq_ = 0L;
+        messageTableOffset_ = 0L;
 
         messageType_ = 0;
 
@@ -9840,7 +9841,7 @@ public final class Flappy {
         result.messageSession_ = messageSession_;
         result.messageSessionType_ = messageSessionType_;
         result.messageSessionOffset_ = messageSessionOffset_;
-        result.messageTableSeq_ = messageTableSeq_;
+        result.messageTableOffset_ = messageTableOffset_;
         result.messageType_ = messageType_;
         result.messageSendId_ = messageSendId_;
         result.messageSendExtendId_ = messageSendExtendId_;
@@ -9911,11 +9912,11 @@ public final class Flappy {
         if (other.getMessageSessionType() != 0) {
           setMessageSessionType(other.getMessageSessionType());
         }
-        if (other.getMessageSessionOffset() != 0) {
+        if (other.getMessageSessionOffset() != 0L) {
           setMessageSessionOffset(other.getMessageSessionOffset());
         }
-        if (other.getMessageTableSeq() != 0L) {
-          setMessageTableSeq(other.getMessageTableSeq());
+        if (other.getMessageTableOffset() != 0L) {
+          setMessageTableOffset(other.getMessageTableOffset());
         }
         if (other.getMessageType() != 0) {
           setMessageType(other.getMessageType());
@@ -10170,17 +10171,17 @@ public final class Flappy {
         return this;
       }
 
-      private int messageSessionOffset_ ;
+      private long messageSessionOffset_ ;
       /**
        * <pre>
        *消息会话偏移量
        * </pre>
        *
-       * <code>int32 messageSessionOffset = 4;</code>
+       * <code>int64 messageSessionOffset = 4;</code>
        * @return The messageSessionOffset.
        */
       @Override
-      public int getMessageSessionOffset() {
+      public long getMessageSessionOffset() {
         return messageSessionOffset_;
       }
       /**
@@ -10188,11 +10189,11 @@ public final class Flappy {
        *消息会话偏移量
        * </pre>
        *
-       * <code>int32 messageSessionOffset = 4;</code>
+       * <code>int64 messageSessionOffset = 4;</code>
        * @param value The messageSessionOffset to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageSessionOffset(int value) {
+      public Builder setMessageSessionOffset(long value) {
         
         messageSessionOffset_ = value;
         onChanged();
@@ -10203,41 +10204,41 @@ public final class Flappy {
        *消息会话偏移量
        * </pre>
        *
-       * <code>int32 messageSessionOffset = 4;</code>
+       * <code>int64 messageSessionOffset = 4;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageSessionOffset() {
         
-        messageSessionOffset_ = 0;
+        messageSessionOffset_ = 0L;
         onChanged();
         return this;
       }
 
-      private long messageTableSeq_ ;
+      private long messageTableOffset_ ;
       /**
        * <pre>
        *消息序列
        * </pre>
        *
-       * <code>int64 messageTableSeq = 5;</code>
-       * @return The messageTableSeq.
+       * <code>int64 messageTableOffset = 5;</code>
+       * @return The messageTableOffset.
        */
       @Override
-      public long getMessageTableSeq() {
-        return messageTableSeq_;
+      public long getMessageTableOffset() {
+        return messageTableOffset_;
       }
       /**
        * <pre>
        *消息序列
        * </pre>
        *
-       * <code>int64 messageTableSeq = 5;</code>
-       * @param value The messageTableSeq to set.
+       * <code>int64 messageTableOffset = 5;</code>
+       * @param value The messageTableOffset to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageTableSeq(long value) {
+      public Builder setMessageTableOffset(long value) {
         
-        messageTableSeq_ = value;
+        messageTableOffset_ = value;
         onChanged();
         return this;
       }
@@ -10246,12 +10247,12 @@ public final class Flappy {
        *消息序列
        * </pre>
        *
-       * <code>int64 messageTableSeq = 5;</code>
+       * <code>int64 messageTableOffset = 5;</code>
        * @return This builder for chaining.
        */
-      public Builder clearMessageTableSeq() {
+      public Builder clearMessageTableOffset() {
         
-        messageTableSeq_ = 0L;
+        messageTableOffset_ = 0L;
         onChanged();
         return this;
       }
@@ -14185,24 +14186,25 @@ public final class Flappy {
       "(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n\014sessionStam" +
       "p\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t\022\031\n\021se" +
       "ssionCreateUser\030\n \001(\t\022\020\n\010isDelete\030\013 \001(\005\022" +
-      "\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\250\003\n\007M" +
+      "\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\253\003\n\007M" +
       "essage\022\021\n\tmessageId\030\001 \001(\t\022\026\n\016messageSess" +
       "ion\030\002 \001(\003\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n" +
-      "\024messageSessionOffset\030\004 \001(\005\022\027\n\017messageTa" +
-      "bleSeq\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005\022\025\n\rmes" +
-      "sageSendId\030\007 \001(\003\022\033\n\023messageSendExtendId\030" +
-      "\010 \001(\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036\n\026messa" +
-      "geReceiveExtendId\030\n \001(\t\022\026\n\016messageConten" +
-      "t\030\013 \001(\t\022\030\n\020messageSendState\030\014 \001(\005\022\030\n\020mes" +
-      "sageReadState\030\r \001(\005\022\025\n\rmessageSecret\030\016 \001" +
-      "(\t\022\023\n\013messageDate\030\017 \001(\t\022\020\n\010isDelete\030\020 \001(" +
-      "\005\022\022\n\ndeleteDate\030\021 \001(\t\"I\n\013FlappyKafka\022\014\n\004" +
-      "type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg" +
-      "\030\003 \001(\0132\010.Message\"\253\001\n\005Route\022\016\n\006userID\030\001 \001" +
-      "(\003\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022\020\n\010pu" +
-      "shType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pushLa" +
-      "nguage\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022\025\n\rpus" +
-      "hNoDisturb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006proto3"
+      "\024messageSessionOffset\030\004 \001(\003\022\032\n\022messageTa" +
+      "bleOffset\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005\022\025\n\r" +
+      "messageSendId\030\007 \001(\003\022\033\n\023messageSendExtend" +
+      "Id\030\010 \001(\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036\n\026me" +
+      "ssageReceiveExtendId\030\n \001(\t\022\026\n\016messageCon" +
+      "tent\030\013 \001(\t\022\030\n\020messageSendState\030\014 \001(\005\022\030\n\020" +
+      "messageReadState\030\r \001(\005\022\025\n\rmessageSecret\030" +
+      "\016 \001(\t\022\023\n\013messageDate\030\017 \001(\t\022\020\n\010isDelete\030\020" +
+      " \001(\005\022\022\n\ndeleteDate\030\021 \001(\t\"I\n\013FlappyKafka\022" +
+      "\014\n\004type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003" +
+      "msg\030\003 \001(\0132\010.Message\"\253\001\n\005Route\022\016\n\006userID\030" +
+      "\001 \001(\003\022\016\n\006device\030\002 \001(\t\022\016\n\006pushId\030\003 \001(\t\022\020\n" +
+      "\010pushType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\024\n\014pus" +
+      "hLanguage\030\006 \001(\t\022\023\n\013pushPrivacy\030\007 \001(\005\022\025\n\r" +
+      "pushNoDisturb\030\010 \001(\005\022\014\n\004time\030\t \001(\tb\006proto" +
+      "3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -14249,7 +14251,7 @@ public final class Flappy {
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Message_descriptor,
-        new String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableSeq", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecret", "MessageDate", "IsDelete", "DeleteDate", });
+        new String[] { "MessageId", "MessageSession", "MessageSessionType", "MessageSessionOffset", "MessageTableOffset", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecret", "MessageDate", "IsDelete", "DeleteDate", });
     internal_static_FlappyKafka_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_FlappyKafka_fieldAccessorTable = new

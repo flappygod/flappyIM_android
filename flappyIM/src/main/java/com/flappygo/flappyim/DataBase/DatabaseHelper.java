@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //会话的offset
             "messageSessionOffset" + " integer," +
             // 当前消息的offset
-            "messageTableSeq" + " integer," +
+            "messageTableOffset" + " integer," +
             // 消息类型
             "messageType" + " integer," +
             // 发送ID
