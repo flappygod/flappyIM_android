@@ -1,5 +1,8 @@
 package com.flappygo.flappyim.Models.Request;
 
+/******
+ * 文件消息
+ */
 public class ChatFile {
 
     //文件名称

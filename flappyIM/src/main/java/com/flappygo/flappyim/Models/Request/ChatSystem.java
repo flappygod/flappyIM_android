@@ -2,9 +2,10 @@ package com.flappygo.flappyim.Models.Request;
 
 import java.io.Serializable;
 
-//系统消息
+/******
+ * 系统消息
+ */
 public class ChatSystem implements Serializable {
-
 
     //系统动作的文本
     private int sysAction;

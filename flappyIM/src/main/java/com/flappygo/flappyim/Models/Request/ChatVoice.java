@@ -2,6 +2,9 @@ package com.flappygo.flappyim.Models.Request;
 
 import java.io.Serializable;
 
+/******
+ * 语音消息
+ */
 public class ChatVoice implements Serializable {
 
     //发送的地址

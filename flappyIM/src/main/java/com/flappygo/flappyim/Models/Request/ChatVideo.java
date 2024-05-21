@@ -2,6 +2,9 @@ package com.flappygo.flappyim.Models.Request;
 
 import java.io.Serializable;
 
+/******
+ * 视频消息
+ */
 public class ChatVideo implements Serializable {
 
     //网页路径

@@ -2,6 +2,9 @@ package com.flappygo.flappyim.Models.Request;
 
 import java.io.Serializable;
 
+/******
+ * 图片消息
+ */
 public class ChatImage implements Serializable {
     //发送的本地地址
     private String sendPath;

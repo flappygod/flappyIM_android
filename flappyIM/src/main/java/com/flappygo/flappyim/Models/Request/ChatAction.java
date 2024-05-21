@@ -2,7 +2,9 @@ package com.flappygo.flappyim.Models.Request;
 
 import java.util.List;
 
-///系统动作消息
+/******
+ * 系统动作消息
+ */
 public class ChatAction {
 
     //系统动作消息  1.消息已读回执   2.删除消息回执

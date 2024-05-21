@@ -2,6 +2,9 @@ package com.flappygo.flappyim.Models.Request;
 
 import java.io.Serializable;
 
+/******
+ * 定位消息
+ */
 public class ChatLocation implements Serializable {
 
 
