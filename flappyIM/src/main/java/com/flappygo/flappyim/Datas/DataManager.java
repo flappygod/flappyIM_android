@@ -46,13 +46,19 @@ public class DataManager {
     private ChatUser chatUser;
 
 
-    //判断是否已经登录
+    /******
+     * 判断是否已经登录
+     * @return 是否登录
+     */
     public boolean isLogin() {
         return getLoginUser() != null && getLoginUser().isLogin() != 0;
     }
 
 
-    //保存用户信息
+    /******
+     * 保存用户信息
+     * @param user 登录用户
+     */
     public void saveLoginUser(ChatUser user) {
         chatUser = user;
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
@@ -65,7 +71,10 @@ public class DataManager {
     }
 
 
-    //获取保存的用户信息
+    /******
+     * 获取保存的用户信息
+     * @return 登录的用户
+     */
     public ChatUser getLoginUser() {
         //如果不为空返回
         if (chatUser != null) {
@@ -90,7 +99,10 @@ public class DataManager {
     }
 
 
-    //保存用户信息
+    /******
+     * 保存用户信息
+     * @param setting 配置信息
+     */
     public void savePushSetting(PushSetting setting) {
         PushSetting update = getPushSetting();
         update = (update == null) ? new PushSetting() : update;
@@ -108,7 +120,10 @@ public class DataManager {
     }
 
 
-    //获取推送设置信息
+    /******
+     * 获取推送设置信息
+     * @return 推送设置信息
+     */
     public PushSetting getPushSetting() {
         //获取首选项
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
@@ -125,7 +140,9 @@ public class DataManager {
     }
 
 
-    //清空当前的用户信息，用户已经退出登录了
+    /******
+     * 清空当前的用户信息，用户已经退出登录了
+     */
     public void clearLoginUser() {
         chatUser = null;
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
@@ -137,7 +154,10 @@ public class DataManager {
         editor.apply();
     }
 
-    //保存用户的推送ID
+    /******
+     * 保存用户的推送ID
+     * @param pushId 推送ID
+     */
     public void savePushId(String pushId) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -148,7 +168,10 @@ public class DataManager {
         editor.apply();
     }
 
-    //获取用户的推送ID
+    /******
+     * 获取用户的推送ID
+     * @return 推送ID
+     */
     public String getPushId() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -158,7 +181,10 @@ public class DataManager {
     }
 
 
-    //保存RSA
+    /******
+     * 保存RSA
+     * @param rsaKey RSA秘钥
+     */
     public void saveRSAKey(String rsaKey) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -169,7 +195,10 @@ public class DataManager {
         editor.apply();
     }
 
-    //获取用户的推送ID
+    /******
+     * 获取用户的推送
+     * @return RSAKey
+     */
     public String getRSAKey() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -179,7 +208,11 @@ public class DataManager {
     }
 
 
-    //保存会话
+    /******
+     * 保存会话
+     * @param key         key
+     * @param chatSession 会话
+     */
     public void saveChatSession(String key, FlappyChatSession chatSession) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -190,7 +223,11 @@ public class DataManager {
         editor.apply();
     }
 
-    //获取会话
+    /******
+     * 获取会话
+     * @param key key
+     * @return 获取会话
+     */
     public FlappyChatSession getChatSession(String key) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -201,7 +238,10 @@ public class DataManager {
     }
 
 
-    //保存消息被点击事件
+    /******
+     * 保存消息被点击事件
+     * @param message 消息
+     */
     public void saveNotificationClick(String message) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -212,7 +252,10 @@ public class DataManager {
         editor.apply();
     }
 
-    //获取消息被点击事件
+    /******
+     * 获取消息被点击事件
+     * @return 点击
+     */
     public String getNotificationClick() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -221,7 +264,9 @@ public class DataManager {
         return mSharedPreferences.getString(KEY_FOR_MESSAGE_CLICK, null);
     }
 
-    //移除消息被点击事件
+    /******
+     * 移除消息被点击事件
+     */
     public void removeNotificationClick() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
@@ -231,6 +276,5 @@ public class DataManager {
         editor.remove(KEY_FOR_MESSAGE_CLICK);
         editor.apply();
     }
-
 
 }

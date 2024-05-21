@@ -77,6 +77,20 @@ public class HandleNotifyManager {
     }
 
     /******
+     * 获取所有没发送的消息列表
+     * @return 当前缓存的所有没有发送成功的消息
+     */
+    public List<ChatMessage> getUnSendCallbackHandlers() {
+        synchronized (lock) {
+            List<ChatMessage> retList = new ArrayList<>();
+            for (String key : sendCallBackHandlers.keySet()) {
+                retList.add(Objects.requireNonNull(sendCallBackHandlers.get(key)).getChatMessage());
+            }
+            return retList;
+        }
+    }
+
+    /******
      * 消息发送成功
      * @param chatMessage 消息
      */
@@ -127,6 +141,59 @@ public class HandleNotifyManager {
         }
     }
 
+    /******
+     * 消息已读回执,对方的阅读消息存在的时候才会执行
+     * @param chatMessage 消息
+     */
+    public void handleMessageAction(ChatMessage chatMessage) {
+        //动作消息处理
+        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION) {
+            //执行数据库更新操作
+            Database.getInstance().handleActionMessageUpdate(chatMessage);
+            //获取对象
+            ChatAction chatAction = chatMessage.getChatAction();
+            //操作类型
+            switch (chatAction.getActionType()) {
+                ///插入的情况下，代表已读，进行通知
+                case ChatMessage.ACTION_TYPE_READ: {
+                    //自身已读
+                    if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
+                        Message msg = new Message();
+                        msg.what = HandlerMessage.MSG_READ_SELF;
+                        msg.obj = new ArrayList<>(Arrays.asList(
+                                chatAction.getActionIds().get(1),
+                                chatAction.getActionIds().get(0),
+                                chatAction.getActionIds().get(2)
+                        ));
+                        handlerMessage.sendMessage(msg);
+                    }
+                    //对方已读
+                    else {
+                        Message msg = new Message();
+                        msg.what = HandlerMessage.MSG_READ_OTHER;
+                        msg.obj = new ArrayList<>(Arrays.asList(
+                                chatAction.getActionIds().get(1),
+                                chatAction.getActionIds().get(0),
+                                chatAction.getActionIds().get(2)
+                        ));
+                        handlerMessage.sendMessage(msg);
+                    }
+                    break;
+                }
+                ///插入的情况下，代表新增，进行通知
+                case ChatMessage.ACTION_TYPE_DELETE: {
+                    Message msg = new Message();
+                    msg.what = HandlerMessage.MSG_DELETE;
+                    msg.obj = new ArrayList<>(Arrays.asList(
+                            chatAction.getActionIds().get(1),
+                            chatAction.getActionIds().get(2)
+                    ));
+                    handlerMessage.sendMessage(msg);
+                    break;
+                }
+            }
+        }
+    }
 
     /******
      * 消息发送监听
@@ -160,75 +227,6 @@ public class HandleNotifyManager {
         msg.what = HandlerMessage.MSG_FAILED;
         msg.obj = chatMessage;
         this.handlerMessage.sendMessage(msg);
-    }
-
-    /******
-     * 消息已读回执,对方的阅读消息存在的时候才会执行
-     * @param chatMessage 消息
-     */
-    public void handleMessageAction(ChatMessage chatMessage) {
-        //动作消息处理
-        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION) {
-            //执行数据库更新操作
-            Database.getInstance().handleActionMessageUpdate(chatMessage);
-            //获取对象
-            ChatAction chatAction = chatMessage.getChatAction();
-            //操作类型
-            switch (chatAction.getActionType()) {
-                ///插入的情况下，代表已读，进行通知
-                case ChatMessage.ACTION_TYPE_READ: {
-                    //自身已读
-                    if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
-                        Message msg = new Message();
-                        msg.what = HandlerMessage.MSG_READ_SELF;
-                        msg.obj = new ArrayList<>(Arrays.asList(
-                                chatAction.getActionIds().get(1),
-                                chatAction.getActionIds().get(0),
-                                chatAction.getActionIds().get(2)
-                        ));
-                        this.handlerMessage.sendMessage(msg);
-                    }
-                    //对方已读
-                    else {
-                        Message msg = new Message();
-                        msg.what = HandlerMessage.MSG_READ_OTHER;
-                        msg.obj = new ArrayList<>(Arrays.asList(
-                                chatAction.getActionIds().get(1),
-                                chatAction.getActionIds().get(0),
-                                chatAction.getActionIds().get(2)
-                        ));
-                        this.handlerMessage.sendMessage(msg);
-                    }
-                    break;
-                }
-                ///插入的情况下，代表新增，进行通知
-                case ChatMessage.ACTION_TYPE_DELETE: {
-                    Message msg = new Message();
-                    msg.what = HandlerMessage.MSG_DELETE;
-                    msg.obj = new ArrayList<>(Arrays.asList(
-                            chatAction.getActionIds().get(1),
-                            chatAction.getActionIds().get(2)
-                    ));
-                    this.handlerMessage.sendMessage(msg);
-                    break;
-                }
-            }
-        }
-    }
-
-
-    /******
-     * 获取所有没发送的消息列表
-     * @return 当前缓存的所有没有发送成功的消息
-     */
-    public List<ChatMessage> getAllUnSendMessages() {
-        synchronized (lock) {
-            List<ChatMessage> retList = new ArrayList<>();
-            for (String key : sendCallBackHandlers.keySet()) {
-                retList.add(Objects.requireNonNull(sendCallBackHandlers.get(key)).getChatMessage());
-            }
-            return retList;
-        }
     }
 
     /******

@@ -1,8 +1,7 @@
 package com.flappygo.flappyim.Handler;
 
-
-import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
+import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
@@ -12,7 +11,6 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import com.flappygo.flappyim.Tools.Secret.RSATool;
@@ -25,16 +23,13 @@ import com.flappygo.flappyim.Datas.DataManager;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.FlappyImService;
 
 import io.netty.channel.ChannelFuture;
-
 import java.util.Collections;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-
 import android.os.Message;
 
 import java.util.List;
@@ -576,7 +571,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * 检查旧消息进行发送
      */
     private void checkFormerMessagesToSend() {
-        List<ChatMessage> formerMessageList = HandleNotifyManager.getInstance().getAllUnSendMessages();
+        List<ChatMessage> formerMessageList = HandleNotifyManager.getInstance().getUnSendCallbackHandlers();
         for (ChatMessage message : formerMessageList) {
             sendMessageIfActive(message);
         }
