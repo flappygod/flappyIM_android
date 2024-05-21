@@ -90,7 +90,6 @@ public class FlappyBaseSession {
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
-                //插入消息
                 Database.getInstance().insertMessage(data);
                 return data;
             }
@@ -111,12 +110,13 @@ public class FlappyBaseSession {
 
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
-        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, Boolean>() {
             @Override
-            public ChatMessage run(ChatMessage data, String tag) {
-                Database.getInstance().insertMessage(data);
-                return data;
+            public Boolean run(ChatMessage data, String tag) {
+                return Database.getInstance().updateMessageSendState(
+                        data.getMessageId(),
+                        Integer.toString(SEND_STATE_FAILURE)
+                );
             }
 
             @Override
@@ -127,7 +127,7 @@ public class FlappyBaseSession {
             }
 
             @Override
-            public void success(ChatMessage data, String tag) {
+            public void success(Boolean data, String tag) {
                 HandlerNotifyManager.getInstance().notifyMessageFailure(msg);
             }
         }, msg);

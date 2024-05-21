@@ -209,6 +209,37 @@ public class Database {
         }
     }
 
+
+    /******
+     * 更新消息状态
+     * @param messageId        消息ID
+     * @param sendState        发送状态
+     */
+    public boolean updateMessageSendState(String messageId, String sendState) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return false;
+        }
+        open();
+        try {
+            ContentValues values = new ContentValues();
+            values.put("messageSendState", sendState);
+            return db.update(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    values,
+                    "messageInsertUser=? and messageId=? ",
+                    new String[]{
+                            chatUser.getUserExtendId(),
+                            messageId
+                    }
+            ) > 0;
+        } finally {
+            close();
+        }
+    }
+
+
     /******
      * 更新消息已读(系统消息的已读状态不做处理)
      * @param userId        用户ID
