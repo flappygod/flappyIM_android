@@ -234,7 +234,6 @@ public class HandlerNotifyManager {
      * @param session 会话
      */
     public void notifySessionUpdate(SessionModel session) {
-        //通知消息更新
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_UPDATE;
         msg.obj = session;
