@@ -54,7 +54,10 @@ public class FlappyChatSession extends FlappyBaseSession {
         return session;
     }
 
-    //设置消息的监听,新收到消息都会在这里
+    /******
+     * 设置消息的监听,新收到消息都会在这里
+     * @param messageListener 监听
+     */
     public void addMessageListener(MessageListener messageListener) {
         //添加监听
         HolderMessageSession.getInstance().addMessageListener(
@@ -64,7 +67,10 @@ public class FlappyChatSession extends FlappyBaseSession {
         listenerList.add(messageListener);
     }
 
-    //移除当前会话的监听
+    /******
+     * 移除当前会话的监听
+     * @param messageListener 监听
+     */
     public void removeListener(MessageListener messageListener) {
         HolderMessageSession.getInstance().removeMessageListener(
                 messageListener,
@@ -73,12 +79,16 @@ public class FlappyChatSession extends FlappyBaseSession {
         listenerList.remove(messageListener);
     }
 
-    //始终都要移除它，防止内存泄漏
+    /******
+     * 始终都要移除它，防止内存泄漏
+     */
     protected void finalize() {
         close();
     }
 
-    //session使用完成之后，请务必关闭防止内存泄漏
+    /******
+     * session使用完成之后，请务必关闭防止内存泄漏
+     */
     public void close() {
         for (int s = 0; s < listenerList.size(); s++) {
             HolderMessageSession.getInstance().removeMessageListener(
@@ -90,7 +100,12 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //发送消息
+    /******
+     * 发送文本消息
+     * @param text  文本消息
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendText(String text, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -120,7 +135,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-    //发送本地图片
+    /******
+     * 发送本地图片
+     * @param path     本地图片路径
+     * @param callback  回调
+     * @return 消息
+     */
     public ChatMessage sendLocalImage(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
@@ -168,7 +188,12 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //发送图片
+    /******
+     * 发送图片
+     * @param image 图片消息体
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendImage(ChatImage image, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -197,8 +222,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-
-    //发送本地的音频
+    /******
+     * 发送本地的音频
+     * @param path     路径
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendLocalVoice(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -248,7 +277,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-    //发送语音消息
+    /******
+     * 发送语音消息
+     * @param chatVoice 语音消息
+     * @param callback  回调
+     * @return 消息
+     */
     public ChatMessage sendVoice(
             ChatVoice chatVoice,
             final FlappySendCallback<ChatMessage> callback) {
@@ -280,7 +314,12 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //发送定位信息
+    /******
+     * 发送定位信息
+     * @param location 定位
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendLocation(ChatLocation location,
             final FlappySendCallback<ChatMessage> callback) {
         //创建消息
@@ -310,7 +349,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-    //发送短视频
+    /******
+     * 发送短视频
+     * @param path 本地视频地址
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendLocalVideo(String path,
             final FlappySendCallback<ChatMessage> callback) {
         //创建消息
@@ -364,7 +408,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-    //发送视频信息
+    /******
+     * 发送视频信息
+     * @param chatVideo 视频
+     * @param callback  回调
+     * @return 消息
+     */
     public ChatMessage sendVideo(ChatVideo chatVideo,
             final FlappySendCallback<ChatMessage> callback) {
         //创建消息
@@ -396,7 +445,13 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //发送本地的音频
+    /******
+     * 发送本地的音频
+     * @param path 路径
+     * @param name 名称
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendLocalFile(String path,
             String name,
             final FlappySendCallback<ChatMessage> callback) {
@@ -439,7 +494,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-    //发送语音消息
+    /******
+     * 发送文件消息
+     * @param chatFile 文件消息
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendFile(
             ChatFile chatFile,
             final FlappySendCallback<ChatMessage> callback) {
@@ -470,7 +530,12 @@ public class FlappyChatSession extends FlappyBaseSession {
         return msg;
     }
 
-    //发送消息
+    /******
+     * 发送消息
+     * @param text 文本
+     * @param callback 回调
+     * @return 消息
+     */
     public ChatMessage sendCustom(String text,
             FlappySendCallback<ChatMessage> callback) {
         //创建消息
@@ -502,7 +567,11 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //设置消息已读sequence
+    /******
+     * 设置消息已读sequence
+     * @param  callback 回调
+     * @return 消息
+     */
     public ChatMessage readSessionMessage(FlappySendCallback<ChatMessage> callback) {
 
         //未读为零
@@ -555,7 +624,12 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //设置消息已读sequence
+    /******
+     * 设置消息已读sequence
+     * @param messageId 消息ID
+     * @param callback  回调
+     * @return 消息
+     */
     public ChatMessage deleteSessionMessage(String messageId,
             FlappySendCallback<ChatMessage> callback) {
         //创建消息
@@ -599,14 +673,21 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //通过消息ID重发消息
+    /******
+     * 通过消息ID重发消息
+     * @param messageId 消息ID
+     * @param callback  回调
+     */
     public void resendMessageById(String messageId,
             FlappySendCallback<ChatMessage> callback) {
         resendMessage(Database.getInstance().getMessageById(messageId), callback);
     }
 
-
-    //重发消息
+    /******
+     * 重发消息
+     * @param chatMessage 消息
+     * @param callback    回调
+     */
     public void resendMessage(final ChatMessage chatMessage,
             final FlappySendCallback<ChatMessage> callback) {
         //文本消息
@@ -639,8 +720,10 @@ public class FlappyChatSession extends FlappyBaseSession {
         }
     }
 
-
-    //获取要发送的ID
+    /******
+     * 获取要发送的ID
+     * @return 对方ID
+     */
     private String getPeerID() {
         switch (getSession().getSessionType().intValue()) {
             ///群聊会话
@@ -665,7 +748,10 @@ public class FlappyChatSession extends FlappyBaseSession {
         return null;
     }
 
-    //获取对方的extendID
+    /******
+     * 获取对方的extendID
+     * @return 对方ID
+     */
     private String getPeerExtendID() {
         //查找
         switch (getSession().getSessionType().intValue()) {
@@ -691,12 +777,20 @@ public class FlappyChatSession extends FlappyBaseSession {
         return null;
     }
 
-    //获取最后一条消息
+    /******
+     * 获取最后一条消息
+     * @return 消息
+     */
     public ChatMessage getLatestMessage() {
         return Database.getInstance().getSessionLatestMessage(getSession().getSessionId());
     }
 
-    //获取这条消息之前的消息
+    /******
+     * 获取这条消息之前的消息
+     * @param messageId 消息ID
+     * @param size      大小
+     * @return 消息列表
+     */
     public List<ChatMessage> getFormerMessages(String messageId, int size) {
         return Database.getInstance().getSessionFormerMessages(getSession().getSessionId(),
                 messageId,
@@ -704,10 +798,12 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
-    //获取未读消息的数量
+    /******
+     * 获取未读消息的数量
+     * @return 未读消息数量
+     */
     public int getUnReadMessageCount() {
         return Database.getInstance().getUnReadSessionMessageCountBySessionId(getSession().getSessionId());
     }
-
 
 }

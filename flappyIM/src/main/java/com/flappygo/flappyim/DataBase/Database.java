@@ -900,7 +900,7 @@ public class Database {
      * @return 获取消息，这个消息可能有多条，主要是没发成功的
      */
     @SuppressLint("Range")
-    private List<ChatMessage> getSessionOffsetMessages(String messageSession, String messageTableOffset) {
+    private List<ChatMessage> getSessionOffsetMessages(String messageSession, String messageTableOffset, String messageStamp) {
 
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
@@ -913,10 +913,11 @@ public class Database {
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageTableOffset = ? and messageInsertUser = ? and messageType !=8 ",
+                    "messageSession = ? and messageTableOffset = ? and messageStamp < ? and messageInsertUser = ? and messageType !=8 ",
                     new String[]{
                             messageSession,
                             messageTableOffset,
+                            messageStamp,
                             chatUser.getUserExtendId()
                     },
                     null,
@@ -971,17 +972,14 @@ public class Database {
 
         try {
             //首先查询所有的这个seq的消息，可能有很多发送失败的消息，而这里的消息也是经过排序好的
-            ChatMessage chatMessage = getMessageByID(messageID, false);
-            List<ChatMessage> chatMessages = new ArrayList<>();
+            ChatMessage chatMessage = getMessageByID(messageID);
             List<ChatMessage> sessionSeqMessages = getSessionOffsetMessages(
                     messageSession,
-                    chatMessage.getMessageTableOffset().toString()
+                    chatMessage.getMessageTableOffset().toString(),
+                    chatMessage.getMessageStamp().toString()
             );
-            for (int s = 0; s < sessionSeqMessages.size(); s++) {
-                if (sessionSeqMessages.get(s).getMessageStamp().intValue() < chatMessage.getMessageStamp().intValue()) {
-                    chatMessages.add(sessionSeqMessages.get(s));
-                }
-            }
+            List<ChatMessage> chatMessages = new ArrayList<>(sessionSeqMessages);
+
             //获取此数据之前的数据列表集
             List<ChatMessage> list = new ArrayList<>();
             Cursor cursor = db.query(
@@ -997,6 +995,7 @@ public class Database {
                     null,
                     "messageTableOffset DESC,messageStamp DESC LIMIT " + size
             );
+
             //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
@@ -1150,7 +1149,7 @@ public class Database {
      * @return 消息
      */
     @SuppressLint("Range")
-    public ChatMessage getMessageByID(String messageID, boolean showActionMsg) {
+    public ChatMessage getMessageByID(String messageID) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -1158,30 +1157,15 @@ public class Database {
         }
         open();
         try {
-            Cursor cursor;
-            //获取当前用户的消息
-            if (showActionMsg) {
-                cursor = db.query(
-                        DataBaseConfig.TABLE_MESSAGE,
-                        null,
-                        "messageId = ? and messageInsertUser = ?",
-                        new String[]{messageID, chatUser.getUserExtendId()},
-                        null,
-                        null,
-                        null
-                );
-            } else {
-                cursor = db.query(
-                        DataBaseConfig.TABLE_MESSAGE,
-                        null,
-                        "messageId = ? and messageInsertUser = ? and messageType != 8",
-                        new String[]{messageID, chatUser.getUserExtendId()},
-                        null,
-                        null,
-                        null
-                );
-            }
-            //获取
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageId = ? and messageInsertUser = ?",
+                    new String[]{messageID, chatUser.getUserExtendId()},
+                    null,
+                    null,
+                    null
+            );
             if (cursor.moveToFirst()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));

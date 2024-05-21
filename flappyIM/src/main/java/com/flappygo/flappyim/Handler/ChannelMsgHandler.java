@@ -235,7 +235,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             for (int s = 0; s < messages.size(); s++) {
                 ChatMessage chatMessage = messages.get(s);
                 //通知接收成功或者发送成功
-                ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId(), true);
+                ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId());
                 //消息状态更改
                 handleMessageSendArriveState(chatMessage, former);
                 //插入消息
@@ -274,7 +274,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //得到真正的消息对象
             ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), secret);
             //判断数据库是否存在
-            ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId(), true);
+            ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId());
             //消息到达后的状态改变
             handleMessageSendArriveState(chatMessage, former);
             //插入消息
