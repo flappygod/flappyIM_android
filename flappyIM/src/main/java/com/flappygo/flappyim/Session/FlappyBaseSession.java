@@ -134,29 +134,6 @@ public class FlappyBaseSession {
         }, msg);
     }
 
-    //将消息的状态更新为已经发送
-    private void updateMsgSent(ChatMessage msg) {
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
-        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
-            @Override
-            public ChatMessage run(ChatMessage data, String tag) {
-                Database.getInstance().insertMessage(data);
-                return data;
-            }
-
-            @Override
-            public void failure(Exception e, String tag) {
-                if (e != null) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void success(ChatMessage data, String tag) {
-
-            }
-        }, msg);
-    }
 
     //发送消息
     protected void sendMessage(ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
@@ -171,7 +148,6 @@ public class FlappyBaseSession {
         handler.sendMessage(chatMessage, new FlappySendCallback<ChatMessage>() {
             @Override
             public void success(ChatMessage msg) {
-                updateMsgSent(msg);
                 callback.success(msg);
             }
 

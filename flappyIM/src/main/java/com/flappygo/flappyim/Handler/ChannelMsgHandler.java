@@ -242,7 +242,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //通知接收成功或者发送成功
                 ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId(), true);
                 //消息状态更改
-                messageArrivedState(chatMessage, former);
+                handleMessageSendArriveState(chatMessage, former);
                 //插入消息
                 Database.getInstance().insertMessage(chatMessage);
                 //消息发送回调
@@ -281,7 +281,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //判断数据库是否存在
             ChatMessage former = Database.getInstance().getMessageByID(chatMessage.getMessageId(), true);
             //消息到达后的状态改变
-            messageArrivedState(chatMessage, former);
+            handleMessageSendArriveState(chatMessage, former);
             //插入消息
             Database.getInstance().insertMessage(chatMessage);
             //发送成功
@@ -516,7 +516,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * @param msg    消息
      * @param former 之前的消息
      */
-    private void messageArrivedState(ChatMessage msg, ChatMessage former) {
+    private void handleMessageSendArriveState(ChatMessage msg, ChatMessage former) {
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         //如果是自己发送的，代表发送成功
         if (chatUser.getUserId().equals(msg.getMessageSendId())) {
