@@ -20,16 +20,16 @@ import java.util.List;
 /******
  * 消息管理器
  */
-public class HandleNotifyManager {
+public class HandlerNotifyManager {
 
     //单例holder
     private static final class InstanceHolder {
-        static final HandleNotifyManager instance = new HandleNotifyManager();
+        static final HandlerNotifyManager instance = new HandlerNotifyManager();
     }
 
     //获取单例
-    public static HandleNotifyManager getInstance() {
-        return HandleNotifyManager.InstanceHolder.instance;
+    public static HandlerNotifyManager getInstance() {
+        return HandlerNotifyManager.InstanceHolder.instance;
     }
 
     //用于加锁

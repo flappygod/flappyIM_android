@@ -2,7 +2,6 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDING;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
@@ -10,7 +9,7 @@ import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
-import com.flappygo.flappyim.Handler.HandleNotifyManager;
+import com.flappygo.flappyim.Handler.HandlerNotifyManager;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
@@ -105,7 +104,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage data, String tag) {
-                HandleNotifyManager.getInstance().notifyMessageSendInsert(data);
+                HandlerNotifyManager.getInstance().notifyMessageSendInsert(data);
             }
         }, msg);
     }
@@ -129,7 +128,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage data, String tag) {
-                HandleNotifyManager.getInstance().notifyMessageFailure(msg);
+                HandlerNotifyManager.getInstance().notifyMessageFailure(msg);
             }
         }, msg);
     }

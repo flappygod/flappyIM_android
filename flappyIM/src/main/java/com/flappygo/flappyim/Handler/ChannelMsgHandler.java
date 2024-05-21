@@ -209,7 +209,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         handlerLogin.getLoginResponse().getSessions()
                 );
                 //通知会话更新
-                HandleNotifyManager.getInstance().notifySessionListUpdate(
+                HandlerNotifyManager.getInstance().notifySessionListUpdate(
                         handlerLogin.getLoginResponse().getSessions()
                 );
             }
@@ -241,11 +241,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //插入消息
                 Database.getInstance().insertMessage(chatMessage);
                 //消息发送回调
-                HandleNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
+                HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
                 //通知监听变化
-                HandleNotifyManager.getInstance().handleMessageAction(chatMessage);
+                HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
                 //通知监听变化
-                HandleNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
+                HandlerNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
                 //保存最后的offset
                 if (s == (messages.size() - 1)) {
                     messageArrivedReceipt(ctx, chatMessage, former);
@@ -280,11 +280,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //插入消息
             Database.getInstance().insertMessage(chatMessage);
             //发送成功
-            HandleNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
+            HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
             //新消息到达
-            HandleNotifyManager.getInstance().handleMessageAction(chatMessage);
+            HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
             //新消息到达
-            HandleNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
+            HandlerNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
             //消息回执
             messageArrivedReceipt(ctx, chatMessage, former);
         }
@@ -306,7 +306,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //插入数据
             Database.getInstance().insertSession(data);
             //通知session更新
-            HandleNotifyManager.getInstance().notifySessionUpdate(data);
+            HandlerNotifyManager.getInstance().notifySessionUpdate(data);
             //消息标记为已经处理
             List<ChatMessage> messages = Database.getInstance().getNotActionSystemMessageBySession(data.getSessionId());
             //将系统消息标记成为已经处理，不再需要重复处理
@@ -334,7 +334,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         isActive = false;
 
         //消息通道关闭，回调
-        HandleNotifyManager.getInstance().handleSendFailureAllCallback();
+        HandlerNotifyManager.getInstance().handleSendFailureAllCallback();
 
         //如果这里还没有回调成功，那么就是登录失败
         if (this.handlerLogin != null) {
@@ -474,7 +474,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Message msg = new Message();
             msg.what = HandlerSession.SESSION_UPDATE;
             msg.obj = Database.getInstance().getUserSessionByID(message.getMessageSession());
-            HandleNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
+            HandlerNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
         }
     }
 
@@ -501,7 +501,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Message msg = new Message();
             msg.what = HandlerSession.SESSION_DELETE;
             msg.obj = sessionModel;
-            HandleNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
+            HandlerNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
         }
     }
 
@@ -571,7 +571,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * 检查旧消息进行发送
      */
     private void checkFormerMessagesToSend() {
-        List<ChatMessage> formerMessageList = HandleNotifyManager.getInstance().getUnSendCallbackHandlers();
+        List<ChatMessage> formerMessageList = HandlerNotifyManager.getInstance().getUnSendCallbackHandlers();
         for (ChatMessage message : formerMessageList) {
             sendMessageIfActive(message);
         }
@@ -585,13 +585,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     public void sendMessage(final ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
 
         //多次发送，之前的发送全部直接给他失败
-        HandleNotifyManager.getInstance().handleSendFailureCallback(
+        HandlerNotifyManager.getInstance().handleSendFailureCallback(
                 chatMessage,
                 new Exception("消息重新发送")
         );
 
         //添加进入到消息发送请求
-        HandleNotifyManager.getInstance().addSendCallbackHandler(
+        HandlerNotifyManager.getInstance().addSendCallbackHandler(
                 chatMessage.getMessageId(),
                 new HandlerSendCall(callback, chatMessage)
         );
@@ -619,7 +619,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //添加监听
                     future.addListener((ChannelFutureListener) channelFuture -> {
                         if (!channelFuture.isSuccess()) {
-                            HandleNotifyManager.getInstance().handleSendFailureCallback(
+                            HandlerNotifyManager.getInstance().handleSendFailureCallback(
                                     chatMessage,
                                     new Exception("连接已经断开")
                             );
@@ -628,7 +628,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 }
             }
         } catch (Exception ex) {
-            HandleNotifyManager.getInstance().handleSendFailureCallback(chatMessage, ex);
+            HandlerNotifyManager.getInstance().handleSendFailureCallback(chatMessage, ex);
         }
     }
 }
