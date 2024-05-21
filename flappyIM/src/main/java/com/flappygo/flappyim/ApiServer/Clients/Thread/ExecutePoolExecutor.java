@@ -92,7 +92,6 @@ public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
      * @param thread   线程
      */
     private void addThreadToHashMap(Thread thread) {
-        // 加入到当前正在进行的线程中
         synchronized (lThreads) {
             lThreads.put(Long.toString(thread.getId()), thread);
         }
@@ -103,7 +102,6 @@ public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
      * @param thread  线程
      */
     private void removeThreadFromHashMap(Thread thread) {
-        // 保证原子操作
         String key = Long.toString(((Thread) thread).getId());
         synchronized (lThreads) {
             if (lThreads.containsKey(key)) {
@@ -114,7 +112,6 @@ public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
 
     @Override
     public boolean remove(Runnable task) {
-        // 从HashMap中移除某个线程
         if (task instanceof Thread) {
             removeThreadFromHashMap((Thread) task);
         }
@@ -126,7 +123,6 @@ public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
      * @return 列表
      */
     public List<Thread> getAllThread() {
-        // 加锁进行原子操作
         List<Thread> ret = new ArrayList<>();
         synchronized (lThreads) {
             for (Entry<String, Thread> entry : lThreads.entrySet()) {

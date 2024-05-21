@@ -128,6 +128,7 @@ public class GsonTool {
      * @param <T>        泛型
      * @return 对象
      */
+    @SuppressWarnings("unchecked")
     public static <T> T jsonStringToModel(String jsonStr, Class<T> cls) {
         if (StringTool.isEmpty(jsonStr)) {
             return null;

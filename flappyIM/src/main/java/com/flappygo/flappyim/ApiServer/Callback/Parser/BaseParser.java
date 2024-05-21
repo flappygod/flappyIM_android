@@ -13,13 +13,19 @@ import org.json.JSONObject;
  */
 public class BaseParser<T> {
 
-    //基本的解析对象
-    private BaseApiModel<T> baseApiModel;
+    /******
+     * 基本的解析对象
+     */
+    private BaseApiModel<T> data;
 
-    //判断是否解析成功
-    private boolean parseSuccess;
+    /******
+     * 判断是否解析成功
+     */
+    private boolean success;
 
-    //解析错误时候的报错代码
+    /******
+     * 解析错误时候的报错代码
+     */
     private Exception exception;
 
     /******
@@ -31,10 +37,10 @@ public class BaseParser<T> {
         try {
             parseData(dataStr, tClass);
             //解析成功
-            parseSuccess = true;
+            success = true;
         } catch (Exception ex) {
             //解析失败
-            parseSuccess = false;
+            success = false;
             //解析失败
             exception = ex;
         }
@@ -47,39 +53,39 @@ public class BaseParser<T> {
      */
     @SuppressWarnings("unchecked")
     private void parseData(String dataStr, Class<T> tClass) throws JSONException {
-        baseApiModel = new BaseApiModel<T>();
+        data = new BaseApiModel<T>();
         //创建
         JSONObject jb = new JSONObject(dataStr);
         //返回码
-        baseApiModel.setCode(jb.optString("code"));
+        data.setCode(jb.optString("code"));
         //解析code
-        baseApiModel.setMsg(jb.optString("msg"));
+        data.setMsg(jb.optString("msg"));
         //返回的总页码
-        baseApiModel.setPageCount(jb.optInt("pageCount"));
+        data.setPageCount(jb.optInt("pageCount"));
         //获取到Array数据
         String strData = jb.optString("data");
         //假如是String
         if (tClass == String.class) {
-            baseApiModel.setData((T) strData);
+            data.setData((T) strData);
         }
         //假如是JSON
         else if (tClass == JSONObject.class) {
-            baseApiModel.setData((T) new JSONObject(strData));
+            data.setData((T) new JSONObject(strData));
         }
         //假如是对象
         else {
-            baseApiModel.setData(GsonTool.jsonStringToModel(strData, tClass));
+            data.setData(GsonTool.jsonStringToModel(strData, tClass));
         }
     }
 
     //判断是否解析成功
-    public boolean isParseSuccess() {
-        return parseSuccess;
+    public boolean isSuccess() {
+        return success;
     }
 
     //设置解析成功
-    public void setParseSuccess(boolean parseSuccess) {
-        this.parseSuccess = parseSuccess;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     //获取Exception
@@ -93,13 +99,13 @@ public class BaseParser<T> {
     }
 
     //获取解析后的参数
-    public BaseApiModel<T> getBaseApiModel() {
-        return baseApiModel;
+    public BaseApiModel<T> getData() {
+        return data;
     }
 
     //设置解析model
-    public void setBaseApiModel(BaseApiModel<T> baseApiModel) {
-        this.baseApiModel = baseApiModel;
+    public void setData(BaseApiModel<T> data) {
+        this.data = data;
     }
 
 }

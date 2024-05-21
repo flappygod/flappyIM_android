@@ -28,7 +28,7 @@ public class ChatMessage {
 
 
     //消息被创建
-    public final static int SEND_STATE_CREATE = 0;
+    public final static int SEND_STATE_SENDING = 0;
     //消息已经送达服务器
     public final static int SEND_STATE_SENT = 1;
     //消息已经到达
@@ -76,6 +76,7 @@ public class ChatMessage {
 
     //已读消息
     public final static int ACTION_TYPE_READ = 1;
+
     //删除消息
     public final static int ACTION_TYPE_DELETE = 2;
 

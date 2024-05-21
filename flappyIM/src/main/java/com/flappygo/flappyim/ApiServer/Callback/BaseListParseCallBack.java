@@ -73,14 +73,14 @@ public abstract class BaseListParseCallBack<T> implements OkHttpAsyncCallback {
         //基础解析器为空
         BaseListParser<T> parser = new BaseListParser<T>(data, entityClass);
         //解析成功
-        if (parser.isParseSuccess()) {
+        if (parser.isSuccess()) {
             //此处可以对sign进行必要的验证
-            if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
-                stateTrue(parser.getBaseApiModel().getData(), tag);
+            if (parser.getData().getCode().equals(RESULT_SUCCESS)) {
+                stateTrue(parser.getData().getData(), tag);
             }
             //状态错误
             else {
-                stateFalse(parser.getBaseApiModel().getMsg(), tag);
+                stateFalse(parser.getData().getMsg(), tag);
             }
         } else {
             //json解析出现异常

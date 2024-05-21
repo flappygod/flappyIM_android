@@ -82,14 +82,14 @@ public abstract class BaseParseCallback<T> implements OkHttpAsyncCallback {
         //基础解析器为空
         BaseParser<T> parser = new BaseParser<>(data, entityClass);
         //解析成功
-        if (parser.isParseSuccess()) {
+        if (parser.isSuccess()) {
             //状态成功
-            if (parser.getBaseApiModel().getCode().equals(RESULT_SUCCESS)) {
-                stateTrue(parser.getBaseApiModel().getData(), tag);
+            if (parser.getData().getCode().equals(RESULT_SUCCESS)) {
+                stateTrue(parser.getData().getData(), tag);
             }
             //状态错误
             else {
-                stateFalse(parser.getBaseApiModel(), tag);
+                stateFalse(parser.getData(), tag);
             }
         } else {
             //json解析出现异常

@@ -26,12 +26,17 @@ import java.util.Map;
 public class OkHttpClient {
 
 
-    //单例
+    /******
+     * 单例
+     */
     private static final class InstanceHolder {
         static final OkHttpClient instance = new OkHttpClient();
     }
 
-    //单例
+    /*****
+     * 单例
+     * @return OkHttpClient
+     */
     public static OkHttpClient getInstance() {
         return OkHttpClient.InstanceHolder.instance;
     }
@@ -122,6 +127,7 @@ public class OkHttpClient {
      * @param header   请求Header
      * @param callback 回调
      */
+    @SuppressWarnings("unchecked")
     public void postJson(String url,
             Map<String, Object> data,
             HashMap<String, String> header,
@@ -233,6 +239,7 @@ public class OkHttpClient {
      * @param header   请求Header
      * @param callback 回调
      */
+    @SuppressWarnings("unchecked")
     public void postParam(String url,
             HashMap<String, String> data,
             HashMap<String, String> header,
@@ -340,6 +347,7 @@ public class OkHttpClient {
      * @param header   请求Header
      * @param callback 回调
      */
+    @SuppressWarnings("unchecked")
     public void requestGet(String url,
             HashMap<String, String> data,
             HashMap<String, String> header,

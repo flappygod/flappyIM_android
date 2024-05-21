@@ -1,6 +1,6 @@
 package com.flappygo.flappyim.Session;
 
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_CREATE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDING;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENT;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
@@ -10,7 +10,7 @@ import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.Models.Response.ResponseUpload;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
-import com.flappygo.flappyim.Handler.MessageNotifyManager;
+import com.flappygo.flappyim.Handler.HandleNotifyManager;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
@@ -43,10 +43,15 @@ import java.util.Objects;
  */
 public class FlappyBaseSession {
 
-    //Client
+    /******
+     * 会话Client
+     */
     private static final LXAsyncTaskClient sessionClient = new LXAsyncTaskClient(20);
 
-    ///获取当前的消息handler
+    /****
+     * 获取当前的消息handler
+     * @return 消息Handler
+     */
     ChannelMsgHandler getCurrentChannelMessageHandler() {
         FlappySocketService flappyService = FlappySocketService.getInstance();
         //如果当前服务不在线，错误
@@ -62,15 +67,24 @@ public class FlappyBaseSession {
         return thread.getChannelMsgHandler();
     }
 
-    //我们姑且认为是最后一条
+    /******
+     * 插入消息
+     * @param msg 消息
+     */
     public void insertMessage(ChatMessage msg) {
-        //设置状态
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_CREATE));
+        //设置消息发送状态为create
+        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENDING));
 
-        //设置消息的TableSeq,这里这个值并不是最终值，最终以服务端成功后的返回值为准
+        //设置消息表Offset
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
+
+        //最近的一条消息
         BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
+
+        //添加一个
         bigDecimal = bigDecimal.add(new BigDecimal(1));
+
+        //设置offset，仅用于排序，最终以服务器端返回为准
         msg.setMessageTableOffset(bigDecimal);
 
         //更新数据
@@ -91,20 +105,14 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage data, String tag) {
-
+                HandleNotifyManager.getInstance().notifyMessageSendInsert(data);
             }
         }, msg);
-
-
-        //通知消息发送成功
-        MessageNotifyManager.getInstance().notifyMessageSend(msg);
     }
 
     //发送失败了更新数据
     private void updateMsgFailure(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
-
-        //更新数据
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
@@ -121,19 +129,14 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage data, String tag) {
-
+                HandleNotifyManager.getInstance().notifyMessageFailure(msg);
             }
         }, msg);
-
-
-        //通知消息发送失败
-        MessageNotifyManager.getInstance().notifyMessageFailure(msg);
     }
 
     //将消息的状态更新为已经发送
     private void updateMsgSent(ChatMessage msg) {
         msg.setMessageSendState(new BigDecimal(SEND_STATE_SENT));
-        //更新数据
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
             public ChatMessage run(ChatMessage data, String tag) {
@@ -164,7 +167,7 @@ public class FlappyBaseSession {
             callback.failure(chatMessage, new Exception("Channel error"), Integer.parseInt(RESULT_NET_ERROR));
             return;
         }
-        //取得了handler,再发送消息
+        //取得了Handler,再发送消息
         handler.sendMessage(chatMessage, new FlappySendCallback<ChatMessage>() {
             @Override
             public void success(ChatMessage msg) {
@@ -235,7 +238,6 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
         }, msg);
@@ -301,8 +303,6 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                //得到上传后的消息实体
-                //设置真实的信息
                 sendMessage(msg, callback);
             }
         }, msg);
@@ -329,7 +329,6 @@ public class FlappyBaseSession {
                 //添加入上传
                 files.add(overFileModel);
 
-
                 //视频地址添加
                 UploadModel videoModel = new UploadModel();
                 //文件
@@ -338,7 +337,6 @@ public class FlappyBaseSession {
                 videoModel.setPath(video.getSendPath());
                 //添加
                 files.add(videoModel);
-
 
                 //返回的字符串
                 String str = UploadTool.postFile(FlappyConfig.getInstance().videoUpload(), new HashMap<>(), files);
@@ -375,7 +373,6 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
         }, msg);
@@ -443,7 +440,6 @@ public class FlappyBaseSession {
 
             @Override
             public void success(ChatMessage msg, String s) {
-                updateMsgSent(msg);
                 sendMessage(msg, callback);
             }
         }, msg);

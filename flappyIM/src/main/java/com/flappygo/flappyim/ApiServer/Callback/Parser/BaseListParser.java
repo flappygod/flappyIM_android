@@ -19,13 +19,19 @@ import java.util.List;
  */
 public class BaseListParser<T> {
 
-    //基本列表的解析对象
-    private BaseApiModel<List<T>> baseApiModel;
+    /******
+     * 基本列表的解析对象
+     */
+    private BaseApiModel<List<T>> data;
 
-    //判断是否解析成功
-    private boolean parseSuccess;
+    /******
+     * 判断是否解析成功
+     */
+    private boolean success;
 
-    //解析错误时候的报错代码
+    /******
+     * 解析错误时候的报错代码
+     */
     private Exception exception;
 
 
@@ -39,10 +45,10 @@ public class BaseListParser<T> {
             //解析数据
             parseData(dataStr, tClass);
             //解析成功
-            parseSuccess = true;
+            success = true;
         } catch (Exception ex) {
             //解析失败
-            parseSuccess = false;
+            success = false;
             //错误信息
             exception = ex;
         }
@@ -56,17 +62,17 @@ public class BaseListParser<T> {
      */
     @SuppressWarnings("unchecked")
     private void parseData(String dataStr, Class<T> tClass) throws JSONException {
-        baseApiModel = new BaseApiModel<>();
+        data = new BaseApiModel<>();
         //创建
         JSONObject jb = new JSONObject(dataStr);
         //获取到Array数据
         String strData = StringTool.ToNotNullStrWithDefault(jb.optString("data"), "[]");
         //返回码
-        baseApiModel.setCode(jb.optString("code"));
+        data.setCode(jb.optString("code"));
         //解析code
-        baseApiModel.setMsg(jb.optString("msg"));
+        data.setMsg(jb.optString("msg"));
         //返回的总页码
-        baseApiModel.setPageCount(jb.optInt("pageCount"));
+        data.setPageCount(jb.optInt("pageCount"));
         //解析数组
         JSONArray data = new JSONArray(strData);
         //列表
@@ -77,7 +83,7 @@ public class BaseListParser<T> {
             if (tClass == String.class) {
                 arrayList.add((T) data.get(s).toString());
             }
-            //json对象
+            //Json对象
             else if (tClass == JSONObject.class) {
                 arrayList.add((T) data.getJSONObject(s));
             }
@@ -88,28 +94,28 @@ public class BaseListParser<T> {
             }
         }
         //解析成功
-        baseApiModel.setData(arrayList);
+        this.data.setData(arrayList);
     }
 
 
     //获取解析后的参数
-    public BaseApiModel<List<T>> getBaseApiModel() {
-        return baseApiModel;
+    public BaseApiModel<List<T>> getData() {
+        return data;
     }
 
     //设置数据model
-    public void setBaseApiModel(BaseApiModel<List<T>> baseApiModel) {
-        this.baseApiModel = baseApiModel;
+    public void setData(BaseApiModel<List<T>> data) {
+        this.data = data;
     }
 
     //判断是否解析成功
-    public boolean isParseSuccess() {
-        return parseSuccess;
+    public boolean isSuccess() {
+        return success;
     }
 
     //设置是否解析成功
-    public void setParseSuccess(boolean parseSuccess) {
-        this.parseSuccess = parseSuccess;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     //获取错误

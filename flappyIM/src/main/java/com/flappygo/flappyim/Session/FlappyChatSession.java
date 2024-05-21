@@ -2,8 +2,9 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
-import com.flappygo.flappyim.Callback.FlappySendCallback;
+import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
@@ -18,7 +19,6 @@ import com.flappygo.flappyim.Tools.Upload.ImageReadWH;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.VideoTool;
 
@@ -599,6 +599,13 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
+    //通过消息ID重发消息
+    public void resendMessageById(String messageId,
+            FlappySendCallback<ChatMessage> callback) {
+        resendMessage(Database.getInstance().getMessageById(messageId), callback);
+    }
+
+
     //重发消息
     public void resendMessage(final ChatMessage chatMessage,
             final FlappySendCallback<ChatMessage> callback) {
@@ -699,7 +706,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     //获取未读消息的数量
     public int getUnReadMessageCount() {
-        return Database.getInstance().getNotReadSessionMessageCountBySessionId(getSession().getSessionId());
+        return Database.getInstance().getUnReadSessionMessageCountBySessionId(getSession().getSessionId());
     }
 
 

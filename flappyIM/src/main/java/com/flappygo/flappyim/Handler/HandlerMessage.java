@@ -18,7 +18,7 @@ public class HandlerMessage extends Handler {
     public static final int MSG_FAILED = 9;
 
     //消息开始发送
-    public static final int MSG_SEND = 0;
+    public static final int MSG_SENDING = 0;
 
     //收到新的消息了
     public static final int MSG_RECEIVE = 1;
@@ -45,7 +45,7 @@ public class HandlerMessage extends Handler {
     @SuppressWarnings("unchecked")
     public void handleMessage(Message message) {
         //消息被创建
-        if (message.what == MSG_SEND) {
+        if (message.what == MSG_SENDING) {
             ChatMessage chatMessage = (ChatMessage) message.obj;
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
                 if (chatMessage.getMessageSession().equals(key) || key.equals(globalMsgTag)) {
