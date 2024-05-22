@@ -19,12 +19,13 @@ public interface MessageListener {
     //消息接收
     void messageReceived(ChatMessage chatMessage);
 
+    //消息被删除
+    void messageDelete(ChatMessage messageId);
+
     //消息已读
     void messageReadOther(String sessionId,String readerId,String tableOffset);
 
     //消息已读
     void messageReadSelf(String sessionId,String readerId,String tableOffset);
 
-    //消息被删除
-    void messageDelete(String messageId);
 }

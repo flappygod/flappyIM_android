@@ -184,10 +184,7 @@ public class HandlerNotifyManager {
                 case ChatMessage.ACTION_TYPE_DELETE: {
                     Message msg = new Message();
                     msg.what = HandlerMessage.MSG_DELETE;
-                    msg.obj = new ArrayList<>(Arrays.asList(
-                            chatAction.getActionIds().get(1),
-                            chatAction.getActionIds().get(2)
-                    ));
+                    msg.obj = Database.getInstance().getMessageById(chatAction.getActionIds().get(2));
                     handlerMessage.sendMessage(msg);
                     break;
                 }

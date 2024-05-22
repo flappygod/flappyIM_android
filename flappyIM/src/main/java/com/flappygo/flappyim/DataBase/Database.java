@@ -972,7 +972,7 @@ public class Database {
 
         try {
             //首先查询所有的这个seq的消息，可能有很多发送失败的消息，而这里的消息也是经过排序好的
-            ChatMessage chatMessage = getMessageByID(messageID);
+            ChatMessage chatMessage = getMessageById(messageID);
             List<ChatMessage> sessionSeqMessages = getSessionOffsetMessages(
                     messageSession,
                     chatMessage.getMessageTableOffset().toString(),
@@ -1035,9 +1035,8 @@ public class Database {
         } finally {
             close();
         }
-
-
     }
+
 
     //获取最近的一条消息
     @SuppressLint("Range")
@@ -1118,59 +1117,6 @@ public class Database {
                     "messageTableOffset DESC,messageStamp DESC LIMIT 1"
             );
             //获取数据
-            if (cursor.moveToFirst()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSession(cursor.getString(cursor.getColumnIndex("messageSession")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
-                cursor.close();
-                return info;
-            }
-            cursor.close();
-            return null;
-        } finally {
-            close();
-        }
-    }
-
-    /******
-     * 通过消息ID获取消息
-     * @param messageID 消息ID
-     * @return 消息
-     */
-    @SuppressLint("Range")
-    public ChatMessage getMessageByID(String messageID) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return null;
-        }
-        open();
-        try {
-            Cursor cursor = db.query(
-                    DataBaseConfig.TABLE_MESSAGE,
-                    null,
-                    "messageId = ? and messageInsertUser = ?",
-                    new String[]{messageID, chatUser.getUserExtendId()},
-                    null,
-                    null,
-                    null
-            );
             if (cursor.moveToFirst()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));

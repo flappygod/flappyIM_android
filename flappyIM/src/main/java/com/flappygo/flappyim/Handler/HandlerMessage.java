@@ -124,14 +124,12 @@ public class HandlerMessage extends Handler {
         }
         //消息删除
         if (message.what == MSG_DELETE) {
-            List<String> chatMessage = (List<String>) message.obj;
-            String sessionId = chatMessage.get(0);
-            String messageId = chatMessage.get(1);
+            ChatMessage chatMessage = (ChatMessage) message.obj;
             for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
-                if (sessionId.equals(key) || key.equals(globalMsgTag)) {
+                if (chatMessage.getMessageSession().equals(key) || key.equals(globalMsgTag)) {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageDelete(messageId);
+                        messageListeners.get(x).messageDelete(chatMessage);
                     }
                 }
             }
