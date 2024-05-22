@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class HolderMessageSession {
 
-    //global message tag
-    public static String globalMsgTag = "HolderMessageSession";
+    //全局消息tag
+    public static String globalMsgTag = "globalMsgTag";
 
     //接收消息的监听列表
     private final HashMap<String, List<MessageListener>> msgListeners = new HashMap<>();
