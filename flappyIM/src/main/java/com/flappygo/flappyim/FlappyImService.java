@@ -318,17 +318,17 @@ public class FlappyImService {
         }
 
         @Override
+        public void messageDelete(ChatMessage messageId) {
+
+        }
+
+        @Override
         public void messageReadOther(String sessionId, String readerId, String tableOffset) {
 
         }
 
         @Override
         public void messageReadSelf(String sessionId, String readerId, String tableOffset) {
-
-        }
-
-        @Override
-        public void messageDelete(String messageId) {
 
         }
     };
