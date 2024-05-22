@@ -2,6 +2,8 @@ package com.flappygo.flappyim.DataBase;
 
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
 import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
@@ -140,7 +142,6 @@ public class Database {
         open();
         try {
             //检查之前是否存在这个消息
-            ChatMessage message = getMessageById(chatMessage.getMessageId());
             ContentValues values = new ContentValues();
             if (chatMessage.getMessageId() != null) {
                 values.put("messageId", chatMessage.getMessageId());
@@ -187,16 +188,19 @@ public class Database {
             if (chatMessage.getMessageDate() != null) {
                 values.put("messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             }
-            if (chatMessage.getIsDelete() != null) {
-                values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
-            }
             if (chatMessage.getDeleteDate() != null) {
                 values.put("deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
             }
             values.put("messageInsertUser", chatUser.getUserExtendId());
 
-            //保留之前的message stamp
-            values.put("messageStamp", message != null ? message.getMessageStamp().toString() : Long.toString(System.currentTimeMillis()));
+            //保留之前的部分参数
+            ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
+
+            //保留之前的Message Stamp
+            values.put("messageStamp", formerMsg != null ? StringTool.decimalToStr(formerMsg.getMessageStamp()) : Long.toString(System.currentTimeMillis()));
+
+            //保留之前的IS Delete
+            values.put("isDelete", formerMsg != null ? StringTool.decimalToInt(formerMsg.getIsDelete()) : StringTool.decimalToInt(chatMessage.getIsDelete()));
 
             return db.insertWithOnConflict(
                     DataBaseConfig.TABLE_MESSAGE,
@@ -264,7 +268,7 @@ public class Database {
                     values,
                     "messageInsertUser=? and " +
                             "messageSendId!=? and " +
-                            "messageType != 0 and " +
+                            String.format("messageType != %d and ", MSG_TYPE_SYSTEM) +
                             "messageSession=? and " +
                             "messageTableOffset <= ? ",
                     new String[]{
@@ -300,7 +304,7 @@ public class Database {
                     DataBaseConfig.TABLE_MESSAGE,
                     values,
                     "messageInsertUser=? and " +
-                               "messageId = ?",
+                            "messageId = ?",
                     new String[]{
                             chatUser.getUserExtendId(),
                             messageId,
@@ -369,8 +373,8 @@ public class Database {
                     "and messageSession = ? " +
                     "and messageSendId != ? " +
                     "and messageReadState = 0 " +
-                    "and messageType != 0 " +
-                    "and messageType != 8";
+                    String.format("and messageType != %d ", MSG_TYPE_SYSTEM) +
+                    String.format("and messageType != %d", MSG_TYPE_ACTION);
             Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
             int count = 0;
             if (cursor.moveToFirst()) {
@@ -910,12 +914,13 @@ public class Database {
             //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageTableOffset = ? and messageStamp < ? and messageInsertUser = ? and messageType !=8 ",
+                    "messageSession = ? and messageTableOffset = ? and messageStamp < ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
                     new String[]{
                             messageSession,
                             messageTableOffset,
                             messageStamp,
-                            chatUser.getUserExtendId()
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
                     },
                     null,
                     null,
@@ -982,11 +987,12 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageTableOffset < ? and messageInsertUser = ? and messageType != 8",
+                    "messageSession = ? and messageTableOffset < ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
                     new String[]{
                             messageSession,
                             chatMessage.getMessageTableOffset().toString(),
                             chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
                     },
                     null,
                     null,
@@ -1103,8 +1109,12 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSession = ? and messageInsertUser = ? and messageType != 8",
-                    new String[]{messageSession, chatUser.getUserExtendId()},
+                    "messageSession = ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    new String[]{
+                            messageSession,
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
+                    },
                     null,
                     null,
                     "messageTableOffset DESC,messageStamp DESC LIMIT 1"
@@ -1270,8 +1280,11 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageType = 0 and messageReadState = 0 and messageInsertUser = ?",
-                    new String[]{chatUser.getUserExtendId()},
+                    "messageType = ? and messageReadState = 0 and messageInsertUser = ?",
+                    new String[]{
+                            Integer.toString(MSG_TYPE_SYSTEM),
+                            chatUser.getUserExtendId()
+                    },
                     null,
                     null,
                     "messageTableOffset ASC"
