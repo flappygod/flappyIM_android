@@ -347,8 +347,6 @@ public class Database {
             }
             //消息删除
             case ChatMessage.ACTION_TYPE_DELETE: {
-                //获取会话ID
-                //String sessionId = action.getActionIds().get(1);
                 //获取TableSequence
                 String messageId = action.getActionIds().get(2);
                 //删除消息
