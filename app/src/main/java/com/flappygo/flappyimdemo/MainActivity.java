@@ -116,6 +116,10 @@ public class MainActivity extends Activity {
             }
 
             @Override
+            public void messageDelete(ChatMessage chatMessage) {
+
+            }
+            @Override
             public void messageReceived(ChatMessage chatMessage) {
 
                 if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
@@ -142,10 +146,6 @@ public class MainActivity extends Activity {
 
             }
 
-            @Override
-            public void messageDelete(String messageId) {
-
-            }
         });
 
         //登录
@@ -218,6 +218,11 @@ public class MainActivity extends Activity {
                             }
 
                             @Override
+                            public void messageDelete(ChatMessage chatMessage) {
+
+                            }
+
+                            @Override
                             public void messageReadOther(String sessionId, String readerId, String tableOffset) {
 
                             }
@@ -227,10 +232,6 @@ public class MainActivity extends Activity {
 
                             }
 
-                            @Override
-                            public void messageDelete(String messageId) {
-
-                            }
                         });
 
                         ChatMessage chatMessage = mySession.getLatestMessage();
