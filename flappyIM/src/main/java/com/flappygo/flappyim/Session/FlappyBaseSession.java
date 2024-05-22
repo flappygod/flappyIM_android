@@ -87,11 +87,10 @@ public class FlappyBaseSession {
         msg.setMessageTableOffset(bigDecimal);
 
         //更新数据
-        sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
+        sessionClient.execute(new LXAsyncTask<ChatMessage, Boolean>() {
             @Override
-            public ChatMessage run(ChatMessage data, String tag) {
-                Database.getInstance().insertMessage(data);
-                return data;
+            public Boolean run(ChatMessage data, String tag) {
+                return Database.getInstance().insertMessage(data);
             }
 
             @Override
@@ -102,8 +101,8 @@ public class FlappyBaseSession {
             }
 
             @Override
-            public void success(ChatMessage data, String tag) {
-                HandlerNotifyManager.getInstance().notifyMessageSendInsert(data);
+            public void success(Boolean data, String tag) {
+                HandlerNotifyManager.getInstance().notifyMessageSendInsert(msg);
             }
         }, msg);
     }
@@ -128,6 +127,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(Boolean data, String tag) {
+                msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
                 HandlerNotifyManager.getInstance().notifyMessageFailure(msg);
             }
         }, msg);

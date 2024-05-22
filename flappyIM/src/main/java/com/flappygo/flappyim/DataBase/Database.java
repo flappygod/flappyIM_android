@@ -129,12 +129,12 @@ public class Database {
      * 插入单条消息
      * @param chatMessage  消息
      */
-    public void insertMessage(ChatMessage chatMessage) {
+    public boolean insertMessage(ChatMessage chatMessage) {
 
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
-            return;
+            return false;
         }
 
         open();
@@ -198,12 +198,12 @@ public class Database {
             //保留之前的message stamp
             values.put("messageStamp", message != null ? message.getMessageStamp().toString() : Long.toString(System.currentTimeMillis()));
 
-            db.insertWithOnConflict(
+            return db.insertWithOnConflict(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE
-            );
+            ) > 0;
         } finally {
             close();
         }
