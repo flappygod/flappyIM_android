@@ -92,6 +92,18 @@ public class HandlerMessage extends Handler {
                 }
             }
         }
+        //消息删除
+        if (message.what == MSG_DELETE) {
+            ChatMessage chatMessage = (ChatMessage) message.obj;
+            for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
+                if (chatMessage.getMessageSession().equals(key) || key.equals(globalMsgTag)) {
+                    List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
+                    for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
+                        messageListeners.get(x).messageDelete(chatMessage);
+                    }
+                }
+            }
+        }
         //对方消息已读
         if (message.what == MSG_READ_OTHER) {
             List<String> chatMessage = (List<String>) message.obj;
@@ -118,18 +130,6 @@ public class HandlerMessage extends Handler {
                     List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
                     for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
                         messageListeners.get(x).messageReadSelf(sessionId, readerId, messageTableOffset);
-                    }
-                }
-            }
-        }
-        //消息删除
-        if (message.what == MSG_DELETE) {
-            ChatMessage chatMessage = (ChatMessage) message.obj;
-            for (String key : HolderMessageSession.getInstance().getMsgListeners().keySet()) {
-                if (chatMessage.getMessageSession().equals(key) || key.equals(globalMsgTag)) {
-                    List<MessageListener> messageListeners = HolderMessageSession.getInstance().getMsgListeners().get(key);
-                    for (int x = 0; messageListeners != null && x < messageListeners.size(); x++) {
-                        messageListeners.get(x).messageDelete(chatMessage);
                     }
                 }
             }
