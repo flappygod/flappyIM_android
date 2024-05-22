@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.Session;
 
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_DATABASE_ERROR;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDING;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
@@ -70,7 +71,7 @@ public class FlappyBaseSession {
      * 插入消息
      * @param msg 消息
      */
-    public void insertMessage(ChatMessage msg) {
+    public void updateMsgInsert(ChatMessage msg) {
         //设置消息发送状态为create
         msg.setMessageSendState(new BigDecimal(SEND_STATE_SENDING));
 
@@ -134,10 +135,39 @@ public class FlappyBaseSession {
     }
 
 
+    //发送失败了更新数据
+    protected void updateMsgDelete(String messageId, FlappySendCallback<ChatMessage> callback) {
+        sessionClient.execute(new LXAsyncTask<String, ChatMessage>() {
+            @Override
+            public ChatMessage run(String id, String tag) {
+                ChatMessage message = Database.getInstance().getMessageById(id);
+                message.setIsDelete(new BigDecimal(1));
+                Database.getInstance().updateMessageDelete(id);
+                return message;
+            }
+
+            @Override
+            public void failure(Exception ex, String tag) {
+                if (callback != null) {
+                    callback.failure(null, ex, Integer.parseInt(RESULT_DATABASE_ERROR));
+                }
+            }
+
+            @Override
+            public void success(ChatMessage data, String tag) {
+                if (callback != null) {
+                    callback.success(data);
+                }
+                HandlerNotifyManager.getInstance().notifyMessageDelete(data);
+            }
+        }, messageId);
+    }
+
+
     //发送消息
     protected void sendMessage(ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
         //插入数据
-        insertMessage(chatMessage);
+        updateMsgInsert(chatMessage);
         //线程中的handler不存在
         ChannelMsgHandler handler = getCurrentChannelMessageHandler();
         if (handler == null) {
@@ -163,7 +193,7 @@ public class FlappyBaseSession {
     //上传图片并发送
     protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //插入数据
-        insertMessage(msg);
+        updateMsgInsert(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
@@ -226,7 +256,7 @@ public class FlappyBaseSession {
     //上传音频文件并发送
     protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //插入数据
-        insertMessage(msg);
+        updateMsgInsert(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
@@ -293,7 +323,7 @@ public class FlappyBaseSession {
     //上传视频并发送
     protected void uploadVideoAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //插入数据
-        insertMessage(msg);
+        updateMsgInsert(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
@@ -365,7 +395,7 @@ public class FlappyBaseSession {
     //上传音频文件并发送
     protected void uploadFileAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
         //插入数据
-        insertMessage(msg);
+        updateMsgInsert(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override

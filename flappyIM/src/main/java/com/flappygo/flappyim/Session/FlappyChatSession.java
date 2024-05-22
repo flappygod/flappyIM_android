@@ -1,9 +1,7 @@
 package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDING;
 
-import com.flappygo.flappyim.Handler.HandlerNotifyManager;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -27,7 +25,6 @@ import com.flappygo.flappyim.Tools.VideoTool;
 import android.media.MediaMetadataRetriever;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -604,12 +601,12 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
-     * 设置消息已读sequence
+     * 撤回已读消息
      * @param messageId 消息ID
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage deleteSessionMessage(String messageId,
+    public ChatMessage recallSessionMessage(String messageId,
             FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -651,12 +648,21 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
+     * 删除已读消息
+     * @param messageId 消息ID
+     * @param callback  回调
+     */
+    public void deleteMessageById(String messageId, FlappySendCallback<ChatMessage> callback) {
+        updateMsgDelete(messageId, callback);
+    }
+
+
+    /******
      * 通过消息ID重发消息
      * @param messageId 消息ID
      * @param callback  回调
      */
-    public void resendMessageById(String messageId,
-            FlappySendCallback<ChatMessage> callback) {
+    public void resendMessageById(String messageId, FlappySendCallback<ChatMessage> callback) {
         resendMessage(Database.getInstance().getMessageById(messageId), callback);
     }
 
@@ -665,8 +671,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param chatMessage 消息
      * @param callback    回调
      */
-    public void resendMessage(final ChatMessage chatMessage,
-            final FlappySendCallback<ChatMessage> callback) {
+    public void resendMessage(ChatMessage chatMessage, FlappySendCallback<ChatMessage> callback) {
         //文本消息
         if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
             sendMessage(chatMessage, callback);

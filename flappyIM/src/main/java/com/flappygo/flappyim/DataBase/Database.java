@@ -281,10 +281,9 @@ public class Database {
 
     /******
      * 设置删除消息
-     * @param sessionId    会话ID
      * @param messageId    消息ID
      */
-    private void updateMessageDelete(String sessionId, String messageId) {
+    public void updateMessageDelete(String messageId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -301,11 +300,9 @@ public class Database {
                     DataBaseConfig.TABLE_MESSAGE,
                     values,
                     "messageInsertUser=? and " +
-                            "messageSession=? and " +
-                            "messageId = ?",
+                               "messageId = ?",
                     new String[]{
                             chatUser.getUserExtendId(),
-                            sessionId,
                             messageId,
                     }
             );
@@ -347,11 +344,11 @@ public class Database {
             //消息删除
             case ChatMessage.ACTION_TYPE_DELETE: {
                 //获取会话ID
-                String sessionId = action.getActionIds().get(1);
+                //String sessionId = action.getActionIds().get(1);
                 //获取TableSequence
                 String messageId = action.getActionIds().get(2);
                 //删除消息
-                updateMessageDelete(sessionId, messageId);
+                updateMessageDelete(messageId);
                 break;
             }
         }

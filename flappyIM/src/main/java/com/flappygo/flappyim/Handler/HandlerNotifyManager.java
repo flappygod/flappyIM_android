@@ -230,6 +230,17 @@ public class HandlerNotifyManager {
     }
 
     /******
+     * 消息删除的监听
+     * @param chatMessage 消息
+     */
+    public void notifyMessageDelete(ChatMessage chatMessage) {
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_DELETE;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
+    }
+
+    /******
      * 通知会话有更新
      * @param session 会话
      */
