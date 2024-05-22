@@ -1,7 +1,9 @@
 package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDING;
 
+import com.flappygo.flappyim.Handler.HandlerNotifyManager;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -25,6 +27,7 @@ import com.flappygo.flappyim.Tools.VideoTool;
 import android.media.MediaMetadataRetriever;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -127,8 +130,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatText(text);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         //返回消息
@@ -179,8 +180,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatImage(chatImage);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //上传图片并发送信息
         uploadImageAndSend(msg, callback);
         //send image
@@ -215,8 +214,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatImage(image);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -269,8 +266,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVoice(chatVoice);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //上传并发送
         uploadVoiceAndSend(msg, callback);
         //返回消息体
@@ -306,8 +301,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVoice(chatVoice);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -342,8 +335,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatLocation(location);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -400,8 +391,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVideo(chatVideo);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //上传并发送
         uploadVideoAndSend(msg, callback);
         //返回消息体
@@ -436,8 +425,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVideo(chatVideo);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //上传并发送
         sendMessage(msg, callback);
         //返回消息体
@@ -486,8 +473,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatFile(chatFile);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //上传并发送
         uploadFileAndSend(msg, callback);
         //返回消息体
@@ -523,8 +508,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatFile(chatFile);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -558,8 +541,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatCustom(text);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         //返回消息
@@ -615,8 +596,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatAction(chatAction);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         //返回消息
@@ -664,8 +643,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatAction(chatAction);
         //时间
         msg.setMessageDate(new Date());
-        //插入数据
-        insertMessage(msg);
         //发送消息
         sendMessage(msg, callback);
         //返回消息

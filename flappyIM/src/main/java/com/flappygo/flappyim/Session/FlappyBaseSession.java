@@ -136,6 +136,8 @@ public class FlappyBaseSession {
 
     //发送消息
     protected void sendMessage(ChatMessage chatMessage, final FlappySendCallback<ChatMessage> callback) {
+        //插入数据
+        insertMessage(chatMessage);
         //线程中的handler不存在
         ChannelMsgHandler handler = getCurrentChannelMessageHandler();
         if (handler == null) {
@@ -160,6 +162,8 @@ public class FlappyBaseSession {
 
     //上传图片并发送
     protected void uploadImageAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //插入数据
+        insertMessage(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
@@ -221,6 +225,8 @@ public class FlappyBaseSession {
 
     //上传音频文件并发送
     protected void uploadVoiceAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //插入数据
+        insertMessage(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
@@ -286,6 +292,8 @@ public class FlappyBaseSession {
 
     //上传视频并发送
     protected void uploadVideoAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //插入数据
+        insertMessage(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
@@ -356,6 +364,8 @@ public class FlappyBaseSession {
 
     //上传音频文件并发送
     protected void uploadFileAndSend(final ChatMessage msg, final FlappySendCallback<ChatMessage> callback) {
+        //插入数据
+        insertMessage(msg);
         //发送
         sessionClient.execute(new LXAsyncTask<ChatMessage, ChatMessage>() {
             @Override
