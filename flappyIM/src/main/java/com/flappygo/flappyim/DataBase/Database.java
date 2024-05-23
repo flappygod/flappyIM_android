@@ -294,6 +294,7 @@ public class Database {
             ContentValues values = new ContentValues();
             //设置已读
             values.put("isDelete", 1);
+            values.put("messageReadState", 1);
             //更新已读消息
             db.update(
                     DataBaseConfig.TABLE_MESSAGE,
