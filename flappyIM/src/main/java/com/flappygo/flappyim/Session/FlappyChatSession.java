@@ -606,7 +606,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage recallSessionMessage(String messageId,
+    public ChatMessage recallMessageById(String messageId,
             FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
