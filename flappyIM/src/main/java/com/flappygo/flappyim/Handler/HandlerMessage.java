@@ -44,6 +44,9 @@ public class HandlerMessage extends Handler {
     //执行消息
     @SuppressWarnings("unchecked")
     public void handleMessage(Message message) {
+        if(message.obj==null){
+            return;
+        }
         //消息被创建
         if (message.what == MSG_SENDING) {
             ChatMessage chatMessage = (ChatMessage) message.obj;

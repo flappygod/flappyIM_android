@@ -26,6 +26,9 @@ public class HandlerSession extends Handler {
 
     //执行消息
     public void handleMessage(Message message) {
+        if(message.obj==null){
+            return;
+        }
         if (message.what == SESSION_UPDATE) {
             SessionModel sessionModel = (SessionModel) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
