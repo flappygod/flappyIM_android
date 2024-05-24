@@ -539,7 +539,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public SessionModel getUserSessionByID(String sessionId) {
+    public SessionModel getUserSessionById(String sessionId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -594,7 +594,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public SessionModel getUserSessionByExtendID(String sessionExtendID) {
+    public SessionModel getUserSessionByExtendId(String sessionExtendID) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {

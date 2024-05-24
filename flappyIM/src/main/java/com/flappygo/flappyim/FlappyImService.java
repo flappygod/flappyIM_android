@@ -1282,7 +1282,7 @@ public class FlappyImService {
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                return Database.getInstance().getUserSessionByExtendID(extendID);
+                return Database.getInstance().getUserSessionByExtendId(extendID);
             }
 
             @Override
@@ -1438,7 +1438,7 @@ public class FlappyImService {
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                return Database.getInstance().getUserSessionByID(sessionId);
+                return Database.getInstance().getUserSessionById(sessionId);
             }
 
             @Override
@@ -1525,7 +1525,7 @@ public class FlappyImService {
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                return Database.getInstance().getUserSessionByExtendID(sessionExtendId);
+                return Database.getInstance().getUserSessionByExtendId(sessionExtendId);
             }
 
             @Override

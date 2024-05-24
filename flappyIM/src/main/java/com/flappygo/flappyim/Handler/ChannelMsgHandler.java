@@ -473,7 +473,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //通知会话更新了
             Message msg = new Message();
             msg.what = HandlerSession.SESSION_UPDATE;
-            msg.obj = Database.getInstance().getUserSessionByID(message.getMessageSession());
+            msg.obj = Database.getInstance().getUserSessionById(message.getMessageSession());
             HandlerNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
         }
     }
@@ -487,7 +487,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         for (ChatMessage message : messages) {
 
             //获取会话信息
-            SessionModel sessionModel = Database.getInstance().getUserSessionByID(message.getMessageSession());
+            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSession());
             sessionModel.setIsDelete(new BigDecimal(1));
 
             //保存消息状态数据
