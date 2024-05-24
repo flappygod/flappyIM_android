@@ -90,7 +90,7 @@ public class BaseListParser<T> {
             //其他对象
             else {
                 String str = data.getJSONObject(s).toString();
-                arrayList.add(GsonTool.jsonStringToModel(str, tClass));
+                arrayList.add(GsonTool.jsonStrToModel(str, tClass));
             }
         }
         //解析成功

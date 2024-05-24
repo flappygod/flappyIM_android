@@ -165,7 +165,7 @@ public class FlappyImService {
     public void notifyClicked() {
         String str = DataManager.getInstance().getNotificationClick();
         if (notificationClickListener != null && str != null) {
-            ChatMessage message = GsonTool.jsonStringToModel(str, ChatMessage.class);
+            ChatMessage message = GsonTool.jsonStrToModel(str, ChatMessage.class);
             notificationClickListener.notificationClicked(message);
             DataManager.getInstance().removeNotificationClick();
         }
@@ -1422,7 +1422,6 @@ public class FlappyImService {
         );
     }
 
-
     /******
      * 获取群组的会话
      * @param sessionId  会话ID
@@ -1509,7 +1508,6 @@ public class FlappyImService {
         );
     }
 
-
     /******
      * 获取群组的会话
      * @param sessionExtendId 群组ID
@@ -1545,7 +1543,6 @@ public class FlappyImService {
             }
         });
     }
-
 
     /******
      * 获取群组的会话
@@ -1596,7 +1593,6 @@ public class FlappyImService {
                 }
         );
     }
-
 
     /******
      * 通过用户ID获取session
@@ -1672,7 +1668,6 @@ public class FlappyImService {
         });
     }
 
-
     /******
      * 通过用户ID获取session
      * @param callback 回调
@@ -1745,7 +1740,6 @@ public class FlappyImService {
         );
     }
 
-
     /******
      * 向群组中添加用户
      * @param userId   用户ID
@@ -1800,7 +1794,6 @@ public class FlappyImService {
                 }
         );
     }
-
 
     /******
      * 删除群组中的用户

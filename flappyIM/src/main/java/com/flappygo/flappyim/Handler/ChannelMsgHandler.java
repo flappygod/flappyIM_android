@@ -385,7 +385,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
             //用户加入是自己也全量更新
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_ADD_MEMBER) {
-                SessionMemberModel chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
+                SessionMemberModel chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
                 if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionUpdateSessionAll.add(item);
                 } else {
@@ -394,7 +394,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
             //用户删除是自己删除会话
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
-                SessionMemberModel chatUser = GsonTool.jsonStringToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
+                SessionMemberModel chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
                 if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionDeleteSession.add(item);
                 } else {
@@ -460,7 +460,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         for (ChatMessage message : messages) {
 
             //数据进入数据库
-            SessionMemberModel chatUser = GsonTool.jsonStringToModel(
+            SessionMemberModel chatUser = GsonTool.jsonStrToModel(
                     message.getChatSystem().getSysData(),
                     SessionMemberModel.class
             );

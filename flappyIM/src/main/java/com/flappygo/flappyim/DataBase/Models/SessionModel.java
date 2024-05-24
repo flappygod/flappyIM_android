@@ -33,7 +33,7 @@ public class SessionModel extends ChatSession implements Serializable {
         setIsDelete(new BigDecimal(session.getIsDelete()));
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
         setUsers(
-                GsonTool.jsonArrayToModels(session.getUsers(), SessionMemberModel.class)
+                GsonTool.jsonStrToModels(session.getUsers(), SessionMemberModel.class)
         );
     }
 

@@ -133,7 +133,7 @@ public class NotificationTool extends ContextWrapper {
     //获取跳转
     public PendingIntent getPendingIntent(ChatMessage chatMessage) {
         Intent openintent = new Intent(this, ActionReceiver.class);
-        openintent.putExtra("msg", GsonTool.modelToString(chatMessage, ChatMessage.class));
+        openintent.putExtra("msg", GsonTool.modelToJsonStr(chatMessage));
         return PendingIntent.getBroadcast(
                 FlappyImService.getInstance().getAppContext(),
                 0,

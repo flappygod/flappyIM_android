@@ -318,31 +318,31 @@ public class ChatMessage {
         ///转换为json数据
         switch (messageType.intValue()) {
             case MSG_TYPE_SYSTEM:
-                map.put("messageData", GsonTool.modelToString(getChatSystem(), ChatSystem.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatSystem()));
                 break;
             case MSG_TYPE_TEXT:
-                map.put("messageData", GsonTool.modelToString(getChatText(), String.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatText()));
                 break;
             case MSG_TYPE_IMG:
-                map.put("messageData", GsonTool.modelToString(getChatImage(), ChatImage.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatImage()));
                 break;
             case MSG_TYPE_VOICE:
-                map.put("messageData", GsonTool.modelToString(getChatVoice(), ChatVoice.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatVoice()));
                 break;
             case MSG_TYPE_LOCATE:
-                map.put("messageData", GsonTool.modelToString(getChatLocation(), ChatLocation.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatLocation()));
                 break;
             case MSG_TYPE_VIDEO:
-                map.put("messageData", GsonTool.modelToString(getChatVideo(), ChatVideo.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatVideo()));
                 break;
             case MSG_TYPE_FILE:
-                map.put("messageData", GsonTool.modelToString(getChatFile(), ChatFile.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatFile()));
                 break;
             case MSG_TYPE_CUSTOM:
-                map.put("messageData", GsonTool.modelToString(getChatCustom(), String.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatCustom()));
                 break;
             case MSG_TYPE_ACTION:
-                map.put("messageData", GsonTool.modelToString(getChatAction(), ChatAction.class));
+                map.put("messageData", GsonTool.modelToJsonStr(getChatAction()));
                 break;
         }
         map.put("isDelete", isDelete);
@@ -602,7 +602,7 @@ public class ChatMessage {
             ///设置发送秘钥
             setMessageSecret(secret);
             ///设置json字符串
-            String jsonStr = GsonTool.modelToString(data, tClass);
+            String jsonStr = GsonTool.modelToJsonStr(data);
             ///空的
             if (StringTool.isEmpty(secret)) {
                 //默认Base64解密
@@ -630,12 +630,12 @@ public class ChatMessage {
             ///没有秘钥
             if (StringTool.isEmpty(secret)) {
                 String jsonData = new String(Base64.decode(data.getBytes(), Base64.NO_WRAP));
-                return GsonTool.jsonStringToModel(jsonData, tClass);
+                return GsonTool.jsonStrToModel(jsonData, tClass);
             }
             ///解密数据
             String jsonData = AESTool.DecryptECB(data, secret);
             ///返回对象
-            return GsonTool.jsonStringToModel(jsonData, tClass);
+            return GsonTool.jsonStrToModel(jsonData, tClass);
         } catch (Exception exception) {
             return null;
         }

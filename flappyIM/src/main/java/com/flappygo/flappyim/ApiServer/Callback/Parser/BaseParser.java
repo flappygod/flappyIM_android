@@ -74,7 +74,7 @@ public class BaseParser<T> {
         }
         //假如是对象
         else {
-            data.setData(GsonTool.jsonStringToModel(strData, tClass));
+            data.setData(GsonTool.jsonStrToModel(strData, tClass));
         }
     }
 

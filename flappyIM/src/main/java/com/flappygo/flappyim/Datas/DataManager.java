@@ -66,7 +66,7 @@ public class DataManager {
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_FOR_USER, GsonTool.modelToString(user, ChatUser.class));
+        editor.putString(KEY_FOR_USER, GsonTool.modelToJsonStr(user));
         editor.apply();
     }
 
@@ -91,7 +91,7 @@ public class DataManager {
             return null;
         }
         //转换为设置
-        ChatUser model = GsonTool.jsonStringToModel(setting, ChatUser.class);
+        ChatUser model = GsonTool.jsonStrToModel(setting, ChatUser.class);
         //进行缓存
         chatUser = model;
         //返回配置信息
@@ -115,7 +115,7 @@ public class DataManager {
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_FOR_PUSH_SETTING, GsonTool.modelToString(update, PushSetting.class));
+        editor.putString(KEY_FOR_PUSH_SETTING, GsonTool.modelToJsonStr(update));
         editor.apply();
     }
 
@@ -136,7 +136,7 @@ public class DataManager {
             return null;
         }
         //返回配置信息
-        return GsonTool.jsonStringToModel(setting, PushSetting.class);
+        return GsonTool.jsonStrToModel(setting, PushSetting.class);
     }
 
 
@@ -219,7 +219,7 @@ public class DataManager {
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(key, GsonTool.modelToString(chatSession, FlappyChatSession.class));
+        editor.putString(key, GsonTool.modelToJsonStr(chatSession));
         editor.apply();
     }
 
@@ -234,7 +234,7 @@ public class DataManager {
                 Context.MODE_PRIVATE
         );
         String str = mSharedPreferences.getString(key, null);
-        return GsonTool.jsonStringToModel(str, FlappyChatSession.class);
+        return GsonTool.jsonStrToModel(str, FlappyChatSession.class);
     }
 
 

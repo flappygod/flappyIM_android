@@ -365,7 +365,7 @@ public class FlappyBaseSession {
                 //返回的总页码
                 baseApiModel.setPageCount(jb.optInt("pageCount"));
                 //设置返回的数据
-                baseApiModel.setData(GsonTool.jsonStringToModel(jb.optString("data"), ResponseUpload.class));
+                baseApiModel.setData(GsonTool.jsonStrToModel(jb.optString("data"), ResponseUpload.class));
                 //上传不成功抛出异常
                 if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
                     throw new Exception(baseApiModel.getMsg());
