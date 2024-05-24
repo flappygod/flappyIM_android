@@ -97,13 +97,18 @@ public class FlappyConfig {
     }
 
     //获取群组会话
-    public String getSessionByExtendID() {
-        return serverUrl + "/api/getSessionByExtendID";
+    public String getSessionById() {
+        return serverUrl + "/api/getSessionById";
+    }
+
+    //获取群组会话
+    public String getSessionByExtendId() {
+        return serverUrl + "/api/getSessionByExtendId";
     }
 
     //获取用户的所有会话
-    public String getUserSessions() {
-        return serverUrl + "/api/getUserSessions";
+    public String getUserSessionList() {
+        return serverUrl + "/api/getUserSessionList";
     }
 
     //向会话中添加人员

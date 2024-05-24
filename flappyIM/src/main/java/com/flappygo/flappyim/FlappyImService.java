@@ -1202,16 +1202,16 @@ public class FlappyImService {
 
     /******
      * 创建会话
-     * @param peerUser  对方ID
+     * @param peerExtendId  对方ID
      * @param callback  回调
      */
-    public void createSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void createSingleSessionByPeer(final String peerExtendId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
         }
         //检查聊天对象
-        if (checkPeerUserNotAvailable(peerUser, callback)) {
+        if (checkPeerUserNotAvailable(peerExtendId, callback)) {
             return;
         }
         //创建这个HashMap
@@ -1219,7 +1219,7 @@ public class FlappyImService {
         //用户ID
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         //外部用户ID
-        hashMap.put("userTwo", peerUser);
+        hashMap.put("userTwo", peerExtendId);
         //调用
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(),
                 hashMap,
@@ -1258,51 +1258,46 @@ public class FlappyImService {
 
     /******
      * 获取单聊会话
-     * @param peerUser 对方ID
+     * @param peerExtendId 对方ID
      * @param callback 回调
      */
-    public void getSingleSession(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSingleSessionByPeer(final String peerExtendId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
         }
 
         //检查聊天对象
-        if (checkPeerUserNotAvailable(peerUser, callback)) {
+        if (checkPeerUserNotAvailable(peerExtendId, callback)) {
             return;
         }
 
         //根据默认规则拼接出session的extendId
         String extendID = StringTool.getTwoUserString(
-                peerUser,
+                peerExtendId,
                 DataManager.getInstance().getLoginUser().getUserExtendId()
         );
 
-        //异步操作数据库
+        //查询数据库中是否存在，如果不存在就从网络上获取
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                //获取数据
                 return Database.getInstance().getUserSessionByExtendID(extendID);
             }
 
             @Override
             public void failure(Exception e, String tag) {
-                //从网络获取数据
-                getSingleSessionHttp(peerUser, callback);
+                getSingleSessionByPeerHttp(peerExtendId, callback);
             }
 
             @Override
             public void success(SessionModel data, String tag) {
-                //成功的回调
-                if (data != null) {
-                    if (callback != null) {
-                        callback.success(new FlappyChatSession(data));
-                    }
+                if (data == null) {
+                    getSingleSessionByPeerHttp(peerExtendId, callback);
+                    return;
                 }
-                //没有找到去网上找
-                else {
-                    getSingleSessionHttp(peerUser, callback);
+                if (callback != null) {
+                    callback.success(new FlappyChatSession(data));
                 }
             }
         });
@@ -1312,22 +1307,22 @@ public class FlappyImService {
 
     /******
      * 获取单聊会话
-     * @param peerUser 对方ID
-     * @param callback 回调
+     * @param peerExtendId 对方ID
+     * @param callback     回调
      */
-    public void getSingleSessionHttp(final String peerUser, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSingleSessionByPeerHttp(final String peerExtendId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
         }
         //检查聊天对象
-        if (checkPeerUserNotAvailable(peerUser, callback)) {
+        if (checkPeerUserNotAvailable(peerExtendId, callback)) {
             return;
         }
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
-        hashMap.put("userTwo", peerUser);
+        hashMap.put("userTwo", peerExtendId);
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(),
                 hashMap,
                 new BaseParseCallback<SessionModel>(SessionModel.class) {
@@ -1430,10 +1425,10 @@ public class FlappyImService {
 
     /******
      * 获取群组的会话
-     * @param extendID 群组ID
-     * @param callback 回调
+     * @param sessionId  会话ID
+     * @param callback   回调
      */
-    public void getSessionByExtendID(String extendID,
+    public void getSessionById(String sessionId,
             final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
@@ -1443,12 +1438,12 @@ public class FlappyImService {
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
             @Override
             public SessionModel run(String input, String tag) {
-                return Database.getInstance().getUserSessionByExtendID(extendID);
+                return Database.getInstance().getUserSessionByID(sessionId);
             }
 
             @Override
             public void failure(Exception e, String tag) {
-                getSessionByExtendIDHttp(extendID, callback);
+                getSessionByIdHttp(sessionId, callback);
             }
 
             @Override
@@ -1458,19 +1453,18 @@ public class FlappyImService {
                         callback.success(new FlappyChatSession(data));
                     }
                 } else {
-                    getSessionByExtendIDHttp(extendID, callback);
+                    getSessionByIdHttp(sessionId, callback);
                 }
             }
         });
     }
 
-
     /******
-     * 获取群组的会话
-     * @param extendID 群组ID
-     * @param callback 回调
+     * 通过会话ID获取会话
+     * @param sessionId  会话id
+     * @param callback 会话信息
      */
-    public void getSessionByExtendIDHttp(String extendID,
+    private void getSessionByIdHttp(String sessionId,
             final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
@@ -1479,9 +1473,97 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //用户ID
-        hashMap.put("extendID", extendID);
+        hashMap.put("sessionId", sessionId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendID(),
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionById(),
+                hashMap,
+                new BaseParseCallback<SessionModel>(SessionModel.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(SessionModel data, String tag) {
+                        if (callback != null) {
+                            callback.success(new FlappyChatSession(data));
+                        }
+                    }
+                }
+        );
+    }
+
+
+    /******
+     * 获取群组的会话
+     * @param sessionExtendId 群组ID
+     * @param callback 回调
+     */
+    public void getSessionByExtendId(String sessionExtendId,
+            final FlappyIMCallback<FlappyChatSession> callback) {
+        //检查登录
+        if (checkLogin(callback)) {
+            return;
+        }
+        //查询本地是否包含
+        asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
+            @Override
+            public SessionModel run(String input, String tag) {
+                return Database.getInstance().getUserSessionByExtendID(sessionExtendId);
+            }
+
+            @Override
+            public void failure(Exception e, String tag) {
+                getSessionByExtendIdHttp(sessionExtendId, callback);
+            }
+
+            @Override
+            public void success(SessionModel data, String tag) {
+                if (data != null) {
+                    if (callback != null) {
+                        callback.success(new FlappyChatSession(data));
+                    }
+                } else {
+                    getSessionByExtendIdHttp(sessionExtendId, callback);
+                }
+            }
+        });
+    }
+
+
+    /******
+     * 获取群组的会话
+     * @param sessionExtendId 群组Extend ID
+     * @param callback        回调
+     */
+    private void getSessionByExtendIdHttp(String sessionExtendId,
+            final FlappyIMCallback<FlappyChatSession> callback) {
+        //检查登录
+        if (checkLogin(callback)) {
+            return;
+        }
+        //创建这个HashMap
+        HashMap<String, String> hashMap = new HashMap<>();
+        //用户ID
+        hashMap.put("sessionExtendId", sessionExtendId);
+        //调用
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendId(),
                 hashMap,
                 new BaseParseCallback<SessionModel>(SessionModel.class) {
                     @Override
@@ -1520,7 +1602,7 @@ public class FlappyImService {
      * 通过用户ID获取session
      * @param callback 回调
      */
-    public void getUserSessions(final FlappyIMCallback<List<FlappyChatSession>> callback) {
+    public void getUserSessionList(final FlappyIMCallback<List<FlappyChatSession>> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1584,7 +1666,7 @@ public class FlappyImService {
                         callback.success(data);
                     }
                 } else {
-                    getUserSessionsHttp(callback);
+                    getUserSessionListHttp(callback);
                 }
             }
         });
@@ -1595,7 +1677,7 @@ public class FlappyImService {
      * 通过用户ID获取session
      * @param callback 回调
      */
-    public void getUserSessionsHttp(final FlappyIMCallback<List<FlappyChatSession>> callback) {
+    public void getUserSessionListHttp(final FlappyIMCallback<List<FlappyChatSession>> callback) {
 
         //用户未登录
         if (checkLogin(callback)) {
@@ -1603,8 +1685,8 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessions(),
+        hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessionList(),
                 hashMap,
                 new BaseListParseCallBack<SessionModel>(SessionModel.class) {
                     @Override
@@ -1666,13 +1748,13 @@ public class FlappyImService {
 
     /******
      * 向群组中添加用户
-     * @param userID   用户ID
-     * @param groupID  群组ID
+     * @param userId   用户ID
+     * @param groupId  群组ID
      * @param callback 回调
      */
     public void addUserToSession(
-            String userID,
-            String groupID,
+            String userId,
+            String groupId,
             final FlappyIMCallback<String> callback) {
 
         //用户未登录
@@ -1682,8 +1764,8 @@ public class FlappyImService {
 
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userID", userID);
-        hashMap.put("extendID", groupID);
+        hashMap.put("userId", userId);
+        hashMap.put("sessionExtendId", groupId);
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
@@ -1722,13 +1804,13 @@ public class FlappyImService {
 
     /******
      * 删除群组中的用户
-     * @param userID   用户ID
-     * @param groupID  群组ID
+     * @param userId   用户ID
+     * @param groupId  群组ID
      * @param callback 回调
      */
     public void delUserInSession(
-            String userID,
-            String groupID,
+            String userId,
+            String groupId,
             final FlappyIMCallback<String> callback) {
         //用户未登录
         if (checkLogin(callback)) {
@@ -1736,8 +1818,8 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userID", userID);
-        hashMap.put("extendID", groupID);
+        hashMap.put("userId", userId);
+        hashMap.put("sessionExtendId", groupId);
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
