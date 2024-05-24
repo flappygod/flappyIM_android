@@ -4,16 +4,18 @@ package com.flappygo.flappyim.ApiServer.Tools;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.stream.Collectors;
 import java.lang.reflect.Type;
 
 import org.json.JSONException;
+
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import org.json.JSONArray;
+
 import com.google.gson.*;
 
 import java.util.List;
@@ -118,6 +120,9 @@ public class GsonTool {
      * @return 表示实体对象的JSON字符串。
      */
     public static <T> String modelToJsonStr(T t) {
+        if (t instanceof String) {
+            return (String) t;
+        }
         return gson.toJson(t);
     }
 
