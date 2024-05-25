@@ -75,6 +75,9 @@ public class FlappyBaseSession {
         //设置消息发送状态为create
         msg.setMessageSendState(new BigDecimal(SEND_STATE_SENDING));
 
+        //设置message stamp
+        msg.setMessageStamp(new BigDecimal(System.currentTimeMillis()));
+
         //设置消息表Offset
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
 
