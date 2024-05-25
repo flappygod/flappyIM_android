@@ -311,6 +311,7 @@ public class ChatMessage {
         map.put("messageSendExtendId", messageSendExtendId);
         map.put("messageReceiveId", messageReceiveId);
         map.put("messageReceiveExtendId", messageReceiveExtendId);
+        map.put("messageStamp", messageStamp);
         map.put("messageSendState", messageSendState);
         map.put("messageReadState", messageReadState);
         map.put("messageSecret", messageSecret);
