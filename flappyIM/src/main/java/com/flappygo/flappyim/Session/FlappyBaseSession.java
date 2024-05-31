@@ -145,6 +145,7 @@ public class FlappyBaseSession {
             public ChatMessage run(String id, String tag) {
                 ChatMessage message = Database.getInstance().getMessageById(id);
                 message.setIsDelete(new BigDecimal(1));
+                message.setMessageDeleteOperation("delete");
                 message.setMessageReadState(new BigDecimal(1));
                 Database.getInstance().updateMessageDelete(id);
                 return message;

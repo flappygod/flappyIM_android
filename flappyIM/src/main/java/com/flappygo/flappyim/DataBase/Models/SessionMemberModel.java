@@ -21,7 +21,10 @@ public class SessionMemberModel extends ChatUser {
     private String sessionMemberMarkName;
 
     //会话免打扰
-    private Integer sessionMemberNoDisturb;
+    private Integer sessionMemberMute;
+
+    //会话置顶
+    private Integer sessionMemberPinned;
 
     //用户加入时间
     private Date sessionJoinDate;
@@ -56,12 +59,20 @@ public class SessionMemberModel extends ChatUser {
         this.sessionMemberMarkName = sessionMemberMarkName;
     }
 
-    public Integer getSessionMemberNoDisturb() {
-        return sessionMemberNoDisturb;
+    public Integer getSessionMemberMute() {
+        return sessionMemberMute;
     }
 
-    public void setSessionMemberNoDisturb(Integer sessionMemberNoDisturb) {
-        this.sessionMemberNoDisturb = sessionMemberNoDisturb;
+    public void setSessionMemberMute(Integer sessionMemberMute) {
+        this.sessionMemberMute = sessionMemberMute;
+    }
+
+    public Integer getSessionMemberPinned() {
+        return sessionMemberPinned;
+    }
+
+    public void setSessionMemberPinned(Integer sessionMemberPinned) {
+        this.sessionMemberPinned = sessionMemberPinned;
     }
 
     public Date getSessionJoinDate() {

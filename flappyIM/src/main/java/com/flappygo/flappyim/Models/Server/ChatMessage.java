@@ -85,7 +85,7 @@ public class ChatMessage {
 
     private String messageId;
 
-    private String messageSession;
+    private String messageSessionId;
 
     private BigDecimal messageSessionType;
 
@@ -115,6 +115,8 @@ public class ChatMessage {
 
     private BigDecimal isDelete;
 
+    private String messageDeleteOperation;
+
     private BigDecimal messageStamp;
 
     private Date deleteDate;
@@ -127,12 +129,12 @@ public class ChatMessage {
         this.messageId = messageId == null ? null : messageId.trim();
     }
 
-    public String getMessageSession() {
-        return messageSession;
+    public String getMessageSessionId() {
+        return messageSessionId;
     }
 
-    public void setMessageSession(String messageSession) {
-        this.messageSession = messageSession == null ? null : messageSession.trim();
+    public void setMessageSessionId(String messageSessionId) {
+        this.messageSessionId = messageSessionId == null ? null : messageSessionId.trim();
     }
 
     public BigDecimal getMessageSessionType() {
@@ -247,6 +249,14 @@ public class ChatMessage {
         this.isDelete = isDelete;
     }
 
+    public String getMessageDeleteOperation() {
+        return messageDeleteOperation;
+    }
+
+    public void setMessageDeleteOperation(String messageDeleteOperation) {
+        this.messageDeleteOperation = messageDeleteOperation;
+    }
+
     public Date getDeleteDate() {
         return deleteDate;
     }
@@ -267,7 +277,7 @@ public class ChatMessage {
     //消息
     public ChatMessage(Flappy.Message msg, String secret) {
         messageId = msg.getMessageId();
-        messageSession = String.valueOf(msg.getMessageSession());
+        messageSessionId = String.valueOf(msg.getMessageSessionId());
         messageSessionType = new BigDecimal(msg.getMessageSessionType());
         messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
         messageTableOffset = new BigDecimal(msg.getMessageTableOffset());
@@ -294,6 +304,7 @@ public class ChatMessage {
         }
 
         isDelete = new BigDecimal(msg.getIsDelete());
+        messageDeleteOperation = msg.getMessageDeleteOperation();
         messageDate = TimeTool.strToDate(msg.getMessageDate());
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
@@ -302,7 +313,7 @@ public class ChatMessage {
     public HashMap<String, Object> toMap() {
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("messageId", messageId);
-        map.put("messageSession", messageSession);
+        map.put("messageSessionId", messageSessionId);
         map.put("messageSessionType", messageSessionType);
         map.put("messageSessionOffset", messageSessionOffset);
         map.put("messageTableOffset", messageTableOffset);
@@ -347,6 +358,7 @@ public class ChatMessage {
                 break;
         }
         map.put("isDelete", isDelete);
+        map.put("messageDeleteOperation", messageDeleteOperation);
         map.put("messageDate", messageDate);
         map.put("deleteDate", deleteDate);
         return map;
@@ -358,8 +370,8 @@ public class ChatMessage {
         //转换消息
         if (getMessageId() != null)
             msgBuilder.setMessageId(getMessageId());
-        if (getMessageSession() != null)
-            msgBuilder.setMessageSession(StringTool.strToLong(getMessageSession()));
+        if (getMessageSessionId() != null)
+            msgBuilder.setMessageSessionId(StringTool.strToLong(getMessageSessionId()));
         if (getMessageSessionType() != null)
             msgBuilder.setMessageSessionType(StringTool.decimalToInt(getMessageSessionType()));
         if (getMessageSessionOffset() != null)
@@ -393,6 +405,8 @@ public class ChatMessage {
             msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
             msgBuilder.setIsDelete(StringTool.decimalToInt(getIsDelete()));
+        if (getMessageDeleteOperation() != null)
+            msgBuilder.setMessageDeleteOperation(getMessageDeleteOperation());
         if (getDeleteDate() != null)
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 

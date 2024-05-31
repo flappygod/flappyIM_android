@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // 消息ID
             "messageId" + " varchar ," +
             //消息的会话
-            "messageSession" + " varchar," +
+            "messageSessionId" + " varchar," +
             // 消息的会话类型
             "messageSessionType" + " integer," +
             //会话的offset
@@ -108,7 +108,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //用户在会话中的附加名称
             "sessionMemberMarkName" + " varchar," +
             //用户设置会话免打扰
-            "sessionMemberNoDisturb" + " integer," +
+            "sessionMemberMute" + " integer," +
+            //用户设置会话置顶
+            "sessionMemberPinned" + " integer," +
             //用户加入会话的时间
             "sessionJoinDate" + " varchar," +
             //用户离开会话的时间

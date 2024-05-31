@@ -428,7 +428,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //获取更新Session并去重,且判断正在进行中的更新
         List<String> updateIdList = new ArrayList<>();
         for (int s = 0; s < messages.size(); s++) {
-            String updateId = messages.get(s).getMessageSession();
+            String updateId = messages.get(s).getMessageSessionId();
             if (!updateIdList.contains(updateId) &&
                     !updatingIdLists.contains(updateId)) {
                 updateIdList.add(updateId);
@@ -473,7 +473,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //通知会话更新了
             Message msg = new Message();
             msg.what = HandlerSession.SESSION_UPDATE;
-            msg.obj = Database.getInstance().getUserSessionById(message.getMessageSession());
+            msg.obj = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             HandlerNotifyManager.getInstance().getHandlerSession().sendMessage(msg);
         }
     }
@@ -487,7 +487,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         for (ChatMessage message : messages) {
 
             //获取会话信息
-            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSession());
+            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             sessionModel.setIsDelete(new BigDecimal(1));
 
             //保存消息状态数据
@@ -495,7 +495,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Database.getInstance().insertMessage(message);
 
             //删除用户会话
-            Database.getInstance().deleteUserSession(message.getMessageSession());
+            Database.getInstance().deleteUserSession(message.getMessageSessionId());
 
             //通知会话删除了
             Message msg = new Message();

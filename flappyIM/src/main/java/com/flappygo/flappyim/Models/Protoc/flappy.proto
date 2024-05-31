@@ -88,7 +88,7 @@ message Message{
   //消息ID
   string messageId = 1;
   //消息会话
-  int64 messageSession = 2;
+  int64 messageSessionId = 2;
   //消息会话类型
   int32  messageSessionType = 3;
   //消息会话偏移量
@@ -115,10 +115,12 @@ message Message{
   string messageSecret = 14; 
   //消息时间
   string messageDate = 15;
+  //消息删除原因
+  string messageDeleteOperation = 16;
   //消息是否被删除
-  int32 isDelete = 16;
+  int32 isDelete = 17;
   //消息删除日期
-  string deleteDate = 17;
+  string deleteDate = 18;
 }
 
 

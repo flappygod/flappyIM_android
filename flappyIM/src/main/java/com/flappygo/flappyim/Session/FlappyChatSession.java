@@ -112,7 +112,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -145,7 +145,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -196,7 +196,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -228,7 +228,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -283,7 +283,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -317,7 +317,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -350,7 +350,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -407,7 +407,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -444,7 +444,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -490,7 +490,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -523,7 +523,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -565,7 +565,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
@@ -613,7 +613,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //生成一个消息的ID
         msg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
-        msg.setMessageSession(session.getSessionId());
+        msg.setMessageSessionId(session.getSessionId());
         //类型
         msg.setMessageSessionType(session.getSessionType());
         //发送者
