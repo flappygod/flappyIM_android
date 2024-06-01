@@ -33,14 +33,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "messageReceiveExtendId" + " varchar," +
             // 发送内容
             "messageContent" + " varchar," +
-            // 发送状态
+            //发送状态
             "messageSendState" + " integer," +
-            // 是否已读
+            //是否已读
             "messageReadState" + " integer," +
-            // 消息发送秘钥
+            //消息发送秘钥
             "messageSecret" + " varchar," +
-            // 是否被删除
+            //是否被删除
             "isDelete" + " integer," +
+            //消息删除原因
+            "messageDeleteOperation" + " varchar," +
             // 发送日期
             "messageDate" + " varchar," +
             // 时间戳
