@@ -2,6 +2,9 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
+import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
+import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
+import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -10,6 +13,7 @@ import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
@@ -17,6 +21,8 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Tools.Upload.ImageReadWH;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Config.FlappyConfig;
+import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
@@ -28,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.io.File;
 
@@ -43,13 +50,19 @@ public class FlappyChatSession extends FlappyBaseSession {
     private final SessionModel session;
 
 
-    //通过session data 创建
+    /******
+     * 通过session data 创建
+     * @param session session对象
+     */
     public FlappyChatSession(SessionModel session) {
         this.session = session;
     }
 
 
-    //获取会话数据
+    /******
+     * 获取会话数据
+     * @return 会话数据
+     */
     public SessionModel getSession() {
         return session;
     }
@@ -60,10 +73,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      */
     public void addMessageListener(MessageListener messageListener) {
         //添加监听
-        HolderMessageSession.getInstance().addMessageListener(
-                messageListener,
-                session.getSessionId()
-        );
+        HolderMessageSession.getInstance().addMessageListener(messageListener, session.getSessionId());
         listenerList.add(messageListener);
     }
 
@@ -72,12 +82,10 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param messageListener 监听
      */
     public void removeListener(MessageListener messageListener) {
-        HolderMessageSession.getInstance().removeMessageListener(
-                messageListener,
-                session.getSessionId()
-        );
+        HolderMessageSession.getInstance().removeMessageListener(messageListener, session.getSessionId());
         listenerList.remove(messageListener);
     }
+
 
     /******
      * 始终都要移除它，防止内存泄漏
@@ -86,15 +94,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         close();
     }
 
+
     /******
      * session使用完成之后，请务必关闭防止内存泄漏
      */
     public void close() {
         for (int s = 0; s < listenerList.size(); s++) {
-            HolderMessageSession.getInstance().removeMessageListener(
-                    listenerList.get(s),
-                    session.getSessionId()
-            );
+            HolderMessageSession.getInstance().removeMessageListener(listenerList.get(s), session.getSessionId());
         }
         listenerList.clear();
     }
@@ -275,9 +281,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage sendVoice(
-            ChatVoice chatVoice,
-            final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendVoice(ChatVoice chatVoice, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -310,8 +314,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocation(ChatLocation location,
-            final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocation(ChatLocation location, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -343,8 +346,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocalVideo(String path,
-            final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -368,10 +370,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         //初始化视频数据
         try {
             //获取到图片的bitmap
-            VideoTool.VideoInfo info = VideoTool.getVideoInfo(FlappyImService.getInstance().getAppContext(),
-                    512,
-                    path
-            );
+            VideoTool.VideoInfo info = VideoTool.getVideoInfo(FlappyImService.getInstance().getAppContext(), 512, path);
             //封面地址
             chatVideo.setCoverSendPath(info.getOverPath());
             //时长
@@ -400,8 +399,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage sendVideo(ChatVideo chatVideo,
-            final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendVideo(ChatVideo chatVideo, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -436,9 +434,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocalFile(String path,
-            String name,
-            final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalFile(String path, String name, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -482,9 +478,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendFile(
-            ChatFile chatFile,
-            final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendFile(ChatFile chatFile, final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -516,8 +510,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendCustom(String text,
-            FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendCustom(String text, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -580,14 +573,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
         chatAction.setActionType(ChatMessage.ACTION_TYPE_READ);
-        chatAction.setActionIds(
-                new ArrayList<>(
-                        Arrays.asList(
-                                DataManager.getInstance().getLoginUser().getUserId(),
-                                session.getSessionId(),
-                                getLatestMessage().getMessageTableOffset().toString()
-                        ))
-        );
+        chatAction.setActionIds(new ArrayList<>(
+                Arrays.asList(
+                        DataManager.getInstance().getLoginUser().getUserId(),
+                        session.getSessionId(),
+                        getLatestMessage().getMessageTableOffset().toString()
+                )
+        ));
 
         //设置内容
         msg.setChatAction(chatAction);
@@ -606,8 +598,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage recallMessageById(String messageId,
-            FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage recallMessageById(String messageId, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -628,13 +619,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
         chatAction.setActionType(ChatMessage.ACTION_TYPE_DELETE);
-        chatAction.setActionIds(
-                new ArrayList<>(Arrays.asList(
+        chatAction.setActionIds(new ArrayList<>(
+                Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
                         session.getSessionId(),
                         messageId
-                ))
-        );
+                )
+        ));
 
         //设置内容
         msg.setChatAction(chatAction);
@@ -702,6 +693,105 @@ public class FlappyChatSession extends FlappyBaseSession {
         }
     }
 
+
+    /******
+     * Change mute
+     * @param mute pinned
+     */
+    public void changeMute(int mute, final FlappyIMCallback<String> callback) {
+        //创建这个HashMap
+        HashMap<String, String> hashMap = new HashMap<>();
+        //用户ID
+        hashMap.put("userId", DataManager.getInstance().getLoginUser().getUserId());
+        //设备ID
+        hashMap.put("sessionExtendId", session.getSessionExtendId());
+        //设备ID
+        hashMap.put("isMute", String.valueOf(mute));
+        //进行callBack
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUserInSession(),
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(String response, String tag) {
+                        if (callback != null) {
+                            callback.success(response);
+                        }
+                    }
+                }
+        );
+    }
+
+
+    /******
+     * Change pinned
+     * @param pinned pinned
+     */
+    public void changePinned(int pinned, final FlappyIMCallback<String> callback) {
+        //创建这个HashMap
+        HashMap<String, String> hashMap = new HashMap<>();
+        //用户ID
+        hashMap.put("userId", DataManager.getInstance().getLoginUser().getUserId());
+        //设备ID
+        hashMap.put("sessionExtendId", session.getSessionExtendId());
+        //设备ID
+        hashMap.put("isPinned", String.valueOf(pinned));
+        //进行callBack
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUserInSession(),
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(String response, String tag) {
+                        if (callback != null) {
+                            callback.success(response);
+                        }
+                    }
+                }
+        );
+    }
+
+
     /******
      * 获取要发送的ID
      * @return 对方ID
@@ -713,8 +803,9 @@ public class FlappyChatSession extends FlappyBaseSession {
                 return getSession().getSessionId();
             ///单聊会话
             case SessionModel.TYPE_SINGLE: {
+                ChatUser loginUser = DataManager.getInstance().getLoginUser();
                 for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
                         return chatUser.getUserId();
                     }
                 }
@@ -723,7 +814,6 @@ public class FlappyChatSession extends FlappyBaseSession {
             ///系统会话
             case SessionModel.TYPE_SYSTEM:
                 return "0";
-            ///WHAT??
             default:
                 throw new RuntimeException("账号错误，聊天对象丢失");
         }
@@ -735,15 +825,15 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 对方ID
      */
     private String getPeerExtendID() {
-        //查找
         switch (getSession().getSessionType().intValue()) {
             ///群聊会话
             case SessionModel.TYPE_GROUP:
                 return getSession().getSessionExtendId();
             ///单聊会话
             case SessionModel.TYPE_SINGLE: {
+                ChatUser loginUser = DataManager.getInstance().getLoginUser();
                 for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
                         return chatUser.getUserExtendId();
                     }
                 }
@@ -752,7 +842,6 @@ public class FlappyChatSession extends FlappyBaseSession {
             ///系统会话
             case SessionModel.TYPE_SYSTEM:
                 return "0";
-            ///WHAT??
             default:
                 throw new RuntimeException("账号错误，聊天对象丢失");
         }
@@ -774,9 +863,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 消息列表
      */
     public List<ChatMessage> getFormerMessages(String messageId, int size) {
-        return Database.getInstance().getSessionFormerMessages(getSession().getSessionId(),
-                messageId,
-                size);
+        return Database.getInstance().getSessionFormerMessages(getSession().getSessionId(), messageId, size);
     }
 
 
