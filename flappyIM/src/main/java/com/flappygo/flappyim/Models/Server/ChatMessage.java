@@ -77,8 +77,9 @@ public class ChatMessage {
     //已读消息
     public final static int ACTION_TYPE_READ = 1;
 
-    //删除消息
-    public final static int ACTION_TYPE_DELETE = 2;
+    //撤回消息
+    public final static int ACTION_TYPE_RECALL = 2;
+
 
     public ChatMessage() {
     }
@@ -116,6 +117,8 @@ public class ChatMessage {
     private BigDecimal isDelete;
 
     private String messageDeleteOperation;
+
+    private String messageDeleteUserList;
 
     private BigDecimal messageStamp;
 
@@ -257,6 +260,14 @@ public class ChatMessage {
         this.messageDeleteOperation = messageDeleteOperation;
     }
 
+    public String getMessageDeleteUserList() {
+        return messageDeleteUserList;
+    }
+
+    public void setMessageDeleteUserList(String messageDeleteUserList) {
+        this.messageDeleteUserList = messageDeleteUserList;
+    }
+
     public Date getDeleteDate() {
         return deleteDate;
     }
@@ -305,6 +316,7 @@ public class ChatMessage {
 
         isDelete = new BigDecimal(msg.getIsDelete());
         messageDeleteOperation = msg.getMessageDeleteOperation();
+        messageDeleteUserList = msg.getMessageDeleteUserList();
         messageDate = TimeTool.strToDate(msg.getMessageDate());
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
@@ -359,6 +371,7 @@ public class ChatMessage {
         }
         map.put("isDelete", isDelete);
         map.put("messageDeleteOperation", messageDeleteOperation);
+        map.put("messageDeleteUserList", messageDeleteUserList);
         map.put("messageDate", messageDate);
         map.put("deleteDate", deleteDate);
         return map;
@@ -407,6 +420,8 @@ public class ChatMessage {
             msgBuilder.setIsDelete(StringTool.decimalToInt(getIsDelete()));
         if (getMessageDeleteOperation() != null)
             msgBuilder.setMessageDeleteOperation(getMessageDeleteOperation());
+        if (getMessageDeleteUserList() != null)
+            msgBuilder.setMessageDeleteUserList(getMessageDeleteUserList());
         if (getDeleteDate() != null)
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 

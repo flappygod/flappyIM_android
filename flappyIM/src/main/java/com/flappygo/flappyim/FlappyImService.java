@@ -345,7 +345,7 @@ public class FlappyImService {
             return;
         }
         //免打扰模式
-        if (StringTool.strToInt(pushSetting.getRoutePushNoDisturb(), 0) == 1) {
+        if (StringTool.strToInt(pushSetting.getRoutePushMute(), 0) == 1) {
             return;
         }
         //正在后台
@@ -611,8 +611,8 @@ public class FlappyImService {
             hashMap.put("pushPrivacy", pushSettings.getRoutePushPrivacy());
         }
         //免打扰
-        if (pushSettings.getRoutePushNoDisturb() != null) {
-            hashMap.put("pushNoDisturb", pushSettings.getRoutePushNoDisturb());
+        if (pushSettings.getRoutePushMute() != null) {
+            hashMap.put("pushMute", pushSettings.getRoutePushMute());
         }
         //免打扰
         if (pushSettings.getRoutePushType() != null) {
@@ -892,7 +892,7 @@ public class FlappyImService {
                     if (callback != null) {
                         PushSetting setting = new PushSetting();
                         setting.setRoutePushPrivacy(response.getRoute().getRoutePushPrivacy());
-                        setting.setRoutePushNoDisturb(response.getRoute().getRoutePushNoDisturb());
+                        setting.setRoutePushMute(response.getRoute().getRoutePushNoDisturb());
                         setting.setRoutePushLanguage(response.getRoute().getRoutePushLanguage());
                         setting.setRoutePushType(response.getRoute().getRoutePushType().toString());
                         DataManager.getInstance().savePushSetting(setting);
@@ -1091,7 +1091,7 @@ public class FlappyImService {
                     PushSetting pushSetting = new PushSetting();
                     pushSetting.setRoutePushLanguage(response.getRoute().getRoutePushLanguage());
                     pushSetting.setRoutePushPrivacy(response.getRoute().getRoutePushPrivacy());
-                    pushSetting.setRoutePushNoDisturb(response.getRoute().getRoutePushNoDisturb());
+                    pushSetting.setRoutePushMute(response.getRoute().getRoutePushNoDisturb());
                     pushSetting.setRoutePushType(response.getRoute().getRoutePushType().toString());
                     DataManager.getInstance().savePushSetting(pushSetting);
 

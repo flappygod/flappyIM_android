@@ -181,7 +181,7 @@ public class HandlerNotifyManager {
                     break;
                 }
                 ///插入的情况下，代表新增，进行通知
-                case ChatMessage.ACTION_TYPE_DELETE: {
+                case ChatMessage.ACTION_TYPE_RECALL: {
                     Message msg = new Message();
                     msg.what = HandlerMessage.MSG_DELETE;
                     msg.obj = Database.getInstance().getMessageById(chatAction.getActionIds().get(2));

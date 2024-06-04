@@ -108,7 +108,7 @@ public class DataManager {
         update = (update == null) ? new PushSetting() : update;
         update.setRoutePushType(setting.getRoutePushType() == null ? update.getRoutePushType() : setting.getRoutePushType());
         update.setRoutePushLanguage(setting.getRoutePushLanguage() == null ? update.getRoutePushLanguage() : setting.getRoutePushLanguage());
-        update.setRoutePushNoDisturb(setting.getRoutePushNoDisturb() == null ? update.getRoutePushNoDisturb() : setting.getRoutePushNoDisturb());
+        update.setRoutePushMute(setting.getRoutePushMute() == null ? update.getRoutePushMute() : setting.getRoutePushMute());
         update.setRoutePushPrivacy(setting.getRoutePushPrivacy() == null ? update.getRoutePushPrivacy() : setting.getRoutePushPrivacy());
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,

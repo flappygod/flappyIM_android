@@ -12,7 +12,7 @@ public class PushSetting {
     private String routePushPrivacy;
 
     //推送免打扰
-    private String routePushNoDisturb;
+    private String routePushMute;
 
 
     public String getRoutePushType() {
@@ -39,11 +39,11 @@ public class PushSetting {
         this.routePushPrivacy = routePushPrivacy;
     }
 
-    public String getRoutePushNoDisturb() {
-        return routePushNoDisturb;
+    public String getRoutePushMute() {
+        return routePushMute;
     }
 
-    public void setRoutePushNoDisturb(String routePushNoDisturb) {
-        this.routePushNoDisturb = routePushNoDisturb;
+    public void setRoutePushMute(String routePushMute) {
+        this.routePushMute = routePushMute;
     }
 }

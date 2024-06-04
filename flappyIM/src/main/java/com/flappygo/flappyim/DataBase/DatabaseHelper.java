@@ -43,6 +43,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "isDelete" + " integer," +
             //消息删除原因
             "messageDeleteOperation" + " varchar," +
+            //消息删除用户
+            "messageDeleteUserList" + " varchar," +
             // 发送日期
             "messageDate" + " varchar," +
             // 时间戳
@@ -107,6 +109,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sessionId" + " varchar," +
             //用户最近阅读
             "sessionMemberLatestRead" + " varchar," +
+            //用户最近删除
+            "sessionMemberLatestDelete" + " varchar," +
             //用户在会话中的附加名称
             "sessionMemberMarkName" + " varchar," +
             //用户设置会话免打扰

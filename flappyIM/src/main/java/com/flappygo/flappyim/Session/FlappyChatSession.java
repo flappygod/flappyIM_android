@@ -618,7 +618,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_DELETE);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_RECALL);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),

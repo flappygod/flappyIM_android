@@ -117,10 +117,12 @@ message Message{
   string messageDate = 15;
   //消息删除原因
   string messageDeleteOperation = 16;
+  //消息删除原因
+  string messageDeleteUserList = 17;
   //消息是否被删除
-  int32 isDelete = 17;
+  int32 isDelete = 18;
   //消息删除日期
-  string deleteDate = 18;
+  string deleteDate = 19;
 }
 
 
@@ -150,7 +152,7 @@ message Route{
   //推送平台隐私
   int32 pushPrivacy = 7;
   //推送平台免打扰
-  int32 pushNoDisturb = 8;
+  int32 pushMute = 8;
   //时间
   string time = 9;
 }

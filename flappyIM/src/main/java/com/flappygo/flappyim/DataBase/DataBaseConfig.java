@@ -8,7 +8,7 @@ public class DataBaseConfig {
     //数据库名称
     public static String DB_NAME = "com.flappy.im.database";
     //数据库版本
-    public static int DB_VERSION = 3;
+    public static int DB_VERSION = 4;
     //消息表
     public static String TABLE_MESSAGE = "message";
     //会话表

@@ -200,6 +200,9 @@ public class Database {
             //保留之前的Delete operation
             values.put("messageDeleteOperation", formerMsg != null ? formerMsg.getMessageDeleteOperation() : chatMessage.getMessageDeleteOperation());
 
+            //保留之前的Delete user list
+            values.put("messageDeleteUserList", formerMsg != null ? formerMsg.getMessageDeleteUserList() : chatMessage.getMessageDeleteUserList());
+
             return db.insertWithOnConflict(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -345,7 +348,7 @@ public class Database {
                 break;
             }
             //消息删除
-            case ChatMessage.ACTION_TYPE_DELETE: {
+            case ChatMessage.ACTION_TYPE_RECALL: {
                 //获取TableSequence
                 String messageId = action.getActionIds().get(2);
                 //删除消息
@@ -721,6 +724,9 @@ public class Database {
             if (member.getSessionMemberLatestRead() != null) {
                 values.put("sessionMemberLatestRead", member.getSessionMemberLatestRead());
             }
+            if (member.getSessionMemberLatestDelete() != null) {
+                values.put("sessionMemberLatestDelete", member.getSessionMemberLatestDelete());
+            }
             if (member.getSessionMemberMarkName() != null) {
                 values.put("sessionMemberMarkName", member.getSessionMemberMarkName());
             }
@@ -797,6 +803,7 @@ public class Database {
                 info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
+                info.setSessionMemberLatestDelete(cursor.getString(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
@@ -858,6 +865,7 @@ public class Database {
                 info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
+                info.setSessionMemberLatestDelete(cursor.getString(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
@@ -940,6 +948,7 @@ public class Database {
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
+                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 cursor.close();
                 return info;
@@ -998,6 +1007,7 @@ public class Database {
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
+                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 cursor.close();
                 return info;
@@ -1065,6 +1075,7 @@ public class Database {
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
+                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -1141,6 +1152,7 @@ public class Database {
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
+                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -1207,6 +1219,7 @@ public class Database {
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
+                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -1270,6 +1283,7 @@ public class Database {
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
+                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
