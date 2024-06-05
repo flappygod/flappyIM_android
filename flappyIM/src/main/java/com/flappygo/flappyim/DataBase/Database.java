@@ -301,7 +301,7 @@ public class Database {
 
         //已经删除了不处理
         ChatMessage message = getMessageById(messageId);
-        if (message.getIsDelete().intValue() == 1) {
+        if (message == null || message.getIsDelete().intValue() == 1) {
             return;
         }
 

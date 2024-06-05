@@ -121,12 +121,6 @@ public class FlappyConfig {
         return serverUrl + "/api/delUserInSession";
     }
 
-    //向会话中更新人员信息
-    public String updateUserInSession() {
-        return serverUrl + "/api/updateUserInSession";
-    }
-
-
     /******
      * 服务器的地址
      * @param serverUrl       服务器地址
