@@ -3,6 +3,7 @@ package com.flappygo.flappyim.Tools;
 import android.provider.Settings;
 import android.content.Context;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class StringTool {
      * join str list
      * @param strList 字符串列表
      * @param split   裁剪
-     * @return
+     * @return 字符串
      */
     public static String joinListStr(List<String> strList, String split) {
         StringBuilder stringBuffer = new StringBuilder();
@@ -29,6 +30,20 @@ public class StringTool {
             }
         }
         return stringBuffer.toString();
+    }
+
+
+    /******
+     * join str list
+     * @param str     字符串
+     * @param split   裁剪
+     * @return 字符串
+     */
+    public static ArrayList<String> splitStr(String str, String split) {
+        if(str==null||str.isEmpty()){
+            return new ArrayList<>();
+        }
+        return  new ArrayList<>(Arrays.asList(str.split(split)));
     }
 
 

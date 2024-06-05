@@ -310,7 +310,7 @@ public class Database {
         //删除
         message.setMessageDeleteOperation("delete");
         //用户ID列表
-        List<String> userIdList = Arrays.asList(message.getMessageDeleteUserList().split(","));
+        List<String> userIdList = StringTool.splitStr(message.getMessageDeleteUserList(),",");
         //添加用户
         userIdList.add(userId);
         //设置删除的用户
