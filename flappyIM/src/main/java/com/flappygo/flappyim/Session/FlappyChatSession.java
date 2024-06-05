@@ -67,23 +67,61 @@ public class FlappyChatSession extends FlappyBaseSession {
         return session;
     }
 
+
     /******
-     * 设置消息的监听,新收到消息都会在这里
-     * @param messageListener 监听
+     * 获取要发送的ID
+     * @return 对方ID
      */
-    public void addMessageListener(MessageListener messageListener) {
-        //添加监听
-        HolderMessageSession.getInstance().addMessageListener(messageListener, session.getSessionId());
-        listenerList.add(messageListener);
+    private String getPeerID() {
+        switch (getSession().getSessionType().intValue()) {
+            ///群聊会话
+            case SessionModel.TYPE_GROUP:
+                return getSession().getSessionId();
+            ///单聊会话
+            case SessionModel.TYPE_SINGLE: {
+                ChatUser loginUser = DataManager.getInstance().getLoginUser();
+                for (ChatUser chatUser : getSession().getUsers()) {
+                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
+                        return chatUser.getUserId();
+                    }
+                }
+                break;
+            }
+            ///系统会话
+            case SessionModel.TYPE_SYSTEM:
+                return "0";
+            default:
+                throw new RuntimeException("账号错误，聊天对象丢失");
+        }
+        return null;
     }
 
     /******
-     * 移除当前会话的监听
-     * @param messageListener 监听
+     * 获取对方的extendID
+     * @return 对方ID
      */
-    public void removeListener(MessageListener messageListener) {
-        HolderMessageSession.getInstance().removeMessageListener(messageListener, session.getSessionId());
-        listenerList.remove(messageListener);
+    private String getPeerExtendID() {
+        switch (getSession().getSessionType().intValue()) {
+            ///群聊会话
+            case SessionModel.TYPE_GROUP:
+                return getSession().getSessionExtendId();
+            ///单聊会话
+            case SessionModel.TYPE_SINGLE: {
+                ChatUser loginUser = DataManager.getInstance().getLoginUser();
+                for (ChatUser chatUser : getSession().getUsers()) {
+                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
+                        return chatUser.getUserExtendId();
+                    }
+                }
+                break;
+            }
+            ///系统会话
+            case SessionModel.TYPE_SYSTEM:
+                return "0";
+            default:
+                throw new RuntimeException("账号错误，聊天对象丢失");
+        }
+        return null;
     }
 
 
@@ -103,6 +141,26 @@ public class FlappyChatSession extends FlappyBaseSession {
             HolderMessageSession.getInstance().removeMessageListener(listenerList.get(s), session.getSessionId());
         }
         listenerList.clear();
+    }
+
+
+    /******
+     * 设置消息的监听,新收到消息都会在这里
+     * @param messageListener 监听
+     */
+    public void addMessageListener(MessageListener messageListener) {
+        //添加监听
+        HolderMessageSession.getInstance().addMessageListener(messageListener, session.getSessionId());
+        listenerList.add(messageListener);
+    }
+
+    /******
+     * 移除当前会话的监听
+     * @param messageListener 监听
+     */
+    public void removeListener(MessageListener messageListener) {
+        HolderMessageSession.getInstance().removeMessageListener(messageListener, session.getSessionId());
+        listenerList.remove(messageListener);
     }
 
 
@@ -572,12 +630,106 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_READ);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_READ_SESSION);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
                         session.getSessionId(),
                         getLatestMessage().getMessageTableOffset().toString()
+                )
+        ));
+
+        //设置内容
+        msg.setChatAction(chatAction);
+        //时间
+        msg.setMessageDate(new Date());
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
+    }
+
+
+    /******
+     * 设置会话静音
+     * @param mute  静音
+     * @param callback Action回调消息
+     * @return 返回消息
+     */
+    public ChatMessage setSessionMute(int mute, FlappySendCallback<ChatMessage> callback) {
+
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerateTool.generateCommonID());
+        //设置
+        msg.setMessageSessionId(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+
+        //读取消息的action消息
+        ChatAction chatAction = new ChatAction();
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_MUTE_SESSION);
+        chatAction.setActionIds(new ArrayList<>(
+                Arrays.asList(
+                        DataManager.getInstance().getLoginUser().getUserId(),
+                        session.getSessionId(),
+                        Integer.toString(mute)
+                )
+        ));
+
+        //设置内容
+        msg.setChatAction(chatAction);
+        //时间
+        msg.setMessageDate(new Date());
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
+    }
+
+
+    /******
+     * 设置会话静音
+     * @param pinned  置顶
+     * @param callback Action回调消息
+     * @return 返回消息
+     */
+    public ChatMessage setSessionPinned(int pinned, FlappySendCallback<ChatMessage> callback) {
+
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerateTool.generateCommonID());
+        //设置
+        msg.setMessageSessionId(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+
+        //读取消息的action消息
+        ChatAction chatAction = new ChatAction();
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_PINNED_SESSION);
+        chatAction.setActionIds(new ArrayList<>(
+                Arrays.asList(
+                        DataManager.getInstance().getLoginUser().getUserId(),
+                        session.getSessionId(),
+                        Integer.toString(pinned)
                 )
         ));
 
@@ -618,7 +770,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_RECALL);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_RECALL_MSG);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
@@ -639,12 +791,47 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
-     * 删除已读消息
+     * 删除消息
      * @param messageId 消息ID
      * @param callback  回调
      */
-    public void deleteMessageById(String messageId, FlappySendCallback<ChatMessage> callback) {
-        updateMsgDelete(messageId, callback);
+    public ChatMessage deleteMessageById(String messageId, FlappySendCallback<ChatMessage> callback) {
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerateTool.generateCommonID());
+        //设置
+        msg.setMessageSessionId(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+
+        //读取消息的action消息
+        ChatAction chatAction = new ChatAction();
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_DELETE_MSG);
+        chatAction.setActionIds(new ArrayList<>(
+                Arrays.asList(
+                        DataManager.getInstance().getLoginUser().getUserId(),
+                        session.getSessionId(),
+                        messageId
+                )
+        ));
+
+        //设置内容
+        msg.setChatAction(chatAction);
+        //时间
+        msg.setMessageDate(new Date());
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
     }
 
 
@@ -693,160 +880,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         }
     }
 
-
-    /******
-     * Change mute
-     * @param mute pinned
-     */
-    public void changeMute(int mute, final FlappyIMCallback<String> callback) {
-        //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
-        //用户ID
-        hashMap.put("userId", DataManager.getInstance().getLoginUser().getUserId());
-        //设备ID
-        hashMap.put("sessionExtendId", session.getSessionExtendId());
-        //设备ID
-        hashMap.put("isMute", String.valueOf(mute));
-        //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUserInSession(),
-                hashMap,
-                new BaseParseCallback<String>(String.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(String response, String tag) {
-                        if (callback != null) {
-                            callback.success(response);
-                        }
-                    }
-                }
-        );
-    }
-
-
-    /******
-     * Change pinned
-     * @param pinned pinned
-     */
-    public void changePinned(int pinned, final FlappyIMCallback<String> callback) {
-        //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
-        //用户ID
-        hashMap.put("userId", DataManager.getInstance().getLoginUser().getUserId());
-        //设备ID
-        hashMap.put("sessionExtendId", session.getSessionExtendId());
-        //设备ID
-        hashMap.put("isPinned", String.valueOf(pinned));
-        //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUserInSession(),
-                hashMap,
-                new BaseParseCallback<String>(String.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(String response, String tag) {
-                        if (callback != null) {
-                            callback.success(response);
-                        }
-                    }
-                }
-        );
-    }
-
-
-    /******
-     * 获取要发送的ID
-     * @return 对方ID
-     */
-    private String getPeerID() {
-        switch (getSession().getSessionType().intValue()) {
-            ///群聊会话
-            case SessionModel.TYPE_GROUP:
-                return getSession().getSessionId();
-            ///单聊会话
-            case SessionModel.TYPE_SINGLE: {
-                ChatUser loginUser = DataManager.getInstance().getLoginUser();
-                for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
-                        return chatUser.getUserId();
-                    }
-                }
-                break;
-            }
-            ///系统会话
-            case SessionModel.TYPE_SYSTEM:
-                return "0";
-            default:
-                throw new RuntimeException("账号错误，聊天对象丢失");
-        }
-        return null;
-    }
-
-    /******
-     * 获取对方的extendID
-     * @return 对方ID
-     */
-    private String getPeerExtendID() {
-        switch (getSession().getSessionType().intValue()) {
-            ///群聊会话
-            case SessionModel.TYPE_GROUP:
-                return getSession().getSessionExtendId();
-            ///单聊会话
-            case SessionModel.TYPE_SINGLE: {
-                ChatUser loginUser = DataManager.getInstance().getLoginUser();
-                for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
-                        return chatUser.getUserExtendId();
-                    }
-                }
-                break;
-            }
-            ///系统会话
-            case SessionModel.TYPE_SYSTEM:
-                return "0";
-            default:
-                throw new RuntimeException("账号错误，聊天对象丢失");
-        }
-        return null;
-    }
 
     /******
      * 获取最后一条消息

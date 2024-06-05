@@ -74,11 +74,22 @@ public class ChatMessage {
     public final static int SYSTEM_MSG_ADD_MEMBER = 4;
 
 
-    //已读消息
-    public final static int ACTION_TYPE_READ = 1;
+    /***动作消息***/
 
     //撤回消息
-    public final static int ACTION_TYPE_RECALL = 2;
+    public final static int ACTION_TYPE_RECALL_MSG = 1;
+
+    //删除消息
+    public final static int ACTION_TYPE_DELETE_MSG = 2;
+
+    //会话已读
+    public final static int ACTION_TYPE_READ_SESSION = 3;
+
+    //会话静音
+    public final static int ACTION_TYPE_MUTE_SESSION = 4;
+
+    //会话置顶
+    public final static int ACTION_TYPE_PINNED_SESSION = 5;
 
 
     public ChatMessage() {

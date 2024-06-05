@@ -15,6 +15,24 @@ public class StringTool {
 
 
     /******
+     * join str list
+     * @param strList 字符串列表
+     * @param split   裁剪
+     * @return
+     */
+    public static String joinListStr(List<String> strList, String split) {
+        StringBuilder stringBuffer = new StringBuilder();
+        for (int s = 0; s < strList.size(); s++) {
+            stringBuffer.append(strList.get(s));
+            if (s != strList.size() - 1) {
+                stringBuffer.append(split);
+            }
+        }
+        return stringBuffer.toString();
+    }
+
+
+    /******
      * 大数转字符串
      * @param decimal decimal
      * @return 字符串

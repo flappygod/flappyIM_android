@@ -25,6 +25,7 @@ import android.database.Cursor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.List;
 
 /******
@@ -93,7 +94,7 @@ public class Database {
         try {
             ContentValues values = new ContentValues();
             values.put("messageSendState", SEND_STATE_FAILURE);
-            db.update(DataBaseConfig.TABLE_MESSAGE,values,"messageSendState = 0",null);
+            db.update(DataBaseConfig.TABLE_MESSAGE, values, "messageSendState = 0", null);
         } finally {
             close();
         }
@@ -191,17 +192,18 @@ public class Database {
             //保留之前的部分参数
             ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
 
+            //保留之前的IS Delete
+            values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
+
+            //保留之前的Delete operation
+            values.put("messageDeleteOperation", chatMessage.getMessageDeleteOperation());
+
+            //保留之前的Delete user list
+            values.put("messageDeleteUserList", chatMessage.getMessageDeleteUserList());
+
             //保留之前的Message Stamp
             values.put("messageStamp", formerMsg != null ? StringTool.decimalToStr(formerMsg.getMessageStamp()) : Long.toString(System.currentTimeMillis()));
 
-            //保留之前的IS Delete
-            values.put("isDelete", formerMsg != null ? StringTool.decimalToInt(formerMsg.getIsDelete()) : StringTool.decimalToInt(chatMessage.getIsDelete()));
-
-            //保留之前的Delete operation
-            values.put("messageDeleteOperation", formerMsg != null ? formerMsg.getMessageDeleteOperation() : chatMessage.getMessageDeleteOperation());
-
-            //保留之前的Delete user list
-            values.put("messageDeleteUserList", formerMsg != null ? formerMsg.getMessageDeleteUserList() : chatMessage.getMessageDeleteUserList());
 
             return db.insertWithOnConflict(
                     DataBaseConfig.TABLE_MESSAGE,
@@ -284,11 +286,47 @@ public class Database {
         }
     }
 
+
     /******
-     * 设置删除消息
+     * 设置删除消息，删除消息时，整个消息不删除，
+     * 只是在messageDeleteUserList中增加delete
      * @param messageId    消息ID
      */
-    public void updateMessageDelete(String messageId) {
+    public void updateMessageDelete(String userId, String messageId) {
+        //检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+
+        //已经删除了不处理
+        ChatMessage message = getMessageById(messageId);
+        if (message.getIsDelete().intValue() == 1) {
+            return;
+        }
+
+        //设置不删除
+        message.setIsDelete(new BigDecimal(0));
+        //删除
+        message.setMessageDeleteOperation("delete");
+        //用户ID列表
+        List<String> userIdList = Arrays.asList(message.getMessageDeleteUserList().split(","));
+        //添加用户
+        userIdList.add(userId);
+        //设置删除的用户
+        message.setMessageDeleteUserList(StringTool.joinListStr(userIdList, ","));
+        //设置已读
+        message.setMessageReadState(new BigDecimal(1));
+        //插入消息
+        insertMessage(message);
+    }
+
+
+    /******
+     * 撤回消息就是完全删除
+     * @param messageId    消息ID
+     */
+    public void updateMessageRecall(String userId, String messageId) {
         //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
@@ -298,15 +336,15 @@ public class Database {
         try {
             //设置已读消息
             ContentValues values = new ContentValues();
-            //设置已读
             values.put("isDelete", 1);
+            values.put("messageDeleteOperation", "recall");
+            values.put("messageDeleteUserList", userId);
             values.put("messageReadState", 1);
             //更新已读消息
             db.update(
                     DataBaseConfig.TABLE_MESSAGE,
                     values,
-                    "messageInsertUser=? and " +
-                            "messageId = ?",
+                    "messageInsertUser=? and messageId = ?",
                     new String[]{
                             chatUser.getUserExtendId(),
                             messageId,
@@ -333,13 +371,27 @@ public class Database {
         }
         ChatAction action = chatMessage.getChatAction();
         switch (action.getActionType()) {
-            //消息已读
-            case ChatMessage.ACTION_TYPE_READ: {
+            //撤回消息
+            case ChatMessage.ACTION_TYPE_RECALL_MSG: {
                 //获取TableSequence
                 String userId = action.getActionIds().get(0);
-                //获取会话ID
-                String sessionId = action.getActionIds().get(1);
+                String messageId = action.getActionIds().get(2);
+                updateMessageRecall(userId, messageId);
+                break;
+            }
+            //消息删除
+            case ChatMessage.ACTION_TYPE_DELETE_MSG: {
                 //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                String messageId = action.getActionIds().get(2);
+                updateMessageDelete(userId, messageId);
+                break;
+            }
+            //消息已读
+            case ChatMessage.ACTION_TYPE_READ_SESSION: {
+                //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                String sessionId = action.getActionIds().get(1);
                 String tableOffset = action.getActionIds().get(2);
                 //更新消息已读
                 updateMessageRead(userId, sessionId, tableOffset);
@@ -347,12 +399,22 @@ public class Database {
                 updateSessionMemberLatestRead(userId, sessionId, tableOffset);
                 break;
             }
-            //消息删除
-            case ChatMessage.ACTION_TYPE_RECALL: {
+            //消息已读
+            case ChatMessage.ACTION_TYPE_MUTE_SESSION: {
                 //获取TableSequence
-                String messageId = action.getActionIds().get(2);
-                //删除消息
-                updateMessageDelete(messageId);
+                String userId = action.getActionIds().get(0);
+                String sessionId = action.getActionIds().get(1);
+                String mute = action.getActionIds().get(2);
+                updateSessionMemberMute(userId, sessionId, mute);
+                break;
+            }
+            //消息已读
+            case ChatMessage.ACTION_TYPE_PINNED_SESSION: {
+                //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                String sessionId = action.getActionIds().get(1);
+                String pinned = action.getActionIds().get(2);
+                updateSessionMemberPinned(userId, sessionId, pinned);
                 break;
             }
         }
@@ -895,11 +957,52 @@ public class Database {
         open();
         try {
             SessionMemberModel memberModel = getSessionMember(sessionId, userId);
-            if (memberModel == null) {
-                return;
+            if (memberModel != null) {
+                memberModel.setSessionMemberLatestRead(tableOffset);
+                insertSessionMember(memberModel);
             }
-            memberModel.setSessionMemberLatestRead(tableOffset);
-            insertSessionMember(memberModel);
+        } finally {
+            close();
+        }
+    }
+
+
+    /******
+     * 更新会话用户mute
+     * @param userId 用户id
+     * @param sessionId 会话id
+     * @param mute 是否静音
+     */
+    private void updateSessionMemberMute(String userId, String sessionId, String mute) {
+        //会话Data
+        open();
+        try {
+            SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+            if (memberModel != null) {
+                memberModel.setSessionMemberMute(StringTool.strToInt(mute, 0));
+                insertSessionMember(memberModel);
+            }
+        } finally {
+            close();
+        }
+    }
+
+
+    /******
+     * 更新会话用户mute
+     * @param userId 用户id
+     * @param sessionId 会话id
+     * @param pinned 是否置顶
+     */
+    private void updateSessionMemberPinned(String userId, String sessionId, String pinned) {
+        //会话Data
+        open();
+        try {
+            SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+            if (memberModel != null) {
+                memberModel.setSessionMemberPinned(StringTool.strToInt(pinned, 0));
+                insertSessionMember(memberModel);
+            }
         } finally {
             close();
         }
@@ -1167,7 +1270,6 @@ public class Database {
             close();
         }
     }
-
 
 
     //更新还未处理的消息

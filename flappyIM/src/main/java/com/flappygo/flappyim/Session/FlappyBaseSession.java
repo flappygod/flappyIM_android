@@ -147,7 +147,7 @@ public class FlappyBaseSession {
                 message.setIsDelete(new BigDecimal(1));
                 message.setMessageDeleteOperation("delete");
                 message.setMessageReadState(new BigDecimal(1));
-                Database.getInstance().updateMessageDelete(id);
+                Database.getInstance().updateMessageRecall(id);
                 return message;
             }
 
