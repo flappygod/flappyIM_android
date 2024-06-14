@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.Handler;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
@@ -227,9 +228,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                         handlerLogin.getLoginResponse().getSessions()
                 );
 
-                //系统消息都设置为已经处理
+                //系统消息、用户动作 消息设置为已处理
                 for (ChatMessage msg : messages) {
-                    if (msg.getMessageType().intValue() == MSG_TYPE_SYSTEM) {
+                    if (msg.getMessageType().intValue() == MSG_TYPE_SYSTEM || msg.getMessageType().intValue() == MSG_TYPE_ACTION) {
                         msg.setMessageReadState(new BigDecimal(1));
                     }
                 }
