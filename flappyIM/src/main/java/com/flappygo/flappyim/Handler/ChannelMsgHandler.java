@@ -1,5 +1,7 @@
 package com.flappygo.flappyim.Handler;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
+
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
@@ -11,6 +13,7 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import com.flappygo.flappyim.Tools.Secret.RSATool;
@@ -23,13 +26,16 @@ import com.flappygo.flappyim.Datas.DataManager;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.FlappyImService;
 
 import io.netty.channel.ChannelFuture;
+
 import java.util.Collections;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+
 import android.os.Message;
 
 import java.util.List;
@@ -201,6 +207,14 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //保存数据
             DataManager.getInstance().saveLoginUser(user);
 
+
+            //消息转换为我们的message
+            List<ChatMessage> messages = new ArrayList<>();
+            for (int s = 0; s < response.getMsgCount(); s++) {
+                ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), secret);
+                messages.add(chatMessage);
+            }
+
             //遍历消息进行通知
             if (handlerLogin.getLoginResponse().getSessions() != null &&
                     handlerLogin.getLoginResponse().getSessions().size() != 0) {
@@ -212,14 +226,15 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 HandlerNotifyManager.getInstance().notifySessionListUpdate(
                         handlerLogin.getLoginResponse().getSessions()
                 );
+
+                //系统消息都设置为已经处理
+                for (ChatMessage msg : messages) {
+                    if (msg.getMessageType().intValue() == MSG_TYPE_SYSTEM) {
+                        msg.setMessageReadState(new BigDecimal(1));
+                    }
+                }
             }
 
-            //消息转换为我们的message
-            List<ChatMessage> messages = new ArrayList<>();
-            for (int s = 0; s < response.getMsgCount(); s++) {
-                ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), secret);
-                messages.add(chatMessage);
-            }
 
             //对消息进行排序，然后在插入数据库
             Collections.sort(messages, (chatMessage, t1) -> {
