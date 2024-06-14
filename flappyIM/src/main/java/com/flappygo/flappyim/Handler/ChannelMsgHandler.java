@@ -272,7 +272,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             handlerLogin.loginSuccess();
 
             //检查是否更新
-            checkSessionNeedUpdate(ctx);
+            checkSystemMessageFunction(ctx);
 
             //如果说之前有消息不是在active状态发送的，那么链接成功后就触发发送
             checkFormerMessagesToSend();
@@ -305,7 +305,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             messageArrivedReceipt(ctx, chatMessage, former);
         }
         //检查会话是否需要更新
-        checkSessionNeedUpdate(ctx);
+        checkSystemMessageFunction(ctx);
     }
 
     /******
@@ -377,7 +377,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * 检查会话是否需要更新
      * @param ctx ctx
      */
-    private void checkSessionNeedUpdate(ChannelHandlerContext ctx) {
+    private void checkSystemMessageFunction(ChannelHandlerContext ctx) {
 
         //获取所有数据
         List<ChatMessage> latestMessages = Database.getInstance().getNotActionSystemMessage();
