@@ -11,11 +11,7 @@ import static android.content.Intent.CATEGORY_LAUNCHER;
 
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 
 /**
  * 自定义接收器
@@ -26,54 +22,58 @@ import java.util.Objects;
  */
 public class ActionReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "ActionReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        // 跳转主界面
+        handleMainActivityLaunch(context);
 
-        //跳转主界面
+        // 通知消息发送
+        handleNotificationMessage(intent);
+    }
+
+    // 处理主界面跳转
+    private void handleMainActivityLaunch(Context context) {
         try {
-            List<ResolveInfo> activities = getActivities(context);
-            //跳转进入主界面
-            if (activities.size() > 0) {
-                Intent main = new Intent();
-                main.setClassName(activities.get(0).activityInfo.packageName,
-                        activities.get(0).activityInfo.name);
-                main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                context.startActivity(main);
+            List<ResolveInfo> activities = getLauncherActivities(context);
+            if (!activities.isEmpty()) {
+                launchMainActivity(context, activities.get(0));
             }
         } catch (Exception ex) {
-            Log.e("主界面跳转失败", Objects.requireNonNull(ex.getMessage()));
-        }
-
-        //通知消息发送
-        try {
-            //获取到相应的
-            Bundle bundle = intent.getExtras();
-            //消息
-            assert bundle != null;
-            String msg = bundle.getString("msg");
-            //通知消息
-            if (msg != null) {
-                //缓存消息
-                DataManager.getInstance().saveNotificationClick(msg);
-                //保存这个消息，直到设置回调或则其他
-                FlappyImService.getInstance().notifyClicked();
-            }
-        } catch (Exception ex) {
-            //打印消息
-            Log.e("消息保存失败", Objects.requireNonNull(ex.getMessage()));
+            Log.e(TAG, "主界面跳转失败", ex);
         }
     }
 
-
-    //获取所有的Launcher界面
-    private ArrayList<ResolveInfo> getActivities(Context ctx) {
-        ArrayList<ResolveInfo> result = new ArrayList<>();
+    // 获取所有的Launcher界面
+    private List<ResolveInfo> getLauncherActivities(Context context) {
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.setPackage(ctx.getPackageName());
+        intent.setPackage(context.getPackageName());
         intent.addCategory(CATEGORY_LAUNCHER);
-        result.addAll(ctx.getPackageManager().queryIntentActivities(intent, 0));
-        return result;
+        return context.getPackageManager().queryIntentActivities(intent, 0);
     }
 
+    // 启动主界面
+    private void launchMainActivity(Context context, ResolveInfo resolveInfo) {
+        Intent main = new Intent();
+        main.setClassName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
+        main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(main);
+    }
+
+    // 处理通知消息
+    private void handleNotificationMessage(Intent intent) {
+        try {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String msg = bundle.getString("msg");
+                if (msg != null) {
+                    DataManager.getInstance().saveNotificationClick(msg);
+                    FlappyImService.getInstance().notifyClicked();
+                }
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "消息保存失败", ex);
+        }
+    }
 }

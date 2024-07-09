@@ -30,29 +30,28 @@ import android.graphics.Canvas;
 import android.content.Intent;
 import android.os.Build;
 
-
 /******
  * 通知工具类
  */
 public class NotificationTool extends ContextWrapper {
 
     private NotificationManager mManager;
-    public static final String sID = "channel_1";
-    public static final String sName = "channel_name_1";
+    public static final String CHANNEL_ID = "channel_1";
+    public static final String CHANNEL_NAME = "channel_name_1";
 
     public NotificationTool(Context context) {
         super(context);
     }
 
     public void sendNotification(ChatMessage chatMessage, String title, String content) {
-        if (Build.VERSION.SDK_INT >= 26) {
+        Notification notification;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel();
-            Notification notification = getNotification_26(chatMessage, title, content).build();
-            getManager().notify(1, notification);
+            notification = getNotificationForOreoAndAbove(chatMessage, title, content).build();
         } else {
-            Notification notification = getNotification_25(chatMessage, title, content).build();
-            getManager().notify(1, notification);
+            notification = getNotificationForPreOreo(chatMessage, title, content).build();
         }
+        getManager().notify(1, notification);
     }
 
     private NotificationManager getManager() {
@@ -63,98 +62,85 @@ public class NotificationTool extends ContextWrapper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(sID, sName, NotificationManager.IMPORTANCE_HIGH);
+    private void createNotificationChannel() {
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
         getManager().createNotificationChannel(channel);
     }
 
-
     /**
-     * 获取图标 bitmap
+     * 获取应用图标的Bitmap
      *
-     * @param context content
+     * @param context 上下文
+     * @return Bitmap
      */
     public static synchronized Bitmap getBitmap(Context context) {
-        PackageManager packageManager = null;
-        ApplicationInfo applicationInfo = null;
         try {
-            packageManager = context.getApplicationContext().getPackageManager();
-            applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException ignored) {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+            Drawable drawable = packageManager.getApplicationIcon(applicationInfo);
+            return drawableToBitmap(drawable);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
-        //xxx根据自己的情况获取drawable
-        assert applicationInfo != null;
-        return drawableToBitmap(packageManager.getApplicationIcon(applicationInfo));
     }
 
-    //drawable转成bitmap
+    /**
+     * Drawable转Bitmap
+     *
+     * @param drawable Drawable对象
+     * @return Bitmap
+     */
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        // 取 drawable 的长宽
-        int w = drawable.getIntrinsicWidth();
-        int h = drawable.getIntrinsicHeight();
-        // 取 drawable 的颜色格式
-        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                : Bitmap.Config.RGB_565;
-        // 建立对应 bitmap
-        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-        // 建立对应 bitmap 的画布
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);
         Canvas canvas = new Canvas(bitmap);
-        //设置bounds
-        drawable.setBounds(0, 0, w, h);
-        // 把 drawable 内容画到画布中
+        drawable.setBounds(0, 0, width, height);
         drawable.draw(canvas);
         return bitmap;
     }
 
     @SuppressLint("NotificationTrampoline")
-    public NotificationCompat.Builder getNotification_25(ChatMessage chatMessage, String title, String content) {
+    private NotificationCompat.Builder getNotificationForPreOreo(ChatMessage chatMessage, String title, String content) {
+        NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle()
+                .setBigContentTitle(title)
+                .setSummaryText(content)
+                .bigPicture(getBitmap(getApplicationContext()));
 
-        // 以下是展示大图的通知
-        androidx.core.app.NotificationCompat.BigPictureStyle style = new androidx.core.app.NotificationCompat.BigPictureStyle();
-        style.setBigContentTitle(title);
-        style.setSummaryText(content);
-        style.bigPicture(getBitmap(getApplicationContext()));
-        // 以下是展示多文本通知
-        androidx.core.app.NotificationCompat.BigTextStyle style1 = new androidx.core.app.NotificationCompat.BigTextStyle();
-        style1.setBigContentTitle(title);
-        style1.bigText(content);
         return new NotificationCompat.Builder(getApplicationContext())
                 .setContentTitle(title)
                 .setContentText(content)
                 .setLargeIcon(getBitmap(getApplicationContext()))
                 .setSmallIcon(R.drawable.nothing)
                 .setContentIntent(getPendingIntent(chatMessage))
-                .setSound(RingtoneManager
-                        .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setStyle(style)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setStyle(bigPictureStyle)
                 .setAutoCancel(true);
     }
 
-    //获取跳转
-    public PendingIntent getPendingIntent(ChatMessage chatMessage) {
-        Intent openintent = new Intent(this, ActionReceiver.class);
-        openintent.putExtra("msg", GsonTool.modelToJsonStr(chatMessage));
+    private PendingIntent getPendingIntent(ChatMessage chatMessage) {
+        Intent intent = new Intent(this, ActionReceiver.class);
+        intent.putExtra("msg", GsonTool.modelToJsonStr(chatMessage));
         return PendingIntent.getBroadcast(
                 FlappyImService.getInstance().getAppContext(),
                 0,
-                openintent,
+                intent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Notification.Builder getNotification_26(ChatMessage chatMessage, String title, String content) {
-        return new Notification.Builder(getApplicationContext(), sID)
+    private Notification.Builder getNotificationForOreoAndAbove(ChatMessage chatMessage, String title, String content) {
+        return new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setLargeIcon(getBitmap(getApplicationContext()))
                 .setSmallIcon(R.drawable.nothing)
                 .setContentIntent(getPendingIntent(chatMessage))
-                .setSound(RingtoneManager
-                        .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setStyle(new Notification.BigPictureStyle().bigPicture(getBitmap(getApplicationContext())))
-                .setNumber(1)
                 .setAutoCancel(true);
     }
 }
