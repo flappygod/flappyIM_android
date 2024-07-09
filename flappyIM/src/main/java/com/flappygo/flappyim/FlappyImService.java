@@ -37,8 +37,11 @@ import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.Tools.RunTool;
 import com.flappygo.flappyim.Tools.NetTool;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.content.IntentFilter;
@@ -76,6 +79,8 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_FAILURE;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 /******
@@ -438,11 +443,11 @@ public class FlappyImService {
 
     /******
      * 初始化
-     * @param appContext 上下文
+     * @param activity 上下文
      */
-    public void init(Context appContext) {
+    public void init(Activity activity) {
         //初始化上下文
-        this.appContext = appContext.getApplicationContext();
+        this.appContext = activity.getApplicationContext();
         //添加总体的监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
         //异步线程，清空异常数据
@@ -464,7 +469,22 @@ public class FlappyImService {
 
             }
         });
+        requestPermission(activity);
     }
+
+
+    /******
+     * request permission
+     * @param activity activity
+     */
+    private void requestPermission(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
+        }
+    }
+
 
     /******
      * 初始化
@@ -472,7 +492,7 @@ public class FlappyImService {
      * @param serverPath Im服务器地址
      * @param uploadPath 资源服务器地址
      */
-    public void init(Context appContext,
+    public void init(Activity appContext,
             String serverPath,
             String uploadPath
     ) {
