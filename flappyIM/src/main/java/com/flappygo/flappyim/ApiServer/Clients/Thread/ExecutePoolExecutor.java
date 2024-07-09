@@ -6,19 +6,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Map.Entry;
 import java.util.List;
-
+import java.util.Map.Entry;
 
 /******
  * 自定义线程池
  */
 public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
 
-    /******
-     * 现成维护列表
-     */
-    private final ConcurrentHashMap<String, Thread> lThreads = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Thread> threadMap = new ConcurrentHashMap<>();
 
     /******
      * 构造器
@@ -31,106 +27,95 @@ public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
     /******
      * 构造器
      * @param corePoolSize 核心大小
+     * @param handler 拒绝执行处理器
      */
-    public ExecutePoolExecutor(int corePoolSize,
-                               RejectedExecutionHandler handler) {
+    public ExecutePoolExecutor(int corePoolSize, RejectedExecutionHandler handler) {
         super(corePoolSize, handler);
     }
 
     /******
      * 构造器
      * @param corePoolSize 核心大小
+     * @param threadFactory 线程工厂
      */
-    public ExecutePoolExecutor(int corePoolSize,
-                               ThreadFactory threadFactory) {
+    public ExecutePoolExecutor(int corePoolSize, ThreadFactory threadFactory) {
         super(corePoolSize, threadFactory);
     }
 
     /******
      * 构造器
      * @param corePoolSize 核心大小
+     * @param threadFactory 线程工厂
+     * @param handler 拒绝执行处理器
      */
-    public ExecutePoolExecutor(int corePoolSize,
-                               ThreadFactory threadFactory,
-                               RejectedExecutionHandler handler) {
+    public ExecutePoolExecutor(int corePoolSize, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
         super(corePoolSize, threadFactory, handler);
     }
-
 
     /******
      * 执行某个线程
      * @param thread 线程
      */
     public void execute(Thread thread) {
-        // 添加到保存的hashMap中
-        addThreadToHashMap(thread);
-        // 动态代理，当线程执行完成后进行移除操作
-        ThreadInterceptor transactionInterceptor = new ThreadInterceptor();
-        transactionInterceptor.setTarget(thread);
-        transactionInterceptor
-                .setThreadListener(new ThreadInterceptor.ThreadListener() {
-                    //线程执行完成的时候自动从列表中移除
-                    @Override
-                    public void death(Thread thread) {
-                        removeThreadFromHashMap(thread);
-                    }
+        addThreadToMap(thread);
+        ThreadInterceptor interceptor = new ThreadInterceptor();
+        interceptor.setTarget(thread);
+        interceptor.setThreadListener(new ThreadInterceptor.ThreadListener() {
+            @Override
+            public void death(Thread thread) {
+                removeThreadFromMap(thread);
+            }
 
-                    @Override
-                    public void began(Thread thread) {
+            @Override
+            public void began(Thread thread) {
+                //No-op
+            }
+        });
 
-                    }
-                });
-        Class<?> classType = transactionInterceptor.getClass();
-        Object userServiceProxy = Proxy.newProxyInstance(
-                classType.getClassLoader(), Thread.class.getInterfaces(),
-                transactionInterceptor);
-        super.execute((Runnable) userServiceProxy);
+        Object proxy = Proxy.newProxyInstance(
+                interceptor.getClass().getClassLoader(),
+                new Class<?>[]{Runnable.class},
+                interceptor
+        );
+
+        super.execute((Runnable) proxy);
     }
 
     /******
-     * 添加线程到HashMap中
-     * @param thread   线程
+     * 添加线程到Map中
+     * @param thread 线程
      */
-    private void addThreadToHashMap(Thread thread) {
-        synchronized (lThreads) {
-            lThreads.put(Long.toString(thread.getId()), thread);
+    private void addThreadToMap(Thread thread) {
+        synchronized (threadMap) {
+            threadMap.put(Long.toString(thread.getId()), thread);
         }
     }
 
     /******
-     * 从hashmap中移除线程
-     * @param thread  线程
+     * 从Map中移除线程
+     * @param thread 线程
      */
-    private void removeThreadFromHashMap(Thread thread) {
-        String key = Long.toString(((Thread) thread).getId());
-        synchronized (lThreads) {
-            if (lThreads.containsKey(key)) {
-                this.lThreads.remove(key);
-            }
+    private void removeThreadFromMap(Thread thread) {
+        synchronized (threadMap) {
+            threadMap.remove(Long.toString(thread.getId()));
         }
     }
 
     @Override
     public boolean remove(Runnable task) {
         if (task instanceof Thread) {
-            removeThreadFromHashMap((Thread) task);
+            removeThreadFromMap((Thread) task);
         }
         return super.remove(task);
     }
 
     /***********
      * 获取当前所有的线程
-     * @return 列表
+     * @return 线程列表
      */
-    public List<Thread> getAllThread() {
-        List<Thread> ret = new ArrayList<>();
-        synchronized (lThreads) {
-            for (Entry<String, Thread> entry : lThreads.entrySet()) {
-                Thread thread = entry.getValue();
-                ret.add(thread);
-            }
+    public List<Thread> getAllThreads() {
+        synchronized (threadMap) {
+            return new ArrayList<>(threadMap.values());
         }
-        return ret;
     }
-
 }

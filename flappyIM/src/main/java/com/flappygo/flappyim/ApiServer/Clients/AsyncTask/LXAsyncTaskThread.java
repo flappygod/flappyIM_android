@@ -4,112 +4,59 @@ import java.lang.ref.WeakReference;
 import android.content.Context;
 import android.os.Message;
 
-
 /******
  * 异步线程
+ * @param <M> 输入类型
+ * @param <T> 输出类型
  */
-public class LXAsyncTaskThread<M,T>extends Thread {
+public class LXAsyncTaskThread<M, T> extends Thread {
 
-    // 线程所归属的上下文
     private final WeakReference<Context> taskContext;
-
-    // 用于回调
-    private LXAsyncTaskHandler<M,T> handler;
-
-    // 任务
-    private LXAsyncTask<M,T> task;
-
-    // 线程tag
+    private final LXAsyncTaskHandler<M, T> handler;
+    private final LXAsyncTask<M, T> task;
     private final String taskTag;
-
-    //传入的数据
     private final Object taskInput;
 
     /******
-     * @param tag  线程tag
-     * @param task 任务
+     * 构造函数
+     * @param taskContext 线程所归属的上下文
+     * @param taskInput   传入的数据
+     * @param taskTag     线程tag
+     * @param task        任务
      */
-    public LXAsyncTaskThread(Context taskContext, Object inObject, String tag, LXAsyncTask<M,T> task) {
-        super();
-        this.handler = new LXAsyncTaskHandler<M,T>(tag, task);
-        this.taskContext = new WeakReference<Context>(taskContext);
+    public LXAsyncTaskThread(Context taskContext, Object taskInput, String taskTag, LXAsyncTask<M, T> task) {
+        this.taskContext = new WeakReference<>(taskContext);
+        this.handler = new LXAsyncTaskHandler<>(taskTag, task);
         this.task = task;
-        this.taskTag = tag;
-        this.taskInput = inObject;
+        this.taskTag = taskTag;
+        this.taskInput = taskInput;
     }
 
-    /******
-     * 获取线程tag
-     * @return 线程tag
-     */
     public String getTaskTag() {
         return taskTag;
     }
 
-    /******
-     * 获取线程输入
-     * @return 线程输入
-     */
     public Object getTaskInput() {
         return taskInput;
     }
 
-    /******
-     * 获取线程上下文
-     * @return 上下文
-     */
     public Context getTaskContext() {
-        if (taskContext != null) {
-            return taskContext.get();
-        }
-        return null;
+        return taskContext.get();
     }
 
-    /******
-     * 获取Handler
-     * @return handler
-     */
-    public LXAsyncTaskHandler<M,T> getHandler() {
+    public LXAsyncTaskHandler<M, T> getHandler() {
         return handler;
     }
 
-    /******
-     * 设置Handler
-     */
-    public void setHandler(LXAsyncTaskHandler<M,T> handler) {
-        this.handler = handler;
-    }
-
-    /******
-     * 获取任务
-     * @return 任务
-     */
-    public LXAsyncTask<M,T> getTask() {
+    public LXAsyncTask<M, T> getTask() {
         return task;
     }
 
-    /******
-     * 设置任务
-     * @param task 任务
-     */
-    public void setTask(LXAsyncTask<M,T> task) {
-        this.task = task;
-    }
-
-    /******
-     * 设置线程执行完成后回调是否响应
-     * @param callBackEnable 是否响应
-     */
     public void setCallBackEnable(boolean callBackEnable) {
         handler.setCallBackEnable(callBackEnable);
     }
 
-    /**********
-     * 取消正在执行的任务
-     * @param task 任务
-     * @return 是否取消成功
-     */
-    public boolean cancelTask(LXAsyncTask<?,?> task) {
+    public boolean cancelTask(LXAsyncTask<?, ?> task) {
         if (handler.getTask() == task) {
             handler.setCallBackEnable(false);
             return true;
@@ -118,19 +65,15 @@ public class LXAsyncTaskThread<M,T>extends Thread {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public void run() {
         try {
-            Object object = task.run((M) taskInput, taskTag);
-            // 发送执行成功的消息
-            Message msg = handler.obtainMessage(LXAsyncTaskHandler.SUCCESS_MSG, object);
-            //发送消息
+            T result = (T) task.run((M) taskInput, taskTag);
+            Message msg = handler.obtainMessage(LXAsyncTaskHandler.SUCCESS_MSG, result);
             handler.sendMessage(msg);
         } catch (Exception e) {
-            // 发送执行错误的消息
             Message msg = handler.obtainMessage(LXAsyncTaskHandler.FAILURE_MSG, e);
-            //错误
             handler.sendMessage(msg);
         }
     }
-
 }
