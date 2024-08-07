@@ -1,23 +1,23 @@
 package com.flappygo.flappyim;
 
 
-import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
+import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.Thread.NettyThreadListener;
+import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Service.FlappySocketService;
+import com.flappygo.flappyim.Thread.NettyThreadListener;
 import com.flappygo.flappyim.Listener.KickedOutListener;
 import com.flappygo.flappyim.Holder.HolderLoginCallback;
 import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Handler.ChannelMsgHandler;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.Listener.MessageListener;
@@ -37,35 +37,40 @@ import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.Tools.RunTool;
 import com.flappygo.flappyim.Tools.NetTool;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.content.IntentFilter;
 import android.content.Context;
 import android.content.Intent;
 
+import java.lang.reflect.Member;
+import java.util.Collections;
+
+import android.app.Activity;
+
 import java.util.ArrayList;
 
-import android.os.Build;
 import android.os.Message;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.Collections;
 import java.util.Objects;
 import java.util.HashMap;
+
+import android.Manifest;
+import android.os.Build;
+
 import java.util.List;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_DATABASE_ERROR;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_NORMAL;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_HIDE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_CUSTOM;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_LOCATE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
+import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_DATABASE_ERROR;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_FILE;
@@ -78,9 +83,9 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NOT_LOGIN;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_FAILURE;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_EXPIRED;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.annotation.NonNull;
 
 
 /******
@@ -268,13 +273,7 @@ public class FlappyImService {
     private void initReceiver() {
         synchronized (this) {
             if (!receiverRegistered) {
-                IntentFilter timeFilter = new IntentFilter();
-                timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
-                timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
-                timeFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-                timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-                timeFilter.addAction("android.net.wifi.STATE_CHANGE");
-                timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+                IntentFilter timeFilter = getIntentFilter();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     getAppContext().registerReceiver(netReceiver, timeFilter, Context.RECEIVER_NOT_EXPORTED);
                 } else {
@@ -283,6 +282,18 @@ public class FlappyImService {
                 receiverRegistered = true;
             }
         }
+    }
+
+    ///get intent filter
+    private static @NonNull IntentFilter getIntentFilter() {
+        IntentFilter timeFilter = new IntentFilter();
+        timeFilter.addAction("android.net.ethernet.ETHERNET_STATE_CHANGED");
+        timeFilter.addAction("android.net.ethernet.STATE_CHANGE");
+        timeFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        timeFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        timeFilter.addAction("android.net.wifi.STATE_CHANGE");
+        timeFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        return timeFilter;
     }
 
     /******
@@ -716,7 +727,7 @@ public class FlappyImService {
             String userName,
             String userAvatar,
             String userData,
-            final FlappyIMCallback<String> callback) {
+            final FlappyIMCallback<ChatUser> callback) {
 
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
@@ -731,9 +742,9 @@ public class FlappyImService {
         //进行callBack
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().register(),
                 hashMap,
-                new BaseParseCallback<String>(String.class) {
+                new BaseParseCallback<ChatUser>(ChatUser.class) {
                     @Override
-                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                    protected void stateFalse(BaseApiModel<ChatUser> model, String tag) {
                         if (callback != null) {
                             callback.failure(
                                     new Exception(model.getMsg()),
@@ -743,16 +754,16 @@ public class FlappyImService {
                     }
 
                     @Override
-                    protected void jsonError(Exception e, String tag) {
+                    public void stateTrue(ChatUser user, String tag) {
                         if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                            callback.success(user);
                         }
                     }
 
                     @Override
-                    public void stateTrue(String s, String tag) {
+                    protected void jsonError(Exception e, String tag) {
                         if (callback != null) {
-                            callback.success(s);
+                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
                         }
                     }
 
@@ -765,6 +776,71 @@ public class FlappyImService {
                 }
         );
     }
+
+
+
+    /******
+     * 用户登录
+     * @param userExtendID  外部ID
+     * @param callback      回调
+     */
+    public void login(String userExtendID, final FlappyIMCallback<ResponseLogin> callback) {
+        synchronized (this) {
+            //不可以登录
+            if (checkLoginBusy(callback)) {
+                return;
+            }
+            isRunningLogin = true;
+            //创建这个HashMap
+            HashMap<String, String> hashMap = new HashMap<>();
+            //外部用户ID
+            hashMap.put("userExtendID", StringTool.ToNotNullStr(userExtendID));
+            //设备ID
+            hashMap.put("device", FlappyConfig.getInstance().device);
+            //设备ID
+            hashMap.put("pushId", DataManager.getInstance().getPushId());
+            //设备ID
+            hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
+            //进行callBack
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login(),
+                    hashMap,
+                    new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                        @Override
+                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
+                            isRunningLogin = false;
+                            if (callback != null) {
+                                callback.failure(
+                                        new Exception(model.getMsg()),
+                                        Integer.parseInt(model.getCode())
+                                );
+                            }
+                        }
+
+                        @Override
+                        protected void jsonError(Exception e, String tag) {
+                            isRunningLogin = false;
+                            if (callback != null) {
+                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                            }
+                        }
+
+                        @Override
+                        protected void netError(Exception e, String tag) {
+                            isRunningLogin = false;
+                            if (callback != null) {
+                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                            }
+                        }
+
+                        @Override
+                        public void stateTrue(ResponseLogin response, String tag) {
+                            loginNetty(response, callback);
+                        }
+                    }
+            );
+        }
+    }
+
 
     /**************
      * 更新用户账户
@@ -827,69 +903,6 @@ public class FlappyImService {
         );
     }
 
-    /******
-     * 用户登录
-     * @param userExtendID  外部ID
-     * @param callback      回调
-     */
-    public void login(String userExtendID, final FlappyIMCallback<ResponseLogin> callback) {
-        synchronized (this) {
-            //不可以登录
-            if (checkLoginBusy(callback)) {
-                return;
-            }
-            isRunningLogin = true;
-            //创建这个HashMap
-            HashMap<String, String> hashMap = new HashMap<>();
-            //用户ID不用传了
-            hashMap.put("userID", "");
-            //外部用户ID
-            hashMap.put("userExtendID", StringTool.ToNotNullStr(userExtendID));
-            //设备ID
-            hashMap.put("device", FlappyConfig.getInstance().device);
-            //设备ID
-            hashMap.put("pushId", DataManager.getInstance().getPushId());
-            //设备ID
-            hashMap.put("pushPlat", FlappyConfig.getInstance().pushPlat);
-            //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login(),
-                    hashMap,
-                    new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
-                        @Override
-                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
-                            isRunningLogin = false;
-                            if (callback != null) {
-                                callback.failure(
-                                        new Exception(model.getMsg()),
-                                        Integer.parseInt(model.getCode())
-                                );
-                            }
-                        }
-
-                        @Override
-                        protected void jsonError(Exception e, String tag) {
-                            isRunningLogin = false;
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                            }
-                        }
-
-                        @Override
-                        protected void netError(Exception e, String tag) {
-                            isRunningLogin = false;
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                            }
-                        }
-
-                        @Override
-                        public void stateTrue(ResponseLogin response, String tag) {
-                            loginNetty(response, callback);
-                        }
-                    }
-            );
-        }
-    }
 
 
     /******

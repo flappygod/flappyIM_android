@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().setPushPlatform("Google");
         //服务初始
-        FlappyImService.getInstance().init(getBaseContext(), "http://192.168.31.11", "http://192.168.31.11");
+        FlappyImService.getInstance().init((Activity) getBaseContext(), "http://192.168.31.11", "http://192.168.31.11");
         //开启服务
         FlappyImService.getInstance().startServer();
 
