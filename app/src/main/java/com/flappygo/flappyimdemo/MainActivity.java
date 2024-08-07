@@ -22,6 +22,7 @@ import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
+import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.lcw.library.imagepicker.ImagePicker;
 
@@ -58,9 +59,9 @@ public class MainActivity extends Activity {
                 "李俊霖",
                 "",
                 "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1183057007,4270556535&fm=26&gp=0.jpg",
-                new FlappyIMCallback<String>() {
+                new FlappyIMCallback<ChatUser>() {
                     @Override
-                    public void success(String data) {
+                    public void success(ChatUser data) {
                         Toast.makeText(getBaseContext(), "账号创建成功", Toast.LENGTH_SHORT).show();
                     }
 
@@ -92,9 +93,7 @@ public class MainActivity extends Activity {
         FlappyImService.getInstance().setKickedOutListener(new KickedOutListener() {
             @Override
             public void kickedOut() {
-
                 Toast.makeText(getBaseContext(), "当前设备已经被踢下线了", Toast.LENGTH_SHORT).show();
-
             }
         });
 

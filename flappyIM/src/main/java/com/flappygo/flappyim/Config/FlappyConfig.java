@@ -6,7 +6,7 @@ package com.flappygo.flappyim.Config;
 public class FlappyConfig {
 
     //安卓设备
-    public final String device = "Android";
+    public final String devicePlat = "Android";
 
     //12秒
     public final int IdleSeconds = 12;
