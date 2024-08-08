@@ -1398,29 +1398,30 @@ public class FlappyImService {
 
     /******
      * 创建群组会话
-     * @param users     用户ID列表
-     * @param groupID   群组ID
-     * @param groupName 群组名称
+     * @param userExtendIds     用户ID列表
+     * @param sessionExtendId   群组ID
+     * @param sessionName 群组名称
      * @param callback  回调
      */
-    public void createGroupSession(List<String> users,
-            String groupID,
-            String groupName,
+    public void createGroupSession(
+            List<String> userExtendIds,
+            String sessionExtendId,
+            String sessionName,
             final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
         }
         //检查用户
-        if (!checkUsers(users, callback)) {
+        if (!checkUsers(userExtendIds, callback)) {
             return;
         }
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("users", GsonTool.jsonArrayListStr(users));
-        hashMap.put("createUser", DataManager.getInstance().getLoginUser().getUserId());
-        hashMap.put("extendID", groupID);
-        hashMap.put("sessionName", groupName);
+        hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
+        hashMap.put("createUserId", DataManager.getInstance().getLoginUser().getUserId());
+        hashMap.put("sessionExtendId", sessionExtendId);
+        hashMap.put("sessionName", sessionName);
 
         //调用
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(),
