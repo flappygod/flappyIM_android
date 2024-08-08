@@ -32,7 +32,7 @@ message ReqLogin{
   //设备信息
   string device = 2;
   //推送ID
-  string pushId = 3;
+  string deviceId = 3;
   //最后的消息序号
   string latest = 4;
   //秘钥验证
@@ -140,19 +140,21 @@ message Route{
   //用户ID
   int64 userID = 1;
   //用户设备
-  string device = 2;
-  //推送ID
-  string pushId = 3;
+  string devicePlat = 2;
+  //用户设备
+  string deviceId = 3;
   //推送类型
   int32 pushType = 4;
   //推送平台类型
   string pushPlat = 5;
+  //推送ID
+  string pushId = 6;
   //推送平台语言
-  string pushLanguage = 6;
+  string pushLanguage = 7;
   //推送平台隐私
-  int32 pushPrivacy = 7;
+  int32 pushPrivacy = 8;
   //推送平台免打扰
-  int32 pushMute = 8;
+  int32 pushMute = 9;
   //时间
-  string time = 9;
+  string time = 10;
 }
