@@ -512,6 +512,23 @@ public class FlappyImService {
     }
 
     /******
+     * 推送的类型
+     * @param pushType 推送类型
+     */
+    public void setPushType(int pushType) {
+        DataManager.getInstance().savePushType(Integer.toString(pushType));
+    }
+
+    /******
+     * 推送的平台
+     * @param pushPlat 推送平台
+     */
+    public void setPushPlat(String pushPlat) {
+        DataManager.getInstance().savePushPlat(pushPlat);
+    }
+
+
+    /******
      * 数据登录加密公钥
      * @param publicKey 公钥
      */
@@ -525,23 +542,6 @@ public class FlappyImService {
      */
     public String getRsaPublicKey() {
         return DataManager.getInstance().getRSAKey();
-    }
-
-
-    /******
-     * 推送的类型
-     * @param pushType 推送类型
-     */
-    public void setPushType(int pushType) {
-        DataManager.getInstance().savePushType(Integer.toString(pushType));
-    }
-
-    /******
-     * 推送的平台
-     * @param pushPlat 推送平台
-     */
-    public void setPushPlatform(String pushPlat) {
-        DataManager.getInstance().savePushPlat(pushPlat);
     }
 
 
