@@ -157,7 +157,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
                 .setDevice(FlappyConfig.getInstance().devicePlat)
                 .setUserID(this.user.getUserId())
-                .setDeviceId(StringTool.getDeviceIDNumber(FlappyImService.getInstance().getAppContext()));
+                .setDeviceId(DataManager.getInstance().getDeviceId());
 
         //如果是空
         if (StringTool.isEmpty(DataManager.getInstance().getRSAKey())) {
