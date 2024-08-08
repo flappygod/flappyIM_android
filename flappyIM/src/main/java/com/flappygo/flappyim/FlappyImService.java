@@ -590,7 +590,7 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //设置index
-        hashMap.put("userExtendID", userExtendID);
+        hashMap.put("userExtendId", userExtendID);
         //用户名称
         hashMap.put("userName", userName);
         //用户头像
@@ -653,7 +653,7 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //设置index
-        hashMap.put("userExtendID", userExtendID);
+        hashMap.put("userExtendId", userExtendID);
         //用户名称
         hashMap.put("userName", userName);
         //用户头像
@@ -762,7 +762,7 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //外部用户ID
-        hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
+        hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         //设备ID
         hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
         //设备ID
@@ -854,7 +854,7 @@ public class FlappyImService {
             //创建这个HashMap
             HashMap<String, String> hashMap = new HashMap<>();
             //外部用户ID
-            hashMap.put("userExtendID", StringTool.ToNotNullStr(userExtendID));
+            hashMap.put("userExtendId", StringTool.ToNotNullStr(userExtendID));
             //设备ID
             hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
             //设备ID
@@ -944,7 +944,7 @@ public class FlappyImService {
             //创建这个HashMap
             HashMap<String, String> hashMap = new HashMap<>();
             //用户ID
-            hashMap.put("userID", user.getUserId());
+            hashMap.put("userId", user.getUserId());
             //设备ID
             hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
             //设备ID
@@ -1185,7 +1185,7 @@ public class FlappyImService {
             //创建这个HashMap
             HashMap<String, String> hashMap = new HashMap<>();
             //外部用户ID
-            hashMap.put("userExtendID", DataManager.getInstance().getLoginUser().getUserExtendId());
+            hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
             //设备ID
             hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
             //设备ID
@@ -1779,13 +1779,13 @@ public class FlappyImService {
 
     /******
      * 向群组中添加用户
-     * @param userId   用户ID
-     * @param groupId  群组ID
+     * @param userExtendId   用户ID
+     * @param sessionExtendId  群组ID
      * @param callback 回调
      */
     public void addUserToSession(
-            String userId,
-            String groupId,
+            String userExtendId,
+            String sessionExtendId,
             final FlappyIMCallback<String> callback) {
 
         //用户未登录
@@ -1795,8 +1795,8 @@ public class FlappyImService {
 
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userId", userId);
-        hashMap.put("sessionExtendId", groupId);
+        hashMap.put("userExtendId", userExtendId);
+        hashMap.put("sessionExtendId", sessionExtendId);
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
@@ -1834,13 +1834,13 @@ public class FlappyImService {
 
     /******
      * 删除群组中的用户
-     * @param userId   用户ID
-     * @param groupId  群组ID
+     * @param userExtendId     用户ID
+     * @param sessionExtendId  群组ID
      * @param callback 回调
      */
     public void delUserInSession(
-            String userId,
-            String groupId,
+            String userExtendId,
+            String sessionExtendId,
             final FlappyIMCallback<String> callback) {
         //用户未登录
         if (checkLogin(callback)) {
@@ -1848,8 +1848,8 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("userId", userId);
-        hashMap.put("sessionExtendId", groupId);
+        hashMap.put("userExtendId", userExtendId);
+        hashMap.put("sessionExtendId", sessionExtendId);
         OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
