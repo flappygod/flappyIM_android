@@ -19,19 +19,21 @@ public class ChatRoute implements Serializable {
 
     private String routeUserExtendId;
 
-    private String routeDevice;
+    private String routeDevicePlat;
 
-    private String routePushId;
+    private String routeDeviceId;
 
     private BigDecimal routePushType;
 
     private String routePushPlat;
 
+    private String routePushId;
+
     private String routePushLanguage;
 
     private String routePushPrivacy;
 
-    private String routePushNoDisturb;
+    private String routePushMute;
 
     private String routeServerIp;
 
@@ -61,6 +63,14 @@ public class ChatRoute implements Serializable {
         this.routeTime = routeTime == null ? null : routeTime.trim();
     }
 
+    public String getRouteDeviceId() {
+        return routeDeviceId;
+    }
+
+    public void setRouteDeviceId(String routeDeviceId) {
+        this.routeDeviceId = routeDeviceId;
+    }
+
     public String getRouteUserId() {
         return routeUserId;
     }
@@ -77,12 +87,12 @@ public class ChatRoute implements Serializable {
         this.routeUserExtendId = routeUserExtendId == null ? null : routeUserExtendId.trim();
     }
 
-    public String getRouteDevice() {
-        return routeDevice;
+    public String getRouteDevicePlat() {
+        return routeDevicePlat;
     }
 
-    public void setRouteDevice(String routeDevice) {
-        this.routeDevice = routeDevice == null ? null : routeDevice.trim();
+    public void setRouteDevicePlat(String routeDevicePlat) {
+        this.routeDevicePlat = routeDevicePlat == null ? null : routeDevicePlat.trim();
     }
 
     public String getRoutePushId() {
@@ -173,12 +183,12 @@ public class ChatRoute implements Serializable {
         this.routePushPrivacy = routePushPrivacy;
     }
 
-    public String getRoutePushNoDisturb() {
-        return routePushNoDisturb;
+    public String getRoutePushMute() {
+        return routePushMute;
     }
 
-    public void setRoutePushNoDisturb(String routePushNoDisturb) {
-        this.routePushNoDisturb = routePushNoDisturb;
+    public void setRoutePushMute(String routePushMute) {
+        this.routePushMute = routePushMute;
     }
 
 }

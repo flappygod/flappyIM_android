@@ -17,8 +17,6 @@ public class FlappyConfig {
     //自动重试netty次数
     public final int autoRetryNetty = 3;
 
-    //当前是正式环境
-    public String pushPlat = "Google";
 
     //链接的http服务器器的地址192.168.124.105
     public String serverUrl;

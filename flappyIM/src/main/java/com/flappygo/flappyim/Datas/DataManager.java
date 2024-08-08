@@ -29,6 +29,12 @@ public class DataManager {
     // 用户信息保存
     private final static String KEY_FOR_USER = "com.flappy.im.data.KEY_FOR_USER";
 
+    // 推送类型
+    private final static String KEY_FOR_PUSH_TYPE = "com.flappy.im.data.KEY_FOR_PUSH_TYPE";
+
+    // 推送平台
+    private final static String KEY_FOR_PUSH_PLAT = "com.flappy.im.data.KEY_FOR_PUSH_PLAT";
+
     // 推送ID的保存
     private final static String KEY_FOR_PUSH_ID = "com.flappy.im.data.KEY_FOR_PUSH_ID";
 
@@ -104,18 +110,27 @@ public class DataManager {
      * @param setting 配置信息
      */
     public void savePushSetting(PushSetting setting) {
-        PushSetting update = getPushSetting();
-        update = (update == null) ? new PushSetting() : update;
-        update.setRoutePushType(setting.getRoutePushType() == null ? update.getRoutePushType() : setting.getRoutePushType());
-        update.setRoutePushLanguage(setting.getRoutePushLanguage() == null ? update.getRoutePushLanguage() : setting.getRoutePushLanguage());
-        update.setRoutePushMute(setting.getRoutePushMute() == null ? update.getRoutePushMute() : setting.getRoutePushMute());
-        update.setRoutePushPrivacy(setting.getRoutePushPrivacy() == null ? update.getRoutePushPrivacy() : setting.getRoutePushPrivacy());
+        // 获取当前的推送设置，如果没有则创建新的
+        PushSetting currentSetting = getPushSetting();
+        if (currentSetting == null) {
+            currentSetting = new PushSetting();
+        }
+
+        // 使用新设置中的值更新当前设置，如果新设置中没有则保留当前设置的值
+        currentSetting.setRoutePushType(setting.getRoutePushType() != null ? setting.getRoutePushType() : currentSetting.getRoutePushType());
+        currentSetting.setRoutePushPlat(setting.getRoutePushPlat() != null ? setting.getRoutePushPlat() : currentSetting.getRoutePushPlat());
+        currentSetting.setRoutePushId(setting.getRoutePushId() != null ? setting.getRoutePushId() : currentSetting.getRoutePushId());
+        currentSetting.setRoutePushLanguage(setting.getRoutePushLanguage() != null ? setting.getRoutePushLanguage() : currentSetting.getRoutePushLanguage());
+        currentSetting.setRoutePushMute(setting.getRoutePushMute() != null ? setting.getRoutePushMute() : currentSetting.getRoutePushMute());
+        currentSetting.setRoutePushPrivacy(setting.getRoutePushPrivacy() != null ? setting.getRoutePushPrivacy() : currentSetting.getRoutePushPrivacy());
+
+        // 将更新后的设置保存到SharedPreferences中
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_FOR_PUSH_SETTING, GsonTool.modelToJsonStr(update));
+        editor.putString(KEY_FOR_PUSH_SETTING, GsonTool.modelToJsonStr(currentSetting));
         editor.apply();
     }
 
@@ -152,6 +167,60 @@ public class DataManager {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(KEY_FOR_USER);
         editor.apply();
+    }
+
+
+    /******
+     * 保存用户的推送类型
+     * @param pushType 推送类型
+     */
+    public void savePushType(String pushType) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_PUSH_TYPE, pushType);
+        editor.apply();
+    }
+
+    /******
+     * 获取推送类型
+     * @return 推送类型
+     */
+    public String getPushType() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        return mSharedPreferences.getString(KEY_FOR_PUSH_TYPE, "0");
+    }
+
+
+    /******
+     * 保存用户的推送平台
+     * @param pushPlat 推送平台
+     */
+    public void savePushPlat(String pushPlat) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_PUSH_PLAT, pushPlat);
+        editor.apply();
+    }
+
+    /******
+     * 获取推送平台设置
+     * @return 推送平台
+     */
+    public String getPushPlat() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        return mSharedPreferences.getString(KEY_FOR_PUSH_PLAT, "Google");
     }
 
     /******

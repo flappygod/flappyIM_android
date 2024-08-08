@@ -5,6 +5,12 @@ public class PushSetting {
     //推送类型
     private String routePushType;
 
+    //推送平台
+    private String routePushPlat;
+
+    //推送Id
+    private String routePushId;
+
     //推送语言
     private String routePushLanguage;
 
@@ -21,6 +27,22 @@ public class PushSetting {
 
     public void setRoutePushType(String routePushType) {
         this.routePushType = routePushType;
+    }
+
+    public String getRoutePushPlat() {
+        return routePushPlat;
+    }
+
+    public void setRoutePushPlat(String routePushPlat) {
+        this.routePushPlat = routePushPlat;
+    }
+
+    public String getRoutePushId() {
+        return routePushId;
+    }
+
+    public void setRoutePushId(String routePushId) {
+        this.routePushId = routePushId;
     }
 
     public String getRoutePushLanguage() {
