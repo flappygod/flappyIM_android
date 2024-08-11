@@ -218,7 +218,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //遍历消息进行通知
             if (handlerLogin.getLoginResponse().getSessions() != null &&
-                    handlerLogin.getLoginResponse().getSessions().size() != 0) {
+                    !handlerLogin.getLoginResponse().getSessions().isEmpty()) {
                 //插入会话
                 Database.getInstance().insertSessions(
                         handlerLogin.getLoginResponse().getSessions()
