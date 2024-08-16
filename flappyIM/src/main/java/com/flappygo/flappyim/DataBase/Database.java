@@ -310,7 +310,7 @@ public class Database {
         //删除
         message.setMessageDeleteOperation("delete");
         //用户ID列表
-        List<String> userIdList = StringTool.splitStr(message.getMessageDeleteUserList(),",");
+        List<String> userIdList = StringTool.splitStr(message.getMessageDeleteUserList(), ",");
         //添加用户
         userIdList.add(userId);
         //设置删除的用户
@@ -396,7 +396,7 @@ public class Database {
                 //更新消息已读
                 updateMessageRead(userId, sessionId, tableOffset);
                 //更新会话任务最新已读
-                updateSessionMemberLatestRead(userId, sessionId, tableOffset);
+                updateSessionMemberLatestRead(sessionId, userId, tableOffset);
                 break;
             }
             //消息已读
@@ -405,7 +405,7 @@ public class Database {
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String mute = action.getActionIds().get(2);
-                updateSessionMemberMute(userId, sessionId, mute);
+                updateSessionMemberMute(sessionId, userId, mute);
                 break;
             }
             //消息已读
@@ -414,7 +414,7 @@ public class Database {
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String pinned = action.getActionIds().get(2);
-                updateSessionMemberPinned(userId, sessionId, pinned);
+                updateSessionMemberPinned(sessionId, userId, pinned);
                 break;
             }
         }
@@ -952,7 +952,7 @@ public class Database {
      * @param sessionId     会话ID
      * @param tableOffset 表序号
      */
-    private void updateSessionMemberLatestRead(String userId, String sessionId, String tableOffset) {
+    private void updateSessionMemberLatestRead(String sessionId, String userId, String tableOffset) {
         //会话Data
         open();
         try {
@@ -973,7 +973,7 @@ public class Database {
      * @param sessionId 会话id
      * @param mute 是否静音
      */
-    private void updateSessionMemberMute(String userId, String sessionId, String mute) {
+    private void updateSessionMemberMute(String sessionId, String userId, String mute) {
         //会话Data
         open();
         try {
@@ -994,7 +994,7 @@ public class Database {
      * @param sessionId 会话id
      * @param pinned 是否置顶
      */
-    private void updateSessionMemberPinned(String userId, String sessionId, String pinned) {
+    private void updateSessionMemberPinned(String sessionId, String userId, String pinned) {
         //会话Data
         open();
         try {

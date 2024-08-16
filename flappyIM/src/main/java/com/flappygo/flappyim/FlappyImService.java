@@ -5,6 +5,7 @@ import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
+import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
@@ -358,6 +359,16 @@ public class FlappyImService {
         if (StringTool.strToInt(pushSetting.getRoutePushMute(), 0) == 1) {
             return;
         }
+
+        //当前设置了免打扰
+        SessionMemberModel member = Database.getInstance().getSessionMember(
+                chatMessage.getMessageSessionId(),
+                DataManager.getInstance().getLoginUser().getUserId()
+        );
+        if (member.getSessionMemberMute() == 1) {
+            return;
+        }
+
         //正在后台
         if (RunTool.isBackground(FlappyImService.this.getAppContext())) {
             NotificationTool util = new NotificationTool(FlappyImService.this.getAppContext());
