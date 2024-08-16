@@ -351,8 +351,9 @@ public class FlappyImService {
      */
     private void sendNotification(ChatMessage chatMessage) {
         PushSetting pushSetting = DataManager.getInstance().getPushSetting();
+        ChatUser user = DataManager.getInstance().getLoginUser();
         //设置为空
-        if (pushSetting == null) {
+        if (pushSetting == null || user == null) {
             return;
         }
         //免打扰模式
@@ -363,7 +364,7 @@ public class FlappyImService {
         //当前设置了免打扰
         SessionMemberModel member = Database.getInstance().getSessionMember(
                 chatMessage.getMessageSessionId(),
-                DataManager.getInstance().getLoginUser().getUserId()
+                user.getUserId()
         );
         if (member == null || member.getSessionMemberMute() == 1) {
             return;
