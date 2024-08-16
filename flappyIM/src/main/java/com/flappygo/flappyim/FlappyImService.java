@@ -365,7 +365,7 @@ public class FlappyImService {
                 chatMessage.getMessageSessionId(),
                 DataManager.getInstance().getLoginUser().getUserId()
         );
-        if (member.getSessionMemberMute() == 1) {
+        if (member == null || member.getSessionMemberMute() == 1) {
             return;
         }
 
