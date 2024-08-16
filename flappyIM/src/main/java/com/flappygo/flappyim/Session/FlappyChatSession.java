@@ -596,20 +596,25 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
 
+    //设置消息已读sequence
+    private boolean readSessionMessageFlag = false;
+
     /******
      * 设置消息已读sequence
      * @param  callback 回调
      * @return 消息
      */
+
     public ChatMessage readSessionMessage(FlappySendCallback<ChatMessage> callback) {
 
         //未读为零
-        if (getUnReadMessageCount() == 0) {
+        if (getUnReadMessageCount() == 0 || readSessionMessageFlag) {
             if (callback != null) {
                 callback.success(null);
             }
             return null;
         }
+
 
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -644,7 +649,24 @@ public class FlappyChatSession extends FlappyBaseSession {
         //时间
         msg.setMessageDate(new Date());
         //发送消息
-        sendMessage(msg, callback);
+        readSessionMessageFlag = true;
+        sendMessage(msg, new FlappySendCallback<ChatMessage>() {
+            @Override
+            public void success(ChatMessage data) {
+                readSessionMessageFlag = false;
+                if (callback != null) {
+                    callback.success(data);
+                }
+            }
+
+            @Override
+            public void failure(ChatMessage data, Exception ex, int code) {
+                readSessionMessageFlag = false;
+                if (callback != null) {
+                    callback.failure(data, ex, code);
+                }
+            }
+        });
         //返回消息
         return msg;
     }
