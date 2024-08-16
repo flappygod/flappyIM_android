@@ -1,6 +1,8 @@
 package com.flappygo.flappyim.Handler;
 
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
+
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
@@ -147,7 +149,7 @@ public class HandlerNotifyManager {
      */
     public void handleMessageAction(ChatMessage chatMessage) {
         //动作消息处理
-        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_ACTION && chatMessage.getMessageReadState().intValue() == 0) {
+        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION && chatMessage.getMessageReadState().intValue() == 0) {
             //执行数据库更新操作
             Database.getInstance().handleActionMessageUpdate(chatMessage);
             //获取对象
@@ -205,10 +207,12 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageSendInsert(ChatMessage chatMessage) {
-        Message msg = new Message();
-        msg.what = HandlerMessage.MSG_SENDING;
-        msg.obj = chatMessage;
-        this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
+            Message msg = new Message();
+            msg.what = HandlerMessage.MSG_SENDING;
+            msg.obj = chatMessage;
+            this.handlerMessage.sendMessage(msg);
+        }
     }
 
     /******
@@ -217,10 +221,12 @@ public class HandlerNotifyManager {
      * @param formerMessage 之前的消息
      */
     public void notifyMessageReceive(ChatMessage chatMessage, ChatMessage formerMessage) {
-        Message msg = new Message();
-        msg.what = (formerMessage == null) ? HandlerMessage.MSG_RECEIVE : HandlerMessage.MSG_UPDATE;
-        msg.obj = chatMessage;
-        this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
+            Message msg = new Message();
+            msg.what = (formerMessage == null) ? HandlerMessage.MSG_RECEIVE : HandlerMessage.MSG_UPDATE;
+            msg.obj = chatMessage;
+            this.handlerMessage.sendMessage(msg);
+        }
     }
 
     /******
@@ -228,10 +234,12 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageFailure(ChatMessage chatMessage) {
-        Message msg = new Message();
-        msg.what = HandlerMessage.MSG_FAILED;
-        msg.obj = chatMessage;
-        this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
+            Message msg = new Message();
+            msg.what = HandlerMessage.MSG_FAILED;
+            msg.obj = chatMessage;
+            this.handlerMessage.sendMessage(msg);
+        }
     }
 
     /******
@@ -239,10 +247,12 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageDelete(ChatMessage chatMessage) {
-        Message msg = new Message();
-        msg.what = HandlerMessage.MSG_DELETE;
-        msg.obj = chatMessage;
-        this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
+            Message msg = new Message();
+            msg.what = HandlerMessage.MSG_DELETE;
+            msg.obj = chatMessage;
+            this.handlerMessage.sendMessage(msg);
+        }
     }
 
     /******
