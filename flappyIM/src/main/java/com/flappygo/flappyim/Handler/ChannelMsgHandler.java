@@ -29,7 +29,6 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import com.flappygo.flappyim.Tools.StringTool;
-import com.flappygo.flappyim.FlappyImService;
 
 import io.netty.channel.ChannelFuture;
 
