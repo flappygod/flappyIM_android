@@ -182,7 +182,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //区分更新,全量更新和只更新部分用户信息
         List<ChatMessage> actionUpdateSessionAll = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionMember = new ArrayList<>();
-        List<ChatMessage> actionDeleteSession = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionMemberDelete = new ArrayList<>();
         for (ChatMessage item : latestMessages) {
 
             ChatSystem chatSystem = item.getChatSystem();
@@ -209,7 +209,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
                 SessionMemberModel chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
                 if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
-                    actionDeleteSession.add(item);
+                    actionUpdateSessionMemberDelete.add(item);
                 } else {
                     actionUpdateSessionMember.add(item);
                 }
@@ -230,7 +230,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //用户删除
         if (!actionUpdateSessionMember.isEmpty()) {
-            updateSessionMemberDelete(actionDeleteSession);
+            updateSessionDeleteSelf(actionUpdateSessionMemberDelete);
         }
     }
 
@@ -421,7 +421,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
     }
 
-    //更新用户数据
+    /******
+     * 更新用户数据
+     * @param messages 消息数据
+     */
     private void updateSessionMemberUpdate(List<ChatMessage> messages) {
         //遍历请求处理
         for (ChatMessage message : messages) {
@@ -446,7 +449,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * 用户的会话被删除
      * @param messages  消息
      */
-    private void updateSessionMemberDelete(List<ChatMessage> messages) {
+    private void updateSessionDeleteSelf(List<ChatMessage> messages) {
         //遍历请求处理
         for (ChatMessage message : messages) {
 
