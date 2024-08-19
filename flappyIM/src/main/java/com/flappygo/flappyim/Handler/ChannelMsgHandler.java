@@ -504,7 +504,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         }
         //设置最大的那个值
         else {
-            user.setLatest(Long.toString(Math.max(chatMessage.getMessageTableOffset().longValue(), StringTool.strToLong(user.getLatest()))));
+            long maxValue = Math.max(chatMessage.getMessageTableOffset().longValue(), StringTool.strToLong(user.getLatest()));
+            user.setLatest(Long.toString(maxValue));
         }
         //保存用户信息
         DataManager.getInstance().saveLoginUser(user);
