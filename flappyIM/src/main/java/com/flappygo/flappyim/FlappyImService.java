@@ -319,9 +319,10 @@ public class FlappyImService {
         }
 
         @Override
-        public void messageUpdate(ChatMessage chatMessage) {
+        public void messageReceiveList(List<ChatMessage> chatMessage) {
 
         }
+
 
         @Override
         public void messageReceive(ChatMessage chatMessage) {

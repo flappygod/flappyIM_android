@@ -79,8 +79,15 @@ public class MainActivity extends Activity {
         });
 
         FlappyImService.getInstance().addSessionListener(new SessionListener() {
+
+
             @Override
-            public void sessionListReceive(SessionModel session) {
+            public void sessionReceiveList(List<SessionModel> session) {
+
+            }
+
+            @Override
+            public void sessionReceive(SessionModel session) {
 
             }
 
@@ -110,14 +117,16 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void messageUpdate(ChatMessage chatMessage) {
+            public void messageReceiveList(List<ChatMessage> chatMessage) {
 
             }
+
 
             @Override
             public void messageDelete(ChatMessage chatMessage) {
 
             }
+
             @Override
             public void messageReceive(ChatMessage chatMessage) {
 
@@ -207,7 +216,7 @@ public class MainActivity extends Activity {
                             }
 
                             @Override
-                            public void messageUpdate(ChatMessage chatMessage) {
+                            public void messageReceiveList(List<ChatMessage> chatMessage) {
 
                             }
 
@@ -327,7 +336,7 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && data != null) {
             List<String> imagePaths = data.getStringArrayListExtra(ImagePicker.EXTRA_SELECT_IMAGES);
