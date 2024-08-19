@@ -91,6 +91,9 @@ public class HandlerMessage extends Handler {
             for (Map.Entry<String, List<MessageListener>> entry : msgListeners.entrySet()) {
                 String key = entry.getKey();
                 List<MessageListener> messageListeners = entry.getValue();
+                if (messageListeners == null || messageListeners.isEmpty()) {
+                    continue;
+                }
                 //全局
                 if (key.equals(globalMsgTag)) {
                     for (MessageListener listener : messageListeners) {
@@ -105,7 +108,7 @@ public class HandlerMessage extends Handler {
                             sessionMessageList.add(msg);
                         }
                     }
-                    if (messageListeners != null && !sessionMessageList.isEmpty()) {
+                    if (!sessionMessageList.isEmpty()) {
                         for (MessageListener listener : messageListeners) {
                             listener.messageReceiveList(sessionMessageList);
                         }
