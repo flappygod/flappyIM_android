@@ -154,8 +154,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void sendLoginRequest(ChannelHandlerContext ctx) throws Exception {
         //创建builder
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
-                .setDevice(FlappyConfig.getInstance().devicePlat)
                 .setUserID(this.user.getUserId())
+                .setDevicePlat(FlappyConfig.getInstance().devicePlat)
                 .setDeviceId(DataManager.getInstance().getDeviceId());
 
         //如果是空

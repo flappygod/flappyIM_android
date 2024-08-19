@@ -3347,20 +3347,20 @@ public final class Flappy {
      *设备信息
      * </pre>
      *
-     * <code>string device = 2;</code>
-     * @return The device.
+     * <code>string devicePlat = 2;</code>
+     * @return The devicePlat.
      */
-    String getDevice();
+    String getDevicePlat();
     /**
      * <pre>
      *设备信息
      * </pre>
      *
-     * <code>string device = 2;</code>
-     * @return The bytes for device.
+     * <code>string devicePlat = 2;</code>
+     * @return The bytes for devicePlat.
      */
     com.google.protobuf.ByteString
-        getDeviceBytes();
+        getDevicePlatBytes();
 
     /**
      * <pre>
@@ -3436,7 +3436,7 @@ public final class Flappy {
     }
     private ReqLogin() {
       userID_ = "";
-      device_ = "";
+      devicePlat_ = "";
       deviceId_ = "";
       latest_ = "";
       secret_ = "";
@@ -3481,7 +3481,7 @@ public final class Flappy {
             case 18: {
               String s = input.readStringRequireUtf8();
 
-              device_ = s;
+              devicePlat_ = s;
               break;
             }
             case 26: {
@@ -3582,26 +3582,26 @@ public final class Flappy {
       }
     }
 
-    public static final int DEVICE_FIELD_NUMBER = 2;
-    private volatile Object device_;
+    public static final int DEVICEPLAT_FIELD_NUMBER = 2;
+    private volatile Object devicePlat_;
     /**
      * <pre>
      *设备信息
      * </pre>
      *
-     * <code>string device = 2;</code>
-     * @return The device.
+     * <code>string devicePlat = 2;</code>
+     * @return The devicePlat.
      */
     @Override
-    public String getDevice() {
-      Object ref = device_;
+    public String getDevicePlat() {
+      Object ref = devicePlat_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        device_ = s;
+        devicePlat_ = s;
         return s;
       }
     }
@@ -3610,18 +3610,18 @@ public final class Flappy {
      *设备信息
      * </pre>
      *
-     * <code>string device = 2;</code>
-     * @return The bytes for device.
+     * <code>string devicePlat = 2;</code>
+     * @return The bytes for devicePlat.
      */
     @Override
     public com.google.protobuf.ByteString
-        getDeviceBytes() {
-      Object ref = device_;
+        getDevicePlatBytes() {
+      Object ref = devicePlat_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        device_ = b;
+        devicePlat_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -3783,8 +3783,8 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(userID_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, userID_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(device_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, device_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(devicePlat_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, devicePlat_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, deviceId_);
@@ -3807,8 +3807,8 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(userID_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, userID_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(device_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, device_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(devicePlat_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, devicePlat_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deviceId_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, deviceId_);
@@ -3836,8 +3836,8 @@ public final class Flappy {
 
       if (!getUserID()
           .equals(other.getUserID())) return false;
-      if (!getDevice()
-          .equals(other.getDevice())) return false;
+      if (!getDevicePlat()
+          .equals(other.getDevicePlat())) return false;
       if (!getDeviceId()
           .equals(other.getDeviceId())) return false;
       if (!getLatest()
@@ -3857,8 +3857,8 @@ public final class Flappy {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + USERID_FIELD_NUMBER;
       hash = (53 * hash) + getUserID().hashCode();
-      hash = (37 * hash) + DEVICE_FIELD_NUMBER;
-      hash = (53 * hash) + getDevice().hashCode();
+      hash = (37 * hash) + DEVICEPLAT_FIELD_NUMBER;
+      hash = (53 * hash) + getDevicePlat().hashCode();
       hash = (37 * hash) + DEVICEID_FIELD_NUMBER;
       hash = (53 * hash) + getDeviceId().hashCode();
       hash = (37 * hash) + LATEST_FIELD_NUMBER;
@@ -4000,7 +4000,7 @@ public final class Flappy {
         super.clear();
         userID_ = "";
 
-        device_ = "";
+        devicePlat_ = "";
 
         deviceId_ = "";
 
@@ -4035,7 +4035,7 @@ public final class Flappy {
       public ReqLogin buildPartial() {
         ReqLogin result = new ReqLogin(this);
         result.userID_ = userID_;
-        result.device_ = device_;
+        result.devicePlat_ = devicePlat_;
         result.deviceId_ = deviceId_;
         result.latest_ = latest_;
         result.secret_ = secret_;
@@ -4091,8 +4091,8 @@ public final class Flappy {
           userID_ = other.userID_;
           onChanged();
         }
-        if (!other.getDevice().isEmpty()) {
-          device_ = other.device_;
+        if (!other.getDevicePlat().isEmpty()) {
+          devicePlat_ = other.devicePlat_;
           onChanged();
         }
         if (!other.getDeviceId().isEmpty()) {
@@ -4232,22 +4232,22 @@ public final class Flappy {
         return this;
       }
 
-      private Object device_ = "";
+      private Object devicePlat_ = "";
       /**
        * <pre>
        *设备信息
        * </pre>
        *
-       * <code>string device = 2;</code>
-       * @return The device.
+       * <code>string devicePlat = 2;</code>
+       * @return The devicePlat.
        */
-      public String getDevice() {
-        Object ref = device_;
+      public String getDevicePlat() {
+        Object ref = devicePlat_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
-          device_ = s;
+          devicePlat_ = s;
           return s;
         } else {
           return (String) ref;
@@ -4258,17 +4258,17 @@ public final class Flappy {
        *设备信息
        * </pre>
        *
-       * <code>string device = 2;</code>
-       * @return The bytes for device.
+       * <code>string devicePlat = 2;</code>
+       * @return The bytes for devicePlat.
        */
       public com.google.protobuf.ByteString
-          getDeviceBytes() {
-        Object ref = device_;
+          getDevicePlatBytes() {
+        Object ref = devicePlat_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
-          device_ = b;
+          devicePlat_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -4279,17 +4279,17 @@ public final class Flappy {
        *设备信息
        * </pre>
        *
-       * <code>string device = 2;</code>
-       * @param value The device to set.
+       * <code>string devicePlat = 2;</code>
+       * @param value The devicePlat to set.
        * @return This builder for chaining.
        */
-      public Builder setDevice(
+      public Builder setDevicePlat(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        device_ = value;
+        devicePlat_ = value;
         onChanged();
         return this;
       }
@@ -4298,12 +4298,12 @@ public final class Flappy {
        *设备信息
        * </pre>
        *
-       * <code>string device = 2;</code>
+       * <code>string devicePlat = 2;</code>
        * @return This builder for chaining.
        */
-      public Builder clearDevice() {
+      public Builder clearDevicePlat() {
         
-        device_ = getDefaultInstance().getDevice();
+        devicePlat_ = getDefaultInstance().getDevicePlat();
         onChanged();
         return this;
       }
@@ -4312,18 +4312,18 @@ public final class Flappy {
        *设备信息
        * </pre>
        *
-       * <code>string device = 2;</code>
-       * @param value The bytes for device to set.
+       * <code>string devicePlat = 2;</code>
+       * @param value The bytes for devicePlat to set.
        * @return This builder for chaining.
        */
-      public Builder setDeviceBytes(
+      public Builder setDevicePlatBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        device_ = value;
+        devicePlat_ = value;
         onChanged();
         return this;
       }
@@ -14732,39 +14732,39 @@ public final class Flappy {
       "ate\022\034\n\007receipt\030\005 \001(\0132\013.ReqReceipt\"m\n\016Fla" +
       "ppyResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003(\0132\010" +
       ".Message\022\032\n\010sessions\030\003 \003(\0132\010.Session\022\032\n\006" +
-      "update\030\004 \001(\0132\n.ReqUpdate\"\\\n\010ReqLogin\022\016\n\006" +
-      "userID\030\001 \001(\t\022\016\n\006device\030\002 \001(\t\022\020\n\010deviceId" +
-      "\030\003 \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006secret\030\005 \001(\t\"1" +
-      "\n\tReqUpdate\022\022\n\nupdateType\030\001 \001(\005\022\020\n\010updat" +
-      "eID\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013receiptType\030\001" +
-      " \001(\005\022\021\n\treceiptID\030\002 \001(\t\"\242\002\n\007Session\022\021\n\ts" +
-      "essionId\030\001 \001(\003\022\027\n\017sessionExtendId\030\002 \001(\t\022" +
-      "\023\n\013sessionType\030\003 \001(\005\022\023\n\013sessionInfo\030\004 \001(" +
-      "\t\022\023\n\013sessionName\030\005 \001(\t\022\024\n\014sessionImage\030\006" +
-      " \001(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n\014sessionSt" +
-      "amp\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t\022\031\n\021" +
-      "sessionCreateUser\030\n \001(\t\022\020\n\010isDelete\030\013 \001(" +
-      "\005\022\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\354\003\n" +
-      "\007Message\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020messageSe" +
-      "ssionId\030\002 \001(\003\022\032\n\022messageSessionType\030\003 \001(" +
-      "\005\022\034\n\024messageSessionOffset\030\004 \001(\003\022\032\n\022messa" +
-      "geTableOffset\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005" +
-      "\022\025\n\rmessageSendId\030\007 \001(\003\022\033\n\023messageSendEx" +
-      "tendId\030\010 \001(\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036" +
-      "\n\026messageReceiveExtendId\030\n \001(\t\022\026\n\016messag" +
-      "eContent\030\013 \001(\t\022\030\n\020messageSendState\030\014 \001(\005" +
-      "\022\030\n\020messageReadState\030\r \001(\005\022\025\n\rmessageSec" +
-      "ret\030\016 \001(\t\022\023\n\013messageDate\030\017 \001(\t\022\036\n\026messag" +
-      "eDeleteOperation\030\020 \001(\t\022\035\n\025messageDeleteU" +
-      "serList\030\021 \001(\t\022\020\n\010isDelete\030\022 \001(\005\022\022\n\ndelet" +
-      "eDate\030\023 \001(\t\"I\n\013FlappyKafka\022\014\n\004type\030\001 \001(\005" +
-      "\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\0132\010.M" +
-      "essage\"\274\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\022\n\ndevi" +
-      "cePlat\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\022\020\n\010pushTy" +
-      "pe\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\016\n\006pushId\030\006 \001" +
-      "(\t\022\024\n\014pushLanguage\030\007 \001(\t\022\023\n\013pushPrivacy\030" +
-      "\010 \001(\005\022\020\n\010pushMute\030\t \001(\005\022\014\n\004time\030\n \001(\tb\006p" +
-      "roto3"
+      "update\030\004 \001(\0132\n.ReqUpdate\"`\n\010ReqLogin\022\016\n\006" +
+      "userID\030\001 \001(\t\022\022\n\ndevicePlat\030\002 \001(\t\022\020\n\010devi" +
+      "ceId\030\003 \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006secret\030\005 \001" +
+      "(\t\"1\n\tReqUpdate\022\022\n\nupdateType\030\001 \001(\005\022\020\n\010u" +
+      "pdateID\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013receiptTy" +
+      "pe\030\001 \001(\005\022\021\n\treceiptID\030\002 \001(\t\"\242\002\n\007Session\022" +
+      "\021\n\tsessionId\030\001 \001(\003\022\027\n\017sessionExtendId\030\002 " +
+      "\001(\t\022\023\n\013sessionType\030\003 \001(\005\022\023\n\013sessionInfo\030" +
+      "\004 \001(\t\022\023\n\013sessionName\030\005 \001(\t\022\024\n\014sessionIma" +
+      "ge\030\006 \001(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n\014sessi" +
+      "onStamp\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t" +
+      "\022\031\n\021sessionCreateUser\030\n \001(\t\022\020\n\010isDelete\030" +
+      "\013 \001(\005\022\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t" +
+      "\"\354\003\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020messa" +
+      "geSessionId\030\002 \001(\003\022\032\n\022messageSessionType\030" +
+      "\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\003\022\032\n\022m" +
+      "essageTableOffset\030\005 \001(\003\022\023\n\013messageType\030\006" +
+      " \001(\005\022\025\n\rmessageSendId\030\007 \001(\003\022\033\n\023messageSe" +
+      "ndExtendId\030\010 \001(\t\022\030\n\020messageReceiveId\030\t \001" +
+      "(\003\022\036\n\026messageReceiveExtendId\030\n \001(\t\022\026\n\016me" +
+      "ssageContent\030\013 \001(\t\022\030\n\020messageSendState\030\014" +
+      " \001(\005\022\030\n\020messageReadState\030\r \001(\005\022\025\n\rmessag" +
+      "eSecret\030\016 \001(\t\022\023\n\013messageDate\030\017 \001(\t\022\036\n\026me" +
+      "ssageDeleteOperation\030\020 \001(\t\022\035\n\025messageDel" +
+      "eteUserList\030\021 \001(\t\022\020\n\010isDelete\030\022 \001(\005\022\022\n\nd" +
+      "eleteDate\030\023 \001(\t\"I\n\013FlappyKafka\022\014\n\004type\030\001" +
+      " \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\013" +
+      "2\010.Message\"\274\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\022\n\n" +
+      "devicePlat\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\022\020\n\010pu" +
+      "shType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\016\n\006pushId" +
+      "\030\006 \001(\t\022\024\n\014pushLanguage\030\007 \001(\t\022\023\n\013pushPriv" +
+      "acy\030\010 \001(\005\022\020\n\010pushMute\030\t \001(\005\022\014\n\004time\030\n \001(" +
+      "\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -14787,7 +14787,7 @@ public final class Flappy {
     internal_static_ReqLogin_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ReqLogin_descriptor,
-        new String[] { "UserID", "Device", "DeviceId", "Latest", "Secret", });
+        new String[] { "UserID", "DevicePlat", "DeviceId", "Latest", "Secret", });
     internal_static_ReqUpdate_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_ReqUpdate_fieldAccessorTable = new
