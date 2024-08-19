@@ -453,18 +453,23 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //遍历请求处理
         for (ChatMessage message : messages) {
 
-            //获取会话信息
-            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
-            sessionModel.setIsDelete(new BigDecimal(1));
+            //数据进入数据库
+            SessionMemberModel chatUser = GsonTool.jsonStrToModel(
+                    message.getChatSystem().getSysData(),
+                    SessionMemberModel.class
+            );
+            Database.getInstance().insertSessionMember(chatUser);
 
             //保存消息状态数据
             message.setMessageReadState(new BigDecimal(1));
             Database.getInstance().insertMessage(message);
 
+            //获取会话信息
+            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
+            sessionModel.setIsDelete(new BigDecimal(1));
+
             //删除用户会话
             Database.getInstance().deleteUserSession(message.getMessageSessionId());
-
-            //通知会话删除了
             HandlerNotifyManager.getInstance().notifySessionDelete(sessionModel);
         }
     }
