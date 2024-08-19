@@ -721,22 +721,13 @@ public class Database {
         open();
         try {
             //删除会话数据
-            db.delete(
+            ContentValues values = new ContentValues();
+            values.put("sessionDeleted", 1);
+            db.update(
                     DataBaseConfig.TABLE_SESSION,
-                    "sessionId=? and sessionInsertUser=?",
-                    new String[]{
-                            sessionId,
-                            chatUser.getUserExtendId()
-                    }
-            );
-            //删除会话消息
-            db.delete(
-                    DataBaseConfig.TABLE_MESSAGE,
-                    "messageSessionId=? and messageInsertUser=?",
-                    new String[]{
-                            sessionId,
-                            chatUser.getUserExtendId()
-                    }
+                    values,
+                    "sessionId = ? and sessionInsertUser = ?",
+                    new String[]{sessionId, chatUser.getUserExtendId()}
             );
         } finally {
             close();
