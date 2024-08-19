@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import android.os.Message;
 
 import java.util.Objects;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -207,39 +206,78 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageSendInsert(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
-            Message msg = new Message();
-            msg.what = HandlerMessage.MSG_SENDING;
-            msg.obj = chatMessage;
-            this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+            return;
         }
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_SENDING;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
     }
 
     /******
      * 消息接收监听
      * @param chatMessage   消息
-     * @param formerMessage 之前的消息
      */
-    public void notifyMessageReceive(ChatMessage chatMessage, ChatMessage formerMessage) {
-        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
-            Message msg = new Message();
-            msg.what = (formerMessage == null) ? HandlerMessage.MSG_RECEIVE : HandlerMessage.MSG_UPDATE;
-            msg.obj = chatMessage;
-            this.handlerMessage.sendMessage(msg);
+    public void notifyMessageReceive(ChatMessage chatMessage) {
+        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+            return;
         }
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_RECEIVE;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
     }
+
+
+    /******
+     * 消息更新监听
+     * @param chatMessage   消息
+     */
+    public void notifyMessageUpdate(ChatMessage chatMessage) {
+        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+            return;
+        }
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_UPDATE;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
+    }
+
+
+    /******
+     * 消息接收监听
+     * @param chatMessageList   消息
+     */
+    public void notifyMessageListReceive(List<ChatMessage> chatMessageList) {
+        List<ChatMessage> notifyList = new ArrayList<>();
+        for (int s = 0; s < chatMessageList.size(); s++) {
+            if (chatMessageList.get(s).getMessageType().intValue() != MSG_TYPE_ACTION) {
+                notifyList.add(chatMessageList.get(s));
+            }
+        }
+        if (notifyList.isEmpty()) {
+            return;
+        }
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_RECEIVE_LIST;
+        msg.obj = notifyList;
+        this.handlerMessage.sendMessage(msg);
+    }
+
 
     /******
      * 消息错误监听
      * @param chatMessage 消息
      */
     public void notifyMessageFailure(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
-            Message msg = new Message();
-            msg.what = HandlerMessage.MSG_FAILED;
-            msg.obj = chatMessage;
-            this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+            return;
         }
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_FAILED;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
     }
 
     /******
@@ -247,12 +285,13 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageDelete(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
-            Message msg = new Message();
-            msg.what = HandlerMessage.MSG_DELETE;
-            msg.obj = chatMessage;
-            this.handlerMessage.sendMessage(msg);
+        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+            return;
         }
+        Message msg = new Message();
+        msg.what = HandlerMessage.MSG_DELETE;
+        msg.obj = chatMessage;
+        this.handlerMessage.sendMessage(msg);
     }
 
     /******

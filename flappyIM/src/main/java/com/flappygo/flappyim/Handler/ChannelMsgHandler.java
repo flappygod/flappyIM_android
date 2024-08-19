@@ -306,9 +306,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
                 //通知监听变化
                 HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
-                //通知监听变化
-                HandlerNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
             }
+
+            //通知监听变化
+            HandlerNotifyManager.getInstance().notifyMessageListReceive(receiveMessageList);
 
             ///消息到达回执
             if (!receiveMessageList.isEmpty()) {
@@ -349,7 +350,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //新消息到达
             HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
             //新消息到达
-            HandlerNotifyManager.getInstance().notifyMessageReceive(chatMessage, former);
+            if (former == null) {
+                HandlerNotifyManager.getInstance().notifyMessageReceive(chatMessage);
+            } else {
+                HandlerNotifyManager.getInstance().notifyMessageUpdate(chatMessage);
+            }
             //消息回执
             receiveMessageList.add(chatMessage);
         }
@@ -505,20 +510,28 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //保存最近一条的偏移量
         ChatUser user = DataManager.getInstance().getLoginUser();
+
+        //检查这个消息是不是最新的
+        boolean isLatest;
+
         //最近一条为空
         if (user.getLatest() == null) {
             user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableOffset()));
+            isLatest = true;
         }
         //设置最大的那个值
         else {
-            long maxValue = Math.max(chatMessage.getMessageTableOffset().longValue(), StringTool.strToLong(user.getLatest()));
+            long valueNewer = chatMessage.getMessageTableOffset().longValue();
+            long valueFormer = StringTool.strToLong(user.getLatest());
+            long maxValue = Math.max(valueNewer, valueFormer);
             user.setLatest(Long.toString(maxValue));
+            isLatest = (valueNewer > valueFormer);
         }
         //保存用户信息
         DataManager.getInstance().saveLoginUser(user);
 
         //不是自己，而且确实是最新的消息
-        if (!chatMessage.getMessageSendId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+        if (!chatMessage.getMessageSendId().equals(DataManager.getInstance().getLoginUser().getUserId()) && isLatest) {
 
             //创建消息到达的回执
             Flappy.ReqReceipt receipt = Flappy.ReqReceipt.newBuilder()
