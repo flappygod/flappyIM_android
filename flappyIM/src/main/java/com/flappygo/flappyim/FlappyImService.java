@@ -324,7 +324,7 @@ public class FlappyImService {
         }
 
         @Override
-        public void messageReceived(ChatMessage chatMessage) {
+        public void messageReceive(ChatMessage chatMessage) {
             sendNotification(chatMessage);
         }
 

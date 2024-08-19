@@ -16,13 +16,10 @@ public interface MessageListener {
     void messageFailed(ChatMessage chatMessage);
 
     //消息接收(列表，登录或者重新登录时)
-    void messageListReceived(List<ChatMessage> chatMessage);
+    void messageReceiveList(List<ChatMessage> chatMessage);
 
     //消息接收
-    void messageReceived(ChatMessage chatMessage);
-
-    //消息更新
-    void messageUpdate(ChatMessage chatMessage);
+    void messageReceive(ChatMessage chatMessage);
 
     //消息被删除
     void messageDelete(ChatMessage messageId);

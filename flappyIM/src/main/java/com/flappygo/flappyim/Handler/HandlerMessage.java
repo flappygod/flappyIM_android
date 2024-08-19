@@ -29,17 +29,14 @@ public class HandlerMessage extends Handler {
     //消息列表接收到了
     public static final int MSG_RECEIVE_LIST = 2;
 
-    //消息的状态更新
-    public static final int MSG_UPDATE = 3;
-
     //对方消息已读
-    public static final int MSG_READ_OTHER = 4;
+    public static final int MSG_READ_OTHER = 3;
 
     //自身消息已读
-    public static final int MSG_READ_SELF = 5;
+    public static final int MSG_READ_SELF = 4;
 
     //消息删除
-    public static final int MSG_DELETE = 6;
+    public static final int MSG_DELETE = 5;
 
     //Handle message
     public HandlerMessage() {
@@ -86,24 +83,6 @@ public class HandlerMessage extends Handler {
                 }
             }
         }
-        //消息更新
-        if (message.what == MSG_UPDATE) {
-            //获取消息和监听器映射
-            ChatMessage chatMessage = (ChatMessage) message.obj;
-            Map<String, List<MessageListener>> msgListeners = HolderMessageSession.getInstance().getMsgListeners();
-            //遍历监听器映射的键
-            for (Map.Entry<String, List<MessageListener>> entry : msgListeners.entrySet()) {
-                String key = entry.getKey();
-                List<MessageListener> messageListeners = entry.getValue();
-                //检查消息会话 ID 是否匹配或全局消息标签是否匹配，并且监听器列表不为空
-                if (messageListeners != null && (chatMessage.getMessageSessionId().equals(key) || key.equals(globalMsgTag))) {
-                    //通知所有监听器
-                    for (MessageListener listener : messageListeners) {
-                        listener.messageUpdate(chatMessage);
-                    }
-                }
-            }
-        }
         //消息接收
         if (message.what == MSG_RECEIVE_LIST) {
             //消息列表
@@ -115,7 +94,7 @@ public class HandlerMessage extends Handler {
                 //全局
                 if (key.equals(globalMsgTag)) {
                     for (MessageListener listener : messageListeners) {
-                        listener.messageListReceived(chatMessageList);
+                        listener.messageReceiveList(chatMessageList);
                     }
                 }
                 //会话
@@ -128,7 +107,7 @@ public class HandlerMessage extends Handler {
                     }
                     if (messageListeners != null && !sessionMessageList.isEmpty()) {
                         for (MessageListener listener : messageListeners) {
-                            listener.messageListReceived(sessionMessageList);
+                            listener.messageReceiveList(sessionMessageList);
                         }
                     }
                 }
@@ -146,7 +125,7 @@ public class HandlerMessage extends Handler {
                 // 检查消息会话 ID 是否匹配或全局消息标签是否匹配，并且监听器列表不为空
                 if ((chatMessage.getMessageSessionId().equals(key) || key.equals(globalMsgTag)) && messageListeners != null) {
                     for (MessageListener listener : messageListeners) {
-                        listener.messageReceived(chatMessage);
+                        listener.messageReceive(chatMessage);
                     }
                 }
             }

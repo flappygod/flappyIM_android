@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
 
         FlappyImService.getInstance().addSessionListener(new SessionListener() {
             @Override
-            public void sessionUpdate(SessionModel session) {
+            public void sessionListReceive(SessionModel session) {
 
             }
 
@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
 
             }
             @Override
-            public void messageReceived(ChatMessage chatMessage) {
+            public void messageReceive(ChatMessage chatMessage) {
 
                 if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatText(), Toast.LENGTH_SHORT).show();
@@ -212,7 +212,7 @@ public class MainActivity extends Activity {
                             }
 
                             @Override
-                            public void messageReceived(ChatMessage chatMessage) {
+                            public void messageReceive(ChatMessage chatMessage) {
                                 rect.setText(chatMessage.getChatText());
                             }
 

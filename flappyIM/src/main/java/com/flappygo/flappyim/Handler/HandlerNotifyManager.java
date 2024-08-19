@@ -198,7 +198,7 @@ public class HandlerNotifyManager {
             case ChatMessage.ACTION_TYPE_MUTE_SESSION:
             case ChatMessage.ACTION_TYPE_PINNED_SESSION:
                 Message msg = new Message();
-                msg.what = HandlerSession.SESSION_UPDATE;
+                msg.what = HandlerSession.SESSION_RECEIVE;
                 msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
                 handlerSession.sendMessage(msg);
         }
@@ -228,21 +228,6 @@ public class HandlerNotifyManager {
         }
         Message msg = new Message();
         msg.what = HandlerMessage.MSG_RECEIVE;
-        msg.obj = chatMessage;
-        this.handlerMessage.sendMessage(msg);
-    }
-
-
-    /******
-     * 消息更新监听
-     * @param chatMessage   消息
-     */
-    public void notifyMessageUpdate(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
-            return;
-        }
-        Message msg = new Message();
-        msg.what = HandlerMessage.MSG_UPDATE;
         msg.obj = chatMessage;
         this.handlerMessage.sendMessage(msg);
     }
@@ -301,9 +286,9 @@ public class HandlerNotifyManager {
      * 通知会话有更新
      * @param session 会话
      */
-    public void notifySessionUpdate(SessionModel session) {
+    public void notifySessionReceive(SessionModel session) {
         Message msg = new Message();
-        msg.what = HandlerSession.SESSION_UPDATE;
+        msg.what = HandlerSession.SESSION_RECEIVE;
         msg.obj = session;
         handlerSession.sendMessage(msg);
     }
@@ -312,10 +297,22 @@ public class HandlerNotifyManager {
      * 通知会话列表有更新
      * @param sessionList 会话列表
      */
-    public void notifySessionListUpdate(List<SessionModel> sessionList) {
-        for (SessionModel session : sessionList) {
-            notifySessionUpdate(session);
-        }
+    public void notifySessionReceiveList(List<SessionModel> sessionList) {
+        Message msg = new Message();
+        msg.what = HandlerSession.SESSION_RECEIVE_LIST;
+        msg.obj = sessionList;
+        handlerSession.sendMessage(msg);
+    }
+
+    /******
+     * 通知会话有更新
+     * @param session 会话
+     */
+    public void notifySessionDelete(SessionModel session) {
+        Message msg = new Message();
+        msg.what = HandlerSession.SESSION_DELETE;
+        msg.obj = session;
+        handlerSession.sendMessage(msg);
     }
 
 }
