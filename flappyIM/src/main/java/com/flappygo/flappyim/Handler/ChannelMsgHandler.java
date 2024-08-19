@@ -162,7 +162,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     /******
      * 检查旧消息进行发送
      */
-    private void checkFormerMessagesToSend() {
+    private void checkCachedMessagesToSend() {
         List<ChatMessage> formerMessageList = HandlerNotifyManager.getInstance().getUnSendCallbackHandlers();
         for (ChatMessage message : formerMessageList) {
             sendMessageIfActive(message);
@@ -321,7 +321,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             checkSystemMessageFunction(ctx);
 
             //如果说之前有消息不是在active状态发送的，那么链接成功后就触发发送
-            checkFormerMessagesToSend();
+            checkCachedMessagesToSend();
         }
     }
 
