@@ -147,57 +147,62 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void handleMessageAction(ChatMessage chatMessage) {
-        //动作消息处理
-        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION && chatMessage.getMessageReadState().intValue() == 0) {
-            //执行数据库更新操作
-            Database.getInstance().handleActionMessageUpdate(chatMessage);
-            //获取对象
-            ChatAction chatAction = chatMessage.getChatAction();
-            //操作类型
-            switch (chatAction.getActionType()) {
-                ///插入的情况下，代表新增，进行通知
-                case ChatMessage.ACTION_TYPE_DELETE_MSG:
-                case ChatMessage.ACTION_TYPE_RECALL_MSG: {
-                    Message msg = new Message();
-                    msg.what = HandlerMessage.MSG_DELETE;
-                    msg.obj = Database.getInstance().getMessageById(chatAction.getActionIds().get(2));
-                    handlerMessage.sendMessage(msg);
-                    break;
-                }
-                ///插入的情况下，代表已读，进行通知
-                case ChatMessage.ACTION_TYPE_READ_SESSION: {
-                    //自身已读
-                    if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
-                        Message msg = new Message();
-                        msg.what = HandlerMessage.MSG_READ_SELF;
-                        msg.obj = new ArrayList<>(Arrays.asList(
-                                chatAction.getActionIds().get(1),
-                                chatAction.getActionIds().get(0),
-                                chatAction.getActionIds().get(2)
-                        ));
-                        handlerMessage.sendMessage(msg);
-                    }
-                    //对方已读
-                    else {
-                        Message msg = new Message();
-                        msg.what = HandlerMessage.MSG_READ_OTHER;
-                        msg.obj = new ArrayList<>(Arrays.asList(
-                                chatAction.getActionIds().get(1),
-                                chatAction.getActionIds().get(0),
-                                chatAction.getActionIds().get(2)
-                        ));
-                        handlerMessage.sendMessage(msg);
-                    }
-                    break;
-                }
-                ///会话用户更新了
-                case ChatMessage.ACTION_TYPE_MUTE_SESSION:
-                case ChatMessage.ACTION_TYPE_PINNED_SESSION:
-                    Message msg = new Message();
-                    msg.what = HandlerSession.SESSION_UPDATE;
-                    msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
-                    handlerSession.sendMessage(msg);
+        //不是Action消息
+        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
+            return;
+        }
+        //已经处理过了
+        if (chatMessage.getMessageReadState().intValue() == 1) {
+            return;
+        }
+        //执行数据库更新操作
+        Database.getInstance().handleActionMessageUpdate(chatMessage);
+        //获取对象
+        ChatAction chatAction = chatMessage.getChatAction();
+        //操作类型
+        switch (chatAction.getActionType()) {
+            ///插入的情况下，代表新增，进行通知
+            case ChatMessage.ACTION_TYPE_DELETE_MSG:
+            case ChatMessage.ACTION_TYPE_RECALL_MSG: {
+                Message msg = new Message();
+                msg.what = HandlerMessage.MSG_DELETE;
+                msg.obj = Database.getInstance().getMessageById(chatAction.getActionIds().get(2));
+                handlerMessage.sendMessage(msg);
+                break;
             }
+            ///插入的情况下，代表已读，进行通知
+            case ChatMessage.ACTION_TYPE_READ_SESSION: {
+                //自身已读
+                if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
+                    Message msg = new Message();
+                    msg.what = HandlerMessage.MSG_READ_SELF;
+                    msg.obj = new ArrayList<>(Arrays.asList(
+                            chatAction.getActionIds().get(1),
+                            chatAction.getActionIds().get(0),
+                            chatAction.getActionIds().get(2)
+                    ));
+                    handlerMessage.sendMessage(msg);
+                }
+                //对方已读
+                else {
+                    Message msg = new Message();
+                    msg.what = HandlerMessage.MSG_READ_OTHER;
+                    msg.obj = new ArrayList<>(Arrays.asList(
+                            chatAction.getActionIds().get(1),
+                            chatAction.getActionIds().get(0),
+                            chatAction.getActionIds().get(2)
+                    ));
+                    handlerMessage.sendMessage(msg);
+                }
+                break;
+            }
+            ///会话用户更新了
+            case ChatMessage.ACTION_TYPE_MUTE_SESSION:
+            case ChatMessage.ACTION_TYPE_PINNED_SESSION:
+                Message msg = new Message();
+                msg.what = HandlerSession.SESSION_UPDATE;
+                msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
+                handlerSession.sendMessage(msg);
         }
     }
 
