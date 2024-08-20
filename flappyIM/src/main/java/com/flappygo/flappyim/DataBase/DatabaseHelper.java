@@ -59,33 +59,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //创建会话表
     public final String createTableSession = "CREATE TABLE " + DataBaseConfig.TABLE_SESSION + "(" +
-            // 会话ID
+            //会话ID
             "sessionId" + " varchar ," +
             //会话外部ID
             "sessionExtendId" + " varchar," +
-            // 会话类型
+            //会话类型
             "sessionType" + " integer," +
-            // 会话信息
+            //会话信息
             "sessionInfo" + " varchar," +
             //会话名称
             "sessionName" + " varchar," +
-            // 会话图片
+            //会话图片
             "sessionImage" + " varchar," +
-            // 会话当前offset
+            //会话当前offset
             "sessionOffset" + " varchar," +
-            // 会话更新时间戳
+            //会话更新时间戳
             "sessionStamp" + " integer," +
-            // 会话创建者
+            //会话创建者
             "sessionCreateDate" + " varchar," +
-            // 会话创建者
+            //会话创建者
             "sessionCreateUser" + " varchar," +
-            // 是否删除
+            //是否删除
             "sessionDeleted" + " integer," +
-            // 删除时间
+            //删除时间
             "sessionDeletedDate" + " varchar," +
-            // 当前插入的用户
+            //当前插入的用户
             "sessionInsertUser" + " varchar,"
-            // 消息ID
+            //消息ID
             + " primary key (sessionId,sessionInsertUser)" + ")";
 
 
@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //用户最近阅读
             "sessionMemberLatestRead" + " varchar," +
             //用户最近删除
-            "sessionMemberLatestDelete" + " varchar," +
+            "sessionMemberLatestDelete" + " integer," +
             //用户在会话中的附加名称
             "sessionMemberMarkName" + " varchar," +
             //用户设置会话免打扰
@@ -125,7 +125,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "isLeave" + " integer," +
             //当前插入的用户
             "sessionInsertUser" + " varchar,"
-            // 消息ID
+            //消息ID
             + " primary key (userId,sessionId,sessionInsertUser)" + ")";
 
 
