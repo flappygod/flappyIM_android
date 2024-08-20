@@ -416,6 +416,24 @@ public class Database {
                 updateSessionMemberPinned(sessionId, userId, pinned);
                 break;
             }
+            //消息已读
+            case ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP: {
+                //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                String sessionId = action.getActionIds().get(1);
+                String sessionOffset = action.getActionIds().get(2);
+                updateSessionDeleteTemp(sessionId, userId, sessionOffset);
+                break;
+            }
+            //消息已读
+            case ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT: {
+                //获取TableSequence
+                String userId = action.getActionIds().get(0);
+                String sessionId = action.getActionIds().get(1);
+                String sessionOffset = action.getActionIds().get(2);
+                updateSessionDeletePermanent(sessionId, userId, sessionOffset);
+                break;
+            }
         }
     }
 
@@ -719,7 +737,6 @@ public class Database {
         }
         open();
         try {
-            //删除会话数据
             ContentValues values = new ContentValues();
             values.put("sessionDeleted", 1);
             db.update(
@@ -744,10 +761,8 @@ public class Database {
         if (chatUser == null) {
             return;
         }
-
         open();
         try {
-            //创建values
             ContentValues values = new ContentValues();
             if (member.getUserId() != null) {
                 values.put("userId", member.getUserId());
@@ -798,7 +813,6 @@ public class Database {
                 values.put("isLeave", member.getIsLeave());
             }
             values.put("sessionInsertUser", chatUser.getUserExtendId());
-            //没有记录
             db.insertWithOnConflict(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
                     null,
@@ -985,16 +999,38 @@ public class Database {
      * @param pinned 是否置顶
      */
     private void updateSessionMemberPinned(String sessionId, String userId, String pinned) {
-        //会话Data
-        open();
-        try {
-            SessionMemberModel memberModel = getSessionMember(sessionId, userId);
-            if (memberModel != null) {
-                memberModel.setSessionMemberPinned(StringTool.strToInt(pinned, 0));
-                insertSessionMember(memberModel);
-            }
-        } finally {
-            close();
+        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        if (memberModel != null) {
+            memberModel.setSessionMemberPinned(StringTool.strToInt(pinned, 0));
+            insertSessionMember(memberModel);
+        }
+    }
+
+    /******
+     * 更新会话用户pinned
+     * @param sessionId 会话id
+     * @param userId    用户id
+     * @param pinned    是否置顶
+     */
+    private void updateSessionDeleteTemp(String sessionId, String userId, String pinned) {
+        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        if (memberModel != null) {
+            memberModel.setSessionMemberLatestDelete(pinned);
+            insertSessionMember(memberModel);
+        }
+    }
+
+    /******
+     * 更新会话用户permanent
+     * @param sessionId 会话id
+     * @param userId    用户id
+     * @param pinned    是否置顶
+     */
+    private void updateSessionDeletePermanent(String sessionId, String userId, String pinned) {
+        SessionModel session = getUserSessionById(sessionId);
+        if (session != null) {
+            session.setIsDelete(new BigDecimal(1));
+            insertSession(session);
         }
     }
 

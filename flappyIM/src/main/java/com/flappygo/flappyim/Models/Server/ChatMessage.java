@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.Models.Server;
 
-
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatAction;
@@ -14,19 +13,16 @@ import com.flappygo.flappyim.Tools.Secret.AESTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TimeTool;
-
-
 import java.math.BigDecimal;
-
 import android.util.Base64;
-
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Date;
 
 
 public class ChatMessage {
 
 
+    /***消息状态***/
     //消息被创建
     public final static int SEND_STATE_SENDING = 0;
     //消息已经送达服务器
@@ -37,6 +33,7 @@ public class ChatMessage {
     public final static int SEND_STATE_FAILURE = 9;
 
 
+    /***消息类型***/
     //系统消息
     public final static int MSG_TYPE_SYSTEM = 0;
     //文本消息
@@ -91,11 +88,11 @@ public class ChatMessage {
     //会话置顶
     public final static int ACTION_TYPE_SESSION_PIN = 5;
 
-    //会话全部删除
-    public final static int ACTION_TYPE_SESSION_DELETE_ALL = 6;
+    //会话删除临时
+    public final static int ACTION_TYPE_SESSION_DELETE_TEMP = 6;
 
-    //会话自身删除
-    public final static int ACTION_TYPE_SESSION_DELETE_SELF = 7;
+    //会话删除全部
+    public final static int ACTION_TYPE_SESSION_DELETE_PERMANENT = 7;
 
 
     public ChatMessage() {
@@ -452,7 +449,7 @@ public class ChatMessage {
      */
     public void setChatSystem(ChatSystem chatSystem) {
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_SYSTEM);
-        setMessageContent(encrypt(chatSystem, ChatSystem.class, null));
+        setMessageContent(encrypt(chatSystem, null));
     }
 
     /******
@@ -472,7 +469,7 @@ public class ChatMessage {
      */
     public void setChatAction(ChatAction chatAction) {
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_ACTION);
-        setMessageContent(encrypt(chatAction, ChatAction.class, null));
+        setMessageContent(encrypt(chatAction, null));
     }
 
     /******
@@ -493,7 +490,7 @@ public class ChatMessage {
     public void setChatText(String text) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_TEXT);
-        setMessageContent(encrypt(text, String.class, secret));
+        setMessageContent(encrypt(text, secret));
     }
 
     /******
@@ -515,7 +512,7 @@ public class ChatMessage {
     public void setChatImage(ChatImage chatImage) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_IMG);
-        setMessageContent(encrypt(chatImage, ChatImage.class, secret));
+        setMessageContent(encrypt(chatImage, secret));
     }
 
     /******
@@ -536,7 +533,7 @@ public class ChatMessage {
     public void setChatVoice(ChatVoice chatVoice) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_VOICE);
-        setMessageContent(encrypt(chatVoice, ChatVoice.class, secret));
+        setMessageContent(encrypt(chatVoice, secret));
     }
 
     /******
@@ -557,7 +554,7 @@ public class ChatMessage {
     public void setChatLocation(ChatLocation chatLocation) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_LOCATE);
-        setMessageContent(encrypt(chatLocation, ChatLocation.class, secret));
+        setMessageContent(encrypt(chatLocation, secret));
     }
 
     /******
@@ -579,7 +576,7 @@ public class ChatMessage {
     public void setChatVideo(ChatVideo chatVideo) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_VIDEO);
-        setMessageContent(encrypt(chatVideo, ChatVideo.class, secret));
+        setMessageContent(encrypt(chatVideo, secret));
     }
 
     /******
@@ -600,7 +597,7 @@ public class ChatMessage {
     public void setChatFile(ChatFile chatFile) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_FILE);
-        setMessageContent(encrypt(chatFile, ChatFile.class, secret));
+        setMessageContent(encrypt(chatFile, secret));
     }
 
     /******
@@ -621,7 +618,7 @@ public class ChatMessage {
     public void setChatCustom(String text) {
         String secret = IDGenerateTool.getRandomStr(16);
         messageType = new BigDecimal(ChatMessage.MSG_TYPE_CUSTOM);
-        setMessageContent(encrypt(text, String.class, secret));
+        setMessageContent(encrypt(text, secret));
     }
 
     /******
@@ -639,12 +636,11 @@ public class ChatMessage {
     /*******
      * 加密数据
      * @param data   数据
-     * @param tClass 类对象
      * @param secret 秘钥
      * @return 加密字符串
      * @param <T> 类型
      */
-    private <T> String encrypt(T data, Class<T> tClass, String secret) {
+    private <T> String encrypt(T data, String secret) {
         try {
             ///设置发送秘钥
             setMessageSecret(secret);

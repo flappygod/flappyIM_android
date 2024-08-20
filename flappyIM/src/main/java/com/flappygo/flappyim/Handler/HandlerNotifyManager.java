@@ -170,7 +170,6 @@ public class HandlerNotifyManager {
             }
             ///插入的情况下，代表已读，进行通知
             case ChatMessage.ACTION_TYPE_SESSION_READ: {
-                //自身已读
                 if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
                     Message msg = new Message();
                     msg.what = HandlerMessage.MSG_READ_SELF;
@@ -180,9 +179,7 @@ public class HandlerNotifyManager {
                             chatAction.getActionIds().get(2)
                     ));
                     handlerMessage.sendMessage(msg);
-                }
-                //对方已读
-                else {
+                } else {
                     Message msg = new Message();
                     msg.what = HandlerMessage.MSG_READ_OTHER;
                     msg.obj = new ArrayList<>(Arrays.asList(
@@ -196,11 +193,20 @@ public class HandlerNotifyManager {
             }
             ///会话用户更新了
             case ChatMessage.ACTION_TYPE_SESSION_MUTE:
-            case ChatMessage.ACTION_TYPE_SESSION_PIN:
+            case ChatMessage.ACTION_TYPE_SESSION_PIN: {
                 Message msg = new Message();
                 msg.what = HandlerSession.SESSION_RECEIVE;
                 msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
                 handlerSession.sendMessage(msg);
+            }
+            ///会话用户更新了
+            case ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP:
+            case ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT: {
+                Message msg = new Message();
+                msg.what = HandlerSession.SESSION_DELETE;
+                msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
+                handlerSession.sendMessage(msg);
+            }
         }
     }
 

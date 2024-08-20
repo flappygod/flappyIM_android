@@ -739,6 +739,58 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
+     * 删除会话，删除后
+     * @param permanent 永久删除
+     * @param callback  回调
+     * @return 删除会话的消息
+     */
+    public ChatMessage setSessionDelete(boolean permanent, FlappySendCallback<ChatMessage> callback) {
+
+        //创建消息
+        ChatMessage msg = new ChatMessage();
+        //生成一个消息的ID
+        msg.setMessageId(IDGenerateTool.generateCommonID());
+        //设置
+        msg.setMessageSessionId(session.getSessionId());
+        //类型
+        msg.setMessageSessionType(session.getSessionType());
+        //发送者
+        msg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
+        //发送者
+        msg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
+        //接收者
+        msg.setMessageReceiveId(getPeerID());
+        //接收者
+        msg.setMessageReceiveExtendId(getPeerExtendID());
+
+        //message
+        ChatMessage message = getLatestMessage();
+        int sessionOffset = (message != null ? message.getMessageSessionOffset().intValue() : 0);
+
+
+        //读取消息的action消息
+        ChatAction chatAction = new ChatAction();
+        chatAction.setActionType(permanent ? ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT : ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP);
+        chatAction.setActionIds(new ArrayList<>(
+                Arrays.asList(
+                        DataManager.getInstance().getLoginUser().getUserId(),
+                        session.getSessionId(),
+                        Long.toString(sessionOffset)
+                )
+        ));
+
+        //设置内容
+        msg.setChatAction(chatAction);
+        //时间
+        msg.setMessageDate(new Date());
+        //发送消息
+        sendMessage(msg, callback);
+        //返回消息
+        return msg;
+    }
+
+
+    /******
      * 撤回已读消息
      * @param messageId 消息ID
      * @param callback  回调
