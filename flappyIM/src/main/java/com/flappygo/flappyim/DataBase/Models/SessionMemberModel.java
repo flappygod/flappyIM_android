@@ -18,7 +18,7 @@ public class SessionMemberModel extends ChatUser {
     private String sessionMemberLatestRead;
 
     //最近删除
-    private Integer sessionMemberLatestDelete;
+    private String sessionMemberLatestDelete;
 
     //标记名称
     private String sessionMemberMarkName;
@@ -54,11 +54,11 @@ public class SessionMemberModel extends ChatUser {
         this.sessionMemberLatestRead = sessionMemberLatestRead;
     }
 
-    public Integer getSessionMemberLatestDelete() {
+    public String getSessionMemberLatestDelete() {
         return sessionMemberLatestDelete;
     }
 
-    public void setSessionMemberLatestDelete(Integer sessionMemberLatestDelete) {
+    public void setSessionMemberLatestDelete(String sessionMemberLatestDelete) {
         this.sessionMemberLatestDelete = sessionMemberLatestDelete;
     }
 

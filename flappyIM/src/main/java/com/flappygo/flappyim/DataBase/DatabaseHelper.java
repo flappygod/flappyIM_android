@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //用户最近阅读
             "sessionMemberLatestRead" + " varchar," +
             //用户最近删除
-            "sessionMemberLatestDelete" + " integer," +
+            "sessionMemberLatestDelete" + " varchar," +
             //用户在会话中的附加名称
             "sessionMemberMarkName" + " varchar," +
             //用户设置会话免打扰

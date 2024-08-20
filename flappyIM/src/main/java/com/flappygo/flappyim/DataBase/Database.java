@@ -650,7 +650,7 @@ public class Database {
                 info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
-                info.setSessionMemberLatestDelete(cursor.getInt(cursor.getColumnIndex("sessionMemberLatestDelete")));
+                info.setSessionMemberLatestDelete(cursor.getString(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
@@ -712,7 +712,7 @@ public class Database {
                 info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
-                info.setSessionMemberLatestDelete(cursor.getInt(cursor.getColumnIndex("sessionMemberLatestDelete")));
+                info.setSessionMemberLatestDelete(cursor.getString(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
@@ -1304,25 +1304,25 @@ public class Database {
 
     /******
      * 更新会话用户pinned
-     * @param sessionId 会话id
-     * @param userId    用户id
-     * @param pinned    是否置顶
+     * @param sessionId        会话id
+     * @param userId           用户id
+     * @param sessionOffset    是否置顶
      */
-    private void updateSessionDeleteTemp(String sessionId, String userId, String pinned) {
+    private void updateSessionDeleteTemp(String sessionId, String userId, String sessionOffset) {
         SessionMemberModel memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
-            memberModel.setSessionMemberLatestDelete(Integer.parseInt(pinned));
+            memberModel.setSessionMemberLatestDelete(sessionOffset);
             insertSessionMember(memberModel);
         }
     }
 
     /******
      * 更新会话用户permanent
-     * @param sessionId 会话id
-     * @param userId    用户id
-     * @param pinned    是否置顶
+     * @param sessionId        会话id
+     * @param userId           用户id
+     * @param sessionOffset    是否置顶
      */
-    private void updateSessionDeletePermanent(String sessionId, String userId, String pinned) {
+    private void updateSessionDeletePermanent(String sessionId, String userId, String sessionOffset) {
         SessionModel session = getUserSessionById(sessionId);
         if (session != null) {
             session.setIsDelete(new BigDecimal(1));
