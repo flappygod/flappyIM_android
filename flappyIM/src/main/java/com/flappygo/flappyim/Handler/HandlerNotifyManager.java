@@ -162,14 +162,14 @@ public class HandlerNotifyManager {
         //操作类型
         switch (chatAction.getActionType()) {
             ///插入的情况下，代表新增，进行通知
-            case ChatMessage.ACTION_TYPE_DELETE_MSG:
-            case ChatMessage.ACTION_TYPE_RECALL_MSG: {
+            case ChatMessage.ACTION_TYPE_MSG_DELETE:
+            case ChatMessage.ACTION_TYPE_MSG_RECALL: {
                 ChatMessage message = Database.getInstance().getMessageById(chatAction.getActionIds().get(2));
                 notifyMessageDelete(message);
                 break;
             }
             ///插入的情况下，代表已读，进行通知
-            case ChatMessage.ACTION_TYPE_READ_SESSION: {
+            case ChatMessage.ACTION_TYPE_SESSION_READ: {
                 //自身已读
                 if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
                     Message msg = new Message();
@@ -195,8 +195,8 @@ public class HandlerNotifyManager {
                 break;
             }
             ///会话用户更新了
-            case ChatMessage.ACTION_TYPE_MUTE_SESSION:
-            case ChatMessage.ACTION_TYPE_PINNED_SESSION:
+            case ChatMessage.ACTION_TYPE_SESSION_MUTE:
+            case ChatMessage.ACTION_TYPE_SESSION_PIN:
                 Message msg = new Message();
                 msg.what = HandlerSession.SESSION_RECEIVE;
                 msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));

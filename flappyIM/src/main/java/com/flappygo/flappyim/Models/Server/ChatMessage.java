@@ -77,19 +77,25 @@ public class ChatMessage {
     /***动作消息***/
 
     //撤回消息
-    public final static int ACTION_TYPE_RECALL_MSG = 1;
+    public final static int ACTION_TYPE_MSG_RECALL = 1;
 
     //删除消息
-    public final static int ACTION_TYPE_DELETE_MSG = 2;
+    public final static int ACTION_TYPE_MSG_DELETE = 2;
 
     //会话已读
-    public final static int ACTION_TYPE_READ_SESSION = 3;
+    public final static int ACTION_TYPE_SESSION_READ = 3;
 
     //会话静音
-    public final static int ACTION_TYPE_MUTE_SESSION = 4;
+    public final static int ACTION_TYPE_SESSION_MUTE = 4;
 
     //会话置顶
-    public final static int ACTION_TYPE_PINNED_SESSION = 5;
+    public final static int ACTION_TYPE_SESSION_PIN = 5;
+
+    //会话全部删除
+    public final static int ACTION_TYPE_SESSION_DELETE_ALL = 6;
+
+    //会话自身删除
+    public final static int ACTION_TYPE_SESSION_DELETE_SELF = 7;
 
 
     public ChatMessage() {

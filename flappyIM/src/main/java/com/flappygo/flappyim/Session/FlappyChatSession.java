@@ -2,9 +2,6 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
-import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
-import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
-import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.SessionModel;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -13,7 +10,6 @@ import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Tools.Upload.ImageReadTool;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
-import com.flappygo.flappyim.Callback.FlappyIMCallback;
 import com.flappygo.flappyim.Models.Request.ChatVideo;
 import com.flappygo.flappyim.Models.Request.ChatImage;
 import com.flappygo.flappyim.Models.Request.ChatVoice;
@@ -21,8 +17,6 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Tools.Upload.ImageReadWH;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.Config.FlappyConfig;
-import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
@@ -34,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.io.File;
 
@@ -631,7 +624,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_READ_SESSION);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_SESSION_READ);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
@@ -678,7 +671,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_MUTE_SESSION);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_SESSION_MUTE);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
@@ -725,7 +718,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_PINNED_SESSION);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_SESSION_PIN);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
@@ -771,7 +764,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_RECALL_MSG);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_MSG_RECALL);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),
@@ -816,7 +809,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_DELETE_MSG);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_MSG_DELETE);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),

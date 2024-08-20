@@ -25,7 +25,6 @@ import android.database.Cursor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import java.util.Arrays;
 import java.util.List;
 
 /******
@@ -372,7 +371,7 @@ public class Database {
         ChatAction action = chatMessage.getChatAction();
         switch (action.getActionType()) {
             //撤回消息
-            case ChatMessage.ACTION_TYPE_RECALL_MSG: {
+            case ChatMessage.ACTION_TYPE_MSG_RECALL: {
                 //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String messageId = action.getActionIds().get(2);
@@ -380,7 +379,7 @@ public class Database {
                 break;
             }
             //消息删除
-            case ChatMessage.ACTION_TYPE_DELETE_MSG: {
+            case ChatMessage.ACTION_TYPE_MSG_DELETE: {
                 //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String messageId = action.getActionIds().get(2);
@@ -388,7 +387,7 @@ public class Database {
                 break;
             }
             //消息已读
-            case ChatMessage.ACTION_TYPE_READ_SESSION: {
+            case ChatMessage.ACTION_TYPE_SESSION_READ: {
                 //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
@@ -400,7 +399,7 @@ public class Database {
                 break;
             }
             //消息已读
-            case ChatMessage.ACTION_TYPE_MUTE_SESSION: {
+            case ChatMessage.ACTION_TYPE_SESSION_MUTE: {
                 //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
@@ -409,7 +408,7 @@ public class Database {
                 break;
             }
             //消息已读
-            case ChatMessage.ACTION_TYPE_PINNED_SESSION: {
+            case ChatMessage.ACTION_TYPE_SESSION_PIN: {
                 //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
