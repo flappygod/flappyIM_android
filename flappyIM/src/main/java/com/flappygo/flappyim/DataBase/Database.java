@@ -365,10 +365,6 @@ public class Database {
      * @param session 会话
      */
     public void insertSession(SessionModel session) {
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
         executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "sessionId", session.getSessionId());
@@ -509,10 +505,6 @@ public class Database {
      * @param member 会话用户
      */
     public void insertSessionMember(SessionMemberModel member) {
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
         executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "userId", member.getUserId());
