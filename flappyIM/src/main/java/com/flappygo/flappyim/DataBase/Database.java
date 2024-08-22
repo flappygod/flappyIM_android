@@ -158,6 +158,13 @@ public class Database {
         if (chatUser == null) {
             return false;
         }
+
+        //更新最新消息sessionOffset
+        updateSessionLatest(
+                chatMessage.getMessageSessionId(),
+                chatMessage.getMessageSessionOffset().toString()
+        );
+
         open();
         try {
             ContentValues values = new ContentValues();
@@ -1259,6 +1266,32 @@ public class Database {
         //插入消息
         insertMessage(message);
     }
+
+
+    /******
+     * 更新用户消息最近已读
+     * @param sessionId     会话ID
+     * @param sessionOffset 会话Offset
+     */
+    private void updateSessionLatest(String sessionId, String sessionOffset) {
+        // 检查用户是否登录了
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+        open();
+        try {
+            // 构建 SQL 更新语句
+            String sql = "UPDATE " + DataBaseConfig.TABLE_SESSION +
+                    " SET sessionOffset = MAX(sessionOffset, ?) " +
+                    " WHERE sessionId = ? AND sessionInsertUser = ?";
+            // 执行更新操作
+            db.execSQL(sql, new Object[]{sessionOffset, sessionId, chatUser.getUserExtendId()});
+        } finally {
+            close();
+        }
+    }
+
 
     /******
      * 更新用户消息最近已读
