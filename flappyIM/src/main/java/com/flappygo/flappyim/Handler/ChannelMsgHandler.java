@@ -229,7 +229,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             updateSessionMemberUpdate(actionUpdateSessionMember);
         }
         //用户删除
-        if (!actionUpdateSessionMember.isEmpty()) {
+        if (!actionUpdateSessionMemberDelete.isEmpty()) {
             updateSessionDeleteSelf(actionUpdateSessionMemberDelete);
         }
     }
