@@ -174,10 +174,12 @@ public class Database {
      * @param chatMessage  消息
      */
     public boolean insertMessage(ChatMessage chatMessage) {
-        updateSessionOffset(
-                chatMessage.getMessageSessionId(),
-                chatMessage.getMessageSessionOffset().toString()
-        );
+        if (chatMessage.getMessageSessionOffset() != null) {
+            updateSessionOffset(
+                    chatMessage.getMessageSessionId(),
+                    chatMessage.getMessageSessionOffset().toString()
+            );
+        }
         return executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "messageId", chatMessage.getMessageId());
