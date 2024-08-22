@@ -57,6 +57,7 @@ import android.os.Message;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.HashMap;
 
@@ -363,10 +364,7 @@ public class FlappyImService {
         }
 
         //当前设置了免打扰
-        SessionMemberModel member = Database.getInstance().getSessionMember(
-                chatMessage.getMessageSessionId(),
-                user.getUserId()
-        );
+        SessionMemberModel member = Database.getInstance().getSessionMember(chatMessage.getMessageSessionId(), user.getUserId());
         if (member == null || member.getSessionMemberMute() == 1) {
             return;
         }
@@ -379,69 +377,33 @@ public class FlappyImService {
             //推送类型普通
             if (StringTool.strToInt(privacy, 0) == PUSH_PRIVACY_TYPE_NORMAL) {
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            chatMessage.getChatText()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), chatMessage.getChatText());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_IMG) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getImgMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getImgMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VOICE) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getVoiceMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getVoiceMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_LOCATE) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getLocateMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getLocateMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getVideoMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getVideoMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_FILE) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getFileMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getFileMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_SYSTEM) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getSysMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getSysMsg());
                 }
                 if (chatMessage.getMessageType().intValue() == MSG_TYPE_CUSTOM) {
-                    util.sendNotification(
-                            chatMessage,
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                            Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getGeneralMsg()
-                    );
+                    util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getGeneralMsg());
                 }
             }
             //推送类型隐藏
             else if (StringTool.strToInt(privacy, 0) == PUSH_PRIVACY_TYPE_HIDE) {
-                util.sendNotification(
-                        chatMessage,
-                        Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(),
-                        Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getGeneralMsg()
-                );
+                util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getGeneralMsg());
             }
         }
     }
@@ -498,11 +460,7 @@ public class FlappyImService {
     private void requestPermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        activity,
-                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
-                        100
-                );
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
             }
         }
     }
@@ -514,11 +472,7 @@ public class FlappyImService {
      * @param serverPath Im服务器地址
      * @param uploadPath 资源服务器地址
      */
-    public void init(
-            Activity appContext,
-            String serverPath,
-            String uploadPath
-    ) {
+    public void init(Activity appContext, String serverPath, String uploadPath) {
         init(appContext);
         //更新服务器地址和资源文件上传地址
         FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
@@ -593,13 +547,7 @@ public class FlappyImService {
      * @param userAvatar     用户头像
      * @param callback       回调
      */
-    public void createAccount(
-            String userExtendID,
-            String userName,
-            String userAvatar,
-            String userData,
-            final FlappyIMCallback<ChatUser> callback
-    ) {
+    public void createAccount(String userExtendID, String userName, String userAvatar, String userData, final FlappyIMCallback<ChatUser> callback) {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //设置index
@@ -611,41 +559,35 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().register(),
-                hashMap,
-                new BaseParseCallback<ChatUser>(ChatUser.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<ChatUser> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(
-                                    new Exception(model.getMsg()),
-                                    Integer.parseInt(model.getCode())
-                            );
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(ChatUser user, String tag) {
-                        if (callback != null) {
-                            callback.success(user);
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().register(), hashMap, new BaseParseCallback<ChatUser>(ChatUser.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<ChatUser> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            public void stateTrue(ChatUser user, String tag) {
+                if (callback != null) {
+                    callback.success(user);
+                }
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                }
+            }
+        });
     }
 
 
@@ -657,12 +599,7 @@ public class FlappyImService {
      * @param userAvatar    用户头像
      * @param callback      回调
      */
-    public void updateAccount(
-            String userExtendID,
-            String userName,
-            String userAvatar,
-            String userData,
-            final FlappyIMCallback<String> callback) {
+    public void updateAccount(String userExtendID, String userName, String userAvatar, String userData, final FlappyIMCallback<String> callback) {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         //设置index
@@ -674,41 +611,35 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUser(),
-                hashMap,
-                new BaseParseCallback<String>(String.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(
-                                    new Exception(model.getMsg()),
-                                    Integer.parseInt(model.getCode())
-                            );
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(String s, String tag) {
-                        if (callback != null) {
-                            callback.success(s);
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUser(), hashMap, new BaseParseCallback<String>(String.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<String> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(String s, String tag) {
+                if (callback != null) {
+                    callback.success(s);
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                }
+            }
+        });
     }
 
 
@@ -748,10 +679,7 @@ public class FlappyImService {
                 updateDeviceToken(deviceToken);
             }
         };
-        handler.sendMessageDelayed(
-                handler.obtainMessage(1),
-                FlappyConfig.getInstance().autoLoginSpace
-        );
+        handler.sendMessageDelayed(handler.obtainMessage(1), FlappyConfig.getInstance().autoLoginSpace);
     }
 
 
@@ -760,8 +688,7 @@ public class FlappyImService {
      * @param pushSettings  推送设置
      * @param callback      回调
      */
-    public void changePushSettings(PushSetting pushSettings,
-            final FlappyIMCallback<PushSetting> callback) {
+    public void changePushSettings(PushSetting pushSettings, final FlappyIMCallback<PushSetting> callback) {
 
         ///没有登录直接设置
         if (!DataManager.getInstance().isLogin()) {
@@ -805,42 +732,36 @@ public class FlappyImService {
             hashMap.put("pushMute", pushSettings.getRoutePushMute());
         }
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush(),
-                hashMap,
-                new BaseParseCallback<PushSetting>(PushSetting.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<PushSetting> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(
-                                    new Exception(model.getMsg()),
-                                    Integer.parseInt(model.getCode())
-                            );
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(PushSetting setting, String tag) {
-                        DataManager.getInstance().savePushSetting(setting);
-                        if (callback != null) {
-                            callback.success(DataManager.getInstance().getPushSetting());
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush(), hashMap, new BaseParseCallback<PushSetting>(PushSetting.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<PushSetting> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(PushSetting setting, String tag) {
+                DataManager.getInstance().savePushSetting(setting);
+                if (callback != null) {
+                    callback.success(DataManager.getInstance().getPushSetting());
+                }
+            }
+        });
     }
 
     /******
@@ -879,42 +800,36 @@ public class FlappyImService {
             //推送Id
             hashMap.put("pushId", DataManager.getInstance().getPushId());
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login(),
-                    hashMap,
-                    new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
-                        @Override
-                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
-                            isRunningLogin = false;
-                            if (callback != null) {
-                                callback.failure(
-                                        new Exception(model.getMsg()),
-                                        Integer.parseInt(model.getCode())
-                                );
-                            }
-                        }
-
-                        @Override
-                        protected void jsonError(Exception e, String tag) {
-                            isRunningLogin = false;
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                            }
-                        }
-
-                        @Override
-                        protected void netError(Exception e, String tag) {
-                            isRunningLogin = false;
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                            }
-                        }
-
-                        @Override
-                        public void stateTrue(ResponseLogin response, String tag) {
-                            loginNetty(response, callback);
-                        }
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                @Override
+                protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
+                    isRunningLogin = false;
+                    if (callback != null) {
+                        callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                     }
-            );
+                }
+
+                @Override
+                protected void jsonError(Exception e, String tag) {
+                    isRunningLogin = false;
+                    if (callback != null) {
+                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    }
+                }
+
+                @Override
+                protected void netError(Exception e, String tag) {
+                    isRunningLogin = false;
+                    if (callback != null) {
+                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    }
+                }
+
+                @Override
+                public void stateTrue(ResponseLogin response, String tag) {
+                    loginNetty(response, callback);
+                }
+            });
         }
     }
 
@@ -970,58 +885,55 @@ public class FlappyImService {
             hashMap.put("pushId", DataManager.getInstance().getPushId());
 
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().autoLogin(),
-                    hashMap,
-                    new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
-                        //出现异常
-                        @Override
-                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            //当前的用户已经被踢下线了
-                            if (model.getCode().equals(RESULT_EXPIRED)) {
-                                //设置登录状态
-                                ChatUser user = DataManager.getInstance().getLoginUser();
-                                //当前没有登录
-                                user.setLogin(0);
-                                //清空用户数据
-                                DataManager.getInstance().saveLoginUser(user);
-                                //当前已经被踢下线了
-                                if (kickedOutListener != null) {
-                                    kickedOutListener.kickedOut();
-                                }
-                            } else {
-                                //重新登录
-                                checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                            }
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().autoLogin(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                //出现异常
+                @Override
+                protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
+                    //当前不在自动登录状态了
+                    isRunningAutoLogin = false;
+                    //当前的用户已经被踢下线了
+                    if (model.getCode().equals(RESULT_EXPIRED)) {
+                        //设置登录状态
+                        ChatUser user = DataManager.getInstance().getLoginUser();
+                        //当前没有登录
+                        user.setLogin(0);
+                        //清空用户数据
+                        DataManager.getInstance().saveLoginUser(user);
+                        //当前已经被踢下线了
+                        if (kickedOutListener != null) {
+                            kickedOutListener.kickedOut();
                         }
-
-                        //自动登录
-                        @Override
-                        protected void jsonError(Exception e, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            //当前不在自动登录状态了
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
-
-                        //测试并自动登录
-                        @Override
-                        protected void netError(Exception e, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
-
-                        //重置
-                        @Override
-                        public void stateTrue(ResponseLogin response, String tag) {
-                            //当前不在自动登录状态了
-                            isRunningAutoLogin = false;
-                            autoLoginNetty(response);
-                        }
+                    } else {
+                        //重新登录
+                        checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
                     }
-            );
+                }
+
+                //自动登录
+                @Override
+                protected void jsonError(Exception e, String tag) {
+                    //当前不在自动登录状态了
+                    isRunningAutoLogin = false;
+                    //当前不在自动登录状态了
+                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                }
+
+                //测试并自动登录
+                @Override
+                protected void netError(Exception e, String tag) {
+                    //当前不在自动登录状态了
+                    isRunningAutoLogin = false;
+                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                }
+
+                //重置
+                @Override
+                public void stateTrue(ResponseLogin response, String tag) {
+                    //当前不在自动登录状态了
+                    isRunningAutoLogin = false;
+                    autoLoginNetty(response);
+                }
+            });
         }
     }
 
@@ -1065,23 +977,19 @@ public class FlappyImService {
                 }
             });
             //开启服务
-            FlappySocketService.getInstance().startConnect(
-                    loginReqUDID,
-                    response,
-                    new NettyThreadListener() {
-                        @Override
-                        //断线重连，使用http的方式，也许服务器的ip已经发生了变化
-                        public void threadDeadRetryHttp() {
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
+            FlappySocketService.getInstance().startConnect(loginReqUDID, response, new NettyThreadListener() {
+                @Override
+                //断线重连，使用http的方式，也许服务器的ip已经发生了变化
+                public void threadDeadRetryHttp() {
+                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                }
 
-                        @Override
-                        //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
-                        protected void threadDeadRetryNetty() {
-                            checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
-                        }
-                    }
-            );
+                @Override
+                //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
+                protected void threadDeadRetryNetty() {
+                    checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
+                }
+            });
         }
     }
 
@@ -1160,23 +1068,19 @@ public class FlappyImService {
                 }
             });
             //开始链接
-            FlappySocketService.getInstance().startConnect(
-                    loginReqUDID,
-                    response,
-                    new NettyThreadListener() {
-                        //断线重连，使用http的方式，也许服务器的ip已经发生了变化
-                        @Override
-                        public void threadDeadRetryHttp() {
-                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                        }
+            FlappySocketService.getInstance().startConnect(loginReqUDID, response, new NettyThreadListener() {
+                //断线重连，使用http的方式，也许服务器的ip已经发生了变化
+                @Override
+                public void threadDeadRetryHttp() {
+                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                }
 
-                        //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
-                        @Override
-                        protected void threadDeadRetryNetty() {
-                            checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
-                        }
-                    }
-            );
+                //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
+                @Override
+                protected void threadDeadRetryNetty() {
+                    checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
+                }
+            });
         }
     }
 
@@ -1204,39 +1108,36 @@ public class FlappyImService {
             //设备ID
             hashMap.put("deviceId", DataManager.getInstance().getDeviceId());
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().logout(),
-                    hashMap,
-                    new BaseParseCallback<String>(String.class) {
-                        @Override
-                        protected void stateFalse(BaseApiModel<String> model, String tag) {
-                            if (callback != null) {
-                                callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                            }
-                        }
-
-                        @Override
-                        protected void jsonError(Exception e, String tag) {
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                            }
-                        }
-
-                        @Override
-                        protected void netError(Exception e, String tag) {
-                            if (callback != null) {
-                                callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                            }
-                        }
-
-                        @Override
-                        public void stateTrue(String response, String tag) {
-                            logoutNetty();
-                            if (callback != null) {
-                                callback.success(response);
-                            }
-                        }
+            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().logout(), hashMap, new BaseParseCallback<String>(String.class) {
+                @Override
+                protected void stateFalse(BaseApiModel<String> model, String tag) {
+                    if (callback != null) {
+                        callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                     }
-            );
+                }
+
+                @Override
+                protected void jsonError(Exception e, String tag) {
+                    if (callback != null) {
+                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    }
+                }
+
+                @Override
+                protected void netError(Exception e, String tag) {
+                    if (callback != null) {
+                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    }
+                }
+
+                @Override
+                public void stateTrue(String response, String tag) {
+                    logoutNetty();
+                    if (callback != null) {
+                        callback.success(response);
+                    }
+                }
+            });
         }
     }
 
@@ -1271,38 +1172,35 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userTwo", peerExtendId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(),
-                hashMap,
-                new BaseParseCallback<SessionModel>(SessionModel.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(SessionModel data, String tag) {
-                        if (callback != null) {
-                            callback.success(new FlappyChatSession(data));
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(SessionModel data, String tag) {
+                if (callback != null) {
+                    callback.success(new FlappyChatSession(data));
+                }
+            }
+        });
     }
 
 
@@ -1323,10 +1221,7 @@ public class FlappyImService {
         }
 
         //根据默认规则拼接出session的extendId
-        String extendID = StringTool.getTwoUserString(
-                peerExtendId,
-                DataManager.getInstance().getLoginUser().getUserExtendId()
-        );
+        String extendID = StringTool.getTwoUserString(peerExtendId, DataManager.getInstance().getLoginUser().getUserExtendId());
 
         //查询数据库中是否存在，如果不存在就从网络上获取
         asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
@@ -1373,39 +1268,36 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userTwo", peerExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(),
-                hashMap,
-                new BaseParseCallback<SessionModel>(SessionModel.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(SessionModel data, String tag) {
-                        //执行回调
-                        if (callback != null) {
-                            callback.success(new FlappyChatSession(data));
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(SessionModel data, String tag) {
+                //执行回调
+                if (callback != null) {
+                    callback.success(new FlappyChatSession(data));
+                }
+            }
+        });
     }
 
 
@@ -1416,11 +1308,7 @@ public class FlappyImService {
      * @param sessionName 群组名称
      * @param callback  回调
      */
-    public void createGroupSession(
-            List<String> userExtendIds,
-            String sessionExtendId,
-            String sessionName,
-            final FlappyIMCallback<FlappyChatSession> callback) {
+    public void createGroupSession(List<String> userExtendIds, String sessionExtendId, String sessionName, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1437,39 +1325,36 @@ public class FlappyImService {
         hashMap.put("sessionName", sessionName);
 
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(),
-                hashMap,
-                new BaseParseCallback<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
 
-                    @Override
-                    protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(SessionModel data, String tag) {
-                        if (callback != null) {
-                            callback.success(new FlappyChatSession(data));
-                        }
-                    }
+            @Override
+            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(SessionModel data, String tag) {
+                if (callback != null) {
+                    callback.success(new FlappyChatSession(data));
+                }
+            }
+        });
     }
 
     /******
@@ -1477,8 +1362,7 @@ public class FlappyImService {
      * @param sessionId  会话ID
      * @param callback   回调
      */
-    public void getSessionById(String sessionId,
-            final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSessionById(String sessionId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1513,8 +1397,7 @@ public class FlappyImService {
      * @param sessionId  会话id
      * @param callback 会话信息
      */
-    private void getSessionByIdHttp(String sessionId,
-            final FlappyIMCallback<FlappyChatSession> callback) {
+    private void getSessionByIdHttp(String sessionId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1524,38 +1407,35 @@ public class FlappyImService {
         //用户ID
         hashMap.put("sessionId", sessionId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionById(),
-                hashMap,
-                new BaseParseCallback<SessionModel>(SessionModel.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(SessionModel data, String tag) {
-                        if (callback != null) {
-                            callback.success(new FlappyChatSession(data));
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionById(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(SessionModel data, String tag) {
+                if (callback != null) {
+                    callback.success(new FlappyChatSession(data));
+                }
+            }
+        });
     }
 
     /******
@@ -1563,8 +1443,7 @@ public class FlappyImService {
      * @param sessionExtendId 群组ID
      * @param callback 回调
      */
-    public void getSessionByExtendId(String sessionExtendId,
-            final FlappyIMCallback<FlappyChatSession> callback) {
+    public void getSessionByExtendId(String sessionExtendId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1599,8 +1478,7 @@ public class FlappyImService {
      * @param sessionExtendId 群组Extend ID
      * @param callback        回调
      */
-    private void getSessionByExtendIdHttp(String sessionExtendId,
-            final FlappyIMCallback<FlappyChatSession> callback) {
+    private void getSessionByExtendIdHttp(String sessionExtendId, final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1610,38 +1488,35 @@ public class FlappyImService {
         //用户ID
         hashMap.put("sessionExtendId", sessionExtendId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendId(),
-                hashMap,
-                new BaseParseCallback<SessionModel>(SessionModel.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(SessionModel data, String tag) {
-                        if (callback != null) {
-                            callback.success(new FlappyChatSession(data));
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendId(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(SessionModel data, String tag) {
+                if (callback != null) {
+                    callback.success(new FlappyChatSession(data));
+                }
+            }
+        });
     }
 
     /******
@@ -1668,31 +1543,41 @@ public class FlappyImService {
                 //数据不为空
                 List<FlappyChatSession> sessions = new ArrayList<>();
 
+                // 创建一个Map来缓存每个会话的最新消息
+                Map<String, ChatMessage> latestMessagesCache = new HashMap<>();
+
                 //创建FlappyChatSession对象
-                for (int s = 0; s < data.size(); s++) {
-                    sessions.add(new FlappyChatSession(data.get(s)));
+                for (SessionModel sessionModel : data) {
+                    FlappyChatSession session = new FlappyChatSession(sessionModel);
+                    sessions.add(session);
+
+                    // 获取最新消息并缓存
+                    ChatMessage latestMessage = session.getLatestMessage();
+                    if (latestMessage != null) {
+                        latestMessagesCache.put(session.getSession().getSessionId(), latestMessage);
+                    }
                 }
 
                 //进行最后一条消息整体排序
-                Collections.sort(sessions, (one, two) -> {
+                sessions.sort((one, two) -> {
                     if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
                         return -1;
                     }
                     if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
                         return 1;
                     }
-                    ChatMessage msgOne = one.getLatestMessage();
-                    ChatMessage msgTwo = two.getLatestMessage();
+
+                    // 从缓存中获取最新消息
+                    ChatMessage msgOne = latestMessagesCache.get(one.getSession().getSessionId());
+                    ChatMessage msgTwo = latestMessagesCache.get(two.getSession().getSessionId());
+
                     if (msgOne == null) {
                         return 1;
                     }
                     if (msgTwo == null) {
                         return -1;
                     }
-                    return Long.compare(
-                            msgTwo.getMessageTableOffset().longValue(),
-                            msgOne.getMessageTableOffset().longValue()
-                    );
+                    return Long.compare(msgTwo.getMessageTableOffset().longValue(), msgOne.getMessageTableOffset().longValue());
                 });
                 return sessions;
             }
@@ -1731,63 +1616,71 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessionList(),
-                hashMap,
-                new BaseListParseCallBack<SessionModel>(SessionModel.class) {
-                    @Override
-                    public void stateFalse(String message, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(message), Integer.parseInt(tag));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-
-                    @Override
-                    public void stateTrue(List<SessionModel> data, String tag) {
-                        if (callback != null) {
-                            List<FlappyChatSession> sessions = new ArrayList<>();
-                            for (int s = 0; s < data.size(); s++) {
-                                sessions.add(new FlappyChatSession(data.get(s)));
-                            }
-                            Collections.sort(sessions, (one, two) -> {
-                                if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
-                                    return -1;
-                                }
-                                if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
-                                    return 1;
-                                }
-                                ChatMessage msgOne = one.getLatestMessage();
-                                ChatMessage msgTwo = two.getLatestMessage();
-                                if (msgOne == null) {
-                                    return 1;
-                                }
-                                if (msgTwo == null) {
-                                    return -1;
-                                }
-                                return Long.compare(
-                                        msgTwo.getMessageTableOffset().longValue(),
-                                        msgOne.getMessageTableOffset().longValue()
-                                );
-                            });
-                            callback.success(sessions);
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessionList(), hashMap, new BaseListParseCallBack<SessionModel>(SessionModel.class) {
+            @Override
+            public void stateFalse(String message, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(message), Integer.parseInt(tag));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(List<SessionModel> data, String tag) {
+                if (callback != null) {
+                    List<FlappyChatSession> sessions = new ArrayList<>();
+                    // 创建一个Map来缓存每个会话的最新消息
+                    Map<String, ChatMessage> latestMessagesCache = new HashMap<>();
+
+                    for (SessionModel sessionModel : data) {
+                        FlappyChatSession session = new FlappyChatSession(sessionModel);
+                        sessions.add(session);
+
+                        // 获取最新消息并缓存
+                        ChatMessage latestMessage = session.getLatestMessage();
+                        if (latestMessage != null) {
+                            latestMessagesCache.put(session.getSession().getSessionId(), latestMessage);
+                        }
+                    }
+
+                    //进行最后一条消息整体排序
+                    sessions.sort((one, two) -> {
+                        if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                            return -1;
+                        }
+                        if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                            return 1;
+                        }
+
+                        // 从缓存中获取最新消息
+                        ChatMessage msgOne = latestMessagesCache.get(one.getSession().getSessionId());
+                        ChatMessage msgTwo = latestMessagesCache.get(two.getSession().getSessionId());
+
+                        if (msgOne == null) {
+                            return 1;
+                        }
+                        if (msgTwo == null) {
+                            return -1;
+                        }
+                        return Long.compare(msgTwo.getMessageTableOffset().longValue(), msgOne.getMessageTableOffset().longValue());
+                    });
+                    callback.success(sessions);
+                }
+            }
+        });
     }
 
     /******
@@ -1796,10 +1689,7 @@ public class FlappyImService {
      * @param sessionExtendId  群组ID
      * @param callback 回调
      */
-    public void addUserToSession(
-            String userExtendId,
-            String sessionExtendId,
-            final FlappyIMCallback<String> callback) {
+    public void addUserToSession(String userExtendId, String sessionExtendId, final FlappyIMCallback<String> callback) {
 
         //用户未登录
         if (checkLogin(callback)) {
@@ -1810,39 +1700,36 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession(),
-                hashMap,
-                new BaseParseCallback<String>(String.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(String data, String tag) {
-                        if (callback != null) {
-                            callback.success(data);
-                        }
-                    }
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession(), hashMap, new BaseParseCallback<String>(String.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<String> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(String data, String tag) {
+                if (callback != null) {
+                    callback.success(data);
+                }
+            }
+        });
     }
 
     /******
@@ -1851,10 +1738,7 @@ public class FlappyImService {
      * @param sessionExtendId  群组ID
      * @param callback 回调
      */
-    public void delUserInSession(
-            String userExtendId,
-            String sessionExtendId,
-            final FlappyIMCallback<String> callback) {
+    public void delUserInSession(String userExtendId, String sessionExtendId, final FlappyIMCallback<String> callback) {
         //用户未登录
         if (checkLogin(callback)) {
             return;
@@ -1863,39 +1747,36 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession(),
-                hashMap,
-                new BaseParseCallback<String>(String.class) {
-                    @Override
-                    protected void stateFalse(BaseApiModel<String> model, String tag) {
-                        if (callback != null) {
-                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void jsonError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
-                        }
-                    }
-
-                    @Override
-                    protected void netError(Exception e, String tag) {
-                        if (callback != null) {
-                            callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
-                        }
-                    }
-
-                    @Override
-                    public void stateTrue(String data, String tag) {
-                        if (callback != null) {
-                            callback.success(data);
-                        }
-                    }
-
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession(), hashMap, new BaseParseCallback<String>(String.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<String> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
-        );
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(String data, String tag) {
+                if (callback != null) {
+                    callback.success(data);
+                }
+            }
+
+        });
     }
 
     /******
@@ -1959,10 +1840,7 @@ public class FlappyImService {
     private boolean checkLoginBusy(FlappyIMCallback<?> callback) {
         if (isRunningLogin) {
             if (callback != null) {
-                callback.failure(
-                        new Exception("Other thread is running login"),
-                        Integer.parseInt(RESULT_FAILURE)
-                );
+                callback.failure(new Exception("Other thread is running login"), Integer.parseInt(RESULT_FAILURE));
             }
             return true;
         }
