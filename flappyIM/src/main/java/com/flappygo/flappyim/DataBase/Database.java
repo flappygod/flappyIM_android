@@ -1064,13 +1064,13 @@ public class Database {
      * @param sessionOffset 会话Offset
      */
     private void updateSessionOffset(String sessionId, String sessionOffset) {
-        executeDbOperation(chatUser -> {
+        /*executeDbOperation(chatUser -> {
             String sql = "UPDATE " + DataBaseConfig.TABLE_SESSION +
                     " SET sessionOffset = MAX(sessionOffset, ?) " +
                     " WHERE sessionId = ? AND sessionInsertUser = ?";
             db.execSQL(sql, new Object[]{sessionOffset, sessionId, chatUser.getUserExtendId()});
             return true;
-        });
+        });*/
     }
 
     /******
