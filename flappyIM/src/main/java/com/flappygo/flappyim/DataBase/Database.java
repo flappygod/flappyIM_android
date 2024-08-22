@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.DataBase;
 
-
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
@@ -30,7 +29,6 @@ import java.util.List;
  * 数据库操作
  */
 public class Database {
-
 
     //数据库helper
     private static DatabaseHelper dbHelper;
@@ -84,40 +82,30 @@ public class Database {
         }
     }
 
-    /******
-     * 清空正在发送中的消息为发送失败
-     */
-    public void clearSendingMessage() {
+    //通用的数据库操作模板方法
+    private <T> T executeDbOperation(DbOperation<T> operation) {
+        return executeDbOperation(operation, null);
+    }
+
+    //通用的数据库操作模板方法，支持默认值
+    private <T> T executeDbOperation(DbOperation<T> operation, T defaultValue) {
         open();
         try {
-            ContentValues values = new ContentValues();
-            values.put("messageSendState", SEND_STATE_FAILURE);
-            db.update(DataBaseConfig.TABLE_MESSAGE, values, "messageSendState = 0", null);
+            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            if (chatUser != null) {
+                return operation.execute(chatUser);
+            } else {
+                return defaultValue;
+            }
         } finally {
             close();
         }
     }
 
-
-    /******
-     * 插入一个列表的消息
-     * @param messages 消息列表
-     */
-    public void insertMessages(List<ChatMessage> messages) {
-        if (messages == null || messages.isEmpty()) {
-            return;
-        }
-        open();
-        try {
-            db.beginTransaction();
-            for (ChatMessage msg : messages) {
-                insertMessage(msg);
-            }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            close();
-        }
+    // 数据库操作接口
+    @FunctionalInterface
+    private interface DbOperation<T> {
+        T execute(ChatUser chatUser);
     }
 
     /**
@@ -147,26 +135,50 @@ public class Database {
         }
     }
 
+    /******
+     * 清空正在发送中的消息为发送失败
+     */
+    public void clearSendingMessage() {
+        executeDbOperation(chatUser -> {
+            ContentValues values = new ContentValues();
+            values.put("messageSendState", SEND_STATE_FAILURE);
+            db.update(DataBaseConfig.TABLE_MESSAGE, values, "messageSendState = 0", null);
+            return true;
+        });
+    }
+
+    /******
+     * 插入一个列表的消息
+     * @param messages 消息列表
+     */
+    public void insertMessages(List<ChatMessage> messages) {
+        if (messages == null || messages.isEmpty()) {
+            return;
+        }
+        executeDbOperation(chatUser -> {
+            db.beginTransaction();
+            try {
+                for (ChatMessage msg : messages) {
+                    insertMessage(msg);
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            return true;
+        });
+    }
 
     /******
      * 插入单条消息
      * @param chatMessage  消息
      */
     public boolean insertMessage(ChatMessage chatMessage) {
-        // 检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return false;
-        }
-
-        //更新最新消息sessionOffset
-        updateSessionLatest(
+        updateSessionOffset(
                 chatMessage.getMessageSessionId(),
                 chatMessage.getMessageSessionOffset().toString()
         );
-
-        open();
-        try {
+        return executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "messageId", chatMessage.getMessageId());
             putIfNotNull(values, "messageSessionId", chatMessage.getMessageSessionId());
@@ -184,17 +196,11 @@ public class Database {
             putIfNotNull(values, "messageSecret", chatMessage.getMessageSecret());
             putIfNotNull(values, "messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             putIfNotNull(values, "deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
-            values.put("messageInsertUser", chatUser.getUserExtendId());
-
-            //保留之前的部分参数
-            ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
-            //保留之前的IS Delete
+            values.put("messageInsertUser", user.getUserExtendId());
             values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
-            //保留之前的Delete operation
             values.put("messageDeleteOperation", chatMessage.getMessageDeleteOperation());
-            //保留之前的Delete user list
             values.put("messageDeleteUserList", chatMessage.getMessageDeleteUserList());
-            //保留之前的Message Stamp
+            ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
             values.put("messageStamp", formerMsg != null ?
                     StringTool.decimalToStr(formerMsg.getMessageStamp()) :
                     Long.toString(System.currentTimeMillis()));
@@ -205,11 +211,8 @@ public class Database {
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE
             ) > 0;
-        } finally {
-            close();
-        }
+        }, false);
     }
-
 
     /******
      * 更新消息状态
@@ -217,13 +220,7 @@ public class Database {
      * @param sendState        发送状态
      */
     public boolean updateMessageSendState(String messageId, String sendState) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return false;
-        }
-        open();
-        try {
+        return executeDbOperation(chatUser -> {
             ContentValues values = new ContentValues();
             values.put("messageSendState", sendState);
             return db.update(
@@ -235,11 +232,8 @@ public class Database {
                             messageId
                     }
             ) > 0;
-        } finally {
-            close();
-        }
+        });
     }
-
 
     /******
      * 更新消息已读(系统消息的已读状态不做处理)
@@ -248,18 +242,9 @@ public class Database {
      * @param tableOffset 表序号
      */
     private void updateMessageRead(String userId, String sessionId, String tableOffset) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        open();
-        try {
-            //设置已读消息
+        executeDbOperation(chatUser -> {
             ContentValues values = new ContentValues();
-            //设置已读
             values.put("messageReadState", 1);
-            //更新已读消息
             db.update(
                     DataBaseConfig.TABLE_MESSAGE,
                     values,
@@ -275,11 +260,9 @@ public class Database {
                             tableOffset,
                     }
             );
-        } finally {
-            close();
-        }
+            return true;
+        });
     }
-
 
     /******
      * 获取未读消息数量
@@ -287,9 +270,7 @@ public class Database {
      * @return 未读消息数量
      */
     public int getUnReadSessionMessageCountBySessionId(String sessionID) {
-        open();
-        try {
-            ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        return executeDbOperation(chatUser -> {
             String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE +
                     " WHERE messageInsertUser = ? " +
                     "and messageSessionId = ? " +
@@ -306,11 +287,8 @@ public class Database {
             }
             cursor.close();
             return count;
-        } finally {
-            close();
-        }
+        }, 0);
     }
-
 
     /******
      * 插入多个会话
@@ -320,19 +298,19 @@ public class Database {
         if (sessionModelList == null || sessionModelList.isEmpty()) {
             return;
         }
-        open();
-        try {
+        executeDbOperation(chatUser -> {
             db.beginTransaction();
-            for (SessionModel sessionModel : sessionModelList) {
-                insertSession(sessionModel);
+            try {
+                for (SessionModel sessionModel : sessionModelList) {
+                    insertSession(sessionModel);
+                }
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
             }
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            close();
-        }
+            return true;
+        });
     }
-
 
     /******
      * 获取用户的所有会话列表
@@ -340,14 +318,7 @@ public class Database {
      */
     @SuppressLint("Range")
     public List<SessionModel> getUserSessions() {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        open();
-        try {
-            //获取用户的会话
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
                     null,
@@ -360,7 +331,6 @@ public class Database {
                     null
             );
 
-            //获取当前用户所有的会话
             List<SessionModel> sessionList = new ArrayList<>();
             if (!cursor.moveToFirst()) {
                 cursor.close();
@@ -387,9 +357,7 @@ public class Database {
             }
             cursor.close();
             return sessionList;
-        } finally {
-            close();
-        }
+        }, new ArrayList<>());
     }
 
     /******
@@ -397,14 +365,11 @@ public class Database {
      * @param session 会话
      */
     public void insertSession(SessionModel session) {
-        // 检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
             return;
         }
-        open();
-        try {
-            // 创建会话信息
+        executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "sessionId", session.getSessionId());
             putIfNotNull(values, "sessionExtendId", session.getSessionExtendId());
@@ -418,9 +383,8 @@ public class Database {
             putIfNotNull(values, "sessionCreateUser", session.getSessionCreateUser());
             putIfNotNull(values, "sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
             putIfNotNull(values, "sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
-            values.put("sessionInsertUser", chatUser.getUserExtendId());
+            values.put("sessionInsertUser", user.getUserExtendId());
 
-            // 插入数据
             db.insertWithOnConflict(
                     DataBaseConfig.TABLE_SESSION,
                     null,
@@ -428,15 +392,13 @@ public class Database {
                     SQLiteDatabase.CONFLICT_REPLACE
             );
 
-            // 插入用户数据
             if (session.getUsers() != null && !session.getUsers().isEmpty()) {
                 for (SessionMemberModel memberModel : session.getUsers()) {
                     insertSessionMember(memberModel);
                 }
             }
-        } finally {
-            close();
-        }
+            return true;
+        });
     }
 
     /******
@@ -446,14 +408,7 @@ public class Database {
      */
     @SuppressLint("Range")
     public SessionModel getUserSessionById(String sessionId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return null;
-        }
-        open();
-        try {
-            //请求数据
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
                     null,
@@ -466,7 +421,6 @@ public class Database {
                     null,
                     null
             );
-            //获取数据
             if (cursor.moveToFirst()) {
                 SessionModel info = new SessionModel();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
@@ -488,11 +442,8 @@ public class Database {
             }
             cursor.close();
             return null;
-        } finally {
-            close();
-        }
+        });
     }
-
 
     /******
      * 获取当前用户的会话
@@ -501,14 +452,7 @@ public class Database {
      */
     @SuppressLint("Range")
     public SessionModel getUserSessionByExtendId(String sessionExtendID) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return null;
-        }
-        open();
-        try {
-            //请求数据
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
                     null,
@@ -518,7 +462,6 @@ public class Database {
                     null,
                     null
             );
-            //获取数据
             if (cursor.moveToFirst()) {
                 SessionModel info = new SessionModel();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
@@ -540,24 +483,15 @@ public class Database {
             }
             cursor.close();
             return null;
-        } finally {
-            close();
-        }
+        });
     }
-
 
     /******
      * 删除用户会话
      * @param sessionId 会话ID
      */
     public void deleteUserSession(String sessionId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        open();
-        try {
+        executeDbOperation(chatUser -> {
             ContentValues values = new ContentValues();
             values.put("sessionDeleted", 1);
             db.update(
@@ -566,11 +500,9 @@ public class Database {
                     "sessionId = ? and sessionInsertUser = ?",
                     new String[]{sessionId, chatUser.getUserExtendId()}
             );
-        } finally {
-            close();
-        }
+            return true;
+        });
     }
-
 
     /******
      * 插入会话用户
@@ -581,8 +513,7 @@ public class Database {
         if (chatUser == null) {
             return;
         }
-        open();
-        try {
+        executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "userId", member.getUserId());
             putIfNotNull(values, "userExtendId", member.getUserExtendId());
@@ -600,16 +531,15 @@ public class Database {
             putIfNotNull(values, "sessionJoinDate", TimeTool.dateToStr(member.getSessionJoinDate()));
             putIfNotNull(values, "sessionLeaveDate", TimeTool.dateToStr(member.getSessionLeaveDate()));
             putIfNotNull(values, "isLeave", member.getIsLeave());
-            values.put("sessionInsertUser", chatUser.getUserExtendId());
+            values.put("sessionInsertUser", user.getUserExtendId());
             db.insertWithOnConflict(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
                     null,
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE
             );
-        } finally {
-            close();
-        }
+            return true;
+        });
     }
 
     /******
@@ -619,14 +549,7 @@ public class Database {
      */
     @SuppressLint("Range")
     public SessionMemberModel getSessionMember(String sessionId, String memberId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return null;
-        }
-        open();
-        try {
-            //获取session中未读的系统消息
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
                     null,
@@ -640,12 +563,10 @@ public class Database {
                     null,
                     null
             );
-            //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return null;
             }
-            //获取所有数据
             if (!cursor.isAfterLast()) {
                 SessionMemberModel info = new SessionMemberModel();
                 info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
@@ -669,9 +590,7 @@ public class Database {
             }
             cursor.close();
             return null;
-        } finally {
-            close();
-        }
+        });
     }
 
     /******
@@ -680,14 +599,7 @@ public class Database {
      */
     @SuppressLint("Range")
     public List<SessionMemberModel> getSessionMemberList(String sessionId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        open();
-        try {
-            //获取session中未读的系统消息
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
                     null,
@@ -700,14 +612,11 @@ public class Database {
                     null,
                     null
             );
-            //获取数据
             List<SessionMemberModel> list = new ArrayList<>();
-            //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return list;
             }
-            //获取所有数据
             while (!cursor.isAfterLast()) {
                 SessionMemberModel info = new SessionMemberModel();
                 info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
@@ -731,24 +640,13 @@ public class Database {
             }
             cursor.close();
             return list;
-        } finally {
-            close();
-        }
+        }, new ArrayList<>());
     }
-
 
     //获取最近的一条消息
     @SuppressLint("Range")
     public ChatMessage getMessageById(String messageId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return null;
-        }
-        open();
-
-        //查询最近一条消息
-        try {
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -758,7 +656,6 @@ public class Database {
                     null,
                     null
             );
-            //获取数据
             if (cursor.moveToFirst()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
@@ -786,22 +683,13 @@ public class Database {
             }
             cursor.close();
             return null;
-        } finally {
-            close();
-        }
+        });
     }
 
     //获取最近的一条消息
     @SuppressLint("Range")
     public ChatMessage getSessionLatestMessage(String messageSessionId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return null;
-        }
-        open();
-        //查询最近一条消息
-        try {
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -815,7 +703,6 @@ public class Database {
                     null,
                     "messageTableOffset DESC,messageStamp DESC LIMIT 1"
             );
-            //获取数据
             if (cursor.moveToFirst()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
@@ -843,9 +730,7 @@ public class Database {
             }
             cursor.close();
             return null;
-        } finally {
-            close();
-        }
+        });
     }
 
     /******
@@ -856,15 +741,8 @@ public class Database {
      */
     @SuppressLint("Range")
     private List<ChatMessage> getSessionOffsetMessages(String messageSessionId, String messageTableOffset, String messageStamp) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        open();
-        try {
+        return executeDbOperation(chatUser -> {
             List<ChatMessage> list = new ArrayList<>();
-            //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
                     null,
                     "messageSessionId = ? and messageTableOffset = ? and messageStamp < ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
@@ -878,7 +756,6 @@ public class Database {
                     null,
                     null,
                     "messageStamp DESC");
-            //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return list;
@@ -910,22 +787,13 @@ public class Database {
             }
             cursor.close();
             return list;
-        } finally {
-            close();
-        }
+        }, new ArrayList<>());
     }
 
     //获取会话之前的消息列表
     @SuppressLint("Range")
     public List<ChatMessage> getSessionFormerMessages(String messageSessionId, String messageID, int size) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        open();
-        try {
-            //首先查询所有的这个seq的消息，可能有很多发送失败的消息，而这里的消息也是经过排序好的
+        return executeDbOperation(chatUser -> {
             ChatMessage chatMessage = getMessageById(messageID);
             List<ChatMessage> sessionSeqMessages = getSessionOffsetMessages(
                     messageSessionId,
@@ -934,7 +802,6 @@ public class Database {
             );
             List<ChatMessage> chatMessages = new ArrayList<>(sessionSeqMessages);
 
-            //获取此数据之前的数据列表集
             List<ChatMessage> list = new ArrayList<>();
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
@@ -951,12 +818,10 @@ public class Database {
                     "messageTableOffset DESC,messageStamp DESC LIMIT " + size
             );
 
-            //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return list;
             }
-            //获取数据
             while (!cursor.isAfterLast() && list.size() < size) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
@@ -988,23 +853,13 @@ public class Database {
                 chatMessages = chatMessages.subList(0, size);
             }
             return chatMessages;
-        } finally {
-            close();
-        }
+        }, new ArrayList<>());
     }
 
     //更新还未处理的消息
     @SuppressLint("Range")
     public List<ChatMessage> getNotActionSystemMessageBySessionId(String sessionID) {
-
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        open();
-        try {
-            //获取session中未读的系统消息
+        return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -1014,14 +869,11 @@ public class Database {
                     null,
                     "messageTableOffset DESC"
             );
-            //获取数据
             List<ChatMessage> list = new ArrayList<>();
-            //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return list;
             }
-            //获取所有数据
             while (!cursor.isAfterLast()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
@@ -1049,24 +901,14 @@ public class Database {
             }
             cursor.close();
             return list;
-        } finally {
-            close();
-        }
+        }, new ArrayList<>());
     }
 
     //获取所有还未做处理的系统消息
     @SuppressLint("Range")
     public List<ChatMessage> getNotActionSystemMessage() {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return new ArrayList<>();
-        }
-        open();
-        try {
-            //当前用户的消息拿出来
+        return executeDbOperation(chatUser -> {
             List<ChatMessage> list = new ArrayList<>();
-            //获取这条消息之前的消息，并且不包含自身
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
@@ -1079,12 +921,10 @@ public class Database {
                     null,
                     "messageTableOffset ASC"
             );
-            //没有就关闭
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return list;
             }
-            //获取所有数据
             while (!cursor.isAfterLast()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
@@ -1112,9 +952,7 @@ public class Database {
             }
             cursor.close();
             return list;
-        } finally {
-            close();
-        }
+        }, new ArrayList<>());
     }
 
     /******
@@ -1122,75 +960,57 @@ public class Database {
      * @param chatMessage 消息
      */
     public void handleActionMessageUpdate(ChatMessage chatMessage) {
-        //检查用户是否登录了
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         if (chatUser == null) {
             return;
         }
-        //不是动作类型
         if (chatMessage.getMessageType().intValue() != ChatMessage.MSG_TYPE_ACTION) {
             return;
         }
         ChatAction action = chatMessage.getChatAction();
         switch (action.getActionType()) {
-            //撤回消息
             case ChatMessage.ACTION_TYPE_MSG_RECALL: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String messageId = action.getActionIds().get(2);
                 updateMessageRecall(userId, messageId);
                 break;
             }
-            //消息删除
             case ChatMessage.ACTION_TYPE_MSG_DELETE: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String messageId = action.getActionIds().get(2);
                 updateMessageDelete(userId, messageId);
                 break;
             }
-            //消息已读
             case ChatMessage.ACTION_TYPE_SESSION_READ: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String tableOffset = action.getActionIds().get(2);
-                //更新消息已读
                 updateMessageRead(userId, sessionId, tableOffset);
-                //更新会话任务最新已读
                 updateSessionMemberLatestRead(sessionId, userId, tableOffset);
                 break;
             }
-            //消息已读
             case ChatMessage.ACTION_TYPE_SESSION_MUTE: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String mute = action.getActionIds().get(2);
                 updateSessionMemberMute(sessionId, userId, mute);
                 break;
             }
-            //消息已读
             case ChatMessage.ACTION_TYPE_SESSION_PIN: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String pinned = action.getActionIds().get(2);
                 updateSessionMemberPinned(sessionId, userId, pinned);
                 break;
             }
-            //消息已读
             case ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String sessionOffset = action.getActionIds().get(2);
                 updateSessionDeleteTemp(sessionId, userId, sessionOffset);
                 break;
             }
-            //消息已读
             case ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT: {
-                //获取TableSequence
                 String userId = action.getActionIds().get(0);
                 String sessionId = action.getActionIds().get(1);
                 String sessionOffset = action.getActionIds().get(2);
@@ -1205,20 +1025,12 @@ public class Database {
      * @param messageId    消息ID
      */
     public void updateMessageRecall(String userId, String messageId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        open();
-        try {
-            //设置已读消息
+        executeDbOperation(chatUser -> {
             ContentValues values = new ContentValues();
             values.put("isDelete", 1);
             values.put("messageDeleteOperation", "recall");
             values.put("messageDeleteUserList", userId);
             values.put("messageReadState", 1);
-            //更新已读消息
             db.update(
                     DataBaseConfig.TABLE_MESSAGE,
                     values,
@@ -1228,9 +1040,8 @@ public class Database {
                             messageId,
                     }
             );
-        } finally {
-            close();
-        }
+            return true;
+        });
     }
 
     /******
@@ -1239,59 +1050,34 @@ public class Database {
      * @param messageId    消息ID
      */
     public void updateMessageDelete(String userId, String messageId) {
-        //检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-
-        //已经删除了不处理
         ChatMessage message = getMessageById(messageId);
         if (message == null || message.getIsDelete().intValue() == 1) {
             return;
         }
 
-        //设置不删除
         message.setIsDelete(new BigDecimal(0));
-        //删除
         message.setMessageDeleteOperation("delete");
-        //用户ID列表
         List<String> userIdList = StringTool.splitStr(message.getMessageDeleteUserList(), ",");
-        //添加用户
         userIdList.add(userId);
-        //设置删除的用户
         message.setMessageDeleteUserList(StringTool.joinListStr(userIdList, ","));
-        //设置已读
         message.setMessageReadState(new BigDecimal(1));
-        //插入消息
         insertMessage(message);
     }
-
 
     /******
      * 更新用户消息最近已读
      * @param sessionId     会话ID
      * @param sessionOffset 会话Offset
      */
-    private void updateSessionLatest(String sessionId, String sessionOffset) {
-        // 检查用户是否登录了
-        ChatUser chatUser = DataManager.getInstance().getLoginUser();
-        if (chatUser == null) {
-            return;
-        }
-        open();
-        try {
-            // 构建 SQL 更新语句
+    private void updateSessionOffset(String sessionId, String sessionOffset) {
+        executeDbOperation(chatUser -> {
             String sql = "UPDATE " + DataBaseConfig.TABLE_SESSION +
                     " SET sessionOffset = MAX(sessionOffset, ?) " +
                     " WHERE sessionId = ? AND sessionInsertUser = ?";
-            // 执行更新操作
             db.execSQL(sql, new Object[]{sessionOffset, sessionId, chatUser.getUserExtendId()});
-        } finally {
-            close();
-        }
+            return true;
+        });
     }
-
 
     /******
      * 更新用户消息最近已读
