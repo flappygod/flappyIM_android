@@ -181,8 +181,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         List<ChatMessage> actionUpdateSessionAll = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionMember = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionMemberDelete = new ArrayList<>();
-        for (ChatMessage item : latestMessages) {
 
+        //遍历消息处理
+        for (ChatMessage item : latestMessages) {
             ChatSystem chatSystem = item.getChatSystem();
             //全量更新
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_NOTHING) {
@@ -307,10 +308,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //通知监听变化
             HandlerNotifyManager.getInstance().notifyMessageListReceive(receiveMessageList);
 
-            ///消息到达回执
-            if (!receiveMessageList.isEmpty()) {
-                messageArrivedReceipt(ctx, receiveMessageList.get(receiveMessageList.size() - 1));
-            }
+            //消息到达回执
+            messageArrivedReceipt(ctx, receiveMessageList);
 
             //登录成功
             handlerLogin.loginSuccess();
@@ -349,10 +348,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             receiveMessageList.add(chatMessage);
         }
 
-        ///消息到达回执
-        if (!receiveMessageList.isEmpty()) {
-            messageArrivedReceipt(ctx, receiveMessageList.get(receiveMessageList.size() - 1));
-        }
+        //消息到达回执
+        messageArrivedReceipt(ctx, receiveMessageList);
 
         //检查会话是否需要更新
         checkSystemMessageFunction(ctx);
@@ -499,9 +496,17 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     /******
      * 消息已经到达
      * @param cxt  上下文
-     * @param chatMessage 消息
+     * @param messageList 消息
      */
-    private void messageArrivedReceipt(ChannelHandlerContext cxt, ChatMessage chatMessage) {
+    private void messageArrivedReceipt(ChannelHandlerContext cxt, List<ChatMessage> messageList) {
+
+        //最后一条消息做处理
+        ChatMessage chatMessage;
+        if (!messageList.isEmpty()) {
+            chatMessage = messageList.get(messageList.size() - 1);
+        } else {
+            return;
+        }
 
         //保存最近一条的偏移量
         ChatUser user = DataManager.getInstance().getLoginUser();
