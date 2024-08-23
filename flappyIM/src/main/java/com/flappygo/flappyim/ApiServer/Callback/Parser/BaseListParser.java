@@ -4,9 +4,9 @@ import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Tools.StringTool;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,9 @@ public class BaseListParser<T> {
     private BaseApiModel<List<T>> data;
     private Exception exception;
 
-    /******
+    /**
      * 基本列表解析对象
+     *
      * @param dataStr 数据
      * @param tClass  列表中的对象类型
      */
@@ -36,19 +37,22 @@ public class BaseListParser<T> {
         }
     }
 
-    /******
+    /**
      * 解析数据
+     *
      * @param dataStr 数据
      * @param tClass  对象类型
      */
     private void parseData(String dataStr, Class<T> tClass) throws JSONException {
         data = new BaseApiModel<>();
-        JSONObject jb = new JSONObject(dataStr);
-        String strData = StringTool.ToNotNullStrWithDefault(jb.optString("data"), "[]");
-
-        data.setCode(jb.optString("code"));
-        data.setMsg(jb.optString("msg"));
-        data.setPageCount(jb.optInt("pageCount"));
+        JSONObject jsonObject = new JSONObject(dataStr);
+        String strData = StringTool.ToNotNullStrWithDefault(
+                jsonObject.optString("data"),
+                "[]"
+        );
+        data.setCode(jsonObject.optString("code"));
+        data.setMsg(jsonObject.optString("msg"));
+        data.setPageCount(jsonObject.optInt("pageCount"));
 
         JSONArray jsonArray = new JSONArray(strData);
         List<T> arrayList = new ArrayList<>();

@@ -7,13 +7,15 @@ import java.util.concurrent.ThreadFactory;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 /******
  * 自定义线程池
  */
 public class ExecutePoolExecutor extends ScheduledThreadPoolExecutor {
 
+    /******
+     * 线程map
+     */
     private final ConcurrentHashMap<String, Thread> threadMap = new ConcurrentHashMap<>();
 
     /******

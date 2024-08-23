@@ -7,10 +7,13 @@ import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.FlappyImService;
-
 import android.content.SharedPreferences;
 import android.content.Context;
 
+
+/******
+ * 数据管理器
+ */
 public class DataManager {
 
     //单例
@@ -46,7 +49,6 @@ public class DataManager {
 
     // 消息被点击
     private final static String KEY_FOR_MESSAGE_CLICK = "com.flappy.im.data.KEY_FOR_MESSAGE_CLICK";
-
 
     //进行缓存
     private ChatUser chatUser;

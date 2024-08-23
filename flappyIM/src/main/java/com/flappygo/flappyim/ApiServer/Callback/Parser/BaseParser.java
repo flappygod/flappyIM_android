@@ -16,8 +16,9 @@ public class BaseParser<T> {
     private BaseApiModel<T> data;
     private Exception exception;
 
-    /******
+    /**
      * 基础解析器
+     *
      * @param dataStr json字符串
      * @param tClass  对象类型
      */
@@ -31,20 +32,20 @@ public class BaseParser<T> {
         }
     }
 
-    /******
+    /**
      * 解析数据
+     *
      * @param dataStr 数据
      * @param tClass  对象类型
      */
     private void parseData(String dataStr, Class<T> tClass) throws JSONException {
         data = new BaseApiModel<>();
-        JSONObject jb = new JSONObject(dataStr);
+        JSONObject jsonObject = new JSONObject(dataStr);
 
-        data.setCode(jb.optString("code"));
-        data.setMsg(jb.optString("msg"));
-        data.setPageCount(jb.optInt("pageCount"));
-
-        String strData = jb.optString("data");
+        data.setCode(jsonObject.optString("code"));
+        data.setMsg(jsonObject.optString("msg"));
+        data.setPageCount(jsonObject.optInt("pageCount"));
+        String strData = jsonObject.optString("data");
 
         if (tClass == String.class) {
             data.setData(tClass.cast(strData));
