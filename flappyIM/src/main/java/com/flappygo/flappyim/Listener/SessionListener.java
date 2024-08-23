@@ -15,6 +15,11 @@ public interface SessionListener {
     //会话接收到
     void sessionReceive(ChatSessionData session);
 
+    //会话列表接收到
+    void sessionUpdateList(List<ChatSessionData> session);
+
+    //会话接收到
+    void sessionUpdate(ChatSessionData session);
 
     //删除
     void sessionDelete(ChatSessionData session);

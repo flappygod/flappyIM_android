@@ -6,8 +6,8 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
-import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Thread.NettyThreadListener;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
@@ -36,7 +36,9 @@ import java.util.ArrayList;
 
 import android.os.Message;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 //登录的handler
@@ -292,6 +294,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 return 0;
             });
 
+
+            //会话更新了的会话
+            Set<String> updatedSessionIdList = new HashSet<>();
+
             //登录的时候插入的消息必然是新收到的消息
             for (int s = 0; s < receiveMessageList.size(); s++) {
                 ChatMessage chatMessage = receiveMessageList.get(s);
@@ -299,13 +305,27 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 handleMessageSendArriveState(chatMessage);
                 //插入消息
                 Database.getInstance().insertMessage(chatMessage);
-                //消息发送回调
-                HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
                 //通知监听变化
                 HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
+                //消息发送回调
+                HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
+                //更新了的会话ID
+                updatedSessionIdList.add(chatMessage.getMessageSessionId());
             }
 
-            //通知监听变化
+            //更新了的列表
+            List<ChatSessionData> updatedSessionList = new ArrayList<>();
+            for (String id : updatedSessionIdList) {
+                ChatSessionData item = Database.getInstance().getUserSessionById(id);
+                if (item != null) {
+                    updatedSessionList.add(Database.getInstance().getUserSessionById(id));
+                }
+            }
+
+            //会话监听变化
+            HandlerNotifyManager.getInstance().notifySessionUpdateList(updatedSessionList);
+
+            //消息监听变化
             HandlerNotifyManager.getInstance().notifyMessageListReceive(receiveMessageList);
 
             //消息到达回执
@@ -338,19 +358,21 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             handleMessageSendArriveState(chatMessage);
             //插入消息
             Database.getInstance().insertMessage(chatMessage);
-            //发送成功
-            HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
             //新消息到达
             HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
+            //发送成功
+            HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
+            //会话监听变化
+            HandlerNotifyManager.getInstance().notifySessionUpdate(
+                    Database.getInstance().getUserSessionById(chatMessage.getMessageSessionId())
+            );
             //新消息到达
             HandlerNotifyManager.getInstance().notifyMessageReceive(chatMessage);
             //消息回执
             receiveMessageList.add(chatMessage);
         }
-
         //消息到达回执
         messageArrivedReceipt(ctx, receiveMessageList);
-
         //检查会话是否需要更新
         checkSystemMessageFunction(ctx);
     }

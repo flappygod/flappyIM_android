@@ -148,7 +148,7 @@ public class HandlerNotifyManager {
      */
     public void handleMessageAction(ChatMessage chatMessage) {
         //不是Action消息
-        if (chatMessage.getMessageType() != MSG_TYPE_ACTION) {
+        if (chatMessage == null || chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         //已经处理过了
@@ -215,7 +215,7 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageSendInsert(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
+        if (chatMessage == null || chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -229,7 +229,7 @@ public class HandlerNotifyManager {
      * @param chatMessage   消息
      */
     public void notifyMessageReceive(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
+        if (chatMessage == null || chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -244,6 +244,9 @@ public class HandlerNotifyManager {
      * @param chatMessageList   消息
      */
     public void notifyMessageListReceive(List<ChatMessage> chatMessageList) {
+        if (chatMessageList == null || chatMessageList.isEmpty()) {
+            return;
+        }
         List<ChatMessage> notifyList = new ArrayList<>();
         for (int s = 0; s < chatMessageList.size(); s++) {
             if (chatMessageList.get(s).getMessageType() != MSG_TYPE_ACTION) {
@@ -265,7 +268,7 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageFailure(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
+        if (chatMessage == null || chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -279,7 +282,7 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageDelete(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
+        if (chatMessage == null || chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -292,7 +295,38 @@ public class HandlerNotifyManager {
      * 通知会话有更新
      * @param session 会话
      */
+    public void notifySessionUpdate(ChatSessionData session) {
+        if (session == null) {
+            return;
+        }
+        Message msg = new Message();
+        msg.what = HandlerSession.SESSION_UPDATE;
+        msg.obj = session;
+        handlerSession.sendMessage(msg);
+    }
+
+    /******
+     * 通知会话有更新
+     * @param sessionList 会话列表
+     */
+    public void notifySessionUpdateList(List<ChatSessionData> sessionList) {
+        if (sessionList == null || sessionList.isEmpty()) {
+            return;
+        }
+        Message msg = new Message();
+        msg.what = HandlerSession.SESSION_UPDATE_LIST;
+        msg.obj = sessionList;
+        handlerSession.sendMessage(msg);
+    }
+
+    /******
+     * 通知会话有接收
+     * @param session 会话
+     */
     public void notifySessionReceive(ChatSessionData session) {
+        if (session == null) {
+            return;
+        }
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_RECEIVE;
         msg.obj = session;
@@ -300,10 +334,13 @@ public class HandlerNotifyManager {
     }
 
     /******
-     * 通知会话列表有更新
+     * 通知会话列表有接收
      * @param sessionList 会话列表
      */
     public void notifySessionReceiveList(List<ChatSessionData> sessionList) {
+        if (sessionList == null || sessionList.isEmpty()) {
+            return;
+        }
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_RECEIVE_LIST;
         msg.obj = sessionList;
@@ -315,6 +352,9 @@ public class HandlerNotifyManager {
      * @param session 会话
      */
     public void notifySessionDelete(ChatSessionData session) {
+        if (session == null) {
+            return;
+        }
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_DELETE;
         msg.obj = session;

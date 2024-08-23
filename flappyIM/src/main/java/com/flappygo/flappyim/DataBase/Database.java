@@ -146,27 +146,6 @@ public class Database {
         });
     }
 
-    /******
-     * 插入一个列表的消息
-     * @param messages 消息列表
-     */
-    public void insertMessages(List<ChatMessage> messages) {
-        if (messages == null || messages.isEmpty()) {
-            return;
-        }
-        executeDbOperation(chatUser -> {
-            db.beginTransaction();
-            try {
-                for (ChatMessage msg : messages) {
-                    insertMessage(msg);
-                }
-                db.setTransactionSuccessful();
-            } finally {
-                db.endTransaction();
-            }
-            return true;
-        });
-    }
 
     /******
      * 插入单条消息

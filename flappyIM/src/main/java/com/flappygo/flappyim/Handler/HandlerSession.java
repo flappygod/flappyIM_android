@@ -20,19 +20,39 @@ public class HandlerSession extends Handler {
         super(Looper.getMainLooper());
     }
 
+    //会话更新
+    public static final int SESSION_UPDATE = 0;
+
+    //会话更新列表
+    public static final int SESSION_UPDATE_LIST = 1;
+
     //会话接收
-    public static final int SESSION_RECEIVE = 1;
+    public static final int SESSION_RECEIVE = 2;
 
     //会话接收列表
-    public static final int SESSION_RECEIVE_LIST = 2;
+    public static final int SESSION_RECEIVE_LIST = 3;
 
     //会话删除
-    public static final int SESSION_DELETE = 3;
+    public static final int SESSION_DELETE = 4;
 
     //执行消息
     public void handleMessage(Message message) {
         if (message.obj == null) {
             return;
+        }
+        if (message.what == SESSION_UPDATE) {
+            ChatSessionData sessionModel = (ChatSessionData) message.obj;
+            for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
+                SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
+                listener.sessionUpdate(sessionModel);
+            }
+        }
+        if (message.what == SESSION_UPDATE_LIST) {
+            List<ChatSessionData> sessionList = (List<ChatSessionData>) message.obj;
+            for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
+                SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
+                listener.sessionUpdateList(sessionList);
+            }
         }
         if (message.what == SESSION_RECEIVE) {
             ChatSessionData sessionModel = (ChatSessionData) message.obj;
