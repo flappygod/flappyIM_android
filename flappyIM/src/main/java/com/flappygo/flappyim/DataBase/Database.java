@@ -278,8 +278,7 @@ public class Database {
                     "and messageSessionId = ? " +
                     "and messageSendId != ? " +
                     "and messageReadState = 0 " +
-                    "and messageDeleteOperation is not null " +
-                    "and messageDeleteOperation != '' " +
+                    "and (messageDeleteOperation is null or messageDeleteOperation == '')" +
                     String.format("and messageType != %d ", MSG_TYPE_SYSTEM) +
                     String.format("and messageType != %d", MSG_TYPE_ACTION);
             Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
