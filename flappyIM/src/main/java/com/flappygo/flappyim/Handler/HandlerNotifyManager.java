@@ -147,12 +147,8 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void handleMessageAction(ChatMessage chatMessage) {
-        //不是Action消息
-        if (chatMessage == null || chatMessage.getMessageType() != MSG_TYPE_ACTION) {
-            return;
-        }
-        //已经处理过了
-        if (chatMessage.getMessageReadState() == 1) {
+        //不是Action消息,或者已经处理过了
+        if (chatMessage == null || chatMessage.getMessageType() != MSG_TYPE_ACTION || chatMessage.getMessageReadState() == 1) {
             return;
         }
         //执行数据库更新操作
