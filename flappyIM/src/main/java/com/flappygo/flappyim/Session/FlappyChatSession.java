@@ -951,7 +951,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 未读消息数量
      */
     public int getUnReadMessageCount() {
-        return Database.getInstance().getUnReadSessionMessageCountBySessionId(getSession().getSessionId());
+        return Database.getInstance().getSessionMessageUnReadCount(getSession().getSessionId());
     }
 
 }

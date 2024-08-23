@@ -7,8 +7,8 @@ import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TimeTool;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
+
 
 /******
  * 群聊的会话
@@ -44,6 +44,9 @@ public class SessionModel extends ChatSession implements Serializable {
     //未读消息数量
     int unReadMessageCount;
 
+    //临时删除
+    boolean isDeleteTemp;
+
     //获取用户
     public List<SessionMemberModel> getUsers() {
         return users;
@@ -62,5 +65,15 @@ public class SessionModel extends ChatSession implements Serializable {
     //设置未读消息数量
     public void setUnReadMessageCount(int unReadMessageCount) {
         this.unReadMessageCount = unReadMessageCount;
+    }
+
+    //是否临时删除
+    public boolean isDeleteTemp() {
+        return isDeleteTemp;
+    }
+
+    //是否临时删除
+    public void setDeleteTemp(boolean deleteTemp) {
+        isDeleteTemp = deleteTemp;
     }
 }

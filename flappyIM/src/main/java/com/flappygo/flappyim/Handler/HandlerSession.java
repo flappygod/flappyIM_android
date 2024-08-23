@@ -12,7 +12,6 @@ import java.util.List;
 
 /******
  * 会话更新的监听
- * @noinspection ALL
  */
 public class HandlerSession extends Handler {
 

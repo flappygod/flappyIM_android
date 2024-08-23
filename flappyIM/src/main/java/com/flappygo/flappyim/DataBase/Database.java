@@ -21,7 +21,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -271,7 +270,7 @@ public class Database {
      * @param sessionID 会话ID
      * @return 未读消息数量
      */
-    public int getUnReadSessionMessageCountBySessionId(String sessionID) {
+    public int getSessionMessageUnReadCount(String sessionID) {
         return executeDbOperation(chatUser -> {
             String countQuery = "SELECT COUNT(*) FROM " + DataBaseConfig.TABLE_MESSAGE +
                     " WHERE messageInsertUser = ? " +
@@ -290,6 +289,62 @@ public class Database {
             return count;
         }, 0);
     }
+
+    /*****
+     * @param sessionId 会话ID
+     * @return 返回数据
+     */
+    @SuppressLint("Range")
+    public boolean getSessionIsTempDelete(String sessionId) {
+        return executeDbOperation(chatUser -> {
+
+            long latestMessageOffset = 0;
+            long latestMessageOffsetDelete = 0;
+
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageSessionId = ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    new String[]{
+                            sessionId,
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
+                    },
+                    null,
+                    null,
+                    "messageTableOffset DESC,messageStamp DESC LIMIT 1"
+            );
+            if (cursor.moveToFirst()) {
+                latestMessageOffset = cursor.getLong(cursor.getColumnIndex("messageSessionOffset"));
+                cursor.close();
+            } else {
+                cursor.close();
+            }
+
+            cursor = db.query(
+                    DataBaseConfig.TABLE_SESSION_MEMBER,
+                    null,
+                    "sessionId = ? and userId = ? and sessionInsertUser= ?",
+                    new String[]{
+                            sessionId,
+                            chatUser.getUserId(),
+                            chatUser.getUserExtendId()
+                    },
+                    null,
+                    null,
+                    null
+            );
+            if (cursor.moveToFirst()) {
+                latestMessageOffsetDelete = cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete"));
+                cursor.close();
+            } else {
+                cursor.close();
+            }
+
+            return (latestMessageOffsetDelete >= latestMessageOffset && latestMessageOffset != 0);
+        });
+    }
+
 
     /******
      * 插入多个会话
@@ -351,7 +406,8 @@ public class Database {
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-                info.setUnReadMessageCount(getUnReadSessionMessageCountBySessionId(info.getSessionId()));
+                info.setUnReadMessageCount(getSessionMessageUnReadCount(info.getSessionId()));
+                info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
                 info.setUsers(getSessionMemberList(info.getSessionId()));
                 sessionList.add(info);
                 cursor.moveToNext();
@@ -432,7 +488,8 @@ public class Database {
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-                info.setUnReadMessageCount(getUnReadSessionMessageCountBySessionId(sessionId));
+                info.setUnReadMessageCount(getSessionMessageUnReadCount(sessionId));
+                info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
                 info.setUsers(getSessionMemberList(info.getSessionId()));
                 cursor.close();
                 return info;
@@ -473,7 +530,8 @@ public class Database {
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
-                info.setUnReadMessageCount(getUnReadSessionMessageCountBySessionId(info.getSessionId()));
+                info.setUnReadMessageCount(getSessionMessageUnReadCount(info.getSessionId()));
+                info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
                 info.setUsers(getSessionMemberList(info.getSessionId()));
                 cursor.close();
                 return info;
