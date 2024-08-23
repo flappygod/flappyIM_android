@@ -3,7 +3,7 @@ package com.flappygo.flappyim.Session;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
@@ -40,14 +40,14 @@ public class FlappyChatSession extends FlappyBaseSession {
     private final List<MessageListener> listenerList = new ArrayList<>();
 
     //会话
-    private final SessionModel session;
+    private final ChatSessionData session;
 
 
     /******
      * 通过session data 创建
      * @param session session对象
      */
-    public FlappyChatSession(SessionModel session) {
+    public FlappyChatSession(ChatSessionData session) {
         this.session = session;
     }
 
@@ -56,7 +56,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * 获取会话数据
      * @return 会话数据
      */
-    public SessionModel getSession() {
+    public ChatSessionData getSession() {
         return session;
     }
 
@@ -68,10 +68,10 @@ public class FlappyChatSession extends FlappyBaseSession {
     private String getPeerID() {
         switch (getSession().getSessionType().intValue()) {
             ///群聊会话
-            case SessionModel.TYPE_GROUP:
+            case ChatSessionData.TYPE_GROUP:
                 return getSession().getSessionId();
             ///单聊会话
-            case SessionModel.TYPE_SINGLE: {
+            case ChatSessionData.TYPE_SINGLE: {
                 ChatUser loginUser = DataManager.getInstance().getLoginUser();
                 for (ChatUser chatUser : getSession().getUsers()) {
                     if (!chatUser.getUserId().equals(loginUser.getUserId())) {
@@ -81,7 +81,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                 break;
             }
             ///系统会话
-            case SessionModel.TYPE_SYSTEM:
+            case ChatSessionData.TYPE_SYSTEM:
                 return "0";
             default:
                 throw new RuntimeException("账号错误，聊天对象丢失");
@@ -96,10 +96,10 @@ public class FlappyChatSession extends FlappyBaseSession {
     private String getPeerExtendID() {
         switch (getSession().getSessionType().intValue()) {
             ///群聊会话
-            case SessionModel.TYPE_GROUP:
+            case ChatSessionData.TYPE_GROUP:
                 return getSession().getSessionExtendId();
             ///单聊会话
-            case SessionModel.TYPE_SINGLE: {
+            case ChatSessionData.TYPE_SINGLE: {
                 ChatUser loginUser = DataManager.getInstance().getLoginUser();
                 for (ChatUser chatUser : getSession().getUsers()) {
                     if (!chatUser.getUserId().equals(loginUser.getUserId())) {
@@ -109,7 +109,7 @@ public class FlappyChatSession extends FlappyBaseSession {
                 break;
             }
             ///系统会话
-            case SessionModel.TYPE_SYSTEM:
+            case ChatSessionData.TYPE_SYSTEM:
                 return "0";
             default:
                 throw new RuntimeException("账号错误，聊天对象丢失");

@@ -13,14 +13,14 @@ import java.util.List;
 /******
  * 群聊的会话
  */
-public class SessionModel extends ChatSession implements Serializable {
+public class ChatSessionData extends ChatSession implements Serializable {
 
     //构造器
-    public SessionModel() {
+    public ChatSessionData() {
     }
 
     //构造器
-    public SessionModel(Flappy.Session session) {
+    public ChatSessionData(Flappy.Session session) {
         setSessionId(Long.toString(session.getSessionId()));
         setSessionExtendId(session.getSessionExtendId());
         setSessionType(session.getSessionType());
@@ -34,12 +34,12 @@ public class SessionModel extends ChatSession implements Serializable {
         setIsDelete(session.getIsDelete());
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
         setUsers(
-                GsonTool.jsonStrToModels(session.getUsers(), SessionMemberModel.class)
+                GsonTool.jsonStrToModels(session.getUsers(), ChatSessionMember.class)
         );
     }
 
     //用户信息
-    List<SessionMemberModel> users;
+    List<ChatSessionMember> users;
 
     //未读消息数量
     int unReadMessageCount;
@@ -48,12 +48,12 @@ public class SessionModel extends ChatSession implements Serializable {
     boolean isDeleteTemp;
 
     //获取用户
-    public List<SessionMemberModel> getUsers() {
+    public List<ChatSessionMember> getUsers() {
         return users;
     }
 
     //设置用户
-    public void setUsers(List<SessionMemberModel> users) {
+    public void setUsers(List<ChatSessionMember> users) {
         this.users = users;
     }
 

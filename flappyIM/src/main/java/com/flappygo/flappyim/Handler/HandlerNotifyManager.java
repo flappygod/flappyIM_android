@@ -3,7 +3,7 @@ package com.flappygo.flappyim.Handler;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -292,7 +292,7 @@ public class HandlerNotifyManager {
      * 通知会话有更新
      * @param session 会话
      */
-    public void notifySessionReceive(SessionModel session) {
+    public void notifySessionReceive(ChatSessionData session) {
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_RECEIVE;
         msg.obj = session;
@@ -303,7 +303,7 @@ public class HandlerNotifyManager {
      * 通知会话列表有更新
      * @param sessionList 会话列表
      */
-    public void notifySessionReceiveList(List<SessionModel> sessionList) {
+    public void notifySessionReceiveList(List<ChatSessionData> sessionList) {
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_RECEIVE_LIST;
         msg.obj = sessionList;
@@ -314,7 +314,7 @@ public class HandlerNotifyManager {
      * 通知会话有更新
      * @param session 会话
      */
-    public void notifySessionDelete(SessionModel session) {
+    public void notifySessionDelete(ChatSessionData session) {
         Message msg = new Message();
         msg.what = HandlerSession.SESSION_DELETE;
         msg.obj = session;

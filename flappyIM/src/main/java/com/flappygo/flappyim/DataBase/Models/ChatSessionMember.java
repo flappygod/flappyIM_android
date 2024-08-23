@@ -8,7 +8,7 @@ import java.util.Date;
  * 会话用户信息，这是一个聚合类
  * 包含用户信息和用户在当前会话中的附加属性
  */
-public class SessionMemberModel extends ChatUser {
+public class ChatSessionMember extends ChatUser {
 
     // 会话ID
     private String sessionId;

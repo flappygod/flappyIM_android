@@ -1,6 +1,6 @@
 package com.flappygo.flappyim.Listener;
 
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ import java.util.List;
 public interface SessionListener {
 
     //会话列表接收到
-    void sessionReceiveList(List<SessionModel> session);
+    void sessionReceiveList(List<ChatSessionData> session);
 
     //会话接收到
-    void sessionReceive(SessionModel session);
+    void sessionReceive(ChatSessionData session);
 
 
     //删除
-    void sessionDelete(SessionModel session);
+    void sessionDelete(ChatSessionData session);
 }

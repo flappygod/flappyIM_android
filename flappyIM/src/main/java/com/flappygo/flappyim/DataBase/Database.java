@@ -4,8 +4,8 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
-import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -350,14 +350,14 @@ public class Database {
      * 插入多个会话
      * @param  sessionModelList  会话列表
      */
-    public void insertSessions(List<SessionModel> sessionModelList) {
+    public void insertSessions(List<ChatSessionData> sessionModelList) {
         if (sessionModelList == null || sessionModelList.isEmpty()) {
             return;
         }
         executeDbOperation(chatUser -> {
             db.beginTransaction();
             try {
-                for (SessionModel sessionModel : sessionModelList) {
+                for (ChatSessionData sessionModel : sessionModelList) {
                     insertSession(sessionModel);
                 }
                 db.setTransactionSuccessful();
@@ -373,7 +373,7 @@ public class Database {
      * @return 所有的会话数据
      */
     @SuppressLint("Range")
-    public List<SessionModel> getUserSessions() {
+    public List<ChatSessionData> getUserSessions() {
         return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
@@ -387,13 +387,13 @@ public class Database {
                     null
             );
 
-            List<SessionModel> sessionList = new ArrayList<>();
+            List<ChatSessionData> sessionList = new ArrayList<>();
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return sessionList;
             }
             while (!cursor.isAfterLast()) {
-                SessionModel info = new SessionModel();
+                ChatSessionData info = new ChatSessionData();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
                 info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
@@ -421,7 +421,7 @@ public class Database {
      * 插入数据
      * @param session 会话
      */
-    public void insertSession(SessionModel session) {
+    public void insertSession(ChatSessionData session) {
         executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "sessionId", session.getSessionId());
@@ -446,7 +446,7 @@ public class Database {
             );
 
             if (session.getUsers() != null && !session.getUsers().isEmpty()) {
-                for (SessionMemberModel memberModel : session.getUsers()) {
+                for (ChatSessionMember memberModel : session.getUsers()) {
                     insertSessionMember(memberModel);
                 }
             }
@@ -460,7 +460,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public SessionModel getUserSessionById(String sessionId) {
+    public ChatSessionData getUserSessionById(String sessionId) {
         return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
@@ -475,7 +475,7 @@ public class Database {
                     null
             );
             if (cursor.moveToFirst()) {
-                SessionModel info = new SessionModel();
+                ChatSessionData info = new ChatSessionData();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
                 info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
@@ -505,7 +505,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public SessionModel getUserSessionByExtendId(String sessionExtendID) {
+    public ChatSessionData getUserSessionByExtendId(String sessionExtendID) {
         return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
@@ -517,7 +517,7 @@ public class Database {
                     null
             );
             if (cursor.moveToFirst()) {
-                SessionModel info = new SessionModel();
+                ChatSessionData info = new ChatSessionData();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
                 info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
@@ -563,7 +563,7 @@ public class Database {
      * 插入会话用户
      * @param member 会话用户
      */
-    public void insertSessionMember(SessionMemberModel member) {
+    public void insertSessionMember(ChatSessionMember member) {
         executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "userId", member.getUserId());
@@ -599,7 +599,7 @@ public class Database {
      * @param memberId  用户ID
      */
     @SuppressLint("Range")
-    public SessionMemberModel getSessionMember(String sessionId, String memberId) {
+    public ChatSessionMember getSessionMember(String sessionId, String memberId) {
         return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
@@ -619,7 +619,7 @@ public class Database {
                 return null;
             }
             if (!cursor.isAfterLast()) {
-                SessionMemberModel info = new SessionMemberModel();
+                ChatSessionMember info = new ChatSessionMember();
                 info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
                 info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
                 info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
@@ -649,7 +649,7 @@ public class Database {
      * @param sessionId 会话ID
      */
     @SuppressLint("Range")
-    public List<SessionMemberModel> getSessionMemberList(String sessionId) {
+    public List<ChatSessionMember> getSessionMemberList(String sessionId) {
         return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
@@ -663,13 +663,13 @@ public class Database {
                     null,
                     null
             );
-            List<SessionMemberModel> list = new ArrayList<>();
+            List<ChatSessionMember> list = new ArrayList<>();
             if (!cursor.moveToFirst()) {
                 cursor.close();
                 return list;
             }
             while (!cursor.isAfterLast()) {
-                SessionMemberModel info = new SessionMemberModel();
+                ChatSessionMember info = new ChatSessionMember();
                 info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
                 info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
                 info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
@@ -1137,7 +1137,7 @@ public class Database {
      * @param tableOffset 表序号
      */
     private void updateSessionMemberLatestRead(String sessionId, String userId, String tableOffset) {
-        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        ChatSessionMember memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
             memberModel.setSessionMemberLatestRead(StringTool.strToLong(tableOffset));
             insertSessionMember(memberModel);
@@ -1151,7 +1151,7 @@ public class Database {
      * @param mute 是否静音
      */
     private void updateSessionMemberMute(String sessionId, String userId, String mute) {
-        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        ChatSessionMember memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
             memberModel.setSessionMemberMute(StringTool.strToInt(mute, 0));
             insertSessionMember(memberModel);
@@ -1165,7 +1165,7 @@ public class Database {
      * @param pinned 是否置顶
      */
     private void updateSessionMemberPinned(String sessionId, String userId, String pinned) {
-        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        ChatSessionMember memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
             memberModel.setSessionMemberPinned(StringTool.strToInt(pinned, 0));
             insertSessionMember(memberModel);
@@ -1179,7 +1179,7 @@ public class Database {
      * @param sessionOffset    是否置顶
      */
     private void updateSessionDeleteTemp(String sessionId, String userId, String sessionOffset) {
-        SessionMemberModel memberModel = getSessionMember(sessionId, userId);
+        ChatSessionMember memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
             memberModel.setSessionMemberLatestDelete(StringTool.strToLong(sessionOffset));
             insertSessionMember(memberModel);
@@ -1193,7 +1193,7 @@ public class Database {
      * @param sessionOffset    是否置顶
      */
     private void updateSessionDeletePermanent(String sessionId, String userId, String sessionOffset) {
-        SessionModel session = getUserSessionById(sessionId);
+        ChatSessionData session = getUserSessionById(sessionId);
         if (session != null) {
             session.setIsDelete(1);
             insertSession(session);

@@ -1,6 +1,6 @@
 package com.flappygo.flappyim.Handler;
 
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Listener.SessionListener;
 
@@ -35,21 +35,21 @@ public class HandlerSession extends Handler {
             return;
         }
         if (message.what == SESSION_RECEIVE) {
-            SessionModel sessionModel = (SessionModel) message.obj;
+            ChatSessionData sessionModel = (ChatSessionData) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
                 SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
                 listener.sessionReceive(sessionModel);
             }
         }
         if (message.what == SESSION_RECEIVE_LIST) {
-            List<SessionModel> sessionList = (List<SessionModel>) message.obj;
+            List<ChatSessionData> sessionList = (List<ChatSessionData>) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
                 SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
                 listener.sessionReceiveList(sessionList);
             }
         }
         if (message.what == SESSION_DELETE) {
-            SessionModel sessionModel = (SessionModel) message.obj;
+            ChatSessionData sessionModel = (ChatSessionData) message.obj;
             for (int s = 0; s < HolderMessageSession.getInstance().getSessionListeners().size(); s++) {
                 SessionListener listener = HolderMessageSession.getInstance().getSessionListeners().get(s);
                 listener.sessionDelete(sessionModel);

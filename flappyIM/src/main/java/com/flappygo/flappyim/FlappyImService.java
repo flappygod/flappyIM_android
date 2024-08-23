@@ -5,12 +5,12 @@ import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
-import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Thread.NettyThreadListener;
@@ -46,8 +46,6 @@ import android.net.wifi.WifiManager;
 import android.content.IntentFilter;
 import android.content.Context;
 import android.content.Intent;
-
-import java.util.Collections;
 
 import android.app.Activity;
 
@@ -364,7 +362,7 @@ public class FlappyImService {
         }
 
         //当前设置了免打扰
-        SessionMemberModel member = Database.getInstance().getSessionMember(chatMessage.getMessageSessionId(), user.getUserId());
+        ChatSessionMember member = Database.getInstance().getSessionMember(chatMessage.getMessageSessionId(), user.getUserId());
         if (member == null || member.getSessionMemberMute() == 1) {
             return;
         }
@@ -1172,9 +1170,9 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userTwo", peerExtendId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
-            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+            protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
                     callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
@@ -1195,7 +1193,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void stateTrue(SessionModel data, String tag) {
+            public void stateTrue(ChatSessionData data, String tag) {
                 if (callback != null) {
                     callback.success(new FlappyChatSession(data));
                 }
@@ -1224,9 +1222,9 @@ public class FlappyImService {
         String extendID = StringTool.getTwoUserString(peerExtendId, DataManager.getInstance().getLoginUser().getUserExtendId());
 
         //查询数据库中是否存在，如果不存在就从网络上获取
-        asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
+        asyncTaskClient.execute(new LXAsyncTask<String, ChatSessionData>() {
             @Override
-            public SessionModel run(String input, String tag) {
+            public ChatSessionData run(String input, String tag) {
                 return Database.getInstance().getUserSessionByExtendId(extendID);
             }
 
@@ -1236,7 +1234,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void success(SessionModel data, String tag) {
+            public void success(ChatSessionData data, String tag) {
                 if (data == null) {
                     getSingleSessionByPeerHttp(peerExtendId, callback);
                     return;
@@ -1268,9 +1266,9 @@ public class FlappyImService {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userTwo", peerExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
-            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+            protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
                     callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
@@ -1291,7 +1289,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void stateTrue(SessionModel data, String tag) {
+            public void stateTrue(ChatSessionData data, String tag) {
                 //执行回调
                 if (callback != null) {
                     callback.success(new FlappyChatSession(data));
@@ -1325,10 +1323,10 @@ public class FlappyImService {
         hashMap.put("sessionName", sessionName);
 
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
 
             @Override
-            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+            protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
                     callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
@@ -1349,7 +1347,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void stateTrue(SessionModel data, String tag) {
+            public void stateTrue(ChatSessionData data, String tag) {
                 if (callback != null) {
                     callback.success(new FlappyChatSession(data));
                 }
@@ -1368,9 +1366,9 @@ public class FlappyImService {
             return;
         }
         //查询本地是否包含
-        asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
+        asyncTaskClient.execute(new LXAsyncTask<String, ChatSessionData>() {
             @Override
-            public SessionModel run(String input, String tag) {
+            public ChatSessionData run(String input, String tag) {
                 return Database.getInstance().getUserSessionById(sessionId);
             }
 
@@ -1380,7 +1378,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void success(SessionModel data, String tag) {
+            public void success(ChatSessionData data, String tag) {
                 if (data != null) {
                     if (callback != null) {
                         callback.success(new FlappyChatSession(data));
@@ -1407,9 +1405,9 @@ public class FlappyImService {
         //用户ID
         hashMap.put("sessionId", sessionId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionById(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionById(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
-            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+            protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
                     callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
@@ -1430,7 +1428,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void stateTrue(SessionModel data, String tag) {
+            public void stateTrue(ChatSessionData data, String tag) {
                 if (callback != null) {
                     callback.success(new FlappyChatSession(data));
                 }
@@ -1449,9 +1447,9 @@ public class FlappyImService {
             return;
         }
         //查询本地是否包含
-        asyncTaskClient.execute(new LXAsyncTask<String, SessionModel>() {
+        asyncTaskClient.execute(new LXAsyncTask<String, ChatSessionData>() {
             @Override
-            public SessionModel run(String input, String tag) {
+            public ChatSessionData run(String input, String tag) {
                 return Database.getInstance().getUserSessionByExtendId(sessionExtendId);
             }
 
@@ -1461,7 +1459,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void success(SessionModel data, String tag) {
+            public void success(ChatSessionData data, String tag) {
                 if (data != null) {
                     if (callback != null) {
                         callback.success(new FlappyChatSession(data));
@@ -1488,9 +1486,9 @@ public class FlappyImService {
         //用户ID
         hashMap.put("sessionExtendId", sessionExtendId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendId(), hashMap, new BaseParseCallback<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendId(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
-            protected void stateFalse(BaseApiModel<SessionModel> model, String tag) {
+            protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
                     callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
                 }
@@ -1511,7 +1509,7 @@ public class FlappyImService {
             }
 
             @Override
-            public void stateTrue(SessionModel data, String tag) {
+            public void stateTrue(ChatSessionData data, String tag) {
                 if (callback != null) {
                     callback.success(new FlappyChatSession(data));
                 }
@@ -1533,7 +1531,7 @@ public class FlappyImService {
             @Override
             public List<FlappyChatSession> run(Object input, String tag) {
                 //数据库
-                List<SessionModel> data = Database.getInstance().getUserSessions();
+                List<ChatSessionData> data = Database.getInstance().getUserSessions();
 
                 //数据为空，去网上拿
                 if (data == null || data.isEmpty()) {
@@ -1547,7 +1545,7 @@ public class FlappyImService {
                 Map<String, ChatMessage> latestMessagesCache = new HashMap<>();
 
                 //创建FlappyChatSession对象
-                for (SessionModel sessionModel : data) {
+                for (ChatSessionData sessionModel : data) {
                     FlappyChatSession session = new FlappyChatSession(sessionModel);
                     sessions.add(session);
 
@@ -1616,7 +1614,7 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessionList(), hashMap, new BaseListParseCallBack<SessionModel>(SessionModel.class) {
+        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessionList(), hashMap, new BaseListParseCallBack<ChatSessionData>(ChatSessionData.class) {
             @Override
             public void stateFalse(String message, String tag) {
                 if (callback != null) {
@@ -1639,13 +1637,13 @@ public class FlappyImService {
             }
 
             @Override
-            public void stateTrue(List<SessionModel> data, String tag) {
+            public void stateTrue(List<ChatSessionData> data, String tag) {
                 if (callback != null) {
                     List<FlappyChatSession> sessions = new ArrayList<>();
                     // 创建一个Map来缓存每个会话的最新消息
                     Map<String, ChatMessage> latestMessagesCache = new HashMap<>();
 
-                    for (SessionModel sessionModel : data) {
+                    for (ChatSessionData sessionModel : data) {
                         FlappyChatSession session = new FlappyChatSession(sessionModel);
                         sessions.add(session);
 

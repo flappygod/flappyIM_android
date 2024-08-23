@@ -4,10 +4,10 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
-import com.flappygo.flappyim.DataBase.Models.SessionMemberModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Thread.NettyThreadListener;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
@@ -197,7 +197,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
             //用户加入是自己也全量更新
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_ADD_MEMBER) {
-                SessionMemberModel chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
+                ChatSessionMember chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), ChatSessionMember.class);
                 if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionUpdateSessionAll.add(item);
                 } else {
@@ -206,7 +206,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
             //用户删除是自己删除会话
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
-                SessionMemberModel chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), SessionMemberModel.class);
+                ChatSessionMember chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), ChatSessionMember.class);
                 if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
                     actionUpdateSessionMemberDelete.add(item);
                 } else {
@@ -365,7 +365,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //数据开始
         for (int s = 0; s < session.size(); s++) {
             //更新数据
-            SessionModel data = new SessionModel(session.get(s));
+            ChatSessionData data = new ChatSessionData(session.get(s));
             //插入数据
             Database.getInstance().insertSession(data);
             //通知session更新
@@ -424,9 +424,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //遍历请求处理
         for (ChatMessage message : messages) {
             //数据进入数据库
-            SessionMemberModel chatUser = GsonTool.jsonStrToModel(
+            ChatSessionMember chatUser = GsonTool.jsonStrToModel(
                     message.getChatSystem().getSysData(),
-                    SessionMemberModel.class
+                    ChatSessionMember.class
             );
             Database.getInstance().insertSessionMember(chatUser);
 
@@ -435,7 +435,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Database.getInstance().insertMessage(message);
 
             //通知会话更新了
-            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
+            ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             HandlerNotifyManager.getInstance().notifySessionReceive(sessionModel);
         }
     }
@@ -449,9 +449,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         for (ChatMessage message : messages) {
 
             //数据进入数据库
-            SessionMemberModel chatUser = GsonTool.jsonStrToModel(
+            ChatSessionMember chatUser = GsonTool.jsonStrToModel(
                     message.getChatSystem().getSysData(),
-                    SessionMemberModel.class
+                    ChatSessionMember.class
             );
             Database.getInstance().insertSessionMember(chatUser);
 
@@ -460,7 +460,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Database.getInstance().insertMessage(message);
 
             //获取会话信息
-            SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
+            ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             sessionModel.setIsDelete(1);
 
             //删除用户会话

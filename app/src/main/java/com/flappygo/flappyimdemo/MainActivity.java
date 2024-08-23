@@ -20,7 +20,7 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
 import com.flappygo.flappyim.Listener.SessionListener;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.DataBase.Models.SessionModel;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Session.FlappyChatSession;
@@ -82,17 +82,17 @@ public class MainActivity extends Activity {
 
 
             @Override
-            public void sessionReceiveList(List<SessionModel> session) {
+            public void sessionReceiveList(List<ChatSessionData> session) {
 
             }
 
             @Override
-            public void sessionReceive(SessionModel session) {
+            public void sessionReceive(ChatSessionData session) {
 
             }
 
             @Override
-            public void sessionDelete(SessionModel session) {
+            public void sessionDelete(ChatSessionData session) {
 
             }
         });
