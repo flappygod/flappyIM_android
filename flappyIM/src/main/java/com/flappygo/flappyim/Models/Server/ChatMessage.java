@@ -13,8 +13,11 @@ import com.flappygo.flappyim.Tools.Secret.AESTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TimeTool;
+
 import java.math.BigDecimal;
+
 import android.util.Base64;
+
 import java.util.HashMap;
 import java.util.Date;
 
@@ -102,13 +105,13 @@ public class ChatMessage {
 
     private String messageSessionId;
 
-    private BigDecimal messageSessionType;
+    private int messageSessionType;
 
-    private BigDecimal messageSessionOffset;
+    private long messageSessionOffset;
 
-    private BigDecimal messageTableOffset;
+    private long messageTableOffset;
 
-    private BigDecimal messageType;
+    private int messageType;
 
     private String messageSendId;
 
@@ -120,21 +123,21 @@ public class ChatMessage {
 
     private String messageContent;
 
-    private BigDecimal messageSendState;
+    private int messageSendState;
 
-    private BigDecimal messageReadState;
+    private int messageReadState;
 
     private String messageSecret;
 
     private Date messageDate;
 
-    private BigDecimal isDelete;
+    private int isDelete;
 
     private String messageDeleteOperation;
 
     private String messageDeleteUserList;
 
-    private BigDecimal messageStamp;
+    private long messageStamp;
 
     private Date deleteDate;
 
@@ -154,36 +157,36 @@ public class ChatMessage {
         this.messageSessionId = messageSessionId == null ? null : messageSessionId.trim();
     }
 
-    public BigDecimal getMessageSessionType() {
+    public Integer getMessageSessionType() {
         return messageSessionType;
     }
 
-    public void setMessageSessionType(BigDecimal messageSessionType) {
-        this.messageSessionType = messageSessionType;
+    public void setMessageSessionType(Integer messageSessionType) {
+        this.messageSessionType = (messageSessionType != null) ? messageSessionType : 0;
     }
 
-    public BigDecimal getMessageSessionOffset() {
+    public Long getMessageSessionOffset() {
         return messageSessionOffset;
     }
 
-    public void setMessageSessionOffset(BigDecimal messageSessionOffset) {
-        this.messageSessionOffset = messageSessionOffset;
+    public void setMessageSessionOffset(Long messageSessionOffset) {
+        this.messageSessionOffset = (messageSessionOffset != null) ? messageSessionOffset : 0L;
     }
 
-    public BigDecimal getMessageTableOffset() {
+    public Long getMessageTableOffset() {
         return messageTableOffset;
     }
 
-    public void setMessageTableOffset(BigDecimal messageTableOffset) {
-        this.messageTableOffset = messageTableOffset;
+    public void setMessageTableOffset(Long messageTableOffset) {
+        this.messageTableOffset = (messageTableOffset != null) ? messageTableOffset : 0L;
     }
 
-    public BigDecimal getMessageType() {
+    public Integer getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(BigDecimal messageType) {
-        this.messageType = messageType;
+    public void setMessageType(Integer messageType) {
+        this.messageType = (messageType != null) ? messageType : 0;
     }
 
     public String getMessageSendId() {
@@ -226,20 +229,20 @@ public class ChatMessage {
         this.messageContent = messageContent == null ? null : messageContent.trim();
     }
 
-    public BigDecimal getMessageSendState() {
+    public Integer getMessageSendState() {
         return messageSendState;
     }
 
-    public void setMessageSendState(BigDecimal messageSendState) {
-        this.messageSendState = messageSendState;
+    public void setMessageSendState(Integer messageSendState) {
+        this.messageSendState = (messageSendState != null) ? messageSendState : 0;
     }
 
-    public BigDecimal getMessageReadState() {
+    public Integer getMessageReadState() {
         return messageReadState;
     }
 
-    public void setMessageReadState(BigDecimal messageReadState) {
-        this.messageReadState = messageReadState;
+    public void setMessageReadState(Integer messageReadState) {
+        this.messageReadState = (messageReadState != null) ? messageReadState : 0;
     }
 
     public String getMessageSecret() {
@@ -258,12 +261,12 @@ public class ChatMessage {
         this.messageDate = messageDate;
     }
 
-    public BigDecimal getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(BigDecimal isDelete) {
-        this.isDelete = isDelete;
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = (isDelete != null) ? isDelete : 0;
     }
 
     public String getMessageDeleteOperation() {
@@ -290,12 +293,12 @@ public class ChatMessage {
         this.deleteDate = deleteDate;
     }
 
-    public BigDecimal getMessageStamp() {
+    public Long getMessageStamp() {
         return messageStamp;
     }
 
-    public void setMessageStamp(BigDecimal messageStamp) {
-        this.messageStamp = messageStamp;
+    public void setMessageStamp(Long messageStamp) {
+        this.messageStamp = (messageStamp != null) ? messageStamp : 0L;
     }
 
 
@@ -303,17 +306,17 @@ public class ChatMessage {
     public ChatMessage(Flappy.Message msg, String secret) {
         messageId = msg.getMessageId();
         messageSessionId = String.valueOf(msg.getMessageSessionId());
-        messageSessionType = new BigDecimal(msg.getMessageSessionType());
-        messageSessionOffset = new BigDecimal(msg.getMessageSessionOffset());
-        messageTableOffset = new BigDecimal(msg.getMessageTableOffset());
-        messageType = new BigDecimal(msg.getMessageType());
+        messageSessionType = msg.getMessageSessionType();
+        messageSessionOffset = msg.getMessageSessionOffset();
+        messageTableOffset = msg.getMessageTableOffset();
+        messageType = msg.getMessageType();
         messageSendId = Long.toString(msg.getMessageSendId());
         messageSendExtendId = msg.getMessageSendExtendId();
         messageReceiveId = Long.toString(msg.getMessageReceiveId());
         messageReceiveExtendId = msg.getMessageReceiveExtendId();
         messageContent = msg.getMessageContent();
-        messageSendState = new BigDecimal(msg.getMessageSendState());
-        messageReadState = new BigDecimal(msg.getMessageReadState());
+        messageSendState = msg.getMessageSendState();
+        messageReadState = msg.getMessageReadState();
 
         ///不为空时设置
         messageSecret = msg.getMessageSecret();
@@ -328,7 +331,7 @@ public class ChatMessage {
             }
         }
 
-        isDelete = new BigDecimal(msg.getIsDelete());
+        isDelete = msg.getIsDelete();
         messageDeleteOperation = msg.getMessageDeleteOperation();
         messageDeleteUserList = msg.getMessageDeleteUserList();
         messageDate = TimeTool.strToDate(msg.getMessageDate());
@@ -354,7 +357,7 @@ public class ChatMessage {
         map.put("messageSecret", messageSecret);
         map.put("messageContent", messageContent);
         ///转换为json数据
-        switch (messageType.intValue()) {
+        switch (messageType) {
             case MSG_TYPE_SYSTEM:
                 map.put("messageData", GsonTool.modelToJsonStr(getChatSystem()));
                 break;
@@ -400,13 +403,13 @@ public class ChatMessage {
         if (getMessageSessionId() != null)
             msgBuilder.setMessageSessionId(StringTool.strToLong(getMessageSessionId()));
         if (getMessageSessionType() != null)
-            msgBuilder.setMessageSessionType(StringTool.decimalToInt(getMessageSessionType()));
+            msgBuilder.setMessageSessionType(getMessageSessionType());
         if (getMessageSessionOffset() != null)
-            msgBuilder.setMessageSessionOffset(StringTool.decimalToLong(getMessageSessionOffset()));
+            msgBuilder.setMessageSessionOffset(getMessageSessionOffset());
         if (getMessageTableOffset() != null)
-            msgBuilder.setMessageTableOffset(StringTool.decimalToInt(getMessageTableOffset()));
+            msgBuilder.setMessageTableOffset(getMessageTableOffset());
         if (getMessageType() != null)
-            msgBuilder.setMessageType(StringTool.decimalToInt(getMessageType()));
+            msgBuilder.setMessageType(getMessageType());
         if (getMessageSendId() != null)
             msgBuilder.setMessageSendId(StringTool.strToLong(getMessageSendId()));
         if (getMessageSendExtendId() != null)
@@ -418,9 +421,9 @@ public class ChatMessage {
         if (getMessageContent() != null)
             msgBuilder.setMessageContent(getMessageContent());
         if (getMessageSendState() != null)
-            msgBuilder.setMessageSendState(StringTool.decimalToInt(getMessageSendState()));
+            msgBuilder.setMessageSendState(getMessageSendState());
         if (getMessageReadState() != null)
-            msgBuilder.setMessageReadState(StringTool.decimalToInt(getMessageReadState()));
+            msgBuilder.setMessageReadState(getMessageReadState());
         if (!StringTool.isEmpty(getMessageSecret())) {
             try {
                 msgBuilder.setMessageSecret(AESTool.EncryptECB(getMessageSecret(), secret));
@@ -431,7 +434,7 @@ public class ChatMessage {
         if (getMessageDate() != null)
             msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
-            msgBuilder.setIsDelete(StringTool.decimalToInt(getIsDelete()));
+            msgBuilder.setIsDelete(getIsDelete());
         if (getMessageDeleteOperation() != null)
             msgBuilder.setMessageDeleteOperation(getMessageDeleteOperation());
         if (getMessageDeleteUserList() != null)
@@ -448,7 +451,7 @@ public class ChatMessage {
      * @param chatSystem 系统消息
      */
     public void setChatSystem(ChatSystem chatSystem) {
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_SYSTEM);
+        messageType = ChatMessage.MSG_TYPE_SYSTEM;
         setMessageContent(encrypt(chatSystem, null));
     }
 
@@ -457,7 +460,7 @@ public class ChatMessage {
      * @return 系统消息
      */
     public ChatSystem getChatSystem() {
-        if (getMessageType().intValue() == MSG_TYPE_SYSTEM) {
+        if (getMessageType() == MSG_TYPE_SYSTEM) {
             return decrypt(ChatSystem.class);
         }
         return null;
@@ -468,7 +471,7 @@ public class ChatMessage {
      * @param chatAction 动作消息
      */
     public void setChatAction(ChatAction chatAction) {
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_ACTION);
+        messageType = ChatMessage.MSG_TYPE_ACTION;
         setMessageContent(encrypt(chatAction, null));
     }
 
@@ -477,7 +480,7 @@ public class ChatMessage {
      * @return 动作消息
      */
     public ChatAction getChatAction() {
-        if (getMessageType().intValue() == MSG_TYPE_ACTION) {
+        if (getMessageType() == MSG_TYPE_ACTION) {
             return decrypt(ChatAction.class);
         }
         return null;
@@ -489,7 +492,7 @@ public class ChatMessage {
      */
     public void setChatText(String text) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_TEXT);
+        messageType = ChatMessage.MSG_TYPE_TEXT;
         setMessageContent(encrypt(text, secret));
     }
 
@@ -498,7 +501,7 @@ public class ChatMessage {
      * @return 文本消息
      */
     public String getChatText() {
-        if (getMessageType().intValue() == MSG_TYPE_TEXT) {
+        if (getMessageType() == MSG_TYPE_TEXT) {
             return decrypt(String.class);
         }
         return null;
@@ -511,7 +514,7 @@ public class ChatMessage {
      */
     public void setChatImage(ChatImage chatImage) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_IMG);
+        messageType = ChatMessage.MSG_TYPE_IMG;
         setMessageContent(encrypt(chatImage, secret));
     }
 
@@ -520,7 +523,7 @@ public class ChatMessage {
      * @return 图片消息
      */
     public ChatImage getChatImage() {
-        if (getMessageType().intValue() == MSG_TYPE_IMG) {
+        if (getMessageType() == MSG_TYPE_IMG) {
             return decrypt(ChatImage.class);
         }
         return null;
@@ -532,7 +535,7 @@ public class ChatMessage {
      */
     public void setChatVoice(ChatVoice chatVoice) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_VOICE);
+        messageType = ChatMessage.MSG_TYPE_VOICE;
         setMessageContent(encrypt(chatVoice, secret));
     }
 
@@ -541,7 +544,7 @@ public class ChatMessage {
      * @return 语音消息
      */
     public ChatVoice getChatVoice() {
-        if (getMessageType().intValue() == MSG_TYPE_VOICE) {
+        if (getMessageType() == MSG_TYPE_VOICE) {
             return decrypt(ChatVoice.class);
         }
         return null;
@@ -553,7 +556,7 @@ public class ChatMessage {
      */
     public void setChatLocation(ChatLocation chatLocation) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_LOCATE);
+        messageType = ChatMessage.MSG_TYPE_LOCATE;
         setMessageContent(encrypt(chatLocation, secret));
     }
 
@@ -563,7 +566,7 @@ public class ChatMessage {
      */
     public ChatLocation getChatLocation() {
         //获取位置消息
-        if (getMessageType().intValue() == MSG_TYPE_LOCATE) {
+        if (getMessageType() == MSG_TYPE_LOCATE) {
             return decrypt(ChatLocation.class);
         }
         return null;
@@ -575,7 +578,7 @@ public class ChatMessage {
      */
     public void setChatVideo(ChatVideo chatVideo) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_VIDEO);
+        messageType = ChatMessage.MSG_TYPE_VIDEO;
         setMessageContent(encrypt(chatVideo, secret));
     }
 
@@ -584,7 +587,7 @@ public class ChatMessage {
      * @return 视频消息
      */
     public ChatVideo getChatVideo() {
-        if (getMessageType().intValue() == MSG_TYPE_VIDEO) {
+        if (getMessageType() == MSG_TYPE_VIDEO) {
             return decrypt(ChatVideo.class);
         }
         return null;
@@ -596,7 +599,7 @@ public class ChatMessage {
      */
     public void setChatFile(ChatFile chatFile) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_FILE);
+        messageType = ChatMessage.MSG_TYPE_FILE;
         setMessageContent(encrypt(chatFile, secret));
     }
 
@@ -605,7 +608,7 @@ public class ChatMessage {
      * @return 文件消息
      */
     public ChatFile getChatFile() {
-        if (getMessageType().intValue() == MSG_TYPE_FILE) {
+        if (getMessageType() == MSG_TYPE_FILE) {
             return decrypt(ChatFile.class);
         }
         return null;
@@ -617,7 +620,7 @@ public class ChatMessage {
      */
     public void setChatCustom(String text) {
         String secret = IDGenerateTool.getRandomStr(16);
-        messageType = new BigDecimal(ChatMessage.MSG_TYPE_CUSTOM);
+        messageType = ChatMessage.MSG_TYPE_CUSTOM;
         setMessageContent(encrypt(text, secret));
     }
 
@@ -626,7 +629,7 @@ public class ChatMessage {
      * @return 自定义消息
      */
     public String getChatCustom() {
-        if (getMessageType().intValue() == MSG_TYPE_CUSTOM) {
+        if (getMessageType() == MSG_TYPE_CUSTOM) {
             return decrypt(String.class);
         }
         return null;

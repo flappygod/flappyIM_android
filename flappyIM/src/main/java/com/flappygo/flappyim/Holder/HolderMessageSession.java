@@ -57,15 +57,7 @@ public class HolderMessageSession {
     //添加总的监听
     public void addGlobalMessageListener(MessageListener listener) {
         //获取统一的监听
-        List<MessageListener> messageListeners = msgListeners.get(globalMsgTag);
-        //如果为空
-        if (messageListeners == null) {
-            //则创建
-            messageListeners = new ArrayList<>();
-            //并设置监听列表
-            msgListeners.put(globalMsgTag, messageListeners);
-        }
-        //当前的
+        List<MessageListener> messageListeners = msgListeners.computeIfAbsent(globalMsgTag, k -> new ArrayList<>());
         if (listener != null) {
             //不包含，添加
             if (!messageListeners.contains(listener)) {
@@ -77,15 +69,7 @@ public class HolderMessageSession {
     //添加总的监听
     public void removeGlobalMessageListener(MessageListener listener) {
         //获取所有
-        List<MessageListener> messageListeners = msgListeners.get(globalMsgTag);
-        //为空创建
-        if (messageListeners == null) {
-            //设置
-            messageListeners = new ArrayList<>();
-            //空的
-            msgListeners.put(globalMsgTag, messageListeners);
-        }
-        //监听移除
+        List<MessageListener> messageListeners = msgListeners.computeIfAbsent(globalMsgTag, k -> new ArrayList<>());
         if (listener != null) {
             messageListeners.remove(listener);
         }
@@ -94,15 +78,7 @@ public class HolderMessageSession {
     //添加监听
     public void addMessageListener(MessageListener listener, String sessionID) {
         //session的监听
-        List<MessageListener> messageListeners = msgListeners.get(sessionID);
-        //为空创建
-        if (messageListeners == null) {
-            //创建
-            messageListeners = new ArrayList<>();
-            //添加
-            msgListeners.put(sessionID, messageListeners);
-        }
-        //不为空
+        List<MessageListener> messageListeners = msgListeners.computeIfAbsent(sessionID, k -> new ArrayList<>());
         if (listener != null) {
             if (!messageListeners.contains(listener)) {
                 messageListeners.add(listener);
@@ -113,15 +89,7 @@ public class HolderMessageSession {
     //移除某个监听
     public void removeMessageListener(MessageListener listener, String sessionID) {
         //移除监听
-        List<MessageListener> messageListeners = msgListeners.get(sessionID);
-        //监听
-        if (messageListeners == null) {
-            //监听
-            messageListeners = new ArrayList<>();
-            //监听
-            msgListeners.put(sessionID, messageListeners);
-        }
-        //移除
+        List<MessageListener> messageListeners = msgListeners.computeIfAbsent(sessionID, k -> new ArrayList<>());
         if (listener != null) {
             messageListeners.remove(listener);
         }

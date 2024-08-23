@@ -177,34 +177,34 @@ public class Database {
         if (chatMessage.getMessageSessionOffset() != null) {
             updateSessionOffset(
                     chatMessage.getMessageSessionId(),
-                    chatMessage.getMessageSessionOffset().toString()
+                    chatMessage.getMessageSessionOffset()
             );
         }
         return executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "messageId", chatMessage.getMessageId());
             putIfNotNull(values, "messageSessionId", chatMessage.getMessageSessionId());
-            putIfNotNull(values, "messageSessionType", StringTool.decimalToInt(chatMessage.getMessageSessionType()));
-            putIfNotNull(values, "messageSessionOffset", StringTool.decimalToInt(chatMessage.getMessageSessionOffset()));
-            putIfNotNull(values, "messageTableOffset", StringTool.decimalToInt(chatMessage.getMessageTableOffset()));
-            putIfNotNull(values, "messageType", StringTool.decimalToInt(chatMessage.getMessageType()));
+            putIfNotNull(values, "messageSessionType", chatMessage.getMessageSessionType());
+            putIfNotNull(values, "messageSessionOffset", chatMessage.getMessageSessionOffset());
+            putIfNotNull(values, "messageTableOffset", chatMessage.getMessageTableOffset());
+            putIfNotNull(values, "messageType", chatMessage.getMessageType());
             putIfNotNull(values, "messageSendId", chatMessage.getMessageSendId());
             putIfNotNull(values, "messageSendExtendId", chatMessage.getMessageSendExtendId());
             putIfNotNull(values, "messageReceiveId", chatMessage.getMessageReceiveId());
             putIfNotNull(values, "messageReceiveExtendId", chatMessage.getMessageReceiveExtendId());
             putIfNotNull(values, "messageContent", chatMessage.getMessageContent());
-            putIfNotNull(values, "messageSendState", StringTool.decimalToInt(chatMessage.getMessageSendState()));
-            putIfNotNull(values, "messageReadState", StringTool.decimalToInt(chatMessage.getMessageReadState()));
+            putIfNotNull(values, "messageSendState", chatMessage.getMessageSendState());
+            putIfNotNull(values, "messageReadState", chatMessage.getMessageReadState());
             putIfNotNull(values, "messageSecret", chatMessage.getMessageSecret());
             putIfNotNull(values, "messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             putIfNotNull(values, "deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
             values.put("messageInsertUser", user.getUserExtendId());
-            values.put("isDelete", StringTool.decimalToInt(chatMessage.getIsDelete()));
+            values.put("isDelete", chatMessage.getIsDelete());
             values.put("messageDeleteOperation", chatMessage.getMessageDeleteOperation());
             values.put("messageDeleteUserList", chatMessage.getMessageDeleteUserList());
             ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
             values.put("messageStamp", formerMsg != null ?
-                    StringTool.decimalToStr(formerMsg.getMessageStamp()) :
+                    Long.toString(formerMsg.getMessageStamp()) :
                     Long.toString(System.currentTimeMillis()));
 
             return db.insertWithOnConflict(
@@ -342,15 +342,15 @@ public class Database {
                 SessionModel info = new SessionModel();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
-                info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
+                info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
                 info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
                 info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
                 info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
-                info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
-                info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
+                info.setSessionOffset(cursor.getLong(cursor.getColumnIndex("sessionOffset")));
+                info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
                 info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getUnReadSessionMessageCountBySessionId(info.getSessionId()));
                 info.setUsers(getSessionMemberList(info.getSessionId()));
@@ -371,15 +371,15 @@ public class Database {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "sessionId", session.getSessionId());
             putIfNotNull(values, "sessionExtendId", session.getSessionExtendId());
-            putIfNotNull(values, "sessionType", StringTool.decimalToInt(session.getSessionType()));
+            putIfNotNull(values, "sessionType", session.getSessionType());
             putIfNotNull(values, "sessionInfo", session.getSessionInfo());
             putIfNotNull(values, "sessionName", session.getSessionName());
             putIfNotNull(values, "sessionImage", session.getSessionImage());
             putIfNotNull(values, "sessionOffset", session.getSessionOffset());
-            putIfNotNull(values, "sessionStamp", StringTool.decimalToLong(session.getSessionStamp()));
+            putIfNotNull(values, "sessionStamp", session.getSessionStamp());
             putIfNotNull(values, "sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
             putIfNotNull(values, "sessionCreateUser", session.getSessionCreateUser());
-            putIfNotNull(values, "sessionDeleted", StringTool.decimalToInt(session.getIsDelete()));
+            putIfNotNull(values, "sessionDeleted", session.getIsDelete());
             putIfNotNull(values, "sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
             values.put("sessionInsertUser", user.getUserExtendId());
 
@@ -423,15 +423,15 @@ public class Database {
                 SessionModel info = new SessionModel();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
-                info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
+                info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
                 info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
                 info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
                 info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
-                info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
-                info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
+                info.setSessionOffset(cursor.getLong(cursor.getColumnIndex("sessionOffset")));
+                info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
                 info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getUnReadSessionMessageCountBySessionId(sessionId));
                 info.setUsers(getSessionMemberList(info.getSessionId()));
@@ -464,15 +464,15 @@ public class Database {
                 SessionModel info = new SessionModel();
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
                 info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
-                info.setSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionType"))));
+                info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
                 info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
                 info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
                 info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
-                info.setSessionOffset(cursor.getString(cursor.getColumnIndex("sessionOffset")));
-                info.setSessionStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("sessionStamp"))));
+                info.setSessionOffset(cursor.getLong(cursor.getColumnIndex("sessionOffset")));
+                info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
                 info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("sessionDeleted"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getUnReadSessionMessageCountBySessionId(info.getSessionId()));
                 info.setUsers(getSessionMemberList(info.getSessionId()));
@@ -571,8 +571,8 @@ public class Database {
                 info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
                 info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
-                info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
-                info.setSessionMemberLatestDelete(cursor.getString(cursor.getColumnIndex("sessionMemberLatestDelete")));
+                info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
+                info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
@@ -621,8 +621,8 @@ public class Database {
                 info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
                 info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
                 info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
-                info.setSessionMemberLatestRead(cursor.getString(cursor.getColumnIndex("sessionMemberLatestRead")));
-                info.setSessionMemberLatestDelete(cursor.getString(cursor.getColumnIndex("sessionMemberLatestDelete")));
+                info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
+                info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
@@ -654,21 +654,21 @@ public class Database {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
                 info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
                 info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
                 info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
                 info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
@@ -701,21 +701,21 @@ public class Database {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
                 info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
                 info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                info.setMessageReadState(cursor.getColumnIndex("messageReadState"));
                 info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
                 info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
@@ -758,21 +758,21 @@ public class Database {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
                 info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
                 info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
                 info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
                 info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
@@ -820,21 +820,21 @@ public class Database {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
                 info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
                 info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
                 info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
                 info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
@@ -872,21 +872,21 @@ public class Database {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
                 info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
                 info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
                 info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
                 info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
@@ -923,21 +923,21 @@ public class Database {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionType"))));
-                info.setMessageSessionOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSessionOffset"))));
-                info.setMessageTableOffset(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageTableOffset"))));
-                info.setMessageType(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageType"))));
+                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
                 info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
                 info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
                 info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
                 info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
                 info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageSendState"))));
-                info.setMessageReadState(new BigDecimal(cursor.getInt(cursor.getColumnIndex("messageReadState"))));
+                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
                 info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(new BigDecimal(cursor.getLong(cursor.getColumnIndex("messageStamp"))));
+                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(new BigDecimal(cursor.getInt(cursor.getColumnIndex("isDelete"))));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
                 info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
                 info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
@@ -958,7 +958,7 @@ public class Database {
         if (chatUser == null) {
             return;
         }
-        if (chatMessage.getMessageType().intValue() != ChatMessage.MSG_TYPE_ACTION) {
+        if (chatMessage.getMessageType() != ChatMessage.MSG_TYPE_ACTION) {
             return;
         }
         ChatAction action = chatMessage.getChatAction();
@@ -1045,16 +1045,16 @@ public class Database {
      */
     public void updateMessageDelete(String userId, String messageId) {
         ChatMessage message = getMessageById(messageId);
-        if (message == null || message.getIsDelete().intValue() == 1) {
+        if (message == null || message.getIsDelete() == 1) {
             return;
         }
 
-        message.setIsDelete(new BigDecimal(0));
+        message.setIsDelete(0);
         message.setMessageDeleteOperation("delete");
         List<String> userIdList = StringTool.splitStr(message.getMessageDeleteUserList(), ",");
         userIdList.add(userId);
         message.setMessageDeleteUserList(StringTool.joinListStr(userIdList, ","));
-        message.setMessageReadState(new BigDecimal(1));
+        message.setMessageReadState(1);
         insertMessage(message);
     }
 
@@ -1063,14 +1063,14 @@ public class Database {
      * @param sessionId     会话ID
      * @param sessionOffset 会话Offset
      */
-    private void updateSessionOffset(String sessionId, String sessionOffset) {
-        /*executeDbOperation(chatUser -> {
+    private void updateSessionOffset(String sessionId, Long sessionOffset) {
+        executeDbOperation(chatUser -> {
             String sql = "UPDATE " + DataBaseConfig.TABLE_SESSION +
                     " SET sessionOffset = MAX(sessionOffset, ?) " +
                     " WHERE sessionId = ? AND sessionInsertUser = ?";
             db.execSQL(sql, new Object[]{sessionOffset, sessionId, chatUser.getUserExtendId()});
             return true;
-        });*/
+        });
     }
 
     /******
@@ -1082,7 +1082,7 @@ public class Database {
     private void updateSessionMemberLatestRead(String sessionId, String userId, String tableOffset) {
         SessionMemberModel memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
-            memberModel.setSessionMemberLatestRead(tableOffset);
+            memberModel.setSessionMemberLatestRead(StringTool.strToLong(tableOffset));
             insertSessionMember(memberModel);
         }
     }
@@ -1124,7 +1124,7 @@ public class Database {
     private void updateSessionDeleteTemp(String sessionId, String userId, String sessionOffset) {
         SessionMemberModel memberModel = getSessionMember(sessionId, userId);
         if (memberModel != null) {
-            memberModel.setSessionMemberLatestDelete(sessionOffset);
+            memberModel.setSessionMemberLatestDelete(StringTool.strToLong(sessionOffset));
             insertSessionMember(memberModel);
         }
     }
@@ -1138,7 +1138,7 @@ public class Database {
     private void updateSessionDeletePermanent(String sessionId, String userId, String sessionOffset) {
         SessionModel session = getUserSessionById(sessionId);
         if (session != null) {
-            session.setIsDelete(new BigDecimal(1));
+            session.setIsDelete(1);
             insertSession(session);
         }
     }

@@ -3,6 +3,7 @@ package com.flappygo.flappyim.DataBase.Models;
 import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
+import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TimeTool;
 
 import java.io.Serializable;
@@ -22,15 +23,15 @@ public class SessionModel extends ChatSession implements Serializable {
     public SessionModel(Flappy.Session session) {
         setSessionId(Long.toString(session.getSessionId()));
         setSessionExtendId(session.getSessionExtendId());
-        setSessionType(new BigDecimal(session.getSessionType()));
+        setSessionType(session.getSessionType());
         setSessionInfo(session.getSessionInfo());
         setSessionName(session.getSessionName());
         setSessionImage(session.getSessionImage());
-        setSessionOffset(session.getSessionOffset());
-        setSessionStamp(new BigDecimal(session.getSessionStamp()));
+        setSessionOffset(StringTool.strToLong(session.getSessionOffset()));
+        setSessionStamp(session.getSessionStamp());
         setSessionCreateUser(session.getSessionCreateUser());
         setSessionCreateDate(TimeTool.strToDate(session.getSessionCreateDate()));
-        setIsDelete(new BigDecimal(session.getIsDelete()));
+        setIsDelete(session.getIsDelete());
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
         setUsers(
                 GsonTool.jsonStrToModels(session.getUsers(), SessionMemberModel.class)

@@ -32,8 +32,6 @@ import com.flappygo.flappyim.Tools.StringTool;
 
 import io.netty.channel.ChannelFuture;
 
-import java.util.Collections;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import android.os.Message;
@@ -189,7 +187,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //全量更新
             if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_NOTHING) {
                 //保存消息状态数据
-                item.setMessageReadState(new BigDecimal(1));
+                item.setMessageReadState(1);
                 Database.getInstance().insertMessage(item);
             }
             //全量更新
@@ -277,14 +275,14 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
                 //如果sessions不为空代表是登录，如果是登录的情况下，所有会话是已经同步的，所以不需要过多的处理
                 for (ChatMessage msg : receiveMessageList) {
-                    if (msg.getMessageType().intValue() == MSG_TYPE_SYSTEM || msg.getMessageType().intValue() == MSG_TYPE_ACTION) {
-                        msg.setMessageReadState(new BigDecimal(1));
+                    if (msg.getMessageType() == MSG_TYPE_SYSTEM || msg.getMessageType() == MSG_TYPE_ACTION) {
+                        msg.setMessageReadState(1);
                     }
                 }
             }
 
             //进行排序
-            Collections.sort(receiveMessageList, (chatMessage, t1) -> {
+            receiveMessageList.sort((chatMessage, t1) -> {
                 if (chatMessage.getMessageTableOffset().intValue() > t1.getMessageTableOffset().intValue()) {
                     return 1;
                 } else if (chatMessage.getMessageTableOffset().intValue() < t1.getMessageTableOffset().intValue()) {
@@ -380,9 +378,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //将系统消息标记成为已经处理，不再需要重复处理
             for (ChatMessage message : messages) {
                 //更新消息
-                if (data.getSessionStamp().longValue() >= StringTool.strToDecimal(message.getChatSystem().getSysTime()).longValue()) {
+                if (data.getSessionStamp() >= StringTool.strToDecimal(message.getChatSystem().getSysTime()).longValue()) {
                     //设置阅读状态
-                    message.setMessageReadState(new BigDecimal(1));
+                    message.setMessageReadState(1);
                     //插入消息
                     Database.getInstance().insertMessage(message);
                 }
@@ -436,7 +434,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Database.getInstance().insertSessionMember(chatUser);
 
             //保存消息状态数据
-            message.setMessageReadState(new BigDecimal(1));
+            message.setMessageReadState(1);
             Database.getInstance().insertMessage(message);
 
             //通知会话更新了
@@ -461,12 +459,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             Database.getInstance().insertSessionMember(chatUser);
 
             //保存消息状态数据
-            message.setMessageReadState(new BigDecimal(1));
+            message.setMessageReadState(1);
             Database.getInstance().insertMessage(message);
 
             //获取会话信息
             SessionModel sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
-            sessionModel.setIsDelete(new BigDecimal(1));
+            sessionModel.setIsDelete(1);
 
             //删除用户会话
             Database.getInstance().deleteUserSession(message.getMessageSessionId());
@@ -486,11 +484,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
         //如果是自己发送的，代表发送成功
         if (chatUser.getUserId().equals(msg.getMessageSendId())) {
-            msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_SENT));
+            msg.setMessageSendState(ChatMessage.SEND_STATE_SENT);
         }
         //如果是别人发送的，代表到达目的设备
         else {
-            msg.setMessageSendState(new BigDecimal(ChatMessage.SEND_STATE_REACHED));
+            msg.setMessageSendState(ChatMessage.SEND_STATE_REACHED);
         }
         //保留之前的已读状态
         if (former != null) {
@@ -513,12 +511,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //最近一条为空
         if (user.getLatest() == null) {
-            user.setLatest(StringTool.decimalToStr(chatMessage.getMessageTableOffset()));
+            user.setLatest(chatMessage.getMessageTableOffset().toString());
             isLatest = true;
         }
         //设置最大的那个值
         else {
-            long valueNewer = chatMessage.getMessageTableOffset().longValue();
+            long valueNewer = chatMessage.getMessageTableOffset();
             long valueFormer = StringTool.strToLong(user.getLatest());
             long maxValue = Math.max(valueNewer, valueFormer);
             user.setLatest(Long.toString(maxValue));

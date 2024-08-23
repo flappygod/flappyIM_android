@@ -148,11 +148,11 @@ public class HandlerNotifyManager {
      */
     public void handleMessageAction(ChatMessage chatMessage) {
         //不是Action消息
-        if (chatMessage.getMessageType().intValue() != MSG_TYPE_ACTION) {
+        if (chatMessage.getMessageType() != MSG_TYPE_ACTION) {
             return;
         }
         //已经处理过了
-        if (chatMessage.getMessageReadState().intValue() == 1) {
+        if (chatMessage.getMessageReadState() == 1) {
             return;
         }
         //执行数据库更新操作
@@ -215,7 +215,7 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageSendInsert(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -229,7 +229,7 @@ public class HandlerNotifyManager {
      * @param chatMessage   消息
      */
     public void notifyMessageReceive(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -246,7 +246,7 @@ public class HandlerNotifyManager {
     public void notifyMessageListReceive(List<ChatMessage> chatMessageList) {
         List<ChatMessage> notifyList = new ArrayList<>();
         for (int s = 0; s < chatMessageList.size(); s++) {
-            if (chatMessageList.get(s).getMessageType().intValue() != MSG_TYPE_ACTION) {
+            if (chatMessageList.get(s).getMessageType() != MSG_TYPE_ACTION) {
                 notifyList.add(chatMessageList.get(s));
             }
         }
@@ -265,7 +265,7 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageFailure(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();
@@ -279,7 +279,7 @@ public class HandlerNotifyManager {
      * @param chatMessage 消息
      */
     public void notifyMessageDelete(ChatMessage chatMessage) {
-        if (chatMessage.getMessageType().intValue() == MSG_TYPE_ACTION) {
+        if (chatMessage.getMessageType() == MSG_TYPE_ACTION) {
             return;
         }
         Message msg = new Message();

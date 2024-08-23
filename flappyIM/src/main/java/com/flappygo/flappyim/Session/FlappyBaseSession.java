@@ -1,6 +1,5 @@
 package com.flappygo.flappyim.Session;
 
-import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_DATABASE_ERROR;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_SENDING;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_NET_ERROR;
@@ -73,10 +72,10 @@ public class FlappyBaseSession {
      */
     public void updateMsgInsert(ChatMessage msg) {
         //设置消息发送状态为create
-        msg.setMessageSendState(new BigDecimal(SEND_STATE_SENDING));
+        msg.setMessageSendState(SEND_STATE_SENDING);
 
         //设置message stamp
-        msg.setMessageStamp(new BigDecimal(System.currentTimeMillis()));
+        msg.setMessageStamp(System.currentTimeMillis());
 
         //设置消息表Offset
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
@@ -88,7 +87,7 @@ public class FlappyBaseSession {
         bigDecimal = bigDecimal.add(new BigDecimal(1));
 
         //设置offset，仅用于排序，最终以服务器端返回为准
-        msg.setMessageTableOffset(bigDecimal);
+        msg.setMessageTableOffset(bigDecimal.longValue());
 
         //更新数据
         sessionClient.execute(new LXAsyncTask<ChatMessage, Boolean>() {
@@ -131,7 +130,7 @@ public class FlappyBaseSession {
 
             @Override
             public void success(Boolean data, String tag) {
-                msg.setMessageSendState(new BigDecimal(SEND_STATE_FAILURE));
+                msg.setMessageSendState(SEND_STATE_FAILURE);
                 HandlerNotifyManager.getInstance().notifyMessageFailure(msg);
             }
         }, msg);

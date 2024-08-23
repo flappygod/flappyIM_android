@@ -1,24 +1,22 @@
 package com.flappygo.flappyim.Models.Server;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ChatSession implements Serializable {
 
-    //单聊
-    public final static int TYPE_SINGLE=1;
-    //群聊
-    public final static int TYPE_GROUP=2;
-    //系统
-    public final static int TYPE_SYSTEM=3;
-
+    // 单聊
+    public final static int TYPE_SINGLE = 1;
+    // 群聊
+    public final static int TYPE_GROUP = 2;
+    // 系统
+    public final static int TYPE_SYSTEM = 3;
 
     private String sessionId;
 
     private String sessionExtendId;
 
-    private BigDecimal sessionType;
+    private int sessionType;
 
     private String sessionInfo;
 
@@ -26,15 +24,15 @@ public class ChatSession implements Serializable {
 
     private String sessionImage;
 
-    private String sessionOffset;
+    private long sessionOffset;
 
-    private BigDecimal sessionStamp;
+    private long sessionStamp;
 
     private Date sessionCreateDate;
 
     private String sessionCreateUser;
 
-    private BigDecimal isDelete;
+    private int isDelete;
 
     private Date deleteDate;
 
@@ -54,12 +52,12 @@ public class ChatSession implements Serializable {
         this.sessionExtendId = sessionExtendId == null ? null : sessionExtendId.trim();
     }
 
-    public BigDecimal getSessionType() {
+    public Integer getSessionType() {
         return sessionType;
     }
 
-    public void setSessionType(BigDecimal sessionType) {
-        this.sessionType = sessionType;
+    public void setSessionType(Integer sessionType) {
+        this.sessionType = (sessionType != null) ? sessionType : 0;
     }
 
     public String getSessionName() {
@@ -78,20 +76,20 @@ public class ChatSession implements Serializable {
         this.sessionImage = sessionImage == null ? null : sessionImage.trim();
     }
 
-    public String getSessionOffset() {
+    public Long getSessionOffset() {
         return sessionOffset;
     }
 
-    public void setSessionOffset(String sessionOffset) {
-        this.sessionOffset = sessionOffset == null ? null : sessionOffset.trim();
+    public void setSessionOffset(Long sessionOffset) {
+        this.sessionOffset = (sessionOffset != null) ? sessionOffset : 0;
     }
 
-    public BigDecimal getSessionStamp() {
+    public Long getSessionStamp() {
         return sessionStamp;
     }
 
-    public void setSessionStamp(BigDecimal sessionStamp) {
-        this.sessionStamp = sessionStamp;
+    public void setSessionStamp(Long sessionStamp) {
+        this.sessionStamp = (sessionStamp != null) ? sessionStamp : 0L;
     }
 
     public Date getSessionCreateDate() {
@@ -110,12 +108,12 @@ public class ChatSession implements Serializable {
         this.sessionCreateUser = sessionCreateUser == null ? null : sessionCreateUser.trim();
     }
 
-    public BigDecimal getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(BigDecimal isDelete) {
-        this.isDelete = isDelete;
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = (isDelete != null) ? isDelete : 0;
     }
 
     public Date getDeleteDate() {

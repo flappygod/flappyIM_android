@@ -6,37 +6,36 @@ import java.util.Date;
 
 /******
  * 会话用户信息，这是一个聚合类
- * 包含用户信息和用户在当前会话
- * 中的附加属性
+ * 包含用户信息和用户在当前会话中的附加属性
  */
 public class SessionMemberModel extends ChatUser {
 
-    //会话ID
+    // 会话ID
     private String sessionId;
 
-    //最近阅读
-    private String sessionMemberLatestRead;
+    // 最近阅读
+    private long sessionMemberLatestRead;
 
-    //最近删除
-    private String sessionMemberLatestDelete;
+    // 最近删除
+    private long sessionMemberLatestDelete;
 
-    //标记名称
+    // 标记名称
     private String sessionMemberMarkName;
 
-    //会话免打扰
-    private Integer sessionMemberMute;
+    // 会话免打扰
+    private int sessionMemberMute;
 
-    //会话置顶
-    private Integer sessionMemberPinned;
+    // 会话置顶
+    private int sessionMemberPinned;
 
-    //用户加入时间
+    // 用户加入时间
     private Date sessionJoinDate;
 
-    //用户离开时间
+    // 用户离开时间
     private Date sessionLeaveDate;
 
-    //用户是否离开
-    private Integer isLeave;
+    // 用户是否离开
+    private int isLeave;
 
     public String getSessionId() {
         return sessionId;
@@ -46,20 +45,20 @@ public class SessionMemberModel extends ChatUser {
         this.sessionId = sessionId;
     }
 
-    public String getSessionMemberLatestRead() {
+    public Long getSessionMemberLatestRead() {
         return sessionMemberLatestRead;
     }
 
-    public void setSessionMemberLatestRead(String sessionMemberLatestRead) {
-        this.sessionMemberLatestRead = sessionMemberLatestRead;
+    public void setSessionMemberLatestRead(Long sessionMemberLatestRead) {
+        this.sessionMemberLatestRead = (sessionMemberLatestRead != null) ? sessionMemberLatestRead : 0L;
     }
 
-    public String getSessionMemberLatestDelete() {
+    public Long getSessionMemberLatestDelete() {
         return sessionMemberLatestDelete;
     }
 
-    public void setSessionMemberLatestDelete(String sessionMemberLatestDelete) {
-        this.sessionMemberLatestDelete = sessionMemberLatestDelete;
+    public void setSessionMemberLatestDelete(Long sessionMemberLatestDelete) {
+        this.sessionMemberLatestDelete = (sessionMemberLatestDelete != null) ? sessionMemberLatestDelete : 0;
     }
 
     public String getSessionMemberMarkName() {
@@ -75,7 +74,7 @@ public class SessionMemberModel extends ChatUser {
     }
 
     public void setSessionMemberMute(Integer sessionMemberMute) {
-        this.sessionMemberMute = sessionMemberMute;
+        this.sessionMemberMute = (sessionMemberMute != null) ? sessionMemberMute : 0;
     }
 
     public Integer getSessionMemberPinned() {
@@ -83,7 +82,7 @@ public class SessionMemberModel extends ChatUser {
     }
 
     public void setSessionMemberPinned(Integer sessionMemberPinned) {
-        this.sessionMemberPinned = sessionMemberPinned;
+        this.sessionMemberPinned = (sessionMemberPinned != null) ? sessionMemberPinned : 0;
     }
 
     public Date getSessionJoinDate() {
@@ -107,6 +106,6 @@ public class SessionMemberModel extends ChatUser {
     }
 
     public void setIsLeave(Integer isLeave) {
-        this.isLeave = isLeave;
+        this.isLeave = (isLeave != null) ? isLeave : 0;
     }
 }
