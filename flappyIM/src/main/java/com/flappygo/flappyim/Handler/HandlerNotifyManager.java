@@ -148,7 +148,7 @@ public class HandlerNotifyManager {
      */
     public void handleMessageAction(ChatMessage chatMessage) {
         //不是Action消息
-        if (chatMessage == null || chatMessage.getMessageType() == MSG_TYPE_ACTION) {
+        if (chatMessage == null || chatMessage.getMessageType() != MSG_TYPE_ACTION) {
             return;
         }
         //已经处理过了
