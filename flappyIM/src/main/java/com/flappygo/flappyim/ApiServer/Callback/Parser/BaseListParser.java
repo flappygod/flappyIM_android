@@ -19,8 +19,13 @@ import java.util.List;
  */
 public class BaseListParser<T> {
 
+    //parse success or not
     private boolean success;
+
+    //parsed data
     private BaseApiModel<List<T>> data;
+
+    //parse exception
     private Exception exception;
 
     /**

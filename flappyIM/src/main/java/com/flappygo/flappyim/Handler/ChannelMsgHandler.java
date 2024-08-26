@@ -481,12 +481,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             message.setMessageReadState(1);
             Database.getInstance().insertMessage(message);
 
+            //删除会话
+            Database.getInstance().deleteUserSession(message.getMessageSessionId());
+
             //获取会话信息
             ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             sessionModel.setIsDelete(1);
-
-            //删除用户会话
-            Database.getInstance().deleteUserSession(message.getMessageSessionId());
             HandlerNotifyManager.getInstance().notifySessionDelete(sessionModel);
         }
     }
@@ -510,9 +510,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             msg.setMessageSendState(ChatMessage.SEND_STATE_REACHED);
         }
         //保留之前的已读状态
-        if (former != null) {
-            msg.setMessageReadState(former.getMessageReadState());
-        }
+        msg.setMessageReadState((former != null) ? former.getMessageReadState() : msg.getMessageReadState());
     }
 
     /******

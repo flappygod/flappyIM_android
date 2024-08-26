@@ -33,9 +33,7 @@ public class ChatSessionData extends ChatSession implements Serializable {
         setSessionCreateDate(TimeTool.strToDate(session.getSessionCreateDate()));
         setIsDelete(session.getIsDelete());
         setDeleteDate(TimeTool.strToDate(session.getDeleteDate()));
-        setUsers(
-                GsonTool.jsonStrToModels(session.getUsers(), ChatSessionMember.class)
-        );
+        setUsers(GsonTool.jsonStrToModels(session.getUsers(), ChatSessionMember.class));
     }
 
     //用户信息

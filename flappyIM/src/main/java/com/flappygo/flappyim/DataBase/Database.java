@@ -23,6 +23,7 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /******
  * 数据库操作
@@ -230,7 +231,7 @@ public class Database {
                     values,
                     "messageInsertUser=? and " +
                             "messageSendId!=? and " +
-                            String.format("messageType != %d and ", MSG_TYPE_SYSTEM) +
+                            String.format(Locale.US, "messageType != %d and ", MSG_TYPE_SYSTEM) +
                             "messageSessionId=? and " +
                             "messageTableOffset <= ? ",
                     new String[]{
@@ -257,8 +258,8 @@ public class Database {
                     "and messageSendId != ? " +
                     "and messageReadState = 0 " +
                     "and (messageDeleteOperation is null or messageDeleteOperation == '')" +
-                    String.format("and messageType != %d ", MSG_TYPE_SYSTEM) +
-                    String.format("and messageType != %d", MSG_TYPE_ACTION);
+                    String.format(Locale.US, "and messageType != %d ", MSG_TYPE_SYSTEM) +
+                    String.format(Locale.US, "and messageType != %d", MSG_TYPE_ACTION);
             Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
             int count = 0;
             if (cursor.moveToFirst()) {

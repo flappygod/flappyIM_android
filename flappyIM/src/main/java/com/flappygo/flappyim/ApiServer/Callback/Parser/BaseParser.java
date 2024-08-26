@@ -12,8 +12,13 @@ import org.json.JSONObject;
  */
 public class BaseParser<T> {
 
+    //parse success or not
     private boolean success;
+
+    //parsed data
     private BaseApiModel<T> data;
+
+    //parse exception
     private Exception exception;
 
     /**
@@ -27,8 +32,8 @@ public class BaseParser<T> {
             parseData(dataStr, tClass);
             success = true;
         } catch (Exception ex) {
-            success = false;
             exception = ex;
+            success = false;
         }
     }
 
@@ -41,12 +46,10 @@ public class BaseParser<T> {
     private void parseData(String dataStr, Class<T> tClass) throws JSONException {
         data = new BaseApiModel<>();
         JSONObject jsonObject = new JSONObject(dataStr);
-
         data.setCode(jsonObject.optString("code"));
         data.setMsg(jsonObject.optString("msg"));
         data.setPageCount(jsonObject.optInt("pageCount"));
         String strData = jsonObject.optString("data");
-
         if (tClass == String.class) {
             data.setData(tClass.cast(strData));
         } else if (tClass == JSONObject.class) {
