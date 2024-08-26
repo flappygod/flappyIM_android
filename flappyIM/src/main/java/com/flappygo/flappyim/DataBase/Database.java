@@ -246,6 +246,29 @@ public class Database {
     }
 
     /******
+     * 更新消息已读(系统消息的已读状态不做处理)
+     * @param messageId        消息ID
+     */
+    private void updateMessageReadByMsgId(String messageId) {
+        executeDbOperation(chatUser -> {
+            ContentValues values = new ContentValues();
+            values.put("messageReadState", 1);
+            db.update(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    values,
+                    "messageInsertUser=? and " +
+                            "messageId==? ",
+                    new String[]{
+                            chatUser.getUserExtendId(),
+                            messageId,
+                    }
+            );
+            return true;
+        });
+    }
+
+
+    /******
      * 获取未读消息数量
      * @param sessionID 会话ID
      * @return 未读消息数量
@@ -1049,6 +1072,7 @@ public class Database {
                 break;
             }
         }
+        updateMessageReadByMsgId(chatMessage.getMessageId());
     }
 
     /******
