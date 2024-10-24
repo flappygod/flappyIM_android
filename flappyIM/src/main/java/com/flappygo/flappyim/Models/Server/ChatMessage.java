@@ -94,6 +94,7 @@ public class ChatMessage {
 
 
     public ChatMessage() {
+        messageSecret = IDGenerateTool.getRandomStr(16);
     }
 
     private String messageId;
