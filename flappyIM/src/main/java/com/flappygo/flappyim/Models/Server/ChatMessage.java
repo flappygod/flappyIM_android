@@ -14,11 +14,6 @@ import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Tools.TimeTool;
 
-import java.math.BigDecimal;
-
-import android.util.Base64;
-
-import java.util.HashMap;
 import java.util.Date;
 
 
@@ -302,8 +297,219 @@ public class ChatMessage {
     }
 
 
-    //消息
-    public ChatMessage(Flappy.Message msg, String secret) {
+    /******
+     * 设置系统消息
+     * @param chatSystem 系统消息
+     */
+    public void setChatSystem(ChatSystem chatSystem) {
+        messageType = ChatMessage.MSG_TYPE_SYSTEM;
+        setMessageContent(modelToStr(chatSystem));
+    }
+
+    /******
+     * 获取系统消息
+     * @return 系统消息
+     */
+    public ChatSystem getChatSystem() {
+        if (getMessageType() == MSG_TYPE_SYSTEM) {
+            return strToModel(ChatSystem.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置动作消息
+     * @param chatAction 动作消息
+     */
+    public void setChatAction(ChatAction chatAction) {
+        messageType = ChatMessage.MSG_TYPE_ACTION;
+        setMessageContent(modelToStr(chatAction));
+    }
+
+    /******
+     * 获取动作消息
+     * @return 动作消息
+     */
+    public ChatAction getChatAction() {
+        if (getMessageType() == MSG_TYPE_ACTION) {
+            return strToModel(ChatAction.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置文本消息
+     * @param text 文本消息，加密
+     */
+    public void setChatText(String text) {
+        messageType = ChatMessage.MSG_TYPE_TEXT;
+        setMessageContent(modelToStr(text));
+    }
+
+    /******
+     * 获取文本消息
+     * @return 文本消息
+     */
+    public String getChatText() {
+        if (getMessageType() == MSG_TYPE_TEXT) {
+            return strToModel(String.class);
+        }
+        return null;
+    }
+
+
+    /******
+     * 设置图片消息
+     * @param chatImage 图片消息
+     */
+    public void setChatImage(ChatImage chatImage) {
+        messageType = ChatMessage.MSG_TYPE_IMG;
+        setMessageContent(modelToStr(chatImage));
+    }
+
+    /******
+     * 获取图片消息
+     * @return 图片消息
+     */
+    public ChatImage getChatImage() {
+        if (getMessageType() == MSG_TYPE_IMG) {
+            return strToModel(ChatImage.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置语音消息
+     * @param chatVoice 语音消息
+     */
+    public void setChatVoice(ChatVoice chatVoice) {
+        messageType = ChatMessage.MSG_TYPE_VOICE;
+        setMessageContent(modelToStr(chatVoice));
+    }
+
+    /******
+     * 获取语音消息
+     * @return 语音消息
+     */
+    public ChatVoice getChatVoice() {
+        if (getMessageType() == MSG_TYPE_VOICE) {
+            return strToModel(ChatVoice.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置定位消息
+     * @param chatLocation 定位消息
+     */
+    public void setChatLocation(ChatLocation chatLocation) {
+        messageType = ChatMessage.MSG_TYPE_LOCATE;
+        setMessageContent(modelToStr(chatLocation));
+    }
+
+    /******
+     * 获取定位消息
+     * @return 定位消息
+     */
+    public ChatLocation getChatLocation() {
+        //获取位置消息
+        if (getMessageType() == MSG_TYPE_LOCATE) {
+            return strToModel(ChatLocation.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置视频消息
+     * @param chatVideo 视频消息
+     */
+    public void setChatVideo(ChatVideo chatVideo) {
+        messageType = ChatMessage.MSG_TYPE_VIDEO;
+        setMessageContent(modelToStr(chatVideo));
+    }
+
+    /******
+     * 获取视频消息
+     * @return 视频消息
+     */
+    public ChatVideo getChatVideo() {
+        if (getMessageType() == MSG_TYPE_VIDEO) {
+            return strToModel(ChatVideo.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置文件消息
+     * @param chatFile 文件消息
+     */
+    public void setChatFile(ChatFile chatFile) {
+        messageType = ChatMessage.MSG_TYPE_FILE;
+        setMessageContent(modelToStr(chatFile));
+    }
+
+    /******
+     * 获取文件消息
+     * @return 文件消息
+     */
+    public ChatFile getChatFile() {
+        if (getMessageType() == MSG_TYPE_FILE) {
+            return strToModel(ChatFile.class);
+        }
+        return null;
+    }
+
+    /******
+     * 设置自定义消息
+     * @param text 自定义消息
+     */
+    public void setChatCustom(String text) {
+        messageType = ChatMessage.MSG_TYPE_CUSTOM;
+        setMessageContent(modelToStr(text));
+    }
+
+    /******
+     * 获取自定义消息
+     * @return 自定义消息
+     */
+    public String getChatCustom() {
+        if (getMessageType() == MSG_TYPE_CUSTOM) {
+            return strToModel(String.class);
+        }
+        return null;
+    }
+
+
+    /*******
+     * 加密数据
+     * @param data   数据
+     * @return 加密字符串
+     * @param <T> 类型
+     */
+    private <T> String modelToStr(T data) {
+        return GsonTool.modelToJsonStr(data);
+    }
+
+    /*******
+     * 解密数据
+     * @param tClass 类型
+     * @return 加密数据
+     */
+    private <T> T strToModel(Class<T> tClass) {
+        try {
+            return GsonTool.jsonStrToModel(getMessageContent(), tClass);
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
+
+    /******
+     * Flappy.Message          转换为ChatMessage
+     * @param msg              protoc消息
+     * @param channelSecret    通道秘钥
+     */
+    public ChatMessage(Flappy.Message msg, String channelSecret) {
         messageId = msg.getMessageId();
         messageSessionId = String.valueOf(msg.getMessageSessionId());
         messageSessionType = msg.getMessageSessionType();
@@ -318,18 +524,16 @@ public class ChatMessage {
         messageSendState = msg.getMessageSendState();
         messageReadState = msg.getMessageReadState();
 
-        ///不为空时设置
-        messageSecret = msg.getMessageSecret();
-        if (!StringTool.isEmpty(msg.getMessageSecret())) {
-            try {
-                messageSecret = AESTool.DecryptECB(
-                        msg.getMessageSecret(),
-                        secret
-                );
-            } catch (Exception ex) {
-                messageSecret = msg.getMessageSecret();
-            }
-        }
+        //解析秘钥
+        messageSecret = AESTool.DecryptECBNoThrow(
+                msg.getMessageSecret(),
+                channelSecret
+        );
+        //通过秘钥解析数据
+        messageContent = AESTool.DecryptECBNoThrow(
+                msg.getMessageContent(),
+                messageSecret
+        );
 
         isDelete = msg.getIsDelete();
         messageDeleteOperation = msg.getMessageDeleteOperation();
@@ -338,65 +542,14 @@ public class ChatMessage {
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
 
-    ///转换为json数据
-    public HashMap<String, Object> toMap() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("messageId", messageId);
-        map.put("messageSessionId", messageSessionId);
-        map.put("messageSessionType", messageSessionType);
-        map.put("messageSessionOffset", messageSessionOffset);
-        map.put("messageTableOffset", messageTableOffset);
-        map.put("messageType", messageType);
-        map.put("messageSendId", messageSendId);
-        map.put("messageSendExtendId", messageSendExtendId);
-        map.put("messageReceiveId", messageReceiveId);
-        map.put("messageReceiveExtendId", messageReceiveExtendId);
-        map.put("messageStamp", messageStamp);
-        map.put("messageSendState", messageSendState);
-        map.put("messageReadState", messageReadState);
-        map.put("messageSecret", messageSecret);
-        map.put("messageContent", messageContent);
-        ///转换为json数据
-        switch (messageType) {
-            case MSG_TYPE_SYSTEM:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatSystem()));
-                break;
-            case MSG_TYPE_TEXT:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatText()));
-                break;
-            case MSG_TYPE_IMG:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatImage()));
-                break;
-            case MSG_TYPE_VOICE:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatVoice()));
-                break;
-            case MSG_TYPE_LOCATE:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatLocation()));
-                break;
-            case MSG_TYPE_VIDEO:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatVideo()));
-                break;
-            case MSG_TYPE_FILE:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatFile()));
-                break;
-            case MSG_TYPE_CUSTOM:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatCustom()));
-                break;
-            case MSG_TYPE_ACTION:
-                map.put("messageData", GsonTool.modelToJsonStr(getChatAction()));
-                break;
-        }
-        map.put("isDelete", isDelete);
-        map.put("messageDeleteOperation", messageDeleteOperation);
-        map.put("messageDeleteUserList", messageDeleteUserList);
-        map.put("messageDate", messageDate);
-        map.put("deleteDate", deleteDate);
-        return map;
-    }
 
-
-    //转换为protoc消息
-    public Flappy.Message toProtocMessage(Flappy.Message.Builder msgBuilder, String secret) {
+    /******
+     * 转换为protoc消息
+     * @param msgBuilder     消息builder
+     * @param channelSecret  通道秘钥
+     * @return 加密为Protoc消息
+     */
+    public Flappy.Message toProtocMessage(Flappy.Message.Builder msgBuilder, String channelSecret) {
         //转换消息
         if (getMessageId() != null)
             msgBuilder.setMessageId(getMessageId());
@@ -418,19 +571,10 @@ public class ChatMessage {
             msgBuilder.setMessageReceiveId(StringTool.strToLong(getMessageReceiveId()));
         if (getMessageReceiveExtendId() != null)
             msgBuilder.setMessageReceiveExtendId(getMessageReceiveExtendId());
-        if (getMessageContent() != null)
-            msgBuilder.setMessageContent(getMessageContent());
         if (getMessageSendState() != null)
             msgBuilder.setMessageSendState(getMessageSendState());
         if (getMessageReadState() != null)
             msgBuilder.setMessageReadState(getMessageReadState());
-        if (!StringTool.isEmpty(getMessageSecret())) {
-            try {
-                msgBuilder.setMessageSecret(AESTool.EncryptECB(getMessageSecret(), secret));
-            } catch (Exception exception) {
-                msgBuilder.setMessageSecret(getMessageSecret());
-            }
-        }
         if (getMessageDate() != null)
             msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
@@ -442,249 +586,18 @@ public class ChatMessage {
         if (getDeleteDate() != null)
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 
+        //生成临时秘钥
+        //加密内容
+        String msgSecret = IDGenerateTool.getRandomStr(16);
+        msgBuilder.setMessageContent(
+                AESTool.EncryptECBNoThrow(getMessageContent(), msgSecret)
+        );
+        //秘钥使用通道秘钥加密
+        msgBuilder.setMessageSecret(
+                AESTool.EncryptECBNoThrow(getMessageSecret(), channelSecret)
+        );
+
         return msgBuilder.build();
-    }
-
-
-    /******
-     * 设置系统消息
-     * @param chatSystem 系统消息
-     */
-    public void setChatSystem(ChatSystem chatSystem) {
-        messageType = ChatMessage.MSG_TYPE_SYSTEM;
-        setMessageContent(encrypt(chatSystem, null));
-    }
-
-    /******
-     * 获取系统消息
-     * @return 系统消息
-     */
-    public ChatSystem getChatSystem() {
-        if (getMessageType() == MSG_TYPE_SYSTEM) {
-            return decrypt(ChatSystem.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置动作消息
-     * @param chatAction 动作消息
-     */
-    public void setChatAction(ChatAction chatAction) {
-        messageType = ChatMessage.MSG_TYPE_ACTION;
-        setMessageContent(encrypt(chatAction, null));
-    }
-
-    /******
-     * 获取动作消息
-     * @return 动作消息
-     */
-    public ChatAction getChatAction() {
-        if (getMessageType() == MSG_TYPE_ACTION) {
-            return decrypt(ChatAction.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置文本消息
-     * @param text 文本消息，加密
-     */
-    public void setChatText(String text) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_TEXT;
-        setMessageContent(encrypt(text, secret));
-    }
-
-    /******
-     * 获取文本消息
-     * @return 文本消息
-     */
-    public String getChatText() {
-        if (getMessageType() == MSG_TYPE_TEXT) {
-            return decrypt(String.class);
-        }
-        return null;
-    }
-
-
-    /******
-     * 设置图片消息
-     * @param chatImage 图片消息
-     */
-    public void setChatImage(ChatImage chatImage) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_IMG;
-        setMessageContent(encrypt(chatImage, secret));
-    }
-
-    /******
-     * 获取图片消息
-     * @return 图片消息
-     */
-    public ChatImage getChatImage() {
-        if (getMessageType() == MSG_TYPE_IMG) {
-            return decrypt(ChatImage.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置语音消息
-     * @param chatVoice 语音消息
-     */
-    public void setChatVoice(ChatVoice chatVoice) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_VOICE;
-        setMessageContent(encrypt(chatVoice, secret));
-    }
-
-    /******
-     * 获取语音消息
-     * @return 语音消息
-     */
-    public ChatVoice getChatVoice() {
-        if (getMessageType() == MSG_TYPE_VOICE) {
-            return decrypt(ChatVoice.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置定位消息
-     * @param chatLocation 定位消息
-     */
-    public void setChatLocation(ChatLocation chatLocation) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_LOCATE;
-        setMessageContent(encrypt(chatLocation, secret));
-    }
-
-    /******
-     * 获取定位消息
-     * @return 定位消息
-     */
-    public ChatLocation getChatLocation() {
-        //获取位置消息
-        if (getMessageType() == MSG_TYPE_LOCATE) {
-            return decrypt(ChatLocation.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置视频消息
-     * @param chatVideo 视频消息
-     */
-    public void setChatVideo(ChatVideo chatVideo) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_VIDEO;
-        setMessageContent(encrypt(chatVideo, secret));
-    }
-
-    /******
-     * 获取视频消息
-     * @return 视频消息
-     */
-    public ChatVideo getChatVideo() {
-        if (getMessageType() == MSG_TYPE_VIDEO) {
-            return decrypt(ChatVideo.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置文件消息
-     * @param chatFile 文件消息
-     */
-    public void setChatFile(ChatFile chatFile) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_FILE;
-        setMessageContent(encrypt(chatFile, secret));
-    }
-
-    /******
-     * 获取文件消息
-     * @return 文件消息
-     */
-    public ChatFile getChatFile() {
-        if (getMessageType() == MSG_TYPE_FILE) {
-            return decrypt(ChatFile.class);
-        }
-        return null;
-    }
-
-    /******
-     * 设置自定义消息
-     * @param text 自定义消息
-     */
-    public void setChatCustom(String text) {
-        String secret = IDGenerateTool.getRandomStr(16);
-        messageType = ChatMessage.MSG_TYPE_CUSTOM;
-        setMessageContent(encrypt(text, secret));
-    }
-
-    /******
-     * 获取自定义消息
-     * @return 自定义消息
-     */
-    public String getChatCustom() {
-        if (getMessageType() == MSG_TYPE_CUSTOM) {
-            return decrypt(String.class);
-        }
-        return null;
-    }
-
-
-    /*******
-     * 加密数据
-     * @param data   数据
-     * @param secret 秘钥
-     * @return 加密字符串
-     * @param <T> 类型
-     */
-    private <T> String encrypt(T data, String secret) {
-        try {
-            ///设置发送秘钥
-            setMessageSecret(secret);
-            ///设置json字符串
-            String jsonStr = GsonTool.modelToJsonStr(data);
-            ///空的
-            if (StringTool.isEmpty(secret)) {
-                //默认Base64解密
-                return Base64.encodeToString(jsonStr.getBytes(), Base64.NO_WRAP);
-            } else {
-                ///加密数据
-                return AESTool.EncryptECB(jsonStr, secret);
-            }
-        } catch (Exception exception) {
-            return null;
-        }
-    }
-
-    /*******
-     * 解密数据
-     * @param tClass 类型
-     * @return 加密数据
-     */
-    private <T> T decrypt(Class<T> tClass) {
-        try {
-            ///先获取接收的秘钥
-            String secret = getMessageSecret();
-            ///获取数据
-            String data = getMessageContent();
-            ///没有秘钥
-            if (StringTool.isEmpty(secret)) {
-                String jsonData = new String(Base64.decode(data.getBytes(), Base64.NO_WRAP));
-                return GsonTool.jsonStrToModel(jsonData, tClass);
-            }
-            ///解密数据
-            String jsonData = AESTool.DecryptECB(data, secret);
-            ///返回对象
-            return GsonTool.jsonStrToModel(jsonData, tClass);
-        } catch (Exception exception) {
-            return null;
-        }
     }
 
 }

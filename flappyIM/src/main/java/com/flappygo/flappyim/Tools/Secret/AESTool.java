@@ -4,6 +4,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Base64;
+
 import javax.crypto.Cipher;
 
 /******
@@ -105,5 +106,23 @@ public class AESTool {
         byte[] original = cipher.doFinal(encrypted1);
         //ret string
         return new String(original, "utf-8");
+    }
+
+    //encrypt ecb no throw exception
+    public static String EncryptECBNoThrow(String sSrc, String sKey) {
+        try {
+            return EncryptECB(sSrc, sKey);
+        } catch (Exception ex) {
+            return sSrc;
+        }
+    }
+
+    //decrypt ecb no throw exception
+    public static String DecryptECBNoThrow(String sSrc, String sKey) {
+        try {
+            return DecryptECB(sSrc, sKey);
+        } catch (Exception ex) {
+            return sSrc;
+        }
     }
 }
