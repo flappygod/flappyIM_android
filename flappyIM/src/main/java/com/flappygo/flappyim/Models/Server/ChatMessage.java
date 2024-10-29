@@ -129,9 +129,23 @@ public class ChatMessage {
 
     private int isDelete;
 
-    private String messageDeleteOperation;
+    private String messageReplyMsgId;
 
-    private String messageDeleteUserList;
+    private int messageReplyMsgType;
+
+    private String messageReplyMsgContent;
+
+    private String messageReplyUserId;
+
+    private String messageRecallUserId;
+
+    private String messageAtUserIds;
+
+    private String messageReadUserIds;
+
+    private String messageDeleteUserIds;
+
+
 
     private long messageStamp;
 
@@ -265,20 +279,68 @@ public class ChatMessage {
         this.isDelete = (isDelete != null) ? isDelete : 0;
     }
 
-    public String getMessageDeleteOperation() {
-        return messageDeleteOperation;
+    public String getMessageReplyMsgId() {
+        return messageReplyMsgId;
     }
 
-    public void setMessageDeleteOperation(String messageDeleteOperation) {
-        this.messageDeleteOperation = messageDeleteOperation;
+    public void setMessageReplyMsgId(String messageReplyMsgId) {
+        this.messageReplyMsgId = messageReplyMsgId;
     }
 
-    public String getMessageDeleteUserList() {
-        return messageDeleteUserList;
+    public Integer getMessageReplyMsgType() {
+        return messageReplyMsgType;
     }
 
-    public void setMessageDeleteUserList(String messageDeleteUserList) {
-        this.messageDeleteUserList = messageDeleteUserList;
+    public void setMessageReplyMsgType(Integer messageReplyMsgType) {
+        this.messageReplyMsgType = (messageReplyMsgType != null) ? messageReplyMsgType : 0;
+    }
+
+    public String getMessageReplyMsgContent() {
+        return messageReplyMsgContent;
+    }
+
+    public void setMessageReplyMsgContent(String messageReplyMsgContent) {
+        this.messageReplyMsgContent = messageReplyMsgContent;
+    }
+
+    public String getMessageReplyUserId() {
+        return messageReplyUserId;
+    }
+
+    public void setMessageReplyUserId(String messageReplyUserId) {
+        this.messageReplyUserId = messageReplyUserId;
+    }
+
+    public String getMessageRecallUserId() {
+        return messageRecallUserId;
+    }
+
+    public void setMessageRecallUserId(String messageRecallUserId) {
+        this.messageRecallUserId = messageRecallUserId;
+    }
+
+    public String getMessageAtUserIds() {
+        return messageAtUserIds;
+    }
+
+    public void setMessageAtUserIds(String messageAtUserIds) {
+        this.messageAtUserIds = messageAtUserIds;
+    }
+
+    public String getMessageReadUserIds() {
+        return messageReadUserIds;
+    }
+
+    public void setMessageReadUserIds(String messageReadUserIds) {
+        this.messageReadUserIds = messageReadUserIds;
+    }
+
+    public String getMessageDeleteUserIds() {
+        return messageDeleteUserIds;
+    }
+
+    public void setMessageDeleteUserIds(String messageDeleteUserIds) {
+        this.messageDeleteUserIds = messageDeleteUserIds;
     }
 
     public Date getDeleteDate() {
@@ -537,8 +599,18 @@ public class ChatMessage {
         );
 
         isDelete = msg.getIsDelete();
-        messageDeleteOperation = msg.getMessageDeleteOperation();
-        messageDeleteUserList = msg.getMessageDeleteUserList();
+
+        messageReplyMsgId = msg.getMessageReplyMsgId();
+        messageReplyMsgType = msg.getMessageReplyMsgType();
+        messageReplyMsgContent = msg.getMessageReplyMsgContent();
+        messageReplyUserId = msg.getMessageReplyUserId();
+
+        messageRecallUserId = msg.getMessageRecallUserId();
+        messageAtUserIds = msg.getMessageAtUserIds();
+        messageReadUserIds = msg.getMessageReadUserIds();
+        messageDeleteUserIds = msg.getMessageDeleteUserIds();
+
+
         messageDate = TimeTool.strToDate(msg.getMessageDate());
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
     }
@@ -580,10 +652,28 @@ public class ChatMessage {
             msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
         if (getIsDelete() != null)
             msgBuilder.setIsDelete(getIsDelete());
-        if (getMessageDeleteOperation() != null)
-            msgBuilder.setMessageDeleteOperation(getMessageDeleteOperation());
-        if (getMessageDeleteUserList() != null)
-            msgBuilder.setMessageDeleteUserList(getMessageDeleteUserList());
+
+        //用户
+        if (getMessageReplyMsgId() != null)
+            msgBuilder.setMessageReplyMsgId(getMessageReplyMsgId());
+        if (getMessageReplyMsgType() != null)
+            msgBuilder.setMessageReplyMsgType(getMessageReplyMsgType());
+        if (getMessageReplyMsgContent() != null)
+            msgBuilder.setMessageReplyMsgContent(getMessageReplyMsgContent());
+        if (getMessageReplyUserId() != null)
+            msgBuilder.setMessageReplyUserId(getMessageReplyUserId());
+
+        //Recall用户ID
+        if (getMessageRecallUserId() != null)
+            msgBuilder.setMessageRecallUserId(getMessageRecallUserId());
+        if (getMessageAtUserIds() != null)
+            msgBuilder.setMessageAtUserIds(getMessageAtUserIds());
+        if (getMessageReadUserIds() != null)
+            msgBuilder.setMessageReadUserIds(getMessageReadUserIds());
+        if (getMessageDeleteUserIds() != null)
+            msgBuilder.setMessageDeleteUserIds(getMessageDeleteUserIds());
+
+
         if (getDeleteDate() != null)
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 

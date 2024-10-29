@@ -8732,50 +8732,160 @@ public final class Flappy {
 
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息ID
      * </pre>
      *
-     * <code>string messageDeleteOperation = 16;</code>
-     * @return The messageDeleteOperation.
+     * <code>string messageReplyMsgId = 16;</code>
+     * @return The messageReplyMsgId.
      */
-    String getMessageDeleteOperation();
+    String getMessageReplyMsgId();
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息ID
      * </pre>
      *
-     * <code>string messageDeleteOperation = 16;</code>
-     * @return The bytes for messageDeleteOperation.
+     * <code>string messageReplyMsgId = 16;</code>
+     * @return The bytes for messageReplyMsgId.
      */
     com.google.protobuf.ByteString
-        getMessageDeleteOperationBytes();
+        getMessageReplyMsgIdBytes();
 
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息类型
      * </pre>
      *
-     * <code>string messageDeleteUserList = 17;</code>
-     * @return The messageDeleteUserList.
+     * <code>int32 messageReplyMsgType = 17;</code>
+     * @return The messageReplyMsgType.
      */
-    String getMessageDeleteUserList();
+    int getMessageReplyMsgType();
+
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息内容
      * </pre>
      *
-     * <code>string messageDeleteUserList = 17;</code>
-     * @return The bytes for messageDeleteUserList.
+     * <code>string messageReplyMsgContent = 18;</code>
+     * @return The messageReplyMsgContent.
+     */
+    String getMessageReplyMsgContent();
+    /**
+     * <pre>
+     *回复的消息内容
+     * </pre>
+     *
+     * <code>string messageReplyMsgContent = 18;</code>
+     * @return The bytes for messageReplyMsgContent.
      */
     com.google.protobuf.ByteString
-        getMessageDeleteUserListBytes();
+        getMessageReplyMsgContentBytes();
+
+    /**
+     * <pre>
+     *回复的用户ID
+     * </pre>
+     *
+     * <code>string messageReplyUserId = 19;</code>
+     * @return The messageReplyUserId.
+     */
+    String getMessageReplyUserId();
+    /**
+     * <pre>
+     *回复的用户ID
+     * </pre>
+     *
+     * <code>string messageReplyUserId = 19;</code>
+     * @return The bytes for messageReplyUserId.
+     */
+    com.google.protobuf.ByteString
+        getMessageReplyUserIdBytes();
+
+    /**
+     * <pre>
+     *撤回的用户ID
+     * </pre>
+     *
+     * <code>string messageRecallUserId = 20;</code>
+     * @return The messageRecallUserId.
+     */
+    String getMessageRecallUserId();
+    /**
+     * <pre>
+     *撤回的用户ID
+     * </pre>
+     *
+     * <code>string messageRecallUserId = 20;</code>
+     * @return The bytes for messageRecallUserId.
+     */
+    com.google.protobuf.ByteString
+        getMessageRecallUserIdBytes();
+
+    /**
+     * <pre>
+     *AT的用户ID
+     * </pre>
+     *
+     * <code>string messageAtUserIds = 21;</code>
+     * @return The messageAtUserIds.
+     */
+    String getMessageAtUserIds();
+    /**
+     * <pre>
+     *AT的用户ID
+     * </pre>
+     *
+     * <code>string messageAtUserIds = 21;</code>
+     * @return The bytes for messageAtUserIds.
+     */
+    com.google.protobuf.ByteString
+        getMessageAtUserIdsBytes();
+
+    /**
+     * <pre>
+     *已读的用户ID
+     * </pre>
+     *
+     * <code>string messageReadUserIds = 22;</code>
+     * @return The messageReadUserIds.
+     */
+    String getMessageReadUserIds();
+    /**
+     * <pre>
+     *已读的用户ID
+     * </pre>
+     *
+     * <code>string messageReadUserIds = 22;</code>
+     * @return The bytes for messageReadUserIds.
+     */
+    com.google.protobuf.ByteString
+        getMessageReadUserIdsBytes();
+
+    /**
+     * <pre>
+     *删除的用户ID
+     * </pre>
+     *
+     * <code>string messageDeleteUserIds = 23;</code>
+     * @return The messageDeleteUserIds.
+     */
+    String getMessageDeleteUserIds();
+    /**
+     * <pre>
+     *删除的用户ID
+     * </pre>
+     *
+     * <code>string messageDeleteUserIds = 23;</code>
+     * @return The bytes for messageDeleteUserIds.
+     */
+    com.google.protobuf.ByteString
+        getMessageDeleteUserIdsBytes();
 
     /**
      * <pre>
      *消息是否被删除
      * </pre>
      *
-     * <code>int32 isDelete = 18;</code>
+     * <code>int32 isDelete = 24;</code>
      * @return The isDelete.
      */
     int getIsDelete();
@@ -8785,7 +8895,7 @@ public final class Flappy {
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 19;</code>
+     * <code>string deleteDate = 25;</code>
      * @return The deleteDate.
      */
     String getDeleteDate();
@@ -8794,7 +8904,7 @@ public final class Flappy {
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 19;</code>
+     * <code>string deleteDate = 25;</code>
      * @return The bytes for deleteDate.
      */
     com.google.protobuf.ByteString
@@ -8819,8 +8929,13 @@ public final class Flappy {
       messageContent_ = "";
       messageSecret_ = "";
       messageDate_ = "";
-      messageDeleteOperation_ = "";
-      messageDeleteUserList_ = "";
+      messageReplyMsgId_ = "";
+      messageReplyMsgContent_ = "";
+      messageReplyUserId_ = "";
+      messageRecallUserId_ = "";
+      messageAtUserIds_ = "";
+      messageReadUserIds_ = "";
+      messageDeleteUserIds_ = "";
       deleteDate_ = "";
     }
 
@@ -8938,21 +9053,56 @@ public final class Flappy {
             case 130: {
               String s = input.readStringRequireUtf8();
 
-              messageDeleteOperation_ = s;
+              messageReplyMsgId_ = s;
               break;
             }
-            case 138: {
+            case 136: {
+
+              messageReplyMsgType_ = input.readInt32();
+              break;
+            }
+            case 146: {
               String s = input.readStringRequireUtf8();
 
-              messageDeleteUserList_ = s;
+              messageReplyMsgContent_ = s;
               break;
             }
-            case 144: {
+            case 154: {
+              String s = input.readStringRequireUtf8();
+
+              messageReplyUserId_ = s;
+              break;
+            }
+            case 162: {
+              String s = input.readStringRequireUtf8();
+
+              messageRecallUserId_ = s;
+              break;
+            }
+            case 170: {
+              String s = input.readStringRequireUtf8();
+
+              messageAtUserIds_ = s;
+              break;
+            }
+            case 178: {
+              String s = input.readStringRequireUtf8();
+
+              messageReadUserIds_ = s;
+              break;
+            }
+            case 186: {
+              String s = input.readStringRequireUtf8();
+
+              messageDeleteUserIds_ = s;
+              break;
+            }
+            case 192: {
 
               isDelete_ = input.readInt32();
               break;
             }
-            case 154: {
+            case 202: {
               String s = input.readStringRequireUtf8();
 
               deleteDate_ = s;
@@ -9403,106 +9553,351 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGEDELETEOPERATION_FIELD_NUMBER = 16;
-    private volatile Object messageDeleteOperation_;
+    public static final int MESSAGEREPLYMSGID_FIELD_NUMBER = 16;
+    private volatile Object messageReplyMsgId_;
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息ID
      * </pre>
      *
-     * <code>string messageDeleteOperation = 16;</code>
-     * @return The messageDeleteOperation.
+     * <code>string messageReplyMsgId = 16;</code>
+     * @return The messageReplyMsgId.
      */
     @Override
-    public String getMessageDeleteOperation() {
-      Object ref = messageDeleteOperation_;
+    public String getMessageReplyMsgId() {
+      Object ref = messageReplyMsgId_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        messageDeleteOperation_ = s;
+        messageReplyMsgId_ = s;
         return s;
       }
     }
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息ID
      * </pre>
      *
-     * <code>string messageDeleteOperation = 16;</code>
-     * @return The bytes for messageDeleteOperation.
+     * <code>string messageReplyMsgId = 16;</code>
+     * @return The bytes for messageReplyMsgId.
      */
     @Override
     public com.google.protobuf.ByteString
-        getMessageDeleteOperationBytes() {
-      Object ref = messageDeleteOperation_;
+        getMessageReplyMsgIdBytes() {
+      Object ref = messageReplyMsgId_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        messageDeleteOperation_ = b;
+        messageReplyMsgId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int MESSAGEDELETEUSERLIST_FIELD_NUMBER = 17;
-    private volatile Object messageDeleteUserList_;
+    public static final int MESSAGEREPLYMSGTYPE_FIELD_NUMBER = 17;
+    private int messageReplyMsgType_;
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息类型
      * </pre>
      *
-     * <code>string messageDeleteUserList = 17;</code>
-     * @return The messageDeleteUserList.
+     * <code>int32 messageReplyMsgType = 17;</code>
+     * @return The messageReplyMsgType.
      */
     @Override
-    public String getMessageDeleteUserList() {
-      Object ref = messageDeleteUserList_;
+    public int getMessageReplyMsgType() {
+      return messageReplyMsgType_;
+    }
+
+    public static final int MESSAGEREPLYMSGCONTENT_FIELD_NUMBER = 18;
+    private volatile Object messageReplyMsgContent_;
+    /**
+     * <pre>
+     *回复的消息内容
+     * </pre>
+     *
+     * <code>string messageReplyMsgContent = 18;</code>
+     * @return The messageReplyMsgContent.
+     */
+    @Override
+    public String getMessageReplyMsgContent() {
+      Object ref = messageReplyMsgContent_;
       if (ref instanceof String) {
         return (String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
-        messageDeleteUserList_ = s;
+        messageReplyMsgContent_ = s;
         return s;
       }
     }
     /**
      * <pre>
-     *消息删除原因
+     *回复的消息内容
      * </pre>
      *
-     * <code>string messageDeleteUserList = 17;</code>
-     * @return The bytes for messageDeleteUserList.
+     * <code>string messageReplyMsgContent = 18;</code>
+     * @return The bytes for messageReplyMsgContent.
      */
     @Override
     public com.google.protobuf.ByteString
-        getMessageDeleteUserListBytes() {
-      Object ref = messageDeleteUserList_;
+        getMessageReplyMsgContentBytes() {
+      Object ref = messageReplyMsgContent_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
-        messageDeleteUserList_ = b;
+        messageReplyMsgContent_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int ISDELETE_FIELD_NUMBER = 18;
+    public static final int MESSAGEREPLYUSERID_FIELD_NUMBER = 19;
+    private volatile Object messageReplyUserId_;
+    /**
+     * <pre>
+     *回复的用户ID
+     * </pre>
+     *
+     * <code>string messageReplyUserId = 19;</code>
+     * @return The messageReplyUserId.
+     */
+    @Override
+    public String getMessageReplyUserId() {
+      Object ref = messageReplyUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageReplyUserId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *回复的用户ID
+     * </pre>
+     *
+     * <code>string messageReplyUserId = 19;</code>
+     * @return The bytes for messageReplyUserId.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageReplyUserIdBytes() {
+      Object ref = messageReplyUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageReplyUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGERECALLUSERID_FIELD_NUMBER = 20;
+    private volatile Object messageRecallUserId_;
+    /**
+     * <pre>
+     *撤回的用户ID
+     * </pre>
+     *
+     * <code>string messageRecallUserId = 20;</code>
+     * @return The messageRecallUserId.
+     */
+    @Override
+    public String getMessageRecallUserId() {
+      Object ref = messageRecallUserId_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageRecallUserId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *撤回的用户ID
+     * </pre>
+     *
+     * <code>string messageRecallUserId = 20;</code>
+     * @return The bytes for messageRecallUserId.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageRecallUserIdBytes() {
+      Object ref = messageRecallUserId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageRecallUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGEATUSERIDS_FIELD_NUMBER = 21;
+    private volatile Object messageAtUserIds_;
+    /**
+     * <pre>
+     *AT的用户ID
+     * </pre>
+     *
+     * <code>string messageAtUserIds = 21;</code>
+     * @return The messageAtUserIds.
+     */
+    @Override
+    public String getMessageAtUserIds() {
+      Object ref = messageAtUserIds_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageAtUserIds_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *AT的用户ID
+     * </pre>
+     *
+     * <code>string messageAtUserIds = 21;</code>
+     * @return The bytes for messageAtUserIds.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageAtUserIdsBytes() {
+      Object ref = messageAtUserIds_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageAtUserIds_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGEREADUSERIDS_FIELD_NUMBER = 22;
+    private volatile Object messageReadUserIds_;
+    /**
+     * <pre>
+     *已读的用户ID
+     * </pre>
+     *
+     * <code>string messageReadUserIds = 22;</code>
+     * @return The messageReadUserIds.
+     */
+    @Override
+    public String getMessageReadUserIds() {
+      Object ref = messageReadUserIds_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageReadUserIds_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *已读的用户ID
+     * </pre>
+     *
+     * <code>string messageReadUserIds = 22;</code>
+     * @return The bytes for messageReadUserIds.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageReadUserIdsBytes() {
+      Object ref = messageReadUserIds_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageReadUserIds_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGEDELETEUSERIDS_FIELD_NUMBER = 23;
+    private volatile Object messageDeleteUserIds_;
+    /**
+     * <pre>
+     *删除的用户ID
+     * </pre>
+     *
+     * <code>string messageDeleteUserIds = 23;</code>
+     * @return The messageDeleteUserIds.
+     */
+    @Override
+    public String getMessageDeleteUserIds() {
+      Object ref = messageDeleteUserIds_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageDeleteUserIds_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *删除的用户ID
+     * </pre>
+     *
+     * <code>string messageDeleteUserIds = 23;</code>
+     * @return The bytes for messageDeleteUserIds.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageDeleteUserIdsBytes() {
+      Object ref = messageDeleteUserIds_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageDeleteUserIds_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ISDELETE_FIELD_NUMBER = 24;
     private int isDelete_;
     /**
      * <pre>
      *消息是否被删除
      * </pre>
      *
-     * <code>int32 isDelete = 18;</code>
+     * <code>int32 isDelete = 24;</code>
      * @return The isDelete.
      */
     @Override
@@ -9510,14 +9905,14 @@ public final class Flappy {
       return isDelete_;
     }
 
-    public static final int DELETEDATE_FIELD_NUMBER = 19;
+    public static final int DELETEDATE_FIELD_NUMBER = 25;
     private volatile Object deleteDate_;
     /**
      * <pre>
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 19;</code>
+     * <code>string deleteDate = 25;</code>
      * @return The deleteDate.
      */
     @Override
@@ -9538,7 +9933,7 @@ public final class Flappy {
      *消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 19;</code>
+     * <code>string deleteDate = 25;</code>
      * @return The bytes for deleteDate.
      */
     @Override
@@ -9615,17 +10010,35 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDate_)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 15, messageDate_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDeleteOperation_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 16, messageDeleteOperation_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReplyMsgId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 16, messageReplyMsgId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDeleteUserList_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 17, messageDeleteUserList_);
+      if (messageReplyMsgType_ != 0) {
+        output.writeInt32(17, messageReplyMsgType_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReplyMsgContent_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 18, messageReplyMsgContent_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReplyUserId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 19, messageReplyUserId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageRecallUserId_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 20, messageRecallUserId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageAtUserIds_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 21, messageAtUserIds_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReadUserIds_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 22, messageReadUserIds_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDeleteUserIds_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 23, messageDeleteUserIds_);
       }
       if (isDelete_ != 0) {
-        output.writeInt32(18, isDelete_);
+        output.writeInt32(24, isDelete_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deleteDate_)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 19, deleteDate_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 25, deleteDate_);
       }
       unknownFields.writeTo(output);
     }
@@ -9690,18 +10103,37 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDate_)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, messageDate_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDeleteOperation_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(16, messageDeleteOperation_);
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReplyMsgId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(16, messageReplyMsgId_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDeleteUserList_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(17, messageDeleteUserList_);
+      if (messageReplyMsgType_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(17, messageReplyMsgType_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReplyMsgContent_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(18, messageReplyMsgContent_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReplyUserId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(19, messageReplyUserId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageRecallUserId_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(20, messageRecallUserId_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageAtUserIds_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(21, messageAtUserIds_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageReadUserIds_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(22, messageReadUserIds_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(messageDeleteUserIds_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(23, messageDeleteUserIds_);
       }
       if (isDelete_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(18, isDelete_);
+          .computeInt32Size(24, isDelete_);
       }
       if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(deleteDate_)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(19, deleteDate_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(25, deleteDate_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -9748,10 +10180,22 @@ public final class Flappy {
           .equals(other.getMessageSecret())) return false;
       if (!getMessageDate()
           .equals(other.getMessageDate())) return false;
-      if (!getMessageDeleteOperation()
-          .equals(other.getMessageDeleteOperation())) return false;
-      if (!getMessageDeleteUserList()
-          .equals(other.getMessageDeleteUserList())) return false;
+      if (!getMessageReplyMsgId()
+          .equals(other.getMessageReplyMsgId())) return false;
+      if (getMessageReplyMsgType()
+          != other.getMessageReplyMsgType()) return false;
+      if (!getMessageReplyMsgContent()
+          .equals(other.getMessageReplyMsgContent())) return false;
+      if (!getMessageReplyUserId()
+          .equals(other.getMessageReplyUserId())) return false;
+      if (!getMessageRecallUserId()
+          .equals(other.getMessageRecallUserId())) return false;
+      if (!getMessageAtUserIds()
+          .equals(other.getMessageAtUserIds())) return false;
+      if (!getMessageReadUserIds()
+          .equals(other.getMessageReadUserIds())) return false;
+      if (!getMessageDeleteUserIds()
+          .equals(other.getMessageDeleteUserIds())) return false;
       if (getIsDelete()
           != other.getIsDelete()) return false;
       if (!getDeleteDate()
@@ -9802,10 +10246,22 @@ public final class Flappy {
       hash = (53 * hash) + getMessageSecret().hashCode();
       hash = (37 * hash) + MESSAGEDATE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageDate().hashCode();
-      hash = (37 * hash) + MESSAGEDELETEOPERATION_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageDeleteOperation().hashCode();
-      hash = (37 * hash) + MESSAGEDELETEUSERLIST_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageDeleteUserList().hashCode();
+      hash = (37 * hash) + MESSAGEREPLYMSGID_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageReplyMsgId().hashCode();
+      hash = (37 * hash) + MESSAGEREPLYMSGTYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageReplyMsgType();
+      hash = (37 * hash) + MESSAGEREPLYMSGCONTENT_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageReplyMsgContent().hashCode();
+      hash = (37 * hash) + MESSAGEREPLYUSERID_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageReplyUserId().hashCode();
+      hash = (37 * hash) + MESSAGERECALLUSERID_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageRecallUserId().hashCode();
+      hash = (37 * hash) + MESSAGEATUSERIDS_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageAtUserIds().hashCode();
+      hash = (37 * hash) + MESSAGEREADUSERIDS_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageReadUserIds().hashCode();
+      hash = (37 * hash) + MESSAGEDELETEUSERIDS_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageDeleteUserIds().hashCode();
       hash = (37 * hash) + ISDELETE_FIELD_NUMBER;
       hash = (53 * hash) + getIsDelete();
       hash = (37 * hash) + DELETEDATE_FIELD_NUMBER;
@@ -9973,9 +10429,21 @@ public final class Flappy {
 
         messageDate_ = "";
 
-        messageDeleteOperation_ = "";
+        messageReplyMsgId_ = "";
 
-        messageDeleteUserList_ = "";
+        messageReplyMsgType_ = 0;
+
+        messageReplyMsgContent_ = "";
+
+        messageReplyUserId_ = "";
+
+        messageRecallUserId_ = "";
+
+        messageAtUserIds_ = "";
+
+        messageReadUserIds_ = "";
+
+        messageDeleteUserIds_ = "";
 
         isDelete_ = 0;
 
@@ -10022,8 +10490,14 @@ public final class Flappy {
         result.messageReadState_ = messageReadState_;
         result.messageSecret_ = messageSecret_;
         result.messageDate_ = messageDate_;
-        result.messageDeleteOperation_ = messageDeleteOperation_;
-        result.messageDeleteUserList_ = messageDeleteUserList_;
+        result.messageReplyMsgId_ = messageReplyMsgId_;
+        result.messageReplyMsgType_ = messageReplyMsgType_;
+        result.messageReplyMsgContent_ = messageReplyMsgContent_;
+        result.messageReplyUserId_ = messageReplyUserId_;
+        result.messageRecallUserId_ = messageRecallUserId_;
+        result.messageAtUserIds_ = messageAtUserIds_;
+        result.messageReadUserIds_ = messageReadUserIds_;
+        result.messageDeleteUserIds_ = messageDeleteUserIds_;
         result.isDelete_ = isDelete_;
         result.deleteDate_ = deleteDate_;
         onBuilt();
@@ -10125,12 +10599,35 @@ public final class Flappy {
           messageDate_ = other.messageDate_;
           onChanged();
         }
-        if (!other.getMessageDeleteOperation().isEmpty()) {
-          messageDeleteOperation_ = other.messageDeleteOperation_;
+        if (!other.getMessageReplyMsgId().isEmpty()) {
+          messageReplyMsgId_ = other.messageReplyMsgId_;
           onChanged();
         }
-        if (!other.getMessageDeleteUserList().isEmpty()) {
-          messageDeleteUserList_ = other.messageDeleteUserList_;
+        if (other.getMessageReplyMsgType() != 0) {
+          setMessageReplyMsgType(other.getMessageReplyMsgType());
+        }
+        if (!other.getMessageReplyMsgContent().isEmpty()) {
+          messageReplyMsgContent_ = other.messageReplyMsgContent_;
+          onChanged();
+        }
+        if (!other.getMessageReplyUserId().isEmpty()) {
+          messageReplyUserId_ = other.messageReplyUserId_;
+          onChanged();
+        }
+        if (!other.getMessageRecallUserId().isEmpty()) {
+          messageRecallUserId_ = other.messageRecallUserId_;
+          onChanged();
+        }
+        if (!other.getMessageAtUserIds().isEmpty()) {
+          messageAtUserIds_ = other.messageAtUserIds_;
+          onChanged();
+        }
+        if (!other.getMessageReadUserIds().isEmpty()) {
+          messageReadUserIds_ = other.messageReadUserIds_;
+          onChanged();
+        }
+        if (!other.getMessageDeleteUserIds().isEmpty()) {
+          messageDeleteUserIds_ = other.messageDeleteUserIds_;
           onChanged();
         }
         if (other.getIsDelete() != 0) {
@@ -11132,22 +11629,22 @@ public final class Flappy {
         return this;
       }
 
-      private Object messageDeleteOperation_ = "";
+      private Object messageReplyMsgId_ = "";
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息ID
        * </pre>
        *
-       * <code>string messageDeleteOperation = 16;</code>
-       * @return The messageDeleteOperation.
+       * <code>string messageReplyMsgId = 16;</code>
+       * @return The messageReplyMsgId.
        */
-      public String getMessageDeleteOperation() {
-        Object ref = messageDeleteOperation_;
+      public String getMessageReplyMsgId() {
+        Object ref = messageReplyMsgId_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
-          messageDeleteOperation_ = s;
+          messageReplyMsgId_ = s;
           return s;
         } else {
           return (String) ref;
@@ -11155,20 +11652,20 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息ID
        * </pre>
        *
-       * <code>string messageDeleteOperation = 16;</code>
-       * @return The bytes for messageDeleteOperation.
+       * <code>string messageReplyMsgId = 16;</code>
+       * @return The bytes for messageReplyMsgId.
        */
       public com.google.protobuf.ByteString
-          getMessageDeleteOperationBytes() {
-        Object ref = messageDeleteOperation_;
+          getMessageReplyMsgIdBytes() {
+        Object ref = messageReplyMsgId_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
-          messageDeleteOperation_ = b;
+          messageReplyMsgId_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -11176,74 +11673,117 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息ID
        * </pre>
        *
-       * <code>string messageDeleteOperation = 16;</code>
-       * @param value The messageDeleteOperation to set.
+       * <code>string messageReplyMsgId = 16;</code>
+       * @param value The messageReplyMsgId to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageDeleteOperation(
+      public Builder setMessageReplyMsgId(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        messageDeleteOperation_ = value;
+        messageReplyMsgId_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息ID
        * </pre>
        *
-       * <code>string messageDeleteOperation = 16;</code>
+       * <code>string messageReplyMsgId = 16;</code>
        * @return This builder for chaining.
        */
-      public Builder clearMessageDeleteOperation() {
+      public Builder clearMessageReplyMsgId() {
         
-        messageDeleteOperation_ = getDefaultInstance().getMessageDeleteOperation();
+        messageReplyMsgId_ = getDefaultInstance().getMessageReplyMsgId();
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息ID
        * </pre>
        *
-       * <code>string messageDeleteOperation = 16;</code>
-       * @param value The bytes for messageDeleteOperation to set.
+       * <code>string messageReplyMsgId = 16;</code>
+       * @param value The bytes for messageReplyMsgId to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageDeleteOperationBytes(
+      public Builder setMessageReplyMsgIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        messageDeleteOperation_ = value;
+        messageReplyMsgId_ = value;
         onChanged();
         return this;
       }
 
-      private Object messageDeleteUserList_ = "";
+      private int messageReplyMsgType_ ;
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息类型
        * </pre>
        *
-       * <code>string messageDeleteUserList = 17;</code>
-       * @return The messageDeleteUserList.
+       * <code>int32 messageReplyMsgType = 17;</code>
+       * @return The messageReplyMsgType.
        */
-      public String getMessageDeleteUserList() {
-        Object ref = messageDeleteUserList_;
+      @Override
+      public int getMessageReplyMsgType() {
+        return messageReplyMsgType_;
+      }
+      /**
+       * <pre>
+       *回复的消息类型
+       * </pre>
+       *
+       * <code>int32 messageReplyMsgType = 17;</code>
+       * @param value The messageReplyMsgType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageReplyMsgType(int value) {
+        
+        messageReplyMsgType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *回复的消息类型
+       * </pre>
+       *
+       * <code>int32 messageReplyMsgType = 17;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageReplyMsgType() {
+        
+        messageReplyMsgType_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private Object messageReplyMsgContent_ = "";
+      /**
+       * <pre>
+       *回复的消息内容
+       * </pre>
+       *
+       * <code>string messageReplyMsgContent = 18;</code>
+       * @return The messageReplyMsgContent.
+       */
+      public String getMessageReplyMsgContent() {
+        Object ref = messageReplyMsgContent_;
         if (!(ref instanceof String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           String s = bs.toStringUtf8();
-          messageDeleteUserList_ = s;
+          messageReplyMsgContent_ = s;
           return s;
         } else {
           return (String) ref;
@@ -11251,20 +11791,20 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息内容
        * </pre>
        *
-       * <code>string messageDeleteUserList = 17;</code>
-       * @return The bytes for messageDeleteUserList.
+       * <code>string messageReplyMsgContent = 18;</code>
+       * @return The bytes for messageReplyMsgContent.
        */
       public com.google.protobuf.ByteString
-          getMessageDeleteUserListBytes() {
-        Object ref = messageDeleteUserList_;
+          getMessageReplyMsgContentBytes() {
+        Object ref = messageReplyMsgContent_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
-          messageDeleteUserList_ = b;
+          messageReplyMsgContent_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
@@ -11272,54 +11812,534 @@ public final class Flappy {
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息内容
        * </pre>
        *
-       * <code>string messageDeleteUserList = 17;</code>
-       * @param value The messageDeleteUserList to set.
+       * <code>string messageReplyMsgContent = 18;</code>
+       * @param value The messageReplyMsgContent to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageDeleteUserList(
+      public Builder setMessageReplyMsgContent(
           String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        messageDeleteUserList_ = value;
+        messageReplyMsgContent_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息内容
        * </pre>
        *
-       * <code>string messageDeleteUserList = 17;</code>
+       * <code>string messageReplyMsgContent = 18;</code>
        * @return This builder for chaining.
        */
-      public Builder clearMessageDeleteUserList() {
+      public Builder clearMessageReplyMsgContent() {
         
-        messageDeleteUserList_ = getDefaultInstance().getMessageDeleteUserList();
+        messageReplyMsgContent_ = getDefaultInstance().getMessageReplyMsgContent();
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *消息删除原因
+       *回复的消息内容
        * </pre>
        *
-       * <code>string messageDeleteUserList = 17;</code>
-       * @param value The bytes for messageDeleteUserList to set.
+       * <code>string messageReplyMsgContent = 18;</code>
+       * @param value The bytes for messageReplyMsgContent to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageDeleteUserListBytes(
+      public Builder setMessageReplyMsgContentBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        messageDeleteUserList_ = value;
+        messageReplyMsgContent_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object messageReplyUserId_ = "";
+      /**
+       * <pre>
+       *回复的用户ID
+       * </pre>
+       *
+       * <code>string messageReplyUserId = 19;</code>
+       * @return The messageReplyUserId.
+       */
+      public String getMessageReplyUserId() {
+        Object ref = messageReplyUserId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageReplyUserId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *回复的用户ID
+       * </pre>
+       *
+       * <code>string messageReplyUserId = 19;</code>
+       * @return The bytes for messageReplyUserId.
+       */
+      public com.google.protobuf.ByteString
+          getMessageReplyUserIdBytes() {
+        Object ref = messageReplyUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageReplyUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *回复的用户ID
+       * </pre>
+       *
+       * <code>string messageReplyUserId = 19;</code>
+       * @param value The messageReplyUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageReplyUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageReplyUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *回复的用户ID
+       * </pre>
+       *
+       * <code>string messageReplyUserId = 19;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageReplyUserId() {
+        
+        messageReplyUserId_ = getDefaultInstance().getMessageReplyUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *回复的用户ID
+       * </pre>
+       *
+       * <code>string messageReplyUserId = 19;</code>
+       * @param value The bytes for messageReplyUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageReplyUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageReplyUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object messageRecallUserId_ = "";
+      /**
+       * <pre>
+       *撤回的用户ID
+       * </pre>
+       *
+       * <code>string messageRecallUserId = 20;</code>
+       * @return The messageRecallUserId.
+       */
+      public String getMessageRecallUserId() {
+        Object ref = messageRecallUserId_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageRecallUserId_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *撤回的用户ID
+       * </pre>
+       *
+       * <code>string messageRecallUserId = 20;</code>
+       * @return The bytes for messageRecallUserId.
+       */
+      public com.google.protobuf.ByteString
+          getMessageRecallUserIdBytes() {
+        Object ref = messageRecallUserId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageRecallUserId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *撤回的用户ID
+       * </pre>
+       *
+       * <code>string messageRecallUserId = 20;</code>
+       * @param value The messageRecallUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageRecallUserId(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageRecallUserId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *撤回的用户ID
+       * </pre>
+       *
+       * <code>string messageRecallUserId = 20;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageRecallUserId() {
+        
+        messageRecallUserId_ = getDefaultInstance().getMessageRecallUserId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *撤回的用户ID
+       * </pre>
+       *
+       * <code>string messageRecallUserId = 20;</code>
+       * @param value The bytes for messageRecallUserId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageRecallUserIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageRecallUserId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object messageAtUserIds_ = "";
+      /**
+       * <pre>
+       *AT的用户ID
+       * </pre>
+       *
+       * <code>string messageAtUserIds = 21;</code>
+       * @return The messageAtUserIds.
+       */
+      public String getMessageAtUserIds() {
+        Object ref = messageAtUserIds_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageAtUserIds_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *AT的用户ID
+       * </pre>
+       *
+       * <code>string messageAtUserIds = 21;</code>
+       * @return The bytes for messageAtUserIds.
+       */
+      public com.google.protobuf.ByteString
+          getMessageAtUserIdsBytes() {
+        Object ref = messageAtUserIds_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageAtUserIds_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *AT的用户ID
+       * </pre>
+       *
+       * <code>string messageAtUserIds = 21;</code>
+       * @param value The messageAtUserIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageAtUserIds(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageAtUserIds_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *AT的用户ID
+       * </pre>
+       *
+       * <code>string messageAtUserIds = 21;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageAtUserIds() {
+        
+        messageAtUserIds_ = getDefaultInstance().getMessageAtUserIds();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *AT的用户ID
+       * </pre>
+       *
+       * <code>string messageAtUserIds = 21;</code>
+       * @param value The bytes for messageAtUserIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageAtUserIdsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageAtUserIds_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object messageReadUserIds_ = "";
+      /**
+       * <pre>
+       *已读的用户ID
+       * </pre>
+       *
+       * <code>string messageReadUserIds = 22;</code>
+       * @return The messageReadUserIds.
+       */
+      public String getMessageReadUserIds() {
+        Object ref = messageReadUserIds_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageReadUserIds_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *已读的用户ID
+       * </pre>
+       *
+       * <code>string messageReadUserIds = 22;</code>
+       * @return The bytes for messageReadUserIds.
+       */
+      public com.google.protobuf.ByteString
+          getMessageReadUserIdsBytes() {
+        Object ref = messageReadUserIds_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageReadUserIds_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *已读的用户ID
+       * </pre>
+       *
+       * <code>string messageReadUserIds = 22;</code>
+       * @param value The messageReadUserIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageReadUserIds(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageReadUserIds_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *已读的用户ID
+       * </pre>
+       *
+       * <code>string messageReadUserIds = 22;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageReadUserIds() {
+        
+        messageReadUserIds_ = getDefaultInstance().getMessageReadUserIds();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *已读的用户ID
+       * </pre>
+       *
+       * <code>string messageReadUserIds = 22;</code>
+       * @param value The bytes for messageReadUserIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageReadUserIdsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageReadUserIds_ = value;
+        onChanged();
+        return this;
+      }
+
+      private Object messageDeleteUserIds_ = "";
+      /**
+       * <pre>
+       *删除的用户ID
+       * </pre>
+       *
+       * <code>string messageDeleteUserIds = 23;</code>
+       * @return The messageDeleteUserIds.
+       */
+      public String getMessageDeleteUserIds() {
+        Object ref = messageDeleteUserIds_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageDeleteUserIds_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *删除的用户ID
+       * </pre>
+       *
+       * <code>string messageDeleteUserIds = 23;</code>
+       * @return The bytes for messageDeleteUserIds.
+       */
+      public com.google.protobuf.ByteString
+          getMessageDeleteUserIdsBytes() {
+        Object ref = messageDeleteUserIds_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageDeleteUserIds_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *删除的用户ID
+       * </pre>
+       *
+       * <code>string messageDeleteUserIds = 23;</code>
+       * @param value The messageDeleteUserIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageDeleteUserIds(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        messageDeleteUserIds_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *删除的用户ID
+       * </pre>
+       *
+       * <code>string messageDeleteUserIds = 23;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageDeleteUserIds() {
+        
+        messageDeleteUserIds_ = getDefaultInstance().getMessageDeleteUserIds();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *删除的用户ID
+       * </pre>
+       *
+       * <code>string messageDeleteUserIds = 23;</code>
+       * @param value The bytes for messageDeleteUserIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageDeleteUserIdsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        messageDeleteUserIds_ = value;
         onChanged();
         return this;
       }
@@ -11330,7 +12350,7 @@ public final class Flappy {
        *消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 18;</code>
+       * <code>int32 isDelete = 24;</code>
        * @return The isDelete.
        */
       @Override
@@ -11342,7 +12362,7 @@ public final class Flappy {
        *消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 18;</code>
+       * <code>int32 isDelete = 24;</code>
        * @param value The isDelete to set.
        * @return This builder for chaining.
        */
@@ -11357,7 +12377,7 @@ public final class Flappy {
        *消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 18;</code>
+       * <code>int32 isDelete = 24;</code>
        * @return This builder for chaining.
        */
       public Builder clearIsDelete() {
@@ -11373,7 +12393,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 19;</code>
+       * <code>string deleteDate = 25;</code>
        * @return The deleteDate.
        */
       public String getDeleteDate() {
@@ -11393,7 +12413,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 19;</code>
+       * <code>string deleteDate = 25;</code>
        * @return The bytes for deleteDate.
        */
       public com.google.protobuf.ByteString
@@ -11414,7 +12434,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 19;</code>
+       * <code>string deleteDate = 25;</code>
        * @param value The deleteDate to set.
        * @return This builder for chaining.
        */
@@ -11433,7 +12453,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 19;</code>
+       * <code>string deleteDate = 25;</code>
        * @return This builder for chaining.
        */
       public Builder clearDeleteDate() {
@@ -11447,7 +12467,7 @@ public final class Flappy {
        *消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 19;</code>
+       * <code>string deleteDate = 25;</code>
        * @param value The bytes for deleteDate to set.
        * @return This builder for chaining.
        */
@@ -14745,7 +15765,7 @@ public final class Flappy {
       "onStamp\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t" +
       "\022\031\n\021sessionCreateUser\030\n \001(\t\022\020\n\010isDelete\030" +
       "\013 \001(\005\022\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t" +
-      "\"\354\003\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020messa" +
+      "\"\222\005\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020messa" +
       "geSessionId\030\002 \001(\003\022\032\n\022messageSessionType\030" +
       "\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\003\022\032\n\022m" +
       "essageTableOffset\030\005 \001(\003\022\023\n\013messageType\030\006" +
@@ -14754,17 +15774,21 @@ public final class Flappy {
       "(\003\022\036\n\026messageReceiveExtendId\030\n \001(\t\022\026\n\016me" +
       "ssageContent\030\013 \001(\t\022\030\n\020messageSendState\030\014" +
       " \001(\005\022\030\n\020messageReadState\030\r \001(\005\022\025\n\rmessag" +
-      "eSecret\030\016 \001(\t\022\023\n\013messageDate\030\017 \001(\t\022\036\n\026me" +
-      "ssageDeleteOperation\030\020 \001(\t\022\035\n\025messageDel" +
-      "eteUserList\030\021 \001(\t\022\020\n\010isDelete\030\022 \001(\005\022\022\n\nd" +
-      "eleteDate\030\023 \001(\t\"I\n\013FlappyKafka\022\014\n\004type\030\001" +
-      " \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\013" +
-      "2\010.Message\"\274\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\022\n\n" +
-      "devicePlat\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t\022\020\n\010pu" +
-      "shType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\016\n\006pushId" +
-      "\030\006 \001(\t\022\024\n\014pushLanguage\030\007 \001(\t\022\023\n\013pushPriv" +
-      "acy\030\010 \001(\005\022\020\n\010pushMute\030\t \001(\005\022\014\n\004time\030\n \001(" +
-      "\tb\006proto3"
+      "eSecret\030\016 \001(\t\022\023\n\013messageDate\030\017 \001(\t\022\031\n\021me" +
+      "ssageReplyMsgId\030\020 \001(\t\022\033\n\023messageReplyMsg" +
+      "Type\030\021 \001(\005\022\036\n\026messageReplyMsgContent\030\022 \001" +
+      "(\t\022\032\n\022messageReplyUserId\030\023 \001(\t\022\033\n\023messag" +
+      "eRecallUserId\030\024 \001(\t\022\030\n\020messageAtUserIds\030" +
+      "\025 \001(\t\022\032\n\022messageReadUserIds\030\026 \001(\t\022\034\n\024mes" +
+      "sageDeleteUserIds\030\027 \001(\t\022\020\n\010isDelete\030\030 \001(" +
+      "\005\022\022\n\ndeleteDate\030\031 \001(\t\"I\n\013FlappyKafka\022\014\n\004" +
+      "type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg" +
+      "\030\003 \001(\0132\010.Message\"\274\001\n\005Route\022\016\n\006userID\030\001 \001" +
+      "(\003\022\022\n\ndevicePlat\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t" +
+      "\022\020\n\010pushType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\016\n\006" +
+      "pushId\030\006 \001(\t\022\024\n\014pushLanguage\030\007 \001(\t\022\023\n\013pu" +
+      "shPrivacy\030\010 \001(\005\022\020\n\010pushMute\030\t \001(\005\022\014\n\004tim" +
+      "e\030\n \001(\tb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -14811,7 +15835,7 @@ public final class Flappy {
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Message_descriptor,
-        new String[] { "MessageId", "MessageSessionId", "MessageSessionType", "MessageSessionOffset", "MessageTableOffset", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecret", "MessageDate", "MessageDeleteOperation", "MessageDeleteUserList", "IsDelete", "DeleteDate", });
+        new String[] { "MessageId", "MessageSessionId", "MessageSessionType", "MessageSessionOffset", "MessageTableOffset", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecret", "MessageDate", "MessageReplyMsgId", "MessageReplyMsgType", "MessageReplyMsgContent", "MessageReplyUserId", "MessageRecallUserId", "MessageAtUserIds", "MessageReadUserIds", "MessageDeleteUserIds", "IsDelete", "DeleteDate", });
     internal_static_FlappyKafka_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_FlappyKafka_fieldAccessorTable = new

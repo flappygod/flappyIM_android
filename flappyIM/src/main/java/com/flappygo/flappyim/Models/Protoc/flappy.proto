@@ -30,7 +30,7 @@ message ReqLogin{
   //用户ID
   string userID = 1;
   //设备信息
-  string device = 2;
+  string devicePlat = 2;
   //推送ID
   string deviceId = 3;
   //最后的消息序号
@@ -115,14 +115,26 @@ message Message{
   string messageSecret = 14; 
   //消息时间
   string messageDate = 15;
-  //消息删除原因
-  string messageDeleteOperation = 16;
-  //消息删除原因
-  string messageDeleteUserList = 17;
+  //回复的消息ID
+  string messageReplyMsgId = 16;
+  //回复的消息类型
+  int32  messageReplyMsgType = 17;
+  //回复的消息内容
+  string messageReplyMsgContent = 18;
+  //回复的用户ID
+  string messageReplyUserId = 19;
+  //撤回的用户ID
+  string messageRecallUserId = 20;
+  //AT的用户ID
+  string messageAtUserIds = 21;
+  //已读的用户ID
+  string messageReadUserIds = 22;
+  //删除的用户ID
+  string messageDeleteUserIds = 23;
   //消息是否被删除
-  int32 isDelete = 18;
+  int32 isDelete = 24;
   //消息删除日期
-  string deleteDate = 19;
+  string deleteDate = 25;
 }
 
 

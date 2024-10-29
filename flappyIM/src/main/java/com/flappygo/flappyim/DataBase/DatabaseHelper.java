@@ -41,10 +41,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "messageSecret" + " varchar," +
             //是否被删除
             "isDelete" + " integer," +
-            //消息删除原因
-            "messageDeleteOperation" + " varchar," +
-            //消息删除用户
-            "messageDeleteUserList" + " varchar," +
+
+
+            //回复的消息
+            "messageReplyMsgId" + " varchar," +
+            //回复的类型
+            "messageReplyMsgType" + " integer," +
+            //回复的内容
+            "messageReplyMsgContent" + " varchar," +
+            //回复的用户
+            "messageReplyUserId" + " varchar," +
+            //撤回的用户
+            "messageRecallUserId" + " varchar," +
+            //AT的用户
+            "messageAtUserIds" + " varchar," +
+            //已读的用户
+            "messageReadUserIds" + " varchar," +
+            //删除的用户
+            "messageDeleteUserIds" + " varchar," +
+
+
             // 发送日期
             "messageDate" + " varchar," +
             // 时间戳

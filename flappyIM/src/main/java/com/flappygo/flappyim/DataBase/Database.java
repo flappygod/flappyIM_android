@@ -22,8 +22,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /******
  * 数据库操作
@@ -159,6 +161,8 @@ public class Database {
                     chatMessage.getMessageSessionOffset()
             );
         }
+
+
         return executeDbOperation(user -> {
             ContentValues values = new ContentValues();
             putIfNotNull(values, "messageId", chatMessage.getMessageId());
@@ -179,8 +183,16 @@ public class Database {
             putIfNotNull(values, "deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
             values.put("messageInsertUser", user.getUserExtendId());
             values.put("isDelete", chatMessage.getIsDelete());
-            values.put("messageDeleteOperation", chatMessage.getMessageDeleteOperation());
-            values.put("messageDeleteUserList", chatMessage.getMessageDeleteUserList());
+
+            values.put("messageReplyMsgId", chatMessage.getMessageReplyMsgId());
+            values.put("messageReplyMsgType", chatMessage.getMessageReplyMsgType());
+            values.put("messageReplyMsgContent", chatMessage.getMessageReplyMsgContent());
+            values.put("messageReplyUserId", chatMessage.getMessageReplyUserId());
+            values.put("messageRecallUserId", chatMessage.getMessageRecallUserId());
+            values.put("messageAtUserIds", chatMessage.getMessageAtUserIds());
+            values.put("messageReadUserIds", chatMessage.getMessageReadUserIds());
+            values.put("messageDeleteUserIds", chatMessage.getMessageDeleteUserIds());
+
             ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
             values.put("messageStamp", formerMsg != null ?
                     Long.toString(formerMsg.getMessageStamp()) :
@@ -280,10 +292,16 @@ public class Database {
                     "and messageSessionId = ? " +
                     "and messageSendId != ? " +
                     "and messageReadState = 0 " +
-                    "and (messageDeleteOperation is null or messageDeleteOperation == '')" +
+                    "and (messageRecallUserId is null or messageRecallUserId == '')" +
+                    "and (messageDeleteUserIds not like ?)" +
                     String.format(Locale.US, "and messageType != %d ", MSG_TYPE_SYSTEM) +
                     String.format(Locale.US, "and messageType != %d", MSG_TYPE_ACTION);
-            Cursor cursor = db.rawQuery(countQuery, new String[]{chatUser.getUserExtendId(), sessionID, chatUser.getUserId()});
+            Cursor cursor = db.rawQuery(countQuery, new String[]{
+                    chatUser.getUserExtendId(),
+                    sessionID,
+                    chatUser.getUserId(),
+                    "%"+chatUser.getUserId()+"%"
+            });
             int count = 0;
             if (cursor.moveToFirst()) {
                 count = cursor.getInt(0);
@@ -729,8 +747,17 @@ public class Database {
                 info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-                info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
-                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
+
+                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 cursor.close();
                 return info;
@@ -776,8 +803,17 @@ public class Database {
                 info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-                info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
-                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
+
+                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 cursor.close();
                 return info;
@@ -833,8 +869,17 @@ public class Database {
                 info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-                info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
-                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
+
+                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -895,8 +940,17 @@ public class Database {
                 info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-                info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
-                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
+
+                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -947,8 +1001,17 @@ public class Database {
                 info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-                info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
-                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
+
+                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -998,8 +1061,17 @@ public class Database {
                 info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
                 info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-                info.setMessageDeleteOperation(cursor.getString(cursor.getColumnIndex("messageDeleteOperation")));
-                info.setMessageDeleteUserList(cursor.getString(cursor.getColumnIndex("messageDeleteUserList")));
+
+                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
                 list.add(info);
                 cursor.moveToNext();
@@ -1083,8 +1155,7 @@ public class Database {
         executeDbOperation(chatUser -> {
             ContentValues values = new ContentValues();
             values.put("isDelete", 1);
-            values.put("messageDeleteOperation", "recall");
-            values.put("messageDeleteUserList", userId);
+            values.put("messageRecallUserId", userId);
             values.put("messageReadState", 1);
             db.update(
                     DataBaseConfig.TABLE_MESSAGE,
@@ -1101,7 +1172,7 @@ public class Database {
 
     /******
      * 设置删除消息，删除消息时，整个消息不删除，
-     * 只是在messageDeleteUserList中增加delete
+     * 只是在messageDeleteUserIds中增加delete
      * @param messageId    消息ID
      */
     public void updateMessageDelete(String userId, String messageId) {
@@ -1111,10 +1182,9 @@ public class Database {
         }
 
         message.setIsDelete(0);
-        message.setMessageDeleteOperation("delete");
-        List<String> userIdList = StringTool.splitStr(message.getMessageDeleteUserList(), ",");
+        Set<String> userIdList = new HashSet<>(StringTool.splitStr(message.getMessageDeleteUserIds(), ","));
         userIdList.add(userId);
-        message.setMessageDeleteUserList(StringTool.joinListStr(userIdList, ","));
+        message.setMessageDeleteUserIds(StringTool.joinListStr(new ArrayList<>(userIdList), ","));
         message.setMessageReadState(1);
         insertMessage(message);
     }

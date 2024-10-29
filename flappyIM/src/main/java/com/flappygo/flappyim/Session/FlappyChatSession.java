@@ -312,7 +312,7 @@ public class FlappyChatSession extends FlappyBaseSession {
             chatVoice.setSeconds(duration);
             //释放
             retriever.release();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
             return msg;
         }
