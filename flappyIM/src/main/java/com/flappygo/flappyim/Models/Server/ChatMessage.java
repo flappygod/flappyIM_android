@@ -589,9 +589,8 @@ public class ChatMessage {
 
         //生成临时秘钥
         //加密内容
-        String msgSecret = IDGenerateTool.getRandomStr(16);
         msgBuilder.setMessageContent(
-                AESTool.EncryptECBNoThrow(getMessageContent(), msgSecret)
+                AESTool.EncryptECBNoThrow(getMessageContent(), getMessageSecret())
         );
         //秘钥使用通道秘钥加密
         msgBuilder.setMessageSecret(
