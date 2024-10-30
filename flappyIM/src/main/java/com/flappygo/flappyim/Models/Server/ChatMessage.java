@@ -1,5 +1,7 @@
 package com.flappygo.flappyim.Models.Server;
 
+import android.database.Cursor;
+
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatAction;
@@ -96,6 +98,39 @@ public class ChatMessage {
     public ChatMessage() {
         messageSecret = IDGenerateTool.getRandomStr(16);
     }
+
+
+    // Constructor
+    public ChatMessage(Cursor cursor) {
+        this.messageId = cursor.getString(cursor.getColumnIndex("messageId"));
+        this.messageSessionId = cursor.getString(cursor.getColumnIndex("messageSessionId"));
+        this.messageSessionType = cursor.getInt(cursor.getColumnIndex("messageSessionType"));
+        this.messageSessionOffset = cursor.getLong(cursor.getColumnIndex("messageSessionOffset"));
+        this.messageTableOffset = cursor.getLong(cursor.getColumnIndex("messageTableOffset"));
+        this.messageType = cursor.getInt(cursor.getColumnIndex("messageType"));
+        this.messageSendId = cursor.getString(cursor.getColumnIndex("messageSendId"));
+        this.messageSendExtendId = cursor.getString(cursor.getColumnIndex("messageSendExtendId"));
+        this.messageReceiveId = cursor.getString(cursor.getColumnIndex("messageReceiveId"));
+        this.messageReceiveExtendId = cursor.getString(cursor.getColumnIndex("messageReceiveExtendId"));
+        this.messageContent = cursor.getString(cursor.getColumnIndex("messageContent"));
+        this.messageSendState = cursor.getInt(cursor.getColumnIndex("messageSendState"));
+        this.messageReadState = cursor.getInt(cursor.getColumnIndex("messageReadState"));
+        this.messageSecret = cursor.getString(cursor.getColumnIndex("messageSecret"));
+        this.messageStamp = cursor.getLong(cursor.getColumnIndex("messageStamp"));
+        this.messageDate = TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate")));
+        this.isDelete = cursor.getInt(cursor.getColumnIndex("isDelete"));
+        this.messageReplyMsgId = cursor.getString(cursor.getColumnIndex("messageReplyMsgId"));
+        this.messageReplyMsgType = cursor.getInt(cursor.getColumnIndex("messageReplyMsgType"));
+        this.messageReplyMsgContent = cursor.getString(cursor.getColumnIndex("messageReplyMsgContent"));
+        this.messageReplyUserId = cursor.getString(cursor.getColumnIndex("messageReplyUserId"));
+        this.messageRecallUserId = cursor.getString(cursor.getColumnIndex("messageRecallUserId"));
+        this.messageAtUserIds = cursor.getString(cursor.getColumnIndex("messageAtUserIds"));
+        this.messageReadUserIds = cursor.getString(cursor.getColumnIndex("messageReadUserIds"));
+        this.messageDeleteUserIds = cursor.getString(cursor.getColumnIndex("messageDeleteUserIds"));
+        this.deleteDate = TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate")));
+    }
+
+
 
     private String messageId;
 

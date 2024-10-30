@@ -744,36 +744,7 @@ public class Database {
                     null
             );
             if (cursor.moveToFirst()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                ChatMessage info = new ChatMessage(cursor);
                 cursor.close();
                 return info;
             }
@@ -825,36 +796,7 @@ public class Database {
                     "messageTableOffset DESC,messageStamp DESC LIMIT 1"
             );
             if (cursor.moveToFirst()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                info.setMessageReadState(cursor.getColumnIndex("messageReadState"));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                ChatMessage info = new ChatMessage(cursor);
                 cursor.close();
                 return info;
             }
@@ -891,36 +833,7 @@ public class Database {
                 return list;
             }
             while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                ChatMessage info = new ChatMessage(cursor);
                 list.add(info);
                 cursor.moveToNext();
             }
@@ -968,36 +881,7 @@ public class Database {
                 cursor.close();
             } else {
                 while (!cursor.isAfterLast()) {
-                    ChatMessage info = new ChatMessage();
-                    info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                    info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                    info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                    info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                    info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                    info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                    info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                    info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                    info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                    info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                    info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                    info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                    info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                    info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                    info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                    info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                    info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                    info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                    info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                    info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                    info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                    info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                    info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                    info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                    info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                    info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                    ChatMessage info = new ChatMessage(cursor);
                     formerMsgList.add(info);
                     cursor.moveToNext();
                 }
@@ -1044,36 +928,7 @@ public class Database {
                 return list;
             }
             while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                ChatMessage info = new ChatMessage(cursor);
                 list.add(info);
                 cursor.moveToNext();
             }
@@ -1118,36 +973,7 @@ public class Database {
                 cursor.close();
             } else {
                 while (!cursor.isAfterLast()) {
-                    ChatMessage info = new ChatMessage();
-                    info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                    info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                    info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                    info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                    info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                    info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                    info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                    info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                    info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                    info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                    info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                    info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                    info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                    info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                    info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                    info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                    info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                    info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                    info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                    info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                    info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                    info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                    info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                    info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                    info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                    info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                    ChatMessage info = new ChatMessage(cursor);
                     newerMsgList.add(info);
                     cursor.moveToNext();
                 }
@@ -1185,36 +1011,7 @@ public class Database {
                 return list;
             }
             while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                ChatMessage info = new ChatMessage(cursor);
                 list.add(info);
                 cursor.moveToNext();
             }
@@ -1245,36 +1042,7 @@ public class Database {
                 return list;
             }
             while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage();
-                info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
-                info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
-                info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
-                info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
-                info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
-                info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
-                info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
-                info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
-                info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
-                info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
-                info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
-                info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
-                info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
-                info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
-                info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
-                info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
-                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
-
-                info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
-                info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
-                info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
-                info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
-
-                info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
-                info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
-                info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
-                info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
-
-                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                ChatMessage info = new ChatMessage(cursor);
                 list.add(info);
                 cursor.moveToNext();
             }
