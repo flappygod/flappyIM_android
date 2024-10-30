@@ -24,7 +24,6 @@ import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Session.FlappyChatSession;
-import com.lcw.library.imagepicker.ImagePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +87,16 @@ public class MainActivity extends Activity {
 
             @Override
             public void sessionReceive(ChatSessionData session) {
+
+            }
+
+            @Override
+            public void sessionUpdateList(List<ChatSessionData> session) {
+
+            }
+
+            @Override
+            public void sessionUpdate(ChatSessionData session) {
 
             }
 
@@ -325,20 +334,20 @@ public class MainActivity extends Activity {
      * 获取相册图片
      */
     private void gotoGetPicture() {
-        ImagePicker.getInstance()
+        /*ImagePicker.getInstance()
                 .setTitle("标题")//设置标题
                 .showCamera(true)//设置是否显示拍照按钮
                 .showImage(true)//设置是否展示图片
                 .showVideo(true)//设置是否展示视频
                 .setSingleType(true)//设置图片视频不能同时选择
                 .setMaxCount(9)//设置最大选择图片数目(默认为1，单选)
-                .start(MainActivity.this, 100);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode
+                .start(MainActivity.this, 100);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode*/
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && data != null) {
+        /*if (requestCode == 100 && data != null) {
             List<String> imagePaths = data.getStringArrayListExtra(ImagePicker.EXTRA_SELECT_IMAGES);
 
             mySession.sendLocalImage(imagePaths.get(0), new FlappySendCallback<ChatMessage>() {
@@ -354,7 +363,7 @@ public class MainActivity extends Activity {
                 }
 
             });
-        }
+        }*/
     }
 
     /*
