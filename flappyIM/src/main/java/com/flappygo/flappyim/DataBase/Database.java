@@ -229,30 +229,45 @@ public class Database {
     }
 
     /******
-     * 更新消息已读(系统消息的已读状态不做处理)
+     * 更新消息已读(ACTION消息/系统消息、的已读状态不做处理)
      * @param userId        用户ID
      * @param sessionId     会话ID
      * @param tableOffset 表序号
      */
     private void updateMessageRead(String userId, String sessionId, String tableOffset) {
         executeDbOperation(chatUser -> {
-            ContentValues values = new ContentValues();
-            values.put("messageReadState", 1);
-            db.update(
-                    DataBaseConfig.TABLE_MESSAGE,
-                    values,
-                    "messageInsertUser=? and " +
-                            "messageSendId!=? and " +
-                            String.format(Locale.US, "messageType != %d and ", MSG_TYPE_SYSTEM) +
-                            "messageSessionId=? and " +
-                            "messageTableOffset <= ? ",
-                    new String[]{
-                            chatUser.getUserExtendId(),
-                            userId,
-                            sessionId,
-                            tableOffset,
-                    }
-            );
+
+            //SQL
+            String sql = "UPDATE " + DataBaseConfig.TABLE_MESSAGE + " " +
+                    "SET messageReadState = 1, " +
+                    "messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ? " +
+                    "WHERE messageInsertUser = ? AND " +
+                    "messageSendId != ? AND " +
+                    "messageType NOT IN (?, ?) AND " +
+                    "messageSessionId = ? AND " +
+                    "messageTableOffset <= ?";
+
+            //Prepare the statement with the actual values
+            Object[] args = new Object[]{
+                    //New user ID to add
+                    userId,
+                    //messageInsertUser
+                    chatUser.getUserExtendId(),
+                    //messageSendId (to exclude)
+                    userId,
+                    //First messageType to exclude
+                    MSG_TYPE_SYSTEM,
+                    //Second messageType to exclude
+                    MSG_TYPE_ACTION,
+                    //messageSessionId
+                    sessionId,
+                    //messageTableOffset
+                    tableOffset
+            };
+
+            //Execute the update
+            db.execSQL(sql, args);
+
             return true;
         });
     }
@@ -300,7 +315,7 @@ public class Database {
                     chatUser.getUserExtendId(),
                     sessionID,
                     chatUser.getUserId(),
-                    "%"+chatUser.getUserId()+"%"
+                    "%" + chatUser.getUserId() + "%"
             });
             int count = 0;
             if (cursor.moveToFirst()) {
