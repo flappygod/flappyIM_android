@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.Models.Server;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
@@ -101,6 +102,7 @@ public class ChatMessage {
 
 
     // Constructor
+    @SuppressLint("Range")
     public ChatMessage(Cursor cursor) {
         this.messageId = cursor.getString(cursor.getColumnIndex("messageId"));
         this.messageSessionId = cursor.getString(cursor.getColumnIndex("messageSessionId"));
