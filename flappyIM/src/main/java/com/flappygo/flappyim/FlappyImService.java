@@ -5,12 +5,12 @@ import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTaskClient;
 import com.flappygo.flappyim.ApiServer.Callback.BaseListParseCallBack;
 import com.flappygo.flappyim.ApiServer.Clients.AsyncTask.LXAsyncTask;
 import com.flappygo.flappyim.ApiServer.Callback.BaseParseCallback;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.Listener.NotificationClickListener;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
+import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpClient;
 import com.flappygo.flappyim.ApiServer.Models.BaseApiModel;
 import com.flappygo.flappyim.Models.Response.ResponseLogin;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Service.FlappySocketService;
 import com.flappygo.flappyim.Thread.NettyThreadListener;
@@ -374,28 +374,28 @@ public class FlappyImService {
             String language = pushSetting.getRoutePushLanguage();
             //推送类型普通
             if (StringTool.strToInt(privacy, 0) == PUSH_PRIVACY_TYPE_NORMAL) {
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_TEXT) {
+                if (chatMessage.getMessageType() == MSG_TYPE_TEXT) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), chatMessage.getChatText());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_IMG) {
+                if (chatMessage.getMessageType() == MSG_TYPE_IMG) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getImgMsg());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_VOICE) {
+                if (chatMessage.getMessageType() == MSG_TYPE_VOICE) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getVoiceMsg());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_LOCATE) {
+                if (chatMessage.getMessageType() == MSG_TYPE_LOCATE) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getLocateMsg());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_VIDEO) {
+                if (chatMessage.getMessageType() == MSG_TYPE_VIDEO) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getVideoMsg());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_FILE) {
+                if (chatMessage.getMessageType() == MSG_TYPE_FILE) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getFileMsg());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_SYSTEM) {
+                if (chatMessage.getMessageType() == MSG_TYPE_SYSTEM) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getSysMsg());
                 }
-                if (chatMessage.getMessageType().intValue() == MSG_TYPE_CUSTOM) {
+                if (chatMessage.getMessageType() == MSG_TYPE_CUSTOM) {
                     util.sendNotification(chatMessage, Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getTitle(), Objects.requireNonNull(ConfigPushMsg.getLanguagePushMsg(language)).getGeneralMsg());
                 }
             }
