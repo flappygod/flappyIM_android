@@ -782,6 +782,31 @@ public class Database {
         });
     }
 
+    //获取最近的一条消息sessionOffset
+    @SuppressLint("Range")
+    public Long getSessionOffsetLatest(String messageSessionId) {
+        return executeDbOperation(chatUser -> {
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageSessionId = ? and messageInsertUser = ? and messageType != ? and messageSendState in (1,2,3,4) ",
+                    new String[]{
+                            messageSessionId,
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
+                    },
+                    null,
+                    null,
+                    "messageTableOffset desc,messageStamp desc limit 1"
+            );
+            if (cursor.moveToFirst()) {
+                return cursor.getLong(cursor.getColumnIndex("messageSessionOffset"));
+            }
+            cursor.close();
+            return Long.valueOf(0);
+        });
+    }
+
     //获取最近的一条消息
     @SuppressLint("Range")
     public ChatMessage getSessionLatestMessage(String messageSessionId) {
@@ -840,12 +865,12 @@ public class Database {
 
     /******
      * 获取当前这个messageTableSeq的所有消息
-     * @param messageSessionId  会话ID
+     * @param messageSessionId   会话ID
      * @param messageTableOffset 表序号
      * @return 获取消息，这个消息可能有多条，主要是没发成功的
      */
     @SuppressLint("Range")
-    private List<ChatMessage> getSessionOffsetMessages(String messageSessionId, String messageTableOffset, String messageStamp) {
+    private List<ChatMessage> getSessionOffsetSmallerMessages(String messageSessionId, String messageTableOffset, String messageStamp) {
         return executeDbOperation(chatUser -> {
             List<ChatMessage> list = new ArrayList<>();
             Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
@@ -908,35 +933,117 @@ public class Database {
     @SuppressLint("Range")
     public List<ChatMessage> getSessionFormerMessages(String messageSessionId, String messageID, int size) {
         return executeDbOperation(chatUser -> {
+            //消息
             ChatMessage chatMessage = getMessageById(messageID);
-            List<ChatMessage> sessionSeqMessages = getSessionOffsetMessages(
+
+            //当前用户
+            ChatSessionMember chatSessionMember = getSessionMember(messageSessionId, chatUser.getUserId());
+
+            //获取当前这个tableOffset相等的消息
+            List<ChatMessage> equalMsgList = getSessionOffsetSmallerMessages(
                     messageSessionId,
                     chatMessage.getMessageTableOffset().toString(),
                     chatMessage.getMessageStamp().toString()
             );
-            List<ChatMessage> chatMessages = new ArrayList<>(sessionSeqMessages);
 
-            List<ChatMessage> list = new ArrayList<>();
+            //查询比它小的消息
+            List<ChatMessage> formerMsgList = new ArrayList<>();
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSessionId = ? and messageTableOffset < ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    "messageSessionId = ? and messageTableOffset < ? and messageSessionOffset > ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
                     new String[]{
                             messageSessionId,
                             chatMessage.getMessageTableOffset().toString(),
+                            chatSessionMember.getSessionMemberLatestDelete().toString(),
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
                     },
                     null,
                     null,
-                    "messageTableOffset DESC,messageStamp DESC LIMIT " + size
+                    "messageTableOffset desc,messageStamp desc limit " + size
             );
 
             if (!cursor.moveToFirst()) {
                 cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage();
+                    info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
+                    info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
+                    info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                    info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                    info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                    info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
+                    info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
+                    info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
+                    info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
+                    info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
+                    info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
+                    info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                    info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
+                    info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
+                    info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
+                    info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+                    info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
+
+                    info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                    info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                    info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                    info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                    info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                    info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                    info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                    info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
+                    info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                    formerMsgList.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+
+            //返回的数据组装
+            List<ChatMessage> retMessages = new ArrayList<>(equalMsgList);
+            retMessages.addAll(formerMsgList);
+            if (retMessages.size() > size) {
+                retMessages = retMessages.subList(0, size);
+            }
+            return retMessages;
+        }, new ArrayList<>());
+    }
+
+
+    /******
+     * 获取当前这个messageTableSeq的所有消息
+     * @param messageSessionId   会话ID
+     * @param messageTableOffset 表序号
+     * @return 获取消息，这个消息可能有多条，主要是没发成功的
+     */
+    @SuppressLint("Range")
+    private List<ChatMessage> getSessionOffsetLargerMessages(String messageSessionId, String messageTableOffset, String messageStamp) {
+        return executeDbOperation(chatUser -> {
+            List<ChatMessage> list = new ArrayList<>();
+            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageSessionId = ? and messageTableOffset = ? and messageStamp > ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    new String[]{
+                            messageSessionId,
+                            messageTableOffset,
+                            messageStamp,
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
+                    },
+                    null,
+                    null,
+                    "messageStamp desc");
+            if (!cursor.moveToFirst()) {
+                cursor.close();
                 return list;
             }
-            while (!cursor.isAfterLast() && list.size() < size) {
+            while (!cursor.isAfterLast()) {
                 ChatMessage info = new ChatMessage();
                 info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
                 info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
@@ -971,13 +1078,93 @@ public class Database {
                 cursor.moveToNext();
             }
             cursor.close();
-            chatMessages.addAll(list);
-            if (chatMessages.size() > size) {
-                chatMessages = chatMessages.subList(0, size);
-            }
-            return chatMessages;
+            return list;
         }, new ArrayList<>());
     }
+
+
+    //获取会话之前的消息列表
+    @SuppressLint("Range")
+    public List<ChatMessage> getSessionNewerMessages(String messageSessionId, String messageID, int size) {
+        return executeDbOperation(chatUser -> {
+            //消息
+            ChatMessage chatMessage = getMessageById(messageID);
+
+            //获取当前这个tableOffset相等的消息
+            List<ChatMessage> equalMsgList = getSessionOffsetLargerMessages(
+                    messageSessionId,
+                    chatMessage.getMessageTableOffset().toString(),
+                    chatMessage.getMessageStamp().toString()
+            );
+
+            //查询比它小的消息
+            List<ChatMessage> newerMsgList = new ArrayList<>();
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    "messageSessionId = ? and messageTableOffset > ?  and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    new String[]{
+                            messageSessionId,
+                            chatMessage.getMessageTableOffset().toString(),
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
+                    },
+                    null,
+                    null,
+                    "messageTableOffset DESC,messageStamp desc limit " + size
+            );
+
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage();
+                    info.setMessageId(cursor.getString(cursor.getColumnIndex("messageId")));
+                    info.setMessageSessionId(cursor.getString(cursor.getColumnIndex("messageSessionId")));
+                    info.setMessageSessionType(cursor.getInt(cursor.getColumnIndex("messageSessionType")));
+                    info.setMessageSessionOffset(cursor.getLong(cursor.getColumnIndex("messageSessionOffset")));
+                    info.setMessageTableOffset(cursor.getLong(cursor.getColumnIndex("messageTableOffset")));
+                    info.setMessageType(cursor.getInt(cursor.getColumnIndex("messageType")));
+                    info.setMessageSendId(cursor.getString(cursor.getColumnIndex("messageSendId")));
+                    info.setMessageSendExtendId(cursor.getString(cursor.getColumnIndex("messageSendExtendId")));
+                    info.setMessageReceiveId(cursor.getString(cursor.getColumnIndex("messageReceiveId")));
+                    info.setMessageReceiveExtendId(cursor.getString(cursor.getColumnIndex("messageReceiveExtendId")));
+                    info.setMessageContent(cursor.getString(cursor.getColumnIndex("messageContent")));
+                    info.setMessageSendState(cursor.getInt(cursor.getColumnIndex("messageSendState")));
+                    info.setMessageReadState(cursor.getInt(cursor.getColumnIndex("messageReadState")));
+                    info.setMessageSecret(cursor.getString(cursor.getColumnIndex("messageSecret")));
+                    info.setMessageStamp(cursor.getLong(cursor.getColumnIndex("messageStamp")));
+                    info.setMessageDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate"))));
+                    info.setIsDelete(cursor.getInt(cursor.getColumnIndex("isDelete")));
+
+                    info.setMessageReplyMsgId(cursor.getString(cursor.getColumnIndex("messageReplyMsgId")));
+                    info.setMessageReplyMsgType(cursor.getInt(cursor.getColumnIndex("messageReplyMsgType")));
+                    info.setMessageReplyMsgContent(cursor.getString(cursor.getColumnIndex("messageReplyMsgContent")));
+                    info.setMessageReplyUserId(cursor.getString(cursor.getColumnIndex("messageReplyUserId")));
+
+                    info.setMessageRecallUserId(cursor.getString(cursor.getColumnIndex("messageRecallUserId")));
+                    info.setMessageAtUserIds(cursor.getString(cursor.getColumnIndex("messageAtUserIds")));
+                    info.setMessageReadUserIds(cursor.getString(cursor.getColumnIndex("messageReadUserIds")));
+                    info.setMessageDeleteUserIds(cursor.getString(cursor.getColumnIndex("messageDeleteUserIds")));
+
+                    info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("deleteDate"))));
+                    newerMsgList.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+            //返回的数据组装
+            List<ChatMessage> retMessages = new ArrayList<>(newerMsgList);
+            retMessages.addAll(equalMsgList);
+
+            if (retMessages.size() > size) {
+                retMessages = retMessages.subList(retMessages.size() - size, retMessages.size());
+            }
+            return retMessages;
+        }, new ArrayList<>());
+    }
+
 
     //更新还未处理的消息
     @SuppressLint("Range")

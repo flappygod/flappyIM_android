@@ -71,23 +71,27 @@ public class FlappyBaseSession {
      * @param msg 消息
      */
     public void updateMsgInsert(ChatMessage msg) {
-        //设置消息发送状态为create
-        msg.setMessageSendState(SEND_STATE_SENDING);
-
-        //设置message stamp
-        msg.setMessageStamp(System.currentTimeMillis());
 
         //设置消息表Offset
         ChatUser chatUser = DataManager.getInstance().getLoginUser();
 
-        //最近的一条消息
-        BigDecimal bigDecimal = StringTool.strToDecimal(chatUser.getLatest());
+        //表offset
+        long tableOffset = StringTool.strToLong(chatUser.getLatest());
 
-        //添加一个
-        bigDecimal = bigDecimal.add(new BigDecimal(1));
+        //会话offset
+        Long sessionOffset = Database.getInstance().getSessionOffsetLatest(msg.getMessageSessionId());
 
         //设置offset，仅用于排序，最终以服务器端返回为准
-        msg.setMessageTableOffset(bigDecimal.longValue());
+        msg.setMessageTableOffset(tableOffset + 1);
+
+        //设置offset，仅用于排序，最终以服务器端返回为准
+        msg.setMessageSessionOffset(sessionOffset + 1);
+
+        //设置message stamp
+        msg.setMessageStamp(System.currentTimeMillis());
+
+        //设置消息发送状态为create
+        msg.setMessageSendState(SEND_STATE_SENDING);
 
         //更新数据
         sessionClient.execute(new LXAsyncTask<ChatMessage, Boolean>() {
