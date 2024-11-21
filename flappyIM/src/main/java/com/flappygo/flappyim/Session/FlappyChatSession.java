@@ -897,31 +897,31 @@ public class FlappyChatSession extends FlappyBaseSession {
      */
     public void resendMessage(ChatMessage chatMessage, FlappySendCallback<ChatMessage> callback) {
         //文本消息
-        if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
+        if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_TEXT) {
             sendMessage(chatMessage, callback);
         }
         //图片消息
-        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_IMG) {
+        else if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_IMG) {
             uploadImageAndSend(chatMessage, callback);
         }
         //语音消息
-        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VOICE) {
+        else if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_VOICE) {
             uploadVoiceAndSend(chatMessage, callback);
         }
         //定位消息
-        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
+        else if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_LOCATE) {
             sendMessage(chatMessage, callback);
         }
         //视频消息
-        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
+        else if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_VIDEO) {
             uploadVideoAndSend(chatMessage, callback);
         }
         //文件消息
-        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_FILE) {
+        else if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_FILE) {
             uploadFileAndSend(chatMessage, callback);
         }
         //自定义消息
-        else if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_CUSTOM) {
+        else if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_CUSTOM) {
             sendMessage(chatMessage, callback);
         }
     }
@@ -936,6 +936,14 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     /******
+     * 通过消息ID获取消息
+     * @return 消息
+     */
+    public ChatMessage getMessageById(String messageId) {
+        return Database.getInstance().getMessageById(messageId);
+    }
+
+    /******
      * 获取这条消息之前的消息
      * @param messageId 消息ID
      * @param size      大小
@@ -943,6 +951,17 @@ public class FlappyChatSession extends FlappyBaseSession {
      */
     public List<ChatMessage> getFormerMessages(String messageId, int size) {
         return Database.getInstance().getSessionFormerMessages(getSession().getSessionId(), messageId, size);
+    }
+
+
+    /******
+     * 获取这条消息之后的消息
+     * @param messageId 消息ID
+     * @param size      大小
+     * @return 消息列表
+     */
+    public List<ChatMessage> getNewerMessages(String messageId, int size) {
+        return Database.getInstance().getSessionNewerMessages(getSession().getSessionId(), messageId, size);
     }
 
 
