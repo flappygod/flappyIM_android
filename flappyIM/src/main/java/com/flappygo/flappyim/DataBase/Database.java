@@ -1,5 +1,7 @@
 package com.flappygo.flappyim.DataBase;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
@@ -805,42 +807,6 @@ public class Database {
         });
     }
 
-    /******
-     * 获取当前这个messageTableSeq的所有消息
-     * @param messageSessionId   会话ID
-     * @param messageTableOffset 表序号
-     * @return 获取消息，这个消息可能有多条，主要是没发成功的
-     */
-    @SuppressLint("Range")
-    private List<ChatMessage> getSessionOffsetSmallerMessages(String messageSessionId, String messageTableOffset, String messageStamp) {
-        return executeDbOperation(chatUser -> {
-            List<ChatMessage> list = new ArrayList<>();
-            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
-                    null,
-                    "messageSessionId = ? and messageTableOffset = ? and messageStamp < ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
-                    new String[]{
-                            messageSessionId,
-                            messageTableOffset,
-                            messageStamp,
-                            chatUser.getUserExtendId(),
-                            Integer.toString(MSG_TYPE_ACTION),
-                    },
-                    null,
-                    null,
-                    "messageStamp DESC");
-            if (!cursor.moveToFirst()) {
-                cursor.close();
-                return list;
-            }
-            while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage(cursor);
-                list.add(info);
-                cursor.moveToNext();
-            }
-            cursor.close();
-            return list;
-        }, new ArrayList<>());
-    }
 
     //获取会话之前的消息列表
     @SuppressLint("Range")
@@ -852,22 +818,22 @@ public class Database {
             //当前用户
             ChatSessionMember chatSessionMember = getSessionMember(messageSessionId, chatUser.getUserId());
 
-            //获取当前这个tableOffset相等的消息
-            List<ChatMessage> equalMsgList = getSessionOffsetSmallerMessages(
-                    messageSessionId,
-                    chatMessage.getMessageTableOffset().toString(),
-                    chatMessage.getMessageStamp().toString()
-            );
-
             //查询比它小的消息
-            List<ChatMessage> formerMsgList = new ArrayList<>();
+            List<ChatMessage> retMessages = new ArrayList<>();
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSessionId = ? and messageTableOffset < ? and messageSessionOffset > ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    "messageSessionId = ? " +
+                            "and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) " +
+                            "and messageSessionOffset > ? " +
+                            "and messageInsertUser = ? " +
+                            "and messageType != ? " +
+                            "and isDelete != 1 ",
                     new String[]{
                             messageSessionId,
                             chatMessage.getMessageTableOffset().toString(),
+                            chatMessage.getMessageTableOffset().toString(),
+                            chatMessage.getMessageStamp().toString(),
                             chatSessionMember.getSessionMemberLatestDelete().toString(),
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
@@ -876,64 +842,18 @@ public class Database {
                     null,
                     "messageTableOffset desc,messageStamp desc limit " + size
             );
-
+            //全部数据转换
             if (!cursor.moveToFirst()) {
                 cursor.close();
             } else {
                 while (!cursor.isAfterLast()) {
                     ChatMessage info = new ChatMessage(cursor);
-                    formerMsgList.add(info);
+                    retMessages.add(info);
                     cursor.moveToNext();
                 }
                 cursor.close();
             }
-
-
-            //返回的数据组装
-            List<ChatMessage> retMessages = new ArrayList<>(equalMsgList);
-            retMessages.addAll(formerMsgList);
-            if (retMessages.size() > size) {
-                retMessages = retMessages.subList(0, size);
-            }
             return retMessages;
-        }, new ArrayList<>());
-    }
-
-
-    /******
-     * 获取当前这个messageTableSeq的所有消息
-     * @param messageSessionId   会话ID
-     * @param messageTableOffset 表序号
-     * @return 获取消息，这个消息可能有多条，主要是没发成功的
-     */
-    @SuppressLint("Range")
-    private List<ChatMessage> getSessionOffsetLargerMessages(String messageSessionId, String messageTableOffset, String messageStamp) {
-        return executeDbOperation(chatUser -> {
-            List<ChatMessage> list = new ArrayList<>();
-            Cursor cursor = db.query(DataBaseConfig.TABLE_MESSAGE,
-                    null,
-                    "messageSessionId = ? and messageTableOffset = ? and messageStamp > ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
-                    new String[]{
-                            messageSessionId,
-                            messageTableOffset,
-                            messageStamp,
-                            chatUser.getUserExtendId(),
-                            Integer.toString(MSG_TYPE_ACTION),
-                    },
-                    null,
-                    null,
-                    "messageStamp desc");
-            if (!cursor.moveToFirst()) {
-                cursor.close();
-                return list;
-            }
-            while (!cursor.isAfterLast()) {
-                ChatMessage info = new ChatMessage(cursor);
-                list.add(info);
-                cursor.moveToNext();
-            }
-            cursor.close();
-            return list;
         }, new ArrayList<>());
     }
 
@@ -945,22 +865,21 @@ public class Database {
             //消息
             ChatMessage chatMessage = getMessageById(messageID);
 
-            //获取当前这个tableOffset相等的消息
-            List<ChatMessage> equalMsgList = getSessionOffsetLargerMessages(
-                    messageSessionId,
-                    chatMessage.getMessageTableOffset().toString(),
-                    chatMessage.getMessageStamp().toString()
-            );
-
-            //查询比它小的消息
-            List<ChatMessage> newerMsgList = new ArrayList<>();
+            //查询比它大的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSessionId = ? and messageTableOffset > ?  and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    "messageSessionId = ? " +
+                            "and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?))  " +
+                            "and messageInsertUser = ? " +
+                            "and messageType != ? " +
+                            "and isDelete != 1 ",
                     new String[]{
                             messageSessionId,
                             chatMessage.getMessageTableOffset().toString(),
+                            chatMessage.getMessageTableOffset().toString(),
+                            chatMessage.getMessageStamp().toString(),
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
                     },
@@ -969,24 +888,157 @@ public class Database {
                     "messageTableOffset DESC,messageStamp desc limit " + size
             );
 
+            //全部数据转换
             if (!cursor.moveToFirst()) {
                 cursor.close();
             } else {
                 while (!cursor.isAfterLast()) {
                     ChatMessage info = new ChatMessage(cursor);
-                    newerMsgList.add(info);
+                    retMessages.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+            return retMessages;
+        }, new ArrayList<>());
+    }
+
+
+    ///搜索文本消息
+    @SuppressLint("Range")
+    public List<ChatMessage> searchTextMessageList(String text, String sessionId, String messageID, int size) {
+        return executeDbOperation(chatUser -> {
+
+            //查询比它小的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
+
+            //查询语句
+            String queryStr = "1=1 ";
+            List<String> paramList = new ArrayList<>();
+
+            //会话不为空
+            if (!StringTool.isEmpty(sessionId)) {
+                ChatSessionMember chatSessionMember = getSessionMember(sessionId, chatUser.getUserId());
+                queryStr += "messageSessionId = ? ";
+                queryStr += "and messageSessionOffset > ? ";
+                paramList.add(sessionId);
+                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+            }
+
+            //查询文本
+            if (!StringTool.isEmpty(text)) {
+                queryStr += "and messageContent like ? ";
+                paramList.add("%" + text + "%");
+            }
+
+            //消息ID
+            if (!StringTool.isEmpty(messageID)) {
+                ChatMessage chatMessage = getMessageById(messageID);
+                queryStr += "and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) ";
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageStamp().toString());
+            }
+
+            //插入者
+            queryStr += "and messageInsertUser = ? ";
+            paramList.add(chatUser.getUserExtendId());
+
+            //消息类型
+            queryStr += "and messageType = ? and isDelete != 1 ";
+            paramList.add(Integer.toString(MSG_TYPE_TEXT));
+
+            //查询
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    queryStr,
+                    paramList.toArray(new String[0]),
+                    null,
+                    null,
+                    "messageTableOffset desc,messageStamp desc limit " + size
+            );
+
+            //全部数据转换
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage(cursor);
+                    retMessages.add(info);
                     cursor.moveToNext();
                 }
                 cursor.close();
             }
 
-            //返回的数据组装
-            List<ChatMessage> retMessages = new ArrayList<>(newerMsgList);
-            retMessages.addAll(equalMsgList);
+            //返回的消息
+            return retMessages;
+        }, new ArrayList<>());
+    }
 
-            if (retMessages.size() > size) {
-                retMessages = retMessages.subList(retMessages.size() - size, retMessages.size());
+
+    ///搜索文本消息
+    @SuppressLint("Range")
+    public List<ChatMessage> searchImageMessageList(String sessionId, String messageID, int size) {
+        return executeDbOperation(chatUser -> {
+
+            //查询比它小的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
+
+            //查询语句
+            String queryStr = "1=1 ";
+            List<String> paramList = new ArrayList<>();
+
+            //会话不为空
+            if (!StringTool.isEmpty(sessionId)) {
+                ChatSessionMember chatSessionMember = getSessionMember(sessionId, chatUser.getUserId());
+                queryStr += "messageSessionId = ? ";
+                queryStr += "and messageSessionOffset > ? ";
+                paramList.add(sessionId);
+                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
             }
+
+            //消息ID
+            if (!StringTool.isEmpty(messageID)) {
+                ChatMessage chatMessage = getMessageById(messageID);
+                queryStr += "and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) ";
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageStamp().toString());
+            }
+
+            //插入者
+            queryStr += "and messageInsertUser = ? ";
+            paramList.add(chatUser.getUserExtendId());
+
+            //消息类型
+            queryStr += "and messageType = ? and isDelete != 1 ";
+            paramList.add(Integer.toString(MSG_TYPE_IMG));
+
+            //查询
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    queryStr,
+                    paramList.toArray(new String[0]),
+                    null,
+                    null,
+                    "messageTableOffset desc,messageStamp desc limit " + size
+            );
+
+            //全部数据转换
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage(cursor);
+                    retMessages.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+            //返回的消息
             return retMessages;
         }, new ArrayList<>());
     }

@@ -1845,6 +1845,30 @@ public class FlappyImService {
         return false;
     }
 
+
+    /******
+     * 搜索这条消息之前的消息
+     * @param text        文本匹配
+     * @param messageId   消息ID
+     * @param size        大小
+     * @return 搜索结果
+     */
+    public List<ChatMessage> searchTextMessage(String text, String sessionId, String messageId, int size) {
+        return Database.getInstance().searchTextMessageList(text, sessionId, messageId, size);
+    }
+
+
+    /******
+     * 搜索这条消息之前的消息
+     * @param messageId   消息ID
+     * @param size        大小
+     * @return 搜索结果
+     */
+    public List<ChatMessage> searchImageMessage(String sessionId, String messageId, int size) {
+        return Database.getInstance().searchImageMessageList(sessionId, messageId, size);
+    }
+
+
     /******
      * 添加全局的监听
      * @param listener 监听
