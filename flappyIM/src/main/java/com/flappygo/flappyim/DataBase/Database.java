@@ -871,7 +871,7 @@ public class Database {
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
                     "messageSessionId = ? " +
-                            "and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?))  " +
+                            "and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) " +
                             "and messageInsertUser = ? " +
                             "and messageType != ? " +
                             "and isDelete != 1 ",
@@ -919,7 +919,7 @@ public class Database {
             //会话不为空
             if (!StringTool.isEmpty(sessionId)) {
                 ChatSessionMember chatSessionMember = getSessionMember(sessionId, chatUser.getUserId());
-                queryStr += "messageSessionId = ? ";
+                queryStr += "and messageSessionId = ? ";
                 queryStr += "and messageSessionOffset > ? ";
                 paramList.add(sessionId);
                 paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
@@ -992,7 +992,7 @@ public class Database {
             //会话不为空
             if (!StringTool.isEmpty(sessionId)) {
                 ChatSessionMember chatSessionMember = getSessionMember(sessionId, chatUser.getUserId());
-                queryStr += "messageSessionId = ? ";
+                queryStr += "and messageSessionId = ? ";
                 queryStr += "and messageSessionOffset > ? ";
                 paramList.add(sessionId);
                 paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
