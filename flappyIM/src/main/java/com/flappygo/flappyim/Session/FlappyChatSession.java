@@ -987,6 +987,29 @@ public class FlappyChatSession extends FlappyBaseSession {
         return Database.getInstance().searchImageMessageList(getSession().getSessionId(), messageId, size);
     }
 
+
+    /******
+     * 搜索这条消息之前的消息
+     * @param messageId   消息ID
+     * @param size        大小
+     * @return 搜索结果
+     */
+    public List<ChatMessage> searchVideoMessage(String messageId, int size) {
+        return Database.getInstance().searchVideoMessageList(getSession().getSessionId(), messageId, size);
+    }
+
+
+    /******
+     * 搜索这条消息之前的消息
+     * @param messageId   消息ID
+     * @param size        大小
+     * @return 搜索结果
+     */
+    public List<ChatMessage> searchVoiceMessage(String messageId, int size) {
+        return Database.getInstance().searchVoiceMessageList(getSession().getSessionId(), messageId, size);
+    }
+
+
     /******
      * 获取未读消息的数量
      * @return 未读消息数量

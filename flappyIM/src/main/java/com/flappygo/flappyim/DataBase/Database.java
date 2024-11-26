@@ -2,6 +2,8 @@ package com.flappygo.flappyim.DataBase;
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
@@ -1014,6 +1016,139 @@ public class Database {
             //消息类型
             queryStr += "and messageType = ? and isDelete != 1 ";
             paramList.add(Integer.toString(MSG_TYPE_IMG));
+
+            //查询
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    queryStr,
+                    paramList.toArray(new String[0]),
+                    null,
+                    null,
+                    "messageTableOffset desc,messageStamp desc limit " + size
+            );
+
+            //全部数据转换
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage(cursor);
+                    retMessages.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+            //返回的消息
+            return retMessages;
+        }, new ArrayList<>());
+    }
+
+
+    ///搜索视频消息
+    @SuppressLint("Range")
+    public List<ChatMessage> searchVideoMessageList(String sessionId, String messageID, int size) {
+        return executeDbOperation(chatUser -> {
+
+            //查询比它小的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
+
+            //查询语句
+            String queryStr = "1=1 ";
+            List<String> paramList = new ArrayList<>();
+
+            //会话不为空
+            if (!StringTool.isEmpty(sessionId)) {
+                ChatSessionMember chatSessionMember = getSessionMember(sessionId, chatUser.getUserId());
+                queryStr += "and messageSessionId = ? ";
+                queryStr += "and messageSessionOffset > ? ";
+                paramList.add(sessionId);
+                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+            }
+
+            //消息ID
+            if (!StringTool.isEmpty(messageID)) {
+                ChatMessage chatMessage = getMessageById(messageID);
+                queryStr += "and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) ";
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageStamp().toString());
+            }
+
+            //插入者
+            queryStr += "and messageInsertUser = ? ";
+            paramList.add(chatUser.getUserExtendId());
+
+            //消息类型
+            queryStr += "and messageType = ? and isDelete != 1 ";
+            paramList.add(Integer.toString(MSG_TYPE_VIDEO));
+
+            //查询
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_MESSAGE,
+                    null,
+                    queryStr,
+                    paramList.toArray(new String[0]),
+                    null,
+                    null,
+                    "messageTableOffset desc,messageStamp desc limit " + size
+            );
+
+            //全部数据转换
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage(cursor);
+                    retMessages.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+
+            //返回的消息
+            return retMessages;
+        }, new ArrayList<>());
+    }
+
+    ///搜索语音消息
+    @SuppressLint("Range")
+    public List<ChatMessage> searchVoiceMessageList(String sessionId, String messageID, int size) {
+        return executeDbOperation(chatUser -> {
+
+            //查询比它小的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
+
+            //查询语句
+            String queryStr = "1=1 ";
+            List<String> paramList = new ArrayList<>();
+
+            //会话不为空
+            if (!StringTool.isEmpty(sessionId)) {
+                ChatSessionMember chatSessionMember = getSessionMember(sessionId, chatUser.getUserId());
+                queryStr += "and messageSessionId = ? ";
+                queryStr += "and messageSessionOffset > ? ";
+                paramList.add(sessionId);
+                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+            }
+
+            //消息ID
+            if (!StringTool.isEmpty(messageID)) {
+                ChatMessage chatMessage = getMessageById(messageID);
+                queryStr += "and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) ";
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageTableOffset().toString());
+                paramList.add(chatMessage.getMessageStamp().toString());
+            }
+
+            //插入者
+            queryStr += "and messageInsertUser = ? ";
+            paramList.add(chatUser.getUserExtendId());
+
+            //消息类型
+            queryStr += "and messageType = ? and isDelete != 1 ";
+            paramList.add(Integer.toString(MSG_TYPE_VOICE));
 
             //查询
             Cursor cursor = db.query(

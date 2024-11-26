@@ -1870,6 +1870,27 @@ public class FlappyImService {
 
 
     /******
+     * 搜索这条消息之前的消息
+     * @param messageId   消息ID
+     * @param size        大小
+     * @return 搜索结果
+     */
+    public List<ChatMessage> searchVideoMessage(String sessionId, String messageId, int size) {
+        return Database.getInstance().searchVideoMessageList(sessionId, messageId, size);
+    }
+
+    /******
+     * 搜索这条消息之前的消息
+     * @param messageId   消息ID
+     * @param size        大小
+     * @return 搜索结果
+     */
+    public List<ChatMessage> searchVoiceMessage(String sessionId, String messageId, int size) {
+        return Database.getInstance().searchVoiceMessageList(sessionId, messageId, size);
+    }
+
+
+    /******
      * 添加全局的监听
      * @param listener 监听
      */
