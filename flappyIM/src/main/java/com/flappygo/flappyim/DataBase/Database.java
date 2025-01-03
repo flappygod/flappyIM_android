@@ -786,14 +786,21 @@ public class Database {
     @SuppressLint("Range")
     public ChatMessage getSessionLatestMessage(String messageSessionId) {
         return executeDbOperation(chatUser -> {
+            //当前用户
+            ChatSessionMember chatSessionMember = getSessionMember(messageSessionId, chatUser.getUserId());
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSessionId = ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    "messageSessionId = ? " +
+                            "and messageInsertUser = ? " +
+                            "and messageType != ? " +
+                            "and messageSessionOffset > ? " +
+                            "and isDelete != 1 ",
                     new String[]{
                             messageSessionId,
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
+                            chatSessionMember.getSessionMemberLatestDelete().toString(),
                     },
                     null,
                     null,
