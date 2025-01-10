@@ -93,9 +93,7 @@ import androidx.annotation.NonNull;
 public class FlappyImService {
 
 
-    /******
-     * 创建请求池
-     */
+    //创建请求池
     public final LXAsyncTaskClient asyncTaskClient = new LXAsyncTaskClient(20);
 
     //单例
@@ -547,7 +545,7 @@ public class FlappyImService {
      */
     public void createAccount(String userExtendID, String userName, String userAvatar, String userData, final FlappyIMCallback<ChatUser> callback) {
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //设置index
         hashMap.put("userExtendId", userExtendID);
         //用户名称
@@ -557,7 +555,7 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().register(), hashMap, new BaseParseCallback<ChatUser>(ChatUser.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().register(), hashMap, new BaseParseCallback<ChatUser>(ChatUser.class) {
             @Override
             protected void stateFalse(BaseApiModel<ChatUser> model, String tag) {
                 if (callback != null) {
@@ -599,7 +597,7 @@ public class FlappyImService {
      */
     public void updateAccount(String userExtendID, String userName, String userAvatar, String userData, final FlappyIMCallback<String> callback) {
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //设置index
         hashMap.put("userExtendId", userExtendID);
         //用户名称
@@ -609,7 +607,7 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().updateUser(), hashMap, new BaseParseCallback<String>(String.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().updateUser(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
                 if (callback != null) {
@@ -698,7 +696,7 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //外部用户ID
         hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         //设备ID
@@ -730,7 +728,7 @@ public class FlappyImService {
             hashMap.put("pushMute", pushSettings.getRoutePushMute());
         }
         //进行callBack
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().changePush(), hashMap, new BaseParseCallback<PushSetting>(PushSetting.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().changePush(), hashMap, new BaseParseCallback<PushSetting>(PushSetting.class) {
             @Override
             protected void stateFalse(BaseApiModel<PushSetting> model, String tag) {
                 if (callback != null) {
@@ -784,7 +782,7 @@ public class FlappyImService {
             }
             isRunningLogin = true;
             //创建这个HashMap
-            HashMap<String, String> hashMap = new HashMap<>();
+            HashMap<String, Object> hashMap = new HashMap<>();
             //外部用户ID
             hashMap.put("userExtendId", StringTool.ToNotNullStr(userExtendID));
             //设备ID
@@ -798,7 +796,7 @@ public class FlappyImService {
             //推送Id
             hashMap.put("pushId", DataManager.getInstance().getPushId());
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().login(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+            OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().login(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                 @Override
                 protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
                     isRunningLogin = false;
@@ -868,7 +866,7 @@ public class FlappyImService {
             isRunningAutoLogin = true;
 
             //创建这个HashMap
-            HashMap<String, String> hashMap = new HashMap<>();
+            HashMap<String, Object> hashMap = new HashMap<>();
             //用户ID
             hashMap.put("userId", user.getUserId());
             //设备ID
@@ -883,7 +881,7 @@ public class FlappyImService {
             hashMap.put("pushId", DataManager.getInstance().getPushId());
 
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().autoLogin(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+            OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().autoLogin(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
                 //出现异常
                 @Override
                 protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
@@ -1098,7 +1096,7 @@ public class FlappyImService {
                 return;
             }
             //创建这个HashMap
-            HashMap<String, String> hashMap = new HashMap<>();
+            HashMap<String, Object> hashMap = new HashMap<>();
             //外部用户ID
             hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
             //设备ID
@@ -1106,7 +1104,7 @@ public class FlappyImService {
             //设备ID
             hashMap.put("deviceId", DataManager.getInstance().getDeviceId());
             //进行callBack
-            OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().logout(), hashMap, new BaseParseCallback<String>(String.class) {
+            OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().logout(), hashMap, new BaseParseCallback<String>(String.class) {
                 @Override
                 protected void stateFalse(BaseApiModel<String> model, String tag) {
                     if (callback != null) {
@@ -1164,13 +1162,13 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //用户ID
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         //外部用户ID
         hashMap.put("userTwo", peerExtendId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createSingleSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().createSingleSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
@@ -1263,10 +1261,10 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userOne", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userTwo", peerExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSingleSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().getSingleSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
@@ -1316,14 +1314,14 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("createUserId", DataManager.getInstance().getLoginUser().getUserId());
         hashMap.put("sessionExtendId", sessionExtendId);
         hashMap.put("sessionName", sessionName);
 
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().createGroupSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().createGroupSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
 
             @Override
             protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
@@ -1401,11 +1399,11 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //用户ID
         hashMap.put("sessionId", sessionId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionById(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().getSessionById(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
@@ -1482,11 +1480,11 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         //用户ID
         hashMap.put("sessionExtendId", sessionExtendId);
         //调用
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getSessionByExtendId(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().getSessionByExtendId(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
             @Override
             protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
@@ -1612,9 +1610,9 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().getUserSessionList(), hashMap, new BaseListParseCallBack<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().getUserSessionList(), hashMap, new BaseListParseCallBack<ChatSessionData>(ChatSessionData.class) {
             @Override
             public void stateFalse(String message, String tag) {
                 if (callback != null) {
@@ -1656,10 +1654,10 @@ public class FlappyImService {
 
                     //进行最后一条消息整体排序
                     sessions.sort((one, two) -> {
-                        if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                        if (one.getSession().getSessionType() == ChatSession.TYPE_SYSTEM) {
                             return -1;
                         }
-                        if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                        if (two.getSession().getSessionType() == ChatSession.TYPE_SYSTEM) {
                             return 1;
                         }
 
@@ -1695,10 +1693,10 @@ public class FlappyImService {
         }
 
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().addUserToSession(), hashMap, new BaseParseCallback<String>(String.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUserToSession(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
                 if (callback != null) {
@@ -1742,10 +1740,10 @@ public class FlappyImService {
             return;
         }
         //创建这个HashMap
-        HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
-        OkHttpClient.getInstance().postParam(FlappyConfig.getInstance().delUserInSession(), hashMap, new BaseParseCallback<String>(String.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().delUserInSession(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
                 if (callback != null) {

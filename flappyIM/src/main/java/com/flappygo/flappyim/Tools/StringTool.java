@@ -8,11 +8,28 @@ import java.util.Collections;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /******
  * 字符串工具类
  */
 public class StringTool {
+
+
+    // 定义一个包含所有可能字符的字符串
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public static String getRandomStr(int length) {
+        Random random = new Random();
+        StringBuilder stringBuilder = new StringBuilder(length);
+        // 从CHARACTERS中随机选择一个字符并追加到StringBuilder
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            stringBuilder.append(CHARACTERS.charAt(index));
+        }
+
+        return stringBuilder.toString();
+    }
 
 
     /******
