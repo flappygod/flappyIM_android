@@ -931,7 +931,7 @@ public class Database {
                 queryStr += "and messageSessionId = ? ";
                 queryStr += "and messageSessionOffset > ? ";
                 paramList.add(sessionId);
-                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+                paramList.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
             }
 
             //查询文本
@@ -1004,7 +1004,7 @@ public class Database {
                 queryStr += "and messageSessionId = ? ";
                 queryStr += "and messageSessionOffset > ? ";
                 paramList.add(sessionId);
-                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+                paramList.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
             }
 
             //消息ID
@@ -1071,7 +1071,7 @@ public class Database {
                 queryStr += "and messageSessionId = ? ";
                 queryStr += "and messageSessionOffset > ? ";
                 paramList.add(sessionId);
-                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+                paramList.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
             }
 
             //消息ID
@@ -1137,7 +1137,7 @@ public class Database {
                 queryStr += "and messageSessionId = ? ";
                 queryStr += "and messageSessionOffset > ? ";
                 paramList.add(sessionId);
-                paramList.add(chatSessionMember.getSessionMemberLatestDelete().toString());
+                paramList.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
             }
 
             //消息ID
