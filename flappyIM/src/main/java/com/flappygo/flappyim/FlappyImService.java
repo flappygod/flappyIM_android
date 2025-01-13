@@ -862,8 +862,7 @@ public class FlappyImService {
         synchronized (this) {
 
             //再次检查用户
-            ChatUser user = DataManager.getInstance().getLoginUser();
-            if (user == null || user.isLogin() == 0) {
+            if (!isLogin()) {
                 return;
             }
 
@@ -893,7 +892,7 @@ public class FlappyImService {
             //创建这个HashMap
             HashMap<String, Object> hashMap = new HashMap<>();
             //用户ID
-            hashMap.put("userId", user.getUserId());
+            hashMap.put("userId", DataManager.getInstance().getLoginUser().getUserId());
             //设备ID
             hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
             //设备ID
