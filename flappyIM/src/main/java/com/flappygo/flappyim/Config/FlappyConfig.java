@@ -34,11 +34,6 @@ public class FlappyConfig {
         return InstanceHolder.instance;
     }
 
-    //单例模式
-    private FlappyConfig() {
-        setServerUrl("http://139.224.204.128", "139.224.204.128");
-    }
-
     //上传文件的地址
     public String fileUpload() {
         return serverUploadUrl + "/upload/fileUpload";

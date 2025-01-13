@@ -603,13 +603,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 .setDeviceId(DataManager.getInstance().getDeviceId());
 
         //如果是空
-        if (StringTool.isEmpty(DataManager.getInstance().getRSAKey())) {
-            //设置secret
+        if (StringTool.isEmpty(DataManager.getInstance().getRSAPublicKey())) {
             loginInfoBuilder.setSecret(this.secret);
         } else {
-            //设置secret RSA
             loginInfoBuilder.setSecret(RSATool.encryptWithPublicKey(
-                    DataManager.getInstance().getRSAKey(),
+                    DataManager.getInstance().getRSAPublicKey(),
                     this.secret
             ));
         }

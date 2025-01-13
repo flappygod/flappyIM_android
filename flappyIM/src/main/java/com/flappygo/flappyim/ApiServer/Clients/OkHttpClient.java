@@ -6,6 +6,7 @@ import com.flappygo.flappyim.Tools.Secret.AESTool;
 import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
+import com.flappygo.flappyim.FlappyImService;
 
 import okhttp3.RequestBody;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.HashMap;
+
 import okhttp3.MediaType;
 
 import okhttp3.Response;
@@ -32,7 +34,7 @@ public class OkHttpClient {
 
 
     /******
-     * 请求UDID
+     * uuid
      */
     private static final String dataUuid = String.valueOf(UUID.randomUUID());
 
@@ -120,8 +122,11 @@ public class OkHttpClient {
             }
 
             @Override
-            public void failure(Exception e, String tag) {
-                callback.failure(e, tag);
+            public void failure(Exception ex, String tag) {
+                callback.failure(ex, tag);
+                if (ex instanceof UnauthorizedException) {
+                    FlappyImService.getInstance().kickedOut();
+                }
             }
 
             @Override
@@ -148,7 +153,7 @@ public class OkHttpClient {
         String dataStr = new JSONObject(data).toString();
 
         ///RSA
-        if (!StringTool.isEmpty(DataManager.getInstance().getRSAKey())) {
+        if (!StringTool.isEmpty(DataManager.getInstance().getRSAPublicKey())) {
             dataStr = AESTool.EncryptECBNoThrow(
                     dataStr,
                     dataKey
@@ -171,14 +176,26 @@ public class OkHttpClient {
             builder.addHeader(key, Objects.requireNonNull(header.get(key)));
         }
 
+        //Uuid
+        builder.addHeader("dataUuid", dataUuid);
+
         //传递加密秘钥
-        if (!StringTool.isEmpty(DataManager.getInstance().getRSAKey())) {
-            builder.addHeader("dataUuid", dataUuid);
-            String dateEncryptKey = RSATool.encryptWithPublicKey(
-                    DataManager.getInstance().getRSAKey(),
+        if (!StringTool.isEmpty(DataManager.getInstance().getRSAPublicKey())) {
+            builder.addHeader("dataKey", RSATool.encryptWithPublicKey(
+                    DataManager.getInstance().getRSAPublicKey(),
                     dataKey
+            ));
+        } else {
+            builder.addHeader("dataKey", dataKey);
+        }
+
+        //传递用户信息
+        if (!StringTool.isEmpty(DataManager.getInstance().getUserToken())) {
+            String dataToken = DataManager.getInstance().getUserToken();
+            builder.addHeader(
+                    "dataToken",
+                    AESTool.EncryptECBNoThrow(dataToken, dataKey)
             );
-            builder.addHeader("dataKey", dateEncryptKey);
         }
 
         //构建
@@ -186,6 +203,11 @@ public class OkHttpClient {
 
         //发送请求并获取响应
         Response response = client.newCall(request).execute();
+
+        // 检查是否是 401 未授权
+        if (response.code() == 401) {
+            throw new UnauthorizedException("Unauthorized: Invalid or expired token");
+        }
 
         //判断请求是否成功
         if (!response.isSuccessful()) {
@@ -201,4 +223,15 @@ public class OkHttpClient {
         return AESTool.DecryptECBNoThrow(bodyEncryptStr, dataKey);
     }
 
+    //未授权
+    static class UnauthorizedException extends Exception {
+        private static final long serialVersionUID = -4058737144721996830L;
+
+        public UnauthorizedException(String message) {
+            super(message);
+        }
+    }
+
 }
+
+

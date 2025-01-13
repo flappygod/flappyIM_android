@@ -55,7 +55,6 @@ import android.os.Message;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.HashMap;
 
@@ -63,6 +62,7 @@ import android.Manifest;
 import android.os.Build;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_NORMAL;
 import static com.flappygo.flappyim.Models.Server.ChatRoute.PUSH_PRIVACY_TYPE_HIDE;
@@ -132,18 +132,40 @@ public class FlappyImService {
 
 
     /******
+     * 判断当前是否是登录的状态
+     * @return 是否登录
+     */
+    public boolean isLogin() {
+        ChatUser user = DataManager.getInstance().getLoginUser();
+        return user != null && user.isLogin() != 0;
+    }
+
+    /******
      * 设置踢下线的监听
      */
     public void setKickedOutListener(KickedOutListener listener) {
-        ChatUser user = DataManager.getInstance().getLoginUser();
         kickedOutListener = listener;
-        if (user != null && user.isLogin() == 0) {
+        if (!isLogin()) {
             if (kickedOutListener != null) {
                 kickedOutListener.kickedOut();
             }
         }
     }
 
+    /******
+     * 通知被踢下线
+     */
+    public void kickedOut() {
+        //设置登录状态
+        ChatUser user = DataManager.getInstance().getLoginUser();
+        user.setLogin(0);
+        DataManager.getInstance().saveLoginUser(user);
+
+        //被踢下线了
+        if (kickedOutListener != null) {
+            kickedOutListener.kickedOut();
+        }
+    }
 
     /******
      * 消息被点击监听
@@ -419,11 +441,14 @@ public class FlappyImService {
 
     /******
      * 初始化
-     * @param activity 上下文
+     * @param context   上下文
+     * @param serverPath Im服务器地址
+     * @param uploadPath 资源服务器地址
      */
-    public void init(Activity activity) {
+    public void init(Activity context, String serverPath, String uploadPath) {
+        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
         //初始化上下文
-        this.appContext = activity.getApplicationContext();
+        this.appContext = context.getApplicationContext();
         //添加总体的监听
         HolderMessageSession.getInstance().addGlobalMessageListener(messageListener);
         //异步线程，清空异常数据
@@ -445,7 +470,15 @@ public class FlappyImService {
 
             }
         });
-        requestPermission(activity);
+        requestPermission(context);
+    }
+
+    /******
+     * 请求鉴权
+     * @param token authToken
+     */
+    public void auth(String token) {
+        DataManager.getInstance().saveUserToken(token);
     }
 
 
@@ -461,18 +494,6 @@ public class FlappyImService {
         }
     }
 
-
-    /******
-     * 初始化
-     * @param appContext 上下文
-     * @param serverPath Im服务器地址
-     * @param uploadPath 资源服务器地址
-     */
-    public void init(Activity appContext, String serverPath, String uploadPath) {
-        init(appContext);
-        //更新服务器地址和资源文件上传地址
-        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
-    }
 
     /******
      * 推送的类型
@@ -496,7 +517,7 @@ public class FlappyImService {
      * @param publicKey 公钥
      */
     public void setRsaPublicKey(String publicKey) {
-        DataManager.getInstance().saveRSAKey(publicKey);
+        DataManager.getInstance().saveRSAPublicKey(publicKey);
     }
 
 
@@ -504,7 +525,7 @@ public class FlappyImService {
      * 数据登录加密公钥
      */
     public String getRsaPublicKey() {
-        return DataManager.getInstance().getRSAKey();
+        return DataManager.getInstance().getRSAPublicKey();
     }
 
 
@@ -555,35 +576,37 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().register(), hashMap, new BaseParseCallback<ChatUser>(ChatUser.class) {
-            @Override
-            protected void stateFalse(BaseApiModel<ChatUser> model, String tag) {
-                if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                }
-            }
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().register(),
+                hashMap,
+                new BaseParseCallback<ChatUser>(ChatUser.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<ChatUser> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
 
-            @Override
-            public void stateTrue(ChatUser user, String tag) {
-                if (callback != null) {
-                    callback.success(user);
-                }
-            }
+                    @Override
+                    public void stateTrue(ChatUser user, String tag) {
+                        if (callback != null) {
+                            callback.success(user);
+                        }
+                    }
 
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
-                }
-            }
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                        }
+                    }
 
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
-                }
-            }
-        });
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                        }
+                    }
+                });
     }
 
 
@@ -607,35 +630,37 @@ public class FlappyImService {
         //用户名称
         hashMap.put("userData", userData);
         //进行callBack
-        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().updateUser(), hashMap, new BaseParseCallback<String>(String.class) {
-            @Override
-            protected void stateFalse(BaseApiModel<String> model, String tag) {
-                if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
-                }
-            }
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().updateUser(),
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
 
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
-                }
-            }
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                        }
+                    }
 
-            @Override
-            public void stateTrue(String s, String tag) {
-                if (callback != null) {
-                    callback.success(s);
-                }
-            }
+                    @Override
+                    public void stateTrue(String s, String tag) {
+                        if (callback != null) {
+                            callback.success(s);
+                        }
+                    }
 
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
-                }
-            }
-        });
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                        }
+                    }
+                });
     }
 
 
@@ -881,55 +906,49 @@ public class FlappyImService {
             hashMap.put("pushId", DataManager.getInstance().getPushId());
 
             //进行callBack
-            OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().autoLogin(), hashMap, new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
-                //出现异常
-                @Override
-                protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
-                    //当前不在自动登录状态了
-                    isRunningAutoLogin = false;
-                    //当前的用户已经被踢下线了
-                    if (model.getCode().equals(RESULT_EXPIRED)) {
-                        //设置登录状态
-                        ChatUser user = DataManager.getInstance().getLoginUser();
-                        //当前没有登录
-                        user.setLogin(0);
-                        //清空用户数据
-                        DataManager.getInstance().saveLoginUser(user);
-                        //当前已经被踢下线了
-                        if (kickedOutListener != null) {
-                            kickedOutListener.kickedOut();
+            OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().autoLogin(),
+                    hashMap,
+                    new BaseParseCallback<ResponseLogin>(ResponseLogin.class) {
+                        //出现异常
+                        @Override
+                        protected void stateFalse(BaseApiModel<ResponseLogin> model, String tag) {
+                            //当前不在自动登录状态了
+                            isRunningAutoLogin = false;
+                            //当前的用户已经被踢下线了
+                            if (model.getCode().equals(RESULT_EXPIRED)) {
+                                //当前已经被踢下线了
+                                kickedOut();
+                            } else {
+                                //重新登录
+                                checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                            }
                         }
-                    } else {
-                        //重新登录
-                        checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                    }
-                }
 
-                //自动登录
-                @Override
-                protected void jsonError(Exception e, String tag) {
-                    //当前不在自动登录状态了
-                    isRunningAutoLogin = false;
-                    //当前不在自动登录状态了
-                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                }
+                        //自动登录
+                        @Override
+                        protected void jsonError(Exception e, String tag) {
+                            //当前不在自动登录状态了
+                            isRunningAutoLogin = false;
+                            //当前不在自动登录状态了
+                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                        }
 
-                //测试并自动登录
-                @Override
-                protected void netError(Exception e, String tag) {
-                    //当前不在自动登录状态了
-                    isRunningAutoLogin = false;
-                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                }
+                        //测试并自动登录
+                        @Override
+                        protected void netError(Exception e, String tag) {
+                            //当前不在自动登录状态了
+                            isRunningAutoLogin = false;
+                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                        }
 
-                //重置
-                @Override
-                public void stateTrue(ResponseLogin response, String tag) {
-                    //当前不在自动登录状态了
-                    isRunningAutoLogin = false;
-                    autoLoginNetty(response);
-                }
-            });
+                        //重置
+                        @Override
+                        public void stateTrue(ResponseLogin response, String tag) {
+                            //当前不在自动登录状态了
+                            isRunningAutoLogin = false;
+                            autoLoginNetty(response);
+                        }
+                    });
         }
     }
 
@@ -1918,16 +1937,6 @@ public class FlappyImService {
      */
     public void removeSessionListener(SessionListener listener) {
         HolderMessageSession.getInstance().removeSessionListener(listener);
-    }
-
-
-    /******
-     * 判断当前是否是登录的状态
-     * @return 是否登录
-     */
-    public boolean isLogin() {
-        ChatUser user = DataManager.getInstance().getLoginUser();
-        return user != null && user.isLogin() != 0;
     }
 
     /******

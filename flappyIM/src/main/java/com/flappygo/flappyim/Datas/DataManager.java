@@ -7,6 +7,7 @@ import com.flappygo.flappyim.Models.Server.ChatUser;
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.Push.PushSetting;
 import com.flappygo.flappyim.FlappyImService;
+
 import android.content.SharedPreferences;
 import android.content.Context;
 
@@ -31,6 +32,9 @@ public class DataManager {
 
     // 用户信息保存
     private final static String KEY_FOR_USER = "com.flappy.im.data.KEY_FOR_USER";
+
+    // 用户信息Token
+    private final static String KEY_FOR_USER_TOKEN = "com.flappy.im.data.KEY_FOR_USER_TOKEN";
 
     // 推送类型
     private final static String KEY_FOR_PUSH_TYPE = "com.flappy.im.data.KEY_FOR_PUSH_TYPE";
@@ -265,7 +269,7 @@ public class DataManager {
      * 保存RSA
      * @param rsaKey RSA秘钥
      */
-    public void saveRSAKey(String rsaKey) {
+    public void saveRSAPublicKey(String rsaKey) {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
@@ -279,7 +283,7 @@ public class DataManager {
      * 获取用户的推送
      * @return RSAKey
      */
-    public String getRSAKey() {
+    public String getRSAPublicKey() {
         SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
@@ -355,6 +359,33 @@ public class DataManager {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(KEY_FOR_MESSAGE_CLICK);
         editor.apply();
+    }
+
+
+    /******
+     * 保存用户Token
+     * @param userToken 用户token
+     */
+    public void saveUserToken(String userToken) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_USER_TOKEN, userToken);
+        editor.apply();
+    }
+
+    /******
+     * 获取用户Token
+     * @return RSAKey
+     */
+    public String getUserToken() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        return mSharedPreferences.getString(KEY_FOR_USER_TOKEN, null);
     }
 
 }
