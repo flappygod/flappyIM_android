@@ -443,10 +443,10 @@ public class FlappyImService {
      * 初始化
      * @param context   上下文
      * @param serverPath Im服务器地址
-     * @param uploadPath 资源服务器地址
+     * @param assetsPath 资源服务器地址
      */
-    public void init(Activity context, String serverPath, String uploadPath) {
-        FlappyConfig.getInstance().setServerUrl(serverPath, uploadPath);
+    public void init(Activity context, String serverPath, String assetsPath) {
+        FlappyConfig.getInstance().setServerUrl(serverPath, assetsPath);
         //初始化上下文
         this.appContext = context.getApplicationContext();
         //添加总体的监听
@@ -532,7 +532,7 @@ public class FlappyImService {
     /******
      * 正式开启服务
      */
-    public void startServer() {
+    public void startService() {
         initReceiver();
         checkAutoLoginHttp(0);
     }
@@ -540,7 +540,7 @@ public class FlappyImService {
     /******
      * 停止服务
      */
-    public void stopServer() {
+    public void stopService() {
         removeReceiver();
         FlappySocketService.getInstance().offline();
     }
