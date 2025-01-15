@@ -1,6 +1,7 @@
 package com.flappygo.flappyim.Datas;
 
 
+import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Session.FlappyChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -29,6 +30,9 @@ public class DataManager {
 
     // 首选项名称
     private final static String PREFERENCE_NAME = "com.flappy.im.data";
+
+    // 当前平台
+    private final static String KEY_FOR_DEVICE_PLATFORM = "com.flappy.im.data.KEY_FOR_DEVICE_PLATFORM";
 
     // 用户信息保存
     private final static String KEY_FOR_USER = "com.flappy.im.data.KEY_FOR_USER";
@@ -190,6 +194,35 @@ public class DataManager {
         editor.apply();
     }
 
+
+    /******
+     * 获取设备平台
+     * @return 设备平台
+     */
+    public String getDevicePlat() {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        return mSharedPreferences.getString(KEY_FOR_DEVICE_PLATFORM, FlappyConfig.defaultDevicePlat);
+    }
+
+
+    /******
+     * 保存用户的设备平台
+     * @param devicePlat 设备平台
+     */
+    public void saveDevicePlat(String devicePlat) {
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(KEY_FOR_DEVICE_PLATFORM, devicePlat);
+        editor.apply();
+    }
+
+
     /******
      * 获取推送类型
      * @return 推送类型
@@ -226,7 +259,7 @@ public class DataManager {
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );
-        return mSharedPreferences.getString(KEY_FOR_PUSH_PLAT, "Google");
+        return mSharedPreferences.getString(KEY_FOR_PUSH_PLAT, FlappyConfig.defaultPushPlat);
     }
 
     /******

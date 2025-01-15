@@ -599,7 +599,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //创建builder
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
                 .setUserID(this.user.getUserId())
-                .setDevicePlat(FlappyConfig.getInstance().devicePlat)
+                .setDevicePlat(DataManager.getInstance().getDevicePlat())
                 .setDeviceId(DataManager.getInstance().getDeviceId());
 
         //如果是空

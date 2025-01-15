@@ -6,7 +6,10 @@ package com.flappygo.flappyim.Config;
 public class FlappyConfig {
 
     //安卓设备
-    public final String devicePlat = "Android";
+    public static final String defaultDevicePlat = "ANDROID";
+
+    //推送平台
+    public static final String defaultPushPlat = "FCM";
 
     //12秒
     public final int IdleSeconds = 12;

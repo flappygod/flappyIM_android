@@ -490,11 +490,34 @@ public class FlappyImService {
 
 
     /******
+     * 设置设备类型
+     * @param devicePlat 设备类型
+     */
+    public void setDevicePlat(String devicePlat) {
+        DataManager.getInstance().saveDevicePlat(devicePlat);
+    }
+
+    /******
+     * 获取设备类型
+     */
+    public String getDevicePlat() {
+        return DataManager.getInstance().getDevicePlat();
+    }
+
+
+    /******
      * 推送的类型
      * @param pushType 推送类型
      */
     public void setPushType(int pushType) {
         DataManager.getInstance().savePushType(Integer.toString(pushType));
+    }
+
+    /******
+     * 获取推送类型
+     */
+    public String getPushType() {
+        return DataManager.getInstance().getPushType();
     }
 
     /******
@@ -505,6 +528,12 @@ public class FlappyImService {
         DataManager.getInstance().savePushPlat(pushPlat);
     }
 
+    /******
+     * 获取推送的平台
+     */
+    public String getPushPlat() {
+        return DataManager.getInstance().getPushPlat();
+    }
 
     /******
      * 数据登录加密公钥
@@ -719,7 +748,7 @@ public class FlappyImService {
         //外部用户ID
         hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         //设备ID
-        hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
+        hashMap.put("devicePlat", DataManager.getInstance().getDevicePlat());
         //设备ID
         hashMap.put("deviceId", DataManager.getInstance().getDeviceId());
         //推送类型
@@ -805,7 +834,7 @@ public class FlappyImService {
             //外部用户ID
             hashMap.put("userExtendId", StringTool.ToNotNullStr(userExtendID));
             //设备ID
-            hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
+            hashMap.put("devicePlat", DataManager.getInstance().getDevicePlat());
             //设备ID
             hashMap.put("deviceId", DataManager.getInstance().getDeviceId());
             //推送类型
@@ -888,7 +917,7 @@ public class FlappyImService {
             //用户ID
             hashMap.put("userId", DataManager.getInstance().getLoginUser().getUserId());
             //设备ID
-            hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
+            hashMap.put("devicePlat", DataManager.getInstance().getDevicePlat());
             //设备ID
             hashMap.put("deviceId", DataManager.getInstance().getDeviceId());
             //推送类型
@@ -1112,7 +1141,7 @@ public class FlappyImService {
             //外部用户ID
             hashMap.put("userExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
             //设备ID
-            hashMap.put("devicePlat", FlappyConfig.getInstance().devicePlat);
+            hashMap.put("devicePlat", DataManager.getInstance().getDevicePlat());
             //设备ID
             hashMap.put("deviceId", DataManager.getInstance().getDeviceId());
             //进行callBack
