@@ -179,7 +179,7 @@ public class FlappyImService {
     /******
      * 通知被点击
      */
-    public void notifyClicked() {
+    public void checkNotificationClick() {
         String str = DataManager.getInstance().getNotificationClick();
         if (notificationClickListener != null && str != null) {
             ChatMessage message = GsonTool.jsonStrToModel(str, ChatMessage.class);
@@ -557,7 +557,7 @@ public class FlappyImService {
     public void startService() {
         initReceiver();
         checkAutoLoginHttp(0);
-        FlappyImService.getInstance().notifyClicked();
+        FlappyImService.getInstance().checkNotificationClick();
     }
 
     /******

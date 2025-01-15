@@ -359,8 +359,8 @@ public class DataManager {
      * 保存消息被点击事件
      * @param message 消息
      */
-    public void saveNotificationClick(String message) {
-        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+    public void saveNotificationClick(Context context,String message) {
+        SharedPreferences mSharedPreferences = context.getSharedPreferences(
                 PREFERENCE_NAME,
                 Context.MODE_PRIVATE
         );

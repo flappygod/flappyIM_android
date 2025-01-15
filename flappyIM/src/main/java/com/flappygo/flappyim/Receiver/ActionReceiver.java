@@ -11,6 +11,7 @@ import static android.content.Intent.CATEGORY_LAUNCHER;
 
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
+
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class ActionReceiver extends BroadcastReceiver {
         handleMainActivityLaunch(context);
 
         // 通知消息发送
-        handleNotificationMessage(intent);
+        handleNotificationMessage(context, intent);
     }
 
     // 处理主界面跳转
@@ -62,15 +63,13 @@ public class ActionReceiver extends BroadcastReceiver {
     }
 
     // 处理通知消息
-    private void handleNotificationMessage(Intent intent) {
+    private void handleNotificationMessage(Context context, Intent intent) {
         try {
             Bundle bundle = intent.getExtras();
-            if (bundle != null) {
+            if (bundle != null && bundle.getString("msg") != null) {
                 String msg = bundle.getString("msg");
-                if (msg != null) {
-                    DataManager.getInstance().saveNotificationClick(msg);
-                    FlappyImService.getInstance().notifyClicked();
-                }
+                DataManager.getInstance().saveNotificationClick(context, msg);
+                FlappyImService.getInstance().checkNotificationClick();
             }
         } catch (Exception ex) {
             Log.e(TAG, "消息保存失败", ex);
