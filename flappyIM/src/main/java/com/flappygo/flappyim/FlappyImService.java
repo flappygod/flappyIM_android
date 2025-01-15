@@ -166,7 +166,6 @@ public class FlappyImService {
      */
     public void setNotificationClickListener(NotificationClickListener listener) {
         notificationClickListener = listener;
-        notifyClicked();
     }
 
     /******
@@ -558,6 +557,7 @@ public class FlappyImService {
     public void startService() {
         initReceiver();
         checkAutoLoginHttp(0);
+        FlappyImService.getInstance().notifyClicked();
     }
 
     /******
