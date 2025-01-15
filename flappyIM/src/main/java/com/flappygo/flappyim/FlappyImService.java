@@ -145,11 +145,6 @@ public class FlappyImService {
      */
     public void setKickedOutListener(KickedOutListener listener) {
         kickedOutListener = listener;
-        if (!isLogin()) {
-            if (kickedOutListener != null) {
-                kickedOutListener.kickedOut();
-            }
-        }
     }
 
     /******
@@ -160,7 +155,6 @@ public class FlappyImService {
         ChatUser user = DataManager.getInstance().getLoginUser();
         user.setLogin(0);
         DataManager.getInstance().saveLoginUser(user);
-
         //被踢下线了
         if (kickedOutListener != null) {
             kickedOutListener.kickedOut();
