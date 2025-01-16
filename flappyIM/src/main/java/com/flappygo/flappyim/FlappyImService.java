@@ -871,6 +871,9 @@ public class FlappyImService {
 
                 @Override
                 public void stateTrue(ResponseLogin response, String tag) {
+                    //重置
+                    NettyThreadListener.resetNettyRetryCount();
+                    //netty重连
                     loginNetty(response, callback);
                 }
             });
@@ -968,6 +971,9 @@ public class FlappyImService {
                         public void stateTrue(ResponseLogin response, String tag) {
                             //当前不在自动登录状态了
                             isRunningAutoLogin = false;
+                            //重置netty重连次数
+                            NettyThreadListener.resetNettyRetryCount();
+                            //自动登录
                             autoLoginNetty(response);
                         }
                     });
@@ -983,8 +989,6 @@ public class FlappyImService {
     private void loginNetty(ResponseLogin response, FlappyIMCallback<ResponseLogin> callback) {
         synchronized (this) {
 
-            //重置次数
-            NettyThreadListener.reset();
             //转换
             String loginReqUDID = Long.toString(System.currentTimeMillis());
             //添加登录回调
@@ -1070,9 +1074,6 @@ public class FlappyImService {
 
             //正在自动登录
             isRunningAutoLogin = true;
-
-            //重置死亡状态
-            NettyThreadListener.reset();
 
             //保存数据
             ChatUser chatUser = DataManager.getInstance().getLoginUser();

@@ -16,7 +16,7 @@ public abstract class NettyThreadListener implements NettyConnectListener {
     private static int retryCount = 0;
 
     //创建
-    public static void reset() {
+    public static void resetNettyRetryCount() {
         retryCount = FlappyConfig.getInstance().autoRetryNetty;
     }
 
