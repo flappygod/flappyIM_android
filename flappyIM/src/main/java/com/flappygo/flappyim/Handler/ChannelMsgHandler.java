@@ -417,7 +417,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      * 收到被踢下线的回复消息
      */
     private void receiveKicked() {
-        FlappyImService.getInstance().setKickedOut();
+        FlappyImService.getInstance().sendKickedOutEvent();
     }
 
     //更新所有会话

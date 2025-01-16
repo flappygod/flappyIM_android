@@ -153,7 +153,7 @@ public class FlappyImService {
     /******
      * 通知被踢下线
      */
-    public void setKickedOut() {
+    public void sendKickedOutEvent() {
         Message message = handler.obtainMessage(KICKED_OUT);
         handler.sendMessage(message);
     }
@@ -190,19 +190,18 @@ public class FlappyImService {
      * 自动Http重新登录和自动Netty重新登录
      * @param delayMillis 等待时间
      */
-    public void checkAutoLoginHttp(int delayMillis) {
-        //如果不是新登录查看旧的是否登录了
-        ChatUser user = DataManager.getInstance().getLoginUser();
-        //之前已经登录了，那么我们开始断线重连
-        if (user != null && user.isLogin() == 1 && NetTool.isConnected(getAppContext())) {
-            //移除消息
-            handler.removeMessages(AUTO_LOGIN_HTTP);
-            //等待一点时间后继续
-            if (delayMillis == 0) {
-                handler.sendEmptyMessage(AUTO_LOGIN_HTTP);
-            } else {
-                handler.sendEmptyMessageDelayed(AUTO_LOGIN_HTTP, delayMillis);
-            }
+    private void checkAutoLoginHttp(int delayMillis) {
+        //如果没有登录或者没有网络不执行
+        if (!isLogin() || !NetTool.isConnected(getAppContext())) {
+            return;
+        }
+        //移除消息
+        handler.removeMessages(AUTO_LOGIN_HTTP);
+        //等待一点时间后继续
+        if (delayMillis == 0) {
+            handler.sendEmptyMessage(AUTO_LOGIN_HTTP);
+        } else {
+            handler.sendEmptyMessageDelayed(AUTO_LOGIN_HTTP, delayMillis);
         }
     }
 
@@ -211,19 +210,34 @@ public class FlappyImService {
      * @param delayMillis 等待时间
      * @param responseLogin 登录信息
      */
-    public void checkAutoLoginNetty(int delayMillis, ResponseLogin responseLogin) {
-        //如果不是新登录查看旧的是否登录了
+    private void checkAutoLoginNetty(int delayMillis, ResponseLogin responseLogin) {
+        //如果没有登录或者没有网络不执行
+        if (!isLogin() || !NetTool.isConnected(getAppContext())) {
+            return;
+        }
+        //移除消息
+        handler.removeMessages(AUTO_LOGIN_NETTY);
+        Message message = handler.obtainMessage(AUTO_LOGIN_NETTY, responseLogin);
+        if (delayMillis == 0) {
+            handler.sendMessage(message);
+        } else {
+            handler.sendMessageDelayed(message, delayMillis);
+        }
+    }
+
+    /******
+     * 将用户踢下线
+     */
+    private void setKickedOut() {
+        //被踢下线,防止重复执行
         ChatUser user = DataManager.getInstance().getLoginUser();
-        //已经登录且网络正常，那么我们开始断线重连
-        if (user != null && user.isLogin() == 1 && NetTool.isConnected(getAppContext())) {
-            //移除消息
-            handler.removeMessages(AUTO_LOGIN_NETTY);
-            Message message = handler.obtainMessage(AUTO_LOGIN_NETTY, responseLogin);
-            if (delayMillis == 0) {
-                handler.sendMessage(message);
-            } else {
-                handler.sendMessageDelayed(message, delayMillis);
-            }
+        if (user.isLogin() == 0) {
+            return;
+        }
+        user.setLogin(0);
+        DataManager.getInstance().saveLoginUser(user);
+        if (kickedOutListener != null) {
+            kickedOutListener.kickedOut();
         }
     }
 
@@ -243,16 +257,7 @@ public class FlappyImService {
             }
             //被踢下线的消息
             if (msg.what == KICKED_OUT) {
-                //被踢下线,防止重复执行
-                ChatUser user = DataManager.getInstance().getLoginUser();
-                if (user.isLogin() == 0) {
-                    return;
-                }
-                user.setLogin(0);
-                DataManager.getInstance().saveLoginUser(user);
-                if (kickedOutListener != null) {
-                    kickedOutListener.kickedOut();
-                }
+                setKickedOut();
             }
         }
     };
@@ -378,10 +383,12 @@ public class FlappyImService {
     private void sendNotification(ChatMessage chatMessage) {
         PushSetting pushSetting = DataManager.getInstance().getPushSetting();
         ChatUser user = DataManager.getInstance().getLoginUser();
+
         //设置为空
         if (pushSetting == null || user == null) {
             return;
         }
+
         //免打扰模式
         if (StringTool.strToInt(pushSetting.getRoutePushMute(), 0) == 1) {
             return;
@@ -955,7 +962,7 @@ public class FlappyImService {
                             //当前的用户已经被踢下线了
                             if (model.getCode().equals(RESULT_EXPIRED)) {
                                 //当前已经被踢下线了
-                                setKickedOut();
+                                sendKickedOutEvent();
                             } else {
                                 //重新登录
                                 checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);

@@ -125,7 +125,7 @@ public class OkHttpClient {
             public void failure(Exception ex, String tag) {
                 callback.failure(ex, tag);
                 if (ex instanceof UnauthorizedException) {
-                    FlappyImService.getInstance().setKickedOut();
+                    FlappyImService.getInstance().sendKickedOutEvent();
                 }
             }
 
