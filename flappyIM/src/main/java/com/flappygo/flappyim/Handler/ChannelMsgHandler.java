@@ -3,6 +3,7 @@ package com.flappygo.flappyim.Handler;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
+import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
@@ -19,7 +20,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 
 import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
-import com.flappygo.flappyim.Config.FlappyConfig;
 import com.flappygo.flappyim.Tools.NettyAttrTool;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
@@ -116,6 +116,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //更新数据
         else if (response.getType() == FlappyResponse.RES_UPDATE) {
             receiveUpdate(response);
+        }
+        //更新数据
+        else if (response.getType() == FlappyResponse.RES_KICKED) {
+            receiveKicked();
         }
     }
 
@@ -407,6 +411,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //移除正在更新
             updatingIdLists.remove(response.getUpdate().getUpdateID());
         }
+    }
+
+    /******
+     * 收到被踢下线的回复消息
+     */
+    private void receiveKicked() {
+        FlappyImService.getInstance().setKickedOut();
     }
 
     //更新所有会话

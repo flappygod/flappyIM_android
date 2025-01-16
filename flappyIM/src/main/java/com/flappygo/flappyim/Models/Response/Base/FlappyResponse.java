@@ -19,4 +19,6 @@ public class FlappyResponse {
     //更新信息的回复
     public final static int RES_UPDATE = 5;
 
+    //被踢下线的回复
+    public final static int RES_KICKED = 6;
 }

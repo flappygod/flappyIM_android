@@ -112,6 +112,9 @@ public class FlappyImService {
     //自动登录Netty
     private static final int AUTO_LOGIN_NETTY = 2;
 
+    //被踢下线
+    private static final int KICKED_OUT = 3;
+
     //上下文
     private Context appContext;
 
@@ -150,15 +153,9 @@ public class FlappyImService {
     /******
      * 通知被踢下线
      */
-    public void kickedOut() {
-        //设置登录状态
-        ChatUser user = DataManager.getInstance().getLoginUser();
-        user.setLogin(0);
-        DataManager.getInstance().saveLoginUser(user);
-        //被踢下线了
-        if (kickedOutListener != null) {
-            kickedOutListener.kickedOut();
-        }
+    public void setKickedOut() {
+        Message message = handler.obtainMessage(KICKED_OUT);
+        handler.sendMessage(message);
     }
 
     /******
@@ -236,10 +233,26 @@ public class FlappyImService {
      */
     private final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
+            //自动登录Http
             if (msg.what == AUTO_LOGIN_HTTP) {
                 autoLogin();
-            } else if (msg.what == AUTO_LOGIN_NETTY) {
+            }
+            //自动登录Netty
+            if (msg.what == AUTO_LOGIN_NETTY) {
                 autoLoginNetty((ResponseLogin) msg.obj);
+            }
+            //被踢下线的消息
+            if (msg.what == KICKED_OUT) {
+                //被踢下线,防止重复执行
+                ChatUser user = DataManager.getInstance().getLoginUser();
+                if (user.isLogin() == 0) {
+                    return;
+                }
+                user.setLogin(0);
+                DataManager.getInstance().saveLoginUser(user);
+                if (kickedOutListener != null) {
+                    kickedOutListener.kickedOut();
+                }
             }
         }
     };
@@ -942,7 +955,7 @@ public class FlappyImService {
                             //当前的用户已经被踢下线了
                             if (model.getCode().equals(RESULT_EXPIRED)) {
                                 //当前已经被踢下线了
-                                kickedOut();
+                                setKickedOut();
                             } else {
                                 //重新登录
                                 checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
