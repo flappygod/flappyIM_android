@@ -117,7 +117,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         else if (response.getType() == FlappyResponse.RES_UPDATE) {
             receiveUpdate(response);
         }
-        //更新数据
+        //被踢下线
         else if (response.getType() == FlappyResponse.RES_KICKED) {
             receiveKicked();
         }
