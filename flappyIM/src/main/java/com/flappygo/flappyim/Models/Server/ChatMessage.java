@@ -133,7 +133,6 @@ public class ChatMessage {
     }
 
 
-
     private String messageId;
 
     private String messageSessionId;
@@ -181,7 +180,6 @@ public class ChatMessage {
     private String messageReadUserIds;
 
     private String messageDeleteUserIds;
-
 
 
     private long messageStamp;
@@ -624,22 +622,10 @@ public class ChatMessage {
         messageSendState = msg.getMessageSendState();
         messageReadState = msg.getMessageReadState();
 
-        //解析秘钥
-        messageSecret = AESTool.DecryptECBNoThrow(
-                msg.getMessageSecret(),
-                channelSecret
-        );
-        //通过秘钥解析数据
-        messageContent = AESTool.DecryptECBNoThrow(
-                msg.getMessageContent(),
-                messageSecret
-        );
-
         isDelete = msg.getIsDelete();
 
         messageReplyMsgId = msg.getMessageReplyMsgId();
         messageReplyMsgType = msg.getMessageReplyMsgType();
-        messageReplyMsgContent = msg.getMessageReplyMsgContent();
         messageReplyUserId = msg.getMessageReplyUserId();
 
         messageRecallUserId = msg.getMessageRecallUserId();
@@ -650,6 +636,21 @@ public class ChatMessage {
 
         messageDate = TimeTool.strToDate(msg.getMessageDate());
         deleteDate = TimeTool.strToDate(msg.getDeleteDate());
+
+        //解析秘钥及数据
+        messageSecret = AESTool.DecryptECBNoThrow(
+                msg.getMessageSecret(),
+                channelSecret
+        );
+        messageContent = AESTool.DecryptECBNoThrow(
+                msg.getMessageContent(),
+                messageSecret
+        );
+        messageReplyMsgContent = AESTool.DecryptECBNoThrow(
+                msg.getMessageReplyMsgContent(),
+                messageSecret
+        );
+
     }
 
 
@@ -710,16 +711,17 @@ public class ChatMessage {
         if (getMessageDeleteUserIds() != null)
             msgBuilder.setMessageDeleteUserIds(getMessageDeleteUserIds());
 
-
+        ///删除的日期
         if (getDeleteDate() != null)
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 
-        //生成临时秘钥
-        //加密内容
+        //生成临时秘钥,并加密内容
         msgBuilder.setMessageContent(
                 AESTool.EncryptECBNoThrow(getMessageContent(), getMessageSecret())
         );
-        //秘钥使用通道秘钥加密
+        msgBuilder.setMessageReplyMsgContent(
+                AESTool.EncryptECBNoThrow(getMessageReplyMsgContent(), getMessageSecret())
+        );
         msgBuilder.setMessageSecret(
                 AESTool.EncryptECBNoThrow(getMessageSecret(), channelSecret)
         );

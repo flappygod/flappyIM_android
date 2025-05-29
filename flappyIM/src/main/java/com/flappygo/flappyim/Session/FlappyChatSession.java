@@ -2,8 +2,8 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
-import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
@@ -24,7 +24,6 @@ import com.flappygo.flappyim.Tools.VideoTool;
 
 import android.media.MediaMetadataRetriever;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -66,7 +65,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 对方ID
      */
     private String getPeerID() {
-        switch (getSession().getSessionType().intValue()) {
+        switch (getSession().getSessionType()) {
             ///群聊会话
             case ChatSessionData.TYPE_GROUP:
                 return getSession().getSessionId();
@@ -94,7 +93,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 对方ID
      */
     private String getPeerExtendID() {
-        switch (getSession().getSessionType().intValue()) {
+        switch (getSession().getSessionType()) {
             ///群聊会话
             case ChatSessionData.TYPE_GROUP:
                 return getSession().getSessionExtendId();
@@ -156,7 +155,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         listenerList.remove(messageListener);
     }
 
-
     /******
      * 发送文本消息
      * @param text  文本消息
@@ -164,6 +162,17 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 消息
      */
     public ChatMessage sendText(String text, FlappySendCallback<ChatMessage> callback) {
+        return sendReplyText(text, null, callback);
+    }
+
+    /******
+     * 发送文本消息
+     * @param text  文本消息
+     * @param replyMsg 回复的消息
+     * @param callback 回调
+     * @return 消息
+     */
+    public ChatMessage sendReplyText(String text, ChatMessage replyMsg, FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -184,6 +193,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatText(text);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //发送消息
         sendMessage(msg, callback);
         //返回消息

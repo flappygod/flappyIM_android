@@ -291,9 +291,7 @@ public class MainActivity extends Activity {
                     mySession.sendText(message.getText().toString(), new FlappySendCallback<ChatMessage>() {
                         @Override
                         public void success(ChatMessage data) {
-
                             Toast.makeText(getBaseContext(), "消息已经发送", Toast.LENGTH_SHORT).show();
-
                         }
 
                         @Override

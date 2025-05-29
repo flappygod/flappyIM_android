@@ -5,6 +5,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Base64;
 
+import com.flappygo.flappyim.Tools.StringTool;
+
 import javax.crypto.Cipher;
 
 /******
@@ -111,6 +113,9 @@ public class AESTool {
     //encrypt ecb no throw exception
     public static String EncryptECBNoThrow(String sSrc, String sKey) {
         try {
+            if(StringTool.isEmpty(sSrc)){
+                return sSrc;
+            }
             return EncryptECB(sSrc, sKey);
         } catch (Exception ex) {
             return sSrc;
@@ -120,6 +125,9 @@ public class AESTool {
     //decrypt ecb no throw exception
     public static String DecryptECBNoThrow(String sSrc, String sKey) {
         try {
+            if(StringTool.isEmpty(sSrc)){
+                return sSrc;
+            }
             return DecryptECB(sSrc, sKey);
         } catch (Exception ex) {
             return sSrc;
