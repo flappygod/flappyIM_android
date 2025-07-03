@@ -39,7 +39,7 @@ public final class Flappy {
 
     /**
      * <pre>
-     * 聊天消息
+     * 请求消息
      * </pre>
      *
      * <code>.Message msg = 2;</code>
@@ -48,7 +48,7 @@ public final class Flappy {
     boolean hasMsg();
     /**
      * <pre>
-     * 聊天消息
+     * 请求消息
      * </pre>
      *
      * <code>.Message msg = 2;</code>
@@ -57,7 +57,7 @@ public final class Flappy {
     Message getMsg();
     /**
      * <pre>
-     * 聊天消息
+     * 请求消息
      * </pre>
      *
      * <code>.Message msg = 2;</code>
@@ -66,7 +66,7 @@ public final class Flappy {
 
     /**
      * <pre>
-     * 登录信息
+     * 请求登录
      * </pre>
      *
      * <code>.ReqLogin login = 3;</code>
@@ -75,7 +75,7 @@ public final class Flappy {
     boolean hasLogin();
     /**
      * <pre>
-     * 登录信息
+     * 请求登录
      * </pre>
      *
      * <code>.ReqLogin login = 3;</code>
@@ -84,7 +84,7 @@ public final class Flappy {
     ReqLogin getLogin();
     /**
      * <pre>
-     * 登录信息
+     * 请求登录
      * </pre>
      *
      * <code>.ReqLogin login = 3;</code>
@@ -93,7 +93,7 @@ public final class Flappy {
 
     /**
      * <pre>
-     * 更新信息
+     * 请求更新
      * </pre>
      *
      * <code>.ReqUpdate update = 4;</code>
@@ -102,7 +102,7 @@ public final class Flappy {
     boolean hasUpdate();
     /**
      * <pre>
-     * 更新信息
+     * 请求更新
      * </pre>
      *
      * <code>.ReqUpdate update = 4;</code>
@@ -111,7 +111,7 @@ public final class Flappy {
     ReqUpdate getUpdate();
     /**
      * <pre>
-     * 更新信息
+     * 请求更新
      * </pre>
      *
      * <code>.ReqUpdate update = 4;</code>
@@ -120,7 +120,7 @@ public final class Flappy {
 
     /**
      * <pre>
-     * 信息回执
+     * 请求回执
      * </pre>
      *
      * <code>.ReqReceipt receipt = 5;</code>
@@ -129,7 +129,7 @@ public final class Flappy {
     boolean hasReceipt();
     /**
      * <pre>
-     * 信息回执
+     * 请求回执
      * </pre>
      *
      * <code>.ReqReceipt receipt = 5;</code>
@@ -138,7 +138,7 @@ public final class Flappy {
     ReqReceipt getReceipt();
     /**
      * <pre>
-     * 信息回执
+     * 请求回执
      * </pre>
      *
      * <code>.ReqReceipt receipt = 5;</code>
@@ -146,6 +146,10 @@ public final class Flappy {
     ReqReceiptOrBuilder getReceiptOrBuilder();
   }
   /**
+   * <pre>
+   * 请求
+   * </pre>
+   *
    * Protobuf type {@code FlappyRequest}
    */
   public static final class FlappyRequest extends
@@ -202,7 +206,7 @@ public final class Flappy {
     private Message msg_;
     /**
      * <pre>
-     * 聊天消息
+     * 请求消息
      * </pre>
      *
      * <code>.Message msg = 2;</code>
@@ -214,7 +218,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 聊天消息
+     * 请求消息
      * </pre>
      *
      * <code>.Message msg = 2;</code>
@@ -226,7 +230,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 聊天消息
+     * 请求消息
      * </pre>
      *
      * <code>.Message msg = 2;</code>
@@ -240,7 +244,7 @@ public final class Flappy {
     private ReqLogin login_;
     /**
      * <pre>
-     * 登录信息
+     * 请求登录
      * </pre>
      *
      * <code>.ReqLogin login = 3;</code>
@@ -252,7 +256,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 登录信息
+     * 请求登录
      * </pre>
      *
      * <code>.ReqLogin login = 3;</code>
@@ -264,7 +268,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 登录信息
+     * 请求登录
      * </pre>
      *
      * <code>.ReqLogin login = 3;</code>
@@ -278,7 +282,7 @@ public final class Flappy {
     private ReqUpdate update_;
     /**
      * <pre>
-     * 更新信息
+     * 请求更新
      * </pre>
      *
      * <code>.ReqUpdate update = 4;</code>
@@ -290,7 +294,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 更新信息
+     * 请求更新
      * </pre>
      *
      * <code>.ReqUpdate update = 4;</code>
@@ -302,7 +306,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 更新信息
+     * 请求更新
      * </pre>
      *
      * <code>.ReqUpdate update = 4;</code>
@@ -316,7 +320,7 @@ public final class Flappy {
     private ReqReceipt receipt_;
     /**
      * <pre>
-     * 信息回执
+     * 请求回执
      * </pre>
      *
      * <code>.ReqReceipt receipt = 5;</code>
@@ -328,7 +332,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 信息回执
+     * 请求回执
      * </pre>
      *
      * <code>.ReqReceipt receipt = 5;</code>
@@ -340,7 +344,7 @@ public final class Flappy {
     }
     /**
      * <pre>
-     * 信息回执
+     * 请求回执
      * </pre>
      *
      * <code>.ReqReceipt receipt = 5;</code>
@@ -572,6 +576,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 请求
+     * </pre>
+     *
      * Protobuf type {@code FlappyRequest}
      */
     public static final class Builder extends
@@ -851,7 +859,7 @@ public final class Flappy {
           Message, Message.Builder, MessageOrBuilder> msgBuilder_;
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -862,7 +870,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -877,7 +885,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -897,7 +905,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -915,7 +923,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -940,7 +948,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -957,7 +965,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -969,7 +977,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -984,7 +992,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 聊天消息
+       * 请求消息
        * </pre>
        *
        * <code>.Message msg = 2;</code>
@@ -1008,7 +1016,7 @@ public final class Flappy {
           ReqLogin, ReqLogin.Builder, ReqLoginOrBuilder> loginBuilder_;
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1019,7 +1027,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1034,7 +1042,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1054,7 +1062,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1072,7 +1080,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1097,7 +1105,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1114,7 +1122,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1126,7 +1134,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1141,7 +1149,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 登录信息
+       * 请求登录
        * </pre>
        *
        * <code>.ReqLogin login = 3;</code>
@@ -1165,7 +1173,7 @@ public final class Flappy {
           ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder> updateBuilder_;
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1176,7 +1184,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1191,7 +1199,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1211,7 +1219,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1229,7 +1237,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1254,7 +1262,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1271,7 +1279,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1283,7 +1291,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1298,7 +1306,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 更新信息
+       * 请求更新
        * </pre>
        *
        * <code>.ReqUpdate update = 4;</code>
@@ -1322,7 +1330,7 @@ public final class Flappy {
           ReqReceipt, ReqReceipt.Builder, ReqReceiptOrBuilder> receiptBuilder_;
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1333,7 +1341,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1348,7 +1356,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1368,7 +1376,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1386,7 +1394,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1411,7 +1419,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1428,7 +1436,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1440,7 +1448,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1455,7 +1463,7 @@ public final class Flappy {
       }
       /**
        * <pre>
-       * 信息回执
+       * 请求回执
        * </pre>
        *
        * <code>.ReqReceipt receipt = 5;</code>
@@ -1520,1706 +1528,6 @@ public final class Flappy {
 
     @Override
     public FlappyRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface FlappyResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:FlappyResponse)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     * 响应类型
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
-     */
-    int getType();
-
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    java.util.List<Message>
-        getMsgList();
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    Message getMsg(int index);
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    int getMsgCount();
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    java.util.List<? extends MessageOrBuilder>
-        getMsgOrBuilderList();
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    MessageOrBuilder getMsgOrBuilder(
-        int index);
-
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    java.util.List<Session>
-        getSessionsList();
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    Session getSessions(int index);
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    int getSessionsCount();
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    java.util.List<? extends SessionOrBuilder>
-        getSessionsOrBuilderList();
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    SessionOrBuilder getSessionsOrBuilder(
-        int index);
-
-    /**
-     * <pre>
-     * 更新信息
-     * </pre>
-     *
-     * <code>.ReqUpdate update = 4;</code>
-     * @return Whether the update field is set.
-     */
-    boolean hasUpdate();
-    /**
-     * <pre>
-     * 更新信息
-     * </pre>
-     *
-     * <code>.ReqUpdate update = 4;</code>
-     * @return The update.
-     */
-    ReqUpdate getUpdate();
-    /**
-     * <pre>
-     * 更新信息
-     * </pre>
-     *
-     * <code>.ReqUpdate update = 4;</code>
-     */
-    ReqUpdateOrBuilder getUpdateOrBuilder();
-  }
-  /**
-   * Protobuf type {@code FlappyResponse}
-   */
-  public static final class FlappyResponse extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:FlappyResponse)
-      FlappyResponseOrBuilder {
-  private static final long serialVersionUID = 0L;
-    static {
-      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
-        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
-        /* major= */ 4,
-        /* minor= */ 29,
-        /* patch= */ 2,
-        /* suffix= */ "",
-        FlappyResponse.class.getName());
-    }
-    // Use FlappyResponse.newBuilder() to construct.
-    private FlappyResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-    }
-    private FlappyResponse() {
-      msg_ = java.util.Collections.emptyList();
-      sessions_ = java.util.Collections.emptyList();
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return Flappy.internal_static_FlappyResponse_descriptor;
-    }
-
-    @Override
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return Flappy.internal_static_FlappyResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              FlappyResponse.class, Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_ = 0;
-    /**
-     * <pre>
-     * 响应类型
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
-     */
-    @Override
-    public int getType() {
-      return type_;
-    }
-
-    public static final int MSG_FIELD_NUMBER = 2;
-    @SuppressWarnings("serial")
-    private java.util.List<Message> msg_;
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    @Override
-    public java.util.List<Message> getMsgList() {
-      return msg_;
-    }
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    @Override
-    public java.util.List<? extends MessageOrBuilder>
-        getMsgOrBuilderList() {
-      return msg_;
-    }
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    @Override
-    public int getMsgCount() {
-      return msg_.size();
-    }
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    @Override
-    public Message getMsg(int index) {
-      return msg_.get(index);
-    }
-    /**
-     * <pre>
-     * 消息列表
-     * </pre>
-     *
-     * <code>repeated .Message msg = 2;</code>
-     */
-    @Override
-    public MessageOrBuilder getMsgOrBuilder(
-        int index) {
-      return msg_.get(index);
-    }
-
-    public static final int SESSIONS_FIELD_NUMBER = 3;
-    @SuppressWarnings("serial")
-    private java.util.List<Session> sessions_;
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    @Override
-    public java.util.List<Session> getSessionsList() {
-      return sessions_;
-    }
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    @Override
-    public java.util.List<? extends SessionOrBuilder>
-        getSessionsOrBuilderList() {
-      return sessions_;
-    }
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    @Override
-    public int getSessionsCount() {
-      return sessions_.size();
-    }
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    @Override
-    public Session getSessions(int index) {
-      return sessions_.get(index);
-    }
-    /**
-     * <pre>
-     * 会话列表
-     * </pre>
-     *
-     * <code>repeated .Session sessions = 3;</code>
-     */
-    @Override
-    public SessionOrBuilder getSessionsOrBuilder(
-        int index) {
-      return sessions_.get(index);
-    }
-
-    public static final int UPDATE_FIELD_NUMBER = 4;
-    private ReqUpdate update_;
-    /**
-     * <pre>
-     * 更新信息
-     * </pre>
-     *
-     * <code>.ReqUpdate update = 4;</code>
-     * @return Whether the update field is set.
-     */
-    @Override
-    public boolean hasUpdate() {
-      return ((bitField0_ & 0x00000001) != 0);
-    }
-    /**
-     * <pre>
-     * 更新信息
-     * </pre>
-     *
-     * <code>.ReqUpdate update = 4;</code>
-     * @return The update.
-     */
-    @Override
-    public ReqUpdate getUpdate() {
-      return update_ == null ? ReqUpdate.getDefaultInstance() : update_;
-    }
-    /**
-     * <pre>
-     * 更新信息
-     * </pre>
-     *
-     * <code>.ReqUpdate update = 4;</code>
-     */
-    @Override
-    public ReqUpdateOrBuilder getUpdateOrBuilder() {
-      return update_ == null ? ReqUpdate.getDefaultInstance() : update_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (type_ != 0) {
-        output.writeInt32(1, type_);
-      }
-      for (int i = 0; i < msg_.size(); i++) {
-        output.writeMessage(2, msg_.get(i));
-      }
-      for (int i = 0; i < sessions_.size(); i++) {
-        output.writeMessage(3, sessions_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) != 0)) {
-        output.writeMessage(4, getUpdate());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (type_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, type_);
-      }
-      for (int i = 0; i < msg_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, msg_.get(i));
-      }
-      for (int i = 0; i < sessions_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, sessions_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getUpdate());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof FlappyResponse)) {
-        return super.equals(obj);
-      }
-      FlappyResponse other = (FlappyResponse) obj;
-
-      if (getType()
-          != other.getType()) return false;
-      if (!getMsgList()
-          .equals(other.getMsgList())) return false;
-      if (!getSessionsList()
-          .equals(other.getSessionsList())) return false;
-      if (hasUpdate() != other.hasUpdate()) return false;
-      if (hasUpdate()) {
-        if (!getUpdate()
-            .equals(other.getUpdate())) return false;
-      }
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + getType();
-      if (getMsgCount() > 0) {
-        hash = (37 * hash) + MSG_FIELD_NUMBER;
-        hash = (53 * hash) + getMsgList().hashCode();
-      }
-      if (getSessionsCount() > 0) {
-        hash = (37 * hash) + SESSIONS_FIELD_NUMBER;
-        hash = (53 * hash) + getSessionsList().hashCode();
-      }
-      if (hasUpdate()) {
-        hash = (37 * hash) + UPDATE_FIELD_NUMBER;
-        hash = (53 * hash) + getUpdate().hashCode();
-      }
-      hash = (29 * hash) + getUnknownFields().hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static FlappyResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static FlappyResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static FlappyResponse parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static FlappyResponse parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static FlappyResponse parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static FlappyResponse parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static FlappyResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input);
-    }
-    public static FlappyResponse parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public static FlappyResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static FlappyResponse parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static FlappyResponse parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input);
-    }
-    public static FlappyResponse parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(FlappyResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @Override
-    protected Builder newBuilderForType(
-        BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code FlappyResponse}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:FlappyResponse)
-        FlappyResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return Flappy.internal_static_FlappyResponse_descriptor;
-      }
-
-      @Override
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return Flappy.internal_static_FlappyResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                FlappyResponse.class, Builder.class);
-      }
-
-      // Construct using Flappy.FlappyResponse.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage
-                .alwaysUseFieldBuilders) {
-          getMsgFieldBuilder();
-          getSessionsFieldBuilder();
-          getUpdateFieldBuilder();
-        }
-      }
-      @Override
-      public Builder clear() {
-        super.clear();
-        bitField0_ = 0;
-        type_ = 0;
-        if (msgBuilder_ == null) {
-          msg_ = java.util.Collections.emptyList();
-        } else {
-          msg_ = null;
-          msgBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (sessionsBuilder_ == null) {
-          sessions_ = java.util.Collections.emptyList();
-        } else {
-          sessions_ = null;
-          sessionsBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        update_ = null;
-        if (updateBuilder_ != null) {
-          updateBuilder_.dispose();
-          updateBuilder_ = null;
-        }
-        return this;
-      }
-
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return Flappy.internal_static_FlappyResponse_descriptor;
-      }
-
-      @Override
-      public FlappyResponse getDefaultInstanceForType() {
-        return FlappyResponse.getDefaultInstance();
-      }
-
-      @Override
-      public FlappyResponse build() {
-        FlappyResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @Override
-      public FlappyResponse buildPartial() {
-        FlappyResponse result = new FlappyResponse(this);
-        buildPartialRepeatedFields(result);
-        if (bitField0_ != 0) { buildPartial0(result); }
-        onBuilt();
-        return result;
-      }
-
-      private void buildPartialRepeatedFields(FlappyResponse result) {
-        if (msgBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) != 0)) {
-            msg_ = java.util.Collections.unmodifiableList(msg_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.msg_ = msg_;
-        } else {
-          result.msg_ = msgBuilder_.build();
-        }
-        if (sessionsBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) != 0)) {
-            sessions_ = java.util.Collections.unmodifiableList(sessions_);
-            bitField0_ = (bitField0_ & ~0x00000004);
-          }
-          result.sessions_ = sessions_;
-        } else {
-          result.sessions_ = sessionsBuilder_.build();
-        }
-      }
-
-      private void buildPartial0(FlappyResponse result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.type_ = type_;
-        }
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.update_ = updateBuilder_ == null
-              ? update_
-              : updateBuilder_.build();
-          to_bitField0_ |= 0x00000001;
-        }
-        result.bitField0_ |= to_bitField0_;
-      }
-
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof FlappyResponse) {
-          return mergeFrom((FlappyResponse)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(FlappyResponse other) {
-        if (other == FlappyResponse.getDefaultInstance()) return this;
-        if (other.getType() != 0) {
-          setType(other.getType());
-        }
-        if (msgBuilder_ == null) {
-          if (!other.msg_.isEmpty()) {
-            if (msg_.isEmpty()) {
-              msg_ = other.msg_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureMsgIsMutable();
-              msg_.addAll(other.msg_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.msg_.isEmpty()) {
-            if (msgBuilder_.isEmpty()) {
-              msgBuilder_.dispose();
-              msgBuilder_ = null;
-              msg_ = other.msg_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              msgBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getMsgFieldBuilder() : null;
-            } else {
-              msgBuilder_.addAllMessages(other.msg_);
-            }
-          }
-        }
-        if (sessionsBuilder_ == null) {
-          if (!other.sessions_.isEmpty()) {
-            if (sessions_.isEmpty()) {
-              sessions_ = other.sessions_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-            } else {
-              ensureSessionsIsMutable();
-              sessions_.addAll(other.sessions_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.sessions_.isEmpty()) {
-            if (sessionsBuilder_.isEmpty()) {
-              sessionsBuilder_.dispose();
-              sessionsBuilder_ = null;
-              sessions_ = other.sessions_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-              sessionsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getSessionsFieldBuilder() : null;
-            } else {
-              sessionsBuilder_.addAllMessages(other.sessions_);
-            }
-          }
-        }
-        if (other.hasUpdate()) {
-          mergeUpdate(other.getUpdate());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        onChanged();
-        return this;
-      }
-
-      @Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new NullPointerException();
-        }
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                type_ = input.readInt32();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 8
-              case 18: {
-                Message m =
-                    input.readMessage(
-                        Message.parser(),
-                        extensionRegistry);
-                if (msgBuilder_ == null) {
-                  ensureMsgIsMutable();
-                  msg_.add(m);
-                } else {
-                  msgBuilder_.addMessage(m);
-                }
-                break;
-              } // case 18
-              case 26: {
-                Session m =
-                    input.readMessage(
-                        Session.parser(),
-                        extensionRegistry);
-                if (sessionsBuilder_ == null) {
-                  ensureSessionsIsMutable();
-                  sessions_.add(m);
-                } else {
-                  sessionsBuilder_.addMessage(m);
-                }
-                break;
-              } // case 26
-              case 34: {
-                input.readMessage(
-                    getUpdateFieldBuilder().getBuilder(),
-                    extensionRegistry);
-                bitField0_ |= 0x00000008;
-                break;
-              } // case 34
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.unwrapIOException();
-        } finally {
-          onChanged();
-        } // finally
-        return this;
-      }
-      private int bitField0_;
-
-      private int type_ ;
-      /**
-       * <pre>
-       * 响应类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @return The type.
-       */
-      @Override
-      public int getType() {
-        return type_;
-      }
-      /**
-       * <pre>
-       * 响应类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @param value The type to set.
-       * @return This builder for chaining.
-       */
-      public Builder setType(int value) {
-
-        type_ = value;
-        bitField0_ |= 0x00000001;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 响应类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.util.List<Message> msg_ =
-        java.util.Collections.emptyList();
-      private void ensureMsgIsMutable() {
-        if (!((bitField0_ & 0x00000002) != 0)) {
-          msg_ = new java.util.ArrayList<Message>(msg_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          Message, Message.Builder, MessageOrBuilder> msgBuilder_;
-
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public java.util.List<Message> getMsgList() {
-        if (msgBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(msg_);
-        } else {
-          return msgBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public int getMsgCount() {
-        if (msgBuilder_ == null) {
-          return msg_.size();
-        } else {
-          return msgBuilder_.getCount();
-        }
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Message getMsg(int index) {
-        if (msgBuilder_ == null) {
-          return msg_.get(index);
-        } else {
-          return msgBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder setMsg(
-          int index, Message value) {
-        if (msgBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureMsgIsMutable();
-          msg_.set(index, value);
-          onChanged();
-        } else {
-          msgBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder setMsg(
-          int index, Message.Builder builderForValue) {
-        if (msgBuilder_ == null) {
-          ensureMsgIsMutable();
-          msg_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          msgBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder addMsg(Message value) {
-        if (msgBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureMsgIsMutable();
-          msg_.add(value);
-          onChanged();
-        } else {
-          msgBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder addMsg(
-          int index, Message value) {
-        if (msgBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureMsgIsMutable();
-          msg_.add(index, value);
-          onChanged();
-        } else {
-          msgBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder addMsg(
-          Message.Builder builderForValue) {
-        if (msgBuilder_ == null) {
-          ensureMsgIsMutable();
-          msg_.add(builderForValue.build());
-          onChanged();
-        } else {
-          msgBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder addMsg(
-          int index, Message.Builder builderForValue) {
-        if (msgBuilder_ == null) {
-          ensureMsgIsMutable();
-          msg_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          msgBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder addAllMsg(
-          Iterable<? extends Message> values) {
-        if (msgBuilder_ == null) {
-          ensureMsgIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, msg_);
-          onChanged();
-        } else {
-          msgBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder clearMsg() {
-        if (msgBuilder_ == null) {
-          msg_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          msgBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Builder removeMsg(int index) {
-        if (msgBuilder_ == null) {
-          ensureMsgIsMutable();
-          msg_.remove(index);
-          onChanged();
-        } else {
-          msgBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Message.Builder getMsgBuilder(
-          int index) {
-        return getMsgFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public MessageOrBuilder getMsgOrBuilder(
-          int index) {
-        if (msgBuilder_ == null) {
-          return msg_.get(index);  } else {
-          return msgBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public java.util.List<? extends MessageOrBuilder>
-           getMsgOrBuilderList() {
-        if (msgBuilder_ != null) {
-          return msgBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(msg_);
-        }
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Message.Builder addMsgBuilder() {
-        return getMsgFieldBuilder().addBuilder(
-            Message.getDefaultInstance());
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public Message.Builder addMsgBuilder(
-          int index) {
-        return getMsgFieldBuilder().addBuilder(
-            index, Message.getDefaultInstance());
-      }
-      /**
-       * <pre>
-       * 消息列表
-       * </pre>
-       *
-       * <code>repeated .Message msg = 2;</code>
-       */
-      public java.util.List<Message.Builder>
-           getMsgBuilderList() {
-        return getMsgFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          Message, Message.Builder, MessageOrBuilder>
-          getMsgFieldBuilder() {
-        if (msgBuilder_ == null) {
-          msgBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              Message, Message.Builder, MessageOrBuilder>(
-                  msg_,
-                  ((bitField0_ & 0x00000002) != 0),
-                  getParentForChildren(),
-                  isClean());
-          msg_ = null;
-        }
-        return msgBuilder_;
-      }
-
-      private java.util.List<Session> sessions_ =
-        java.util.Collections.emptyList();
-      private void ensureSessionsIsMutable() {
-        if (!((bitField0_ & 0x00000004) != 0)) {
-          sessions_ = new java.util.ArrayList<Session>(sessions_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          Session, Session.Builder, SessionOrBuilder> sessionsBuilder_;
-
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public java.util.List<Session> getSessionsList() {
-        if (sessionsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(sessions_);
-        } else {
-          return sessionsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public int getSessionsCount() {
-        if (sessionsBuilder_ == null) {
-          return sessions_.size();
-        } else {
-          return sessionsBuilder_.getCount();
-        }
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Session getSessions(int index) {
-        if (sessionsBuilder_ == null) {
-          return sessions_.get(index);
-        } else {
-          return sessionsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder setSessions(
-          int index, Session value) {
-        if (sessionsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureSessionsIsMutable();
-          sessions_.set(index, value);
-          onChanged();
-        } else {
-          sessionsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder setSessions(
-          int index, Session.Builder builderForValue) {
-        if (sessionsBuilder_ == null) {
-          ensureSessionsIsMutable();
-          sessions_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          sessionsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder addSessions(Session value) {
-        if (sessionsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureSessionsIsMutable();
-          sessions_.add(value);
-          onChanged();
-        } else {
-          sessionsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder addSessions(
-          int index, Session value) {
-        if (sessionsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureSessionsIsMutable();
-          sessions_.add(index, value);
-          onChanged();
-        } else {
-          sessionsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder addSessions(
-          Session.Builder builderForValue) {
-        if (sessionsBuilder_ == null) {
-          ensureSessionsIsMutable();
-          sessions_.add(builderForValue.build());
-          onChanged();
-        } else {
-          sessionsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder addSessions(
-          int index, Session.Builder builderForValue) {
-        if (sessionsBuilder_ == null) {
-          ensureSessionsIsMutable();
-          sessions_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          sessionsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder addAllSessions(
-          Iterable<? extends Session> values) {
-        if (sessionsBuilder_ == null) {
-          ensureSessionsIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, sessions_);
-          onChanged();
-        } else {
-          sessionsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder clearSessions() {
-        if (sessionsBuilder_ == null) {
-          sessions_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-          onChanged();
-        } else {
-          sessionsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Builder removeSessions(int index) {
-        if (sessionsBuilder_ == null) {
-          ensureSessionsIsMutable();
-          sessions_.remove(index);
-          onChanged();
-        } else {
-          sessionsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Session.Builder getSessionsBuilder(
-          int index) {
-        return getSessionsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public SessionOrBuilder getSessionsOrBuilder(
-          int index) {
-        if (sessionsBuilder_ == null) {
-          return sessions_.get(index);  } else {
-          return sessionsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public java.util.List<? extends SessionOrBuilder>
-           getSessionsOrBuilderList() {
-        if (sessionsBuilder_ != null) {
-          return sessionsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(sessions_);
-        }
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Session.Builder addSessionsBuilder() {
-        return getSessionsFieldBuilder().addBuilder(
-            Session.getDefaultInstance());
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public Session.Builder addSessionsBuilder(
-          int index) {
-        return getSessionsFieldBuilder().addBuilder(
-            index, Session.getDefaultInstance());
-      }
-      /**
-       * <pre>
-       * 会话列表
-       * </pre>
-       *
-       * <code>repeated .Session sessions = 3;</code>
-       */
-      public java.util.List<Session.Builder>
-           getSessionsBuilderList() {
-        return getSessionsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          Session, Session.Builder, SessionOrBuilder>
-          getSessionsFieldBuilder() {
-        if (sessionsBuilder_ == null) {
-          sessionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              Session, Session.Builder, SessionOrBuilder>(
-                  sessions_,
-                  ((bitField0_ & 0x00000004) != 0),
-                  getParentForChildren(),
-                  isClean());
-          sessions_ = null;
-        }
-        return sessionsBuilder_;
-      }
-
-      private ReqUpdate update_;
-      private com.google.protobuf.SingleFieldBuilder<
-          ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder> updateBuilder_;
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       * @return Whether the update field is set.
-       */
-      public boolean hasUpdate() {
-        return ((bitField0_ & 0x00000008) != 0);
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       * @return The update.
-       */
-      public ReqUpdate getUpdate() {
-        if (updateBuilder_ == null) {
-          return update_ == null ? ReqUpdate.getDefaultInstance() : update_;
-        } else {
-          return updateBuilder_.getMessage();
-        }
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      public Builder setUpdate(ReqUpdate value) {
-        if (updateBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          update_ = value;
-        } else {
-          updateBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000008;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      public Builder setUpdate(
-          ReqUpdate.Builder builderForValue) {
-        if (updateBuilder_ == null) {
-          update_ = builderForValue.build();
-        } else {
-          updateBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000008;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      public Builder mergeUpdate(ReqUpdate value) {
-        if (updateBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) != 0) &&
-            update_ != null &&
-            update_ != ReqUpdate.getDefaultInstance()) {
-            getUpdateBuilder().mergeFrom(value);
-          } else {
-            update_ = value;
-          }
-        } else {
-          updateBuilder_.mergeFrom(value);
-        }
-        if (update_ != null) {
-          bitField0_ |= 0x00000008;
-          onChanged();
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      public Builder clearUpdate() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        update_ = null;
-        if (updateBuilder_ != null) {
-          updateBuilder_.dispose();
-          updateBuilder_ = null;
-        }
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      public ReqUpdate.Builder getUpdateBuilder() {
-        bitField0_ |= 0x00000008;
-        onChanged();
-        return getUpdateFieldBuilder().getBuilder();
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      public ReqUpdateOrBuilder getUpdateOrBuilder() {
-        if (updateBuilder_ != null) {
-          return updateBuilder_.getMessageOrBuilder();
-        } else {
-          return update_ == null ?
-              ReqUpdate.getDefaultInstance() : update_;
-        }
-      }
-      /**
-       * <pre>
-       * 更新信息
-       * </pre>
-       *
-       * <code>.ReqUpdate update = 4;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder>
-          getUpdateFieldBuilder() {
-        if (updateBuilder_ == null) {
-          updateBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              ReqUpdate, ReqUpdate.Builder, ReqUpdateOrBuilder>(
-                  getUpdate(),
-                  getParentForChildren(),
-                  isClean());
-          update_ = null;
-        }
-        return updateBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:FlappyResponse)
-    }
-
-    // @@protoc_insertion_point(class_scope:FlappyResponse)
-    private static final FlappyResponse DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new FlappyResponse();
-    }
-
-    public static FlappyResponse getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<FlappyResponse>
-        PARSER = new com.google.protobuf.AbstractParser<FlappyResponse>() {
-      @Override
-      public FlappyResponse parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
-      }
-    };
-
-    public static com.google.protobuf.Parser<FlappyResponse> parser() {
-      return PARSER;
-    }
-
-    @Override
-    public com.google.protobuf.Parser<FlappyResponse> getParserForType() {
-      return PARSER;
-    }
-
-    @Override
-    public FlappyResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -3330,6 +1638,10 @@ public final class Flappy {
         getSecretBytes();
   }
   /**
+   * <pre>
+   * 请求登录
+   * </pre>
+   *
    * Protobuf type {@code ReqLogin}
    */
   public static final class ReqLogin extends
@@ -3803,6 +2115,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 请求登录
+     * </pre>
+     *
      * Protobuf type {@code ReqLogin}
      */
     public static final class Builder extends
@@ -4542,6 +2858,10 @@ public final class Flappy {
         getUpdateIDBytes();
   }
   /**
+   * <pre>
+   * 请求更新
+   * </pre>
+   *
    * Protobuf type {@code ReqUpdate}
    */
   public static final class ReqUpdate extends
@@ -4809,6 +3129,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 请求更新
+     * </pre>
+     *
      * Protobuf type {@code ReqUpdate}
      */
     public static final class Builder extends
@@ -5180,6 +3504,10 @@ public final class Flappy {
         getReceiptIDBytes();
   }
   /**
+   * <pre>
+   * 请求回执
+   * </pre>
+   *
    * Protobuf type {@code ReqReceipt}
    */
   public static final class ReqReceipt extends
@@ -5447,6 +3775,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 请求回执
+     * </pre>
+     *
      * Protobuf type {@code ReqReceipt}
      */
     public static final class Builder extends
@@ -5783,6 +4115,2360 @@ public final class Flappy {
 
   }
 
+  public interface FlappyResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:FlappyResponse)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 回复类型
+     * </pre>
+     *
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    int getType();
+
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    java.util.List<Message>
+        getMsgList();
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    Message getMsg(int index);
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    int getMsgCount();
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    java.util.List<? extends MessageOrBuilder>
+        getMsgOrBuilderList();
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    MessageOrBuilder getMsgOrBuilder(
+        int index);
+
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    java.util.List<Session>
+        getSessionsList();
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    Session getSessions(int index);
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    int getSessionsCount();
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    java.util.List<? extends SessionOrBuilder>
+        getSessionsOrBuilderList();
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    SessionOrBuilder getSessionsOrBuilder(
+        int index);
+
+    /**
+     * <pre>
+     * 回复更新
+     * </pre>
+     *
+     * <code>.ResponseUpdate update = 4;</code>
+     * @return Whether the update field is set.
+     */
+    boolean hasUpdate();
+    /**
+     * <pre>
+     * 回复更新
+     * </pre>
+     *
+     * <code>.ResponseUpdate update = 4;</code>
+     * @return The update.
+     */
+    ResponseUpdate getUpdate();
+    /**
+     * <pre>
+     * 回复更新
+     * </pre>
+     *
+     * <code>.ResponseUpdate update = 4;</code>
+     */
+    ResponseUpdateOrBuilder getUpdateOrBuilder();
+  }
+  /**
+   * <pre>
+   * 回复
+   * </pre>
+   *
+   * Protobuf type {@code FlappyResponse}
+   */
+  public static final class FlappyResponse extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:FlappyResponse)
+      FlappyResponseOrBuilder {
+  private static final long serialVersionUID = 0L;
+    static {
+      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
+        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
+        /* major= */ 4,
+        /* minor= */ 29,
+        /* patch= */ 2,
+        /* suffix= */ "",
+        FlappyResponse.class.getName());
+    }
+    // Use FlappyResponse.newBuilder() to construct.
+    private FlappyResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+    }
+    private FlappyResponse() {
+      msg_ = java.util.Collections.emptyList();
+      sessions_ = java.util.Collections.emptyList();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return Flappy.internal_static_FlappyResponse_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return Flappy.internal_static_FlappyResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              FlappyResponse.class, Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private int type_ = 0;
+    /**
+     * <pre>
+     * 回复类型
+     * </pre>
+     *
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    @Override
+    public int getType() {
+      return type_;
+    }
+
+    public static final int MSG_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
+    private java.util.List<Message> msg_;
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    @Override
+    public java.util.List<Message> getMsgList() {
+      return msg_;
+    }
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    @Override
+    public java.util.List<? extends MessageOrBuilder>
+        getMsgOrBuilderList() {
+      return msg_;
+    }
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    @Override
+    public int getMsgCount() {
+      return msg_.size();
+    }
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    @Override
+    public Message getMsg(int index) {
+      return msg_.get(index);
+    }
+    /**
+     * <pre>
+     * 回复消息
+     * </pre>
+     *
+     * <code>repeated .Message msg = 2;</code>
+     */
+    @Override
+    public MessageOrBuilder getMsgOrBuilder(
+        int index) {
+      return msg_.get(index);
+    }
+
+    public static final int SESSIONS_FIELD_NUMBER = 3;
+    @SuppressWarnings("serial")
+    private java.util.List<Session> sessions_;
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    @Override
+    public java.util.List<Session> getSessionsList() {
+      return sessions_;
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    @Override
+    public java.util.List<? extends SessionOrBuilder>
+        getSessionsOrBuilderList() {
+      return sessions_;
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    @Override
+    public int getSessionsCount() {
+      return sessions_.size();
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    @Override
+    public Session getSessions(int index) {
+      return sessions_.get(index);
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated .Session sessions = 3;</code>
+     */
+    @Override
+    public SessionOrBuilder getSessionsOrBuilder(
+        int index) {
+      return sessions_.get(index);
+    }
+
+    public static final int UPDATE_FIELD_NUMBER = 4;
+    private ResponseUpdate update_;
+    /**
+     * <pre>
+     * 回复更新
+     * </pre>
+     *
+     * <code>.ResponseUpdate update = 4;</code>
+     * @return Whether the update field is set.
+     */
+    @Override
+    public boolean hasUpdate() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 回复更新
+     * </pre>
+     *
+     * <code>.ResponseUpdate update = 4;</code>
+     * @return The update.
+     */
+    @Override
+    public ResponseUpdate getUpdate() {
+      return update_ == null ? ResponseUpdate.getDefaultInstance() : update_;
+    }
+    /**
+     * <pre>
+     * 回复更新
+     * </pre>
+     *
+     * <code>.ResponseUpdate update = 4;</code>
+     */
+    @Override
+    public ResponseUpdateOrBuilder getUpdateOrBuilder() {
+      return update_ == null ? ResponseUpdate.getDefaultInstance() : update_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (type_ != 0) {
+        output.writeInt32(1, type_);
+      }
+      for (int i = 0; i < msg_.size(); i++) {
+        output.writeMessage(2, msg_.get(i));
+      }
+      for (int i = 0; i < sessions_.size(); i++) {
+        output.writeMessage(3, sessions_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeMessage(4, getUpdate());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (type_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, type_);
+      }
+      for (int i = 0; i < msg_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, msg_.get(i));
+      }
+      for (int i = 0; i < sessions_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, sessions_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, getUpdate());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof FlappyResponse)) {
+        return super.equals(obj);
+      }
+      FlappyResponse other = (FlappyResponse) obj;
+
+      if (getType()
+          != other.getType()) return false;
+      if (!getMsgList()
+          .equals(other.getMsgList())) return false;
+      if (!getSessionsList()
+          .equals(other.getSessionsList())) return false;
+      if (hasUpdate() != other.hasUpdate()) return false;
+      if (hasUpdate()) {
+        if (!getUpdate()
+            .equals(other.getUpdate())) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getType();
+      if (getMsgCount() > 0) {
+        hash = (37 * hash) + MSG_FIELD_NUMBER;
+        hash = (53 * hash) + getMsgList().hashCode();
+      }
+      if (getSessionsCount() > 0) {
+        hash = (37 * hash) + SESSIONS_FIELD_NUMBER;
+        hash = (53 * hash) + getSessionsList().hashCode();
+      }
+      if (hasUpdate()) {
+        hash = (37 * hash) + UPDATE_FIELD_NUMBER;
+        hash = (53 * hash) + getUpdate().hashCode();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static FlappyResponse parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static FlappyResponse parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static FlappyResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static FlappyResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static FlappyResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static FlappyResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static FlappyResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static FlappyResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static FlappyResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static FlappyResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static FlappyResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static FlappyResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(FlappyResponse prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+        BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 回复
+     * </pre>
+     *
+     * Protobuf type {@code FlappyResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:FlappyResponse)
+        FlappyResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return Flappy.internal_static_FlappyResponse_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return Flappy.internal_static_FlappyResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                FlappyResponse.class, Builder.class);
+      }
+
+      // Construct using Flappy.FlappyResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage
+                .alwaysUseFieldBuilders) {
+          getMsgFieldBuilder();
+          getSessionsFieldBuilder();
+          getUpdateFieldBuilder();
+        }
+      }
+      @Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        type_ = 0;
+        if (msgBuilder_ == null) {
+          msg_ = java.util.Collections.emptyList();
+        } else {
+          msg_ = null;
+          msgBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (sessionsBuilder_ == null) {
+          sessions_ = java.util.Collections.emptyList();
+        } else {
+          sessions_ = null;
+          sessionsBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        update_ = null;
+        if (updateBuilder_ != null) {
+          updateBuilder_.dispose();
+          updateBuilder_ = null;
+        }
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return Flappy.internal_static_FlappyResponse_descriptor;
+      }
+
+      @Override
+      public FlappyResponse getDefaultInstanceForType() {
+        return FlappyResponse.getDefaultInstance();
+      }
+
+      @Override
+      public FlappyResponse build() {
+        FlappyResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public FlappyResponse buildPartial() {
+        FlappyResponse result = new FlappyResponse(this);
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(FlappyResponse result) {
+        if (msgBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) != 0)) {
+            msg_ = java.util.Collections.unmodifiableList(msg_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.msg_ = msg_;
+        } else {
+          result.msg_ = msgBuilder_.build();
+        }
+        if (sessionsBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) != 0)) {
+            sessions_ = java.util.Collections.unmodifiableList(sessions_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.sessions_ = sessions_;
+        } else {
+          result.sessions_ = sessionsBuilder_.build();
+        }
+      }
+
+      private void buildPartial0(FlappyResponse result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.type_ = type_;
+        }
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          result.update_ = updateBuilder_ == null
+              ? update_
+              : updateBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof FlappyResponse) {
+          return mergeFrom((FlappyResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(FlappyResponse other) {
+        if (other == FlappyResponse.getDefaultInstance()) return this;
+        if (other.getType() != 0) {
+          setType(other.getType());
+        }
+        if (msgBuilder_ == null) {
+          if (!other.msg_.isEmpty()) {
+            if (msg_.isEmpty()) {
+              msg_ = other.msg_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureMsgIsMutable();
+              msg_.addAll(other.msg_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.msg_.isEmpty()) {
+            if (msgBuilder_.isEmpty()) {
+              msgBuilder_.dispose();
+              msgBuilder_ = null;
+              msg_ = other.msg_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              msgBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getMsgFieldBuilder() : null;
+            } else {
+              msgBuilder_.addAllMessages(other.msg_);
+            }
+          }
+        }
+        if (sessionsBuilder_ == null) {
+          if (!other.sessions_.isEmpty()) {
+            if (sessions_.isEmpty()) {
+              sessions_ = other.sessions_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureSessionsIsMutable();
+              sessions_.addAll(other.sessions_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.sessions_.isEmpty()) {
+            if (sessionsBuilder_.isEmpty()) {
+              sessionsBuilder_.dispose();
+              sessionsBuilder_ = null;
+              sessions_ = other.sessions_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              sessionsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getSessionsFieldBuilder() : null;
+            } else {
+              sessionsBuilder_.addAllMessages(other.sessions_);
+            }
+          }
+        }
+        if (other.hasUpdate()) {
+          mergeUpdate(other.getUpdate());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                type_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                Message m =
+                    input.readMessage(
+                        Message.parser(),
+                        extensionRegistry);
+                if (msgBuilder_ == null) {
+                  ensureMsgIsMutable();
+                  msg_.add(m);
+                } else {
+                  msgBuilder_.addMessage(m);
+                }
+                break;
+              } // case 18
+              case 26: {
+                Session m =
+                    input.readMessage(
+                        Session.parser(),
+                        extensionRegistry);
+                if (sessionsBuilder_ == null) {
+                  ensureSessionsIsMutable();
+                  sessions_.add(m);
+                } else {
+                  sessionsBuilder_.addMessage(m);
+                }
+                break;
+              } // case 26
+              case 34: {
+                input.readMessage(
+                    getUpdateFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int type_ ;
+      /**
+       * <pre>
+       * 回复类型
+       * </pre>
+       *
+       * <code>int32 type = 1;</code>
+       * @return The type.
+       */
+      @Override
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <pre>
+       * 回复类型
+       * </pre>
+       *
+       * <code>int32 type = 1;</code>
+       * @param value The type to set.
+       * @return This builder for chaining.
+       */
+      public Builder setType(int value) {
+
+        type_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复类型
+       * </pre>
+       *
+       * <code>int32 type = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<Message> msg_ =
+        java.util.Collections.emptyList();
+      private void ensureMsgIsMutable() {
+        if (!((bitField0_ & 0x00000002) != 0)) {
+          msg_ = new java.util.ArrayList<Message>(msg_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          Message, Message.Builder, MessageOrBuilder> msgBuilder_;
+
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public java.util.List<Message> getMsgList() {
+        if (msgBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(msg_);
+        } else {
+          return msgBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public int getMsgCount() {
+        if (msgBuilder_ == null) {
+          return msg_.size();
+        } else {
+          return msgBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Message getMsg(int index) {
+        if (msgBuilder_ == null) {
+          return msg_.get(index);
+        } else {
+          return msgBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder setMsg(
+          int index, Message value) {
+        if (msgBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMsgIsMutable();
+          msg_.set(index, value);
+          onChanged();
+        } else {
+          msgBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder setMsg(
+          int index, Message.Builder builderForValue) {
+        if (msgBuilder_ == null) {
+          ensureMsgIsMutable();
+          msg_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          msgBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder addMsg(Message value) {
+        if (msgBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMsgIsMutable();
+          msg_.add(value);
+          onChanged();
+        } else {
+          msgBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder addMsg(
+          int index, Message value) {
+        if (msgBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMsgIsMutable();
+          msg_.add(index, value);
+          onChanged();
+        } else {
+          msgBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder addMsg(
+          Message.Builder builderForValue) {
+        if (msgBuilder_ == null) {
+          ensureMsgIsMutable();
+          msg_.add(builderForValue.build());
+          onChanged();
+        } else {
+          msgBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder addMsg(
+          int index, Message.Builder builderForValue) {
+        if (msgBuilder_ == null) {
+          ensureMsgIsMutable();
+          msg_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          msgBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder addAllMsg(
+          Iterable<? extends Message> values) {
+        if (msgBuilder_ == null) {
+          ensureMsgIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, msg_);
+          onChanged();
+        } else {
+          msgBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder clearMsg() {
+        if (msgBuilder_ == null) {
+          msg_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          msgBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Builder removeMsg(int index) {
+        if (msgBuilder_ == null) {
+          ensureMsgIsMutable();
+          msg_.remove(index);
+          onChanged();
+        } else {
+          msgBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Message.Builder getMsgBuilder(
+          int index) {
+        return getMsgFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public MessageOrBuilder getMsgOrBuilder(
+          int index) {
+        if (msgBuilder_ == null) {
+          return msg_.get(index);  } else {
+          return msgBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public java.util.List<? extends MessageOrBuilder>
+           getMsgOrBuilderList() {
+        if (msgBuilder_ != null) {
+          return msgBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(msg_);
+        }
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Message.Builder addMsgBuilder() {
+        return getMsgFieldBuilder().addBuilder(
+            Message.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public Message.Builder addMsgBuilder(
+          int index) {
+        return getMsgFieldBuilder().addBuilder(
+            index, Message.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 回复消息
+       * </pre>
+       *
+       * <code>repeated .Message msg = 2;</code>
+       */
+      public java.util.List<Message.Builder>
+           getMsgBuilderList() {
+        return getMsgFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          Message, Message.Builder, MessageOrBuilder>
+          getMsgFieldBuilder() {
+        if (msgBuilder_ == null) {
+          msgBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              Message, Message.Builder, MessageOrBuilder>(
+                  msg_,
+                  ((bitField0_ & 0x00000002) != 0),
+                  getParentForChildren(),
+                  isClean());
+          msg_ = null;
+        }
+        return msgBuilder_;
+      }
+
+      private java.util.List<Session> sessions_ =
+        java.util.Collections.emptyList();
+      private void ensureSessionsIsMutable() {
+        if (!((bitField0_ & 0x00000004) != 0)) {
+          sessions_ = new java.util.ArrayList<Session>(sessions_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          Session, Session.Builder, SessionOrBuilder> sessionsBuilder_;
+
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public java.util.List<Session> getSessionsList() {
+        if (sessionsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(sessions_);
+        } else {
+          return sessionsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public int getSessionsCount() {
+        if (sessionsBuilder_ == null) {
+          return sessions_.size();
+        } else {
+          return sessionsBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Session getSessions(int index) {
+        if (sessionsBuilder_ == null) {
+          return sessions_.get(index);
+        } else {
+          return sessionsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder setSessions(
+          int index, Session value) {
+        if (sessionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSessionsIsMutable();
+          sessions_.set(index, value);
+          onChanged();
+        } else {
+          sessionsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder setSessions(
+          int index, Session.Builder builderForValue) {
+        if (sessionsBuilder_ == null) {
+          ensureSessionsIsMutable();
+          sessions_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          sessionsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder addSessions(Session value) {
+        if (sessionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSessionsIsMutable();
+          sessions_.add(value);
+          onChanged();
+        } else {
+          sessionsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder addSessions(
+          int index, Session value) {
+        if (sessionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSessionsIsMutable();
+          sessions_.add(index, value);
+          onChanged();
+        } else {
+          sessionsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder addSessions(
+          Session.Builder builderForValue) {
+        if (sessionsBuilder_ == null) {
+          ensureSessionsIsMutable();
+          sessions_.add(builderForValue.build());
+          onChanged();
+        } else {
+          sessionsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder addSessions(
+          int index, Session.Builder builderForValue) {
+        if (sessionsBuilder_ == null) {
+          ensureSessionsIsMutable();
+          sessions_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          sessionsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder addAllSessions(
+          Iterable<? extends Session> values) {
+        if (sessionsBuilder_ == null) {
+          ensureSessionsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, sessions_);
+          onChanged();
+        } else {
+          sessionsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder clearSessions() {
+        if (sessionsBuilder_ == null) {
+          sessions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          sessionsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Builder removeSessions(int index) {
+        if (sessionsBuilder_ == null) {
+          ensureSessionsIsMutable();
+          sessions_.remove(index);
+          onChanged();
+        } else {
+          sessionsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Session.Builder getSessionsBuilder(
+          int index) {
+        return getSessionsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public SessionOrBuilder getSessionsOrBuilder(
+          int index) {
+        if (sessionsBuilder_ == null) {
+          return sessions_.get(index);  } else {
+          return sessionsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public java.util.List<? extends SessionOrBuilder>
+           getSessionsOrBuilderList() {
+        if (sessionsBuilder_ != null) {
+          return sessionsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(sessions_);
+        }
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Session.Builder addSessionsBuilder() {
+        return getSessionsFieldBuilder().addBuilder(
+            Session.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public Session.Builder addSessionsBuilder(
+          int index) {
+        return getSessionsFieldBuilder().addBuilder(
+            index, Session.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated .Session sessions = 3;</code>
+       */
+      public java.util.List<Session.Builder>
+           getSessionsBuilderList() {
+        return getSessionsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          Session, Session.Builder, SessionOrBuilder>
+          getSessionsFieldBuilder() {
+        if (sessionsBuilder_ == null) {
+          sessionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              Session, Session.Builder, SessionOrBuilder>(
+                  sessions_,
+                  ((bitField0_ & 0x00000004) != 0),
+                  getParentForChildren(),
+                  isClean());
+          sessions_ = null;
+        }
+        return sessionsBuilder_;
+      }
+
+      private ResponseUpdate update_;
+      private com.google.protobuf.SingleFieldBuilder<
+          ResponseUpdate, ResponseUpdate.Builder, ResponseUpdateOrBuilder> updateBuilder_;
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       * @return Whether the update field is set.
+       */
+      public boolean hasUpdate() {
+        return ((bitField0_ & 0x00000008) != 0);
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       * @return The update.
+       */
+      public ResponseUpdate getUpdate() {
+        if (updateBuilder_ == null) {
+          return update_ == null ? ResponseUpdate.getDefaultInstance() : update_;
+        } else {
+          return updateBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      public Builder setUpdate(ResponseUpdate value) {
+        if (updateBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          update_ = value;
+        } else {
+          updateBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      public Builder setUpdate(
+          ResponseUpdate.Builder builderForValue) {
+        if (updateBuilder_ == null) {
+          update_ = builderForValue.build();
+        } else {
+          updateBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      public Builder mergeUpdate(ResponseUpdate value) {
+        if (updateBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) != 0) &&
+            update_ != null &&
+            update_ != ResponseUpdate.getDefaultInstance()) {
+            getUpdateBuilder().mergeFrom(value);
+          } else {
+            update_ = value;
+          }
+        } else {
+          updateBuilder_.mergeFrom(value);
+        }
+        if (update_ != null) {
+          bitField0_ |= 0x00000008;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      public Builder clearUpdate() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        update_ = null;
+        if (updateBuilder_ != null) {
+          updateBuilder_.dispose();
+          updateBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      public ResponseUpdate.Builder getUpdateBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getUpdateFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      public ResponseUpdateOrBuilder getUpdateOrBuilder() {
+        if (updateBuilder_ != null) {
+          return updateBuilder_.getMessageOrBuilder();
+        } else {
+          return update_ == null ?
+              ResponseUpdate.getDefaultInstance() : update_;
+        }
+      }
+      /**
+       * <pre>
+       * 回复更新
+       * </pre>
+       *
+       * <code>.ResponseUpdate update = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          ResponseUpdate, ResponseUpdate.Builder, ResponseUpdateOrBuilder>
+          getUpdateFieldBuilder() {
+        if (updateBuilder_ == null) {
+          updateBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              ResponseUpdate, ResponseUpdate.Builder, ResponseUpdateOrBuilder>(
+                  getUpdate(),
+                  getParentForChildren(),
+                  isClean());
+          update_ = null;
+        }
+        return updateBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:FlappyResponse)
+    }
+
+    // @@protoc_insertion_point(class_scope:FlappyResponse)
+    private static final FlappyResponse DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new FlappyResponse();
+    }
+
+    public static FlappyResponse getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<FlappyResponse>
+        PARSER = new com.google.protobuf.AbstractParser<FlappyResponse>() {
+      @Override
+      public FlappyResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<FlappyResponse> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<FlappyResponse> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public FlappyResponse getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface ResponseUpdateOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ResponseUpdate)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 回复的类型
+     * </pre>
+     *
+     * <code>int32 responseType = 1;</code>
+     * @return The responseType.
+     */
+    int getResponseType();
+
+    /**
+     * <pre>
+     * 回复的ID
+     * </pre>
+     *
+     * <code>string responseID = 2;</code>
+     * @return The responseID.
+     */
+    String getResponseID();
+    /**
+     * <pre>
+     * 回复的ID
+     * </pre>
+     *
+     * <code>string responseID = 2;</code>
+     * @return The bytes for responseID.
+     */
+    com.google.protobuf.ByteString
+        getResponseIDBytes();
+  }
+  /**
+   * <pre>
+   * 请求响应
+   * </pre>
+   *
+   * Protobuf type {@code ResponseUpdate}
+   */
+  public static final class ResponseUpdate extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:ResponseUpdate)
+      ResponseUpdateOrBuilder {
+  private static final long serialVersionUID = 0L;
+    static {
+      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
+        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
+        /* major= */ 4,
+        /* minor= */ 29,
+        /* patch= */ 2,
+        /* suffix= */ "",
+        ResponseUpdate.class.getName());
+    }
+    // Use ResponseUpdate.newBuilder() to construct.
+    private ResponseUpdate(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+    }
+    private ResponseUpdate() {
+      responseID_ = "";
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return Flappy.internal_static_ResponseUpdate_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return Flappy.internal_static_ResponseUpdate_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              ResponseUpdate.class, Builder.class);
+    }
+
+    public static final int RESPONSETYPE_FIELD_NUMBER = 1;
+    private int responseType_ = 0;
+    /**
+     * <pre>
+     * 回复的类型
+     * </pre>
+     *
+     * <code>int32 responseType = 1;</code>
+     * @return The responseType.
+     */
+    @Override
+    public int getResponseType() {
+      return responseType_;
+    }
+
+    public static final int RESPONSEID_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
+    private volatile Object responseID_ = "";
+    /**
+     * <pre>
+     * 回复的ID
+     * </pre>
+     *
+     * <code>string responseID = 2;</code>
+     * @return The responseID.
+     */
+    @Override
+    public String getResponseID() {
+      Object ref = responseID_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        responseID_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 回复的ID
+     * </pre>
+     *
+     * <code>string responseID = 2;</code>
+     * @return The bytes for responseID.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getResponseIDBytes() {
+      Object ref = responseID_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        responseID_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (responseType_ != 0) {
+        output.writeInt32(1, responseType_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(responseID_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 2, responseID_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (responseType_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, responseType_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(responseID_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(2, responseID_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof ResponseUpdate)) {
+        return super.equals(obj);
+      }
+      ResponseUpdate other = (ResponseUpdate) obj;
+
+      if (getResponseType()
+          != other.getResponseType()) return false;
+      if (!getResponseID()
+          .equals(other.getResponseID())) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + RESPONSETYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getResponseType();
+      hash = (37 * hash) + RESPONSEID_FIELD_NUMBER;
+      hash = (53 * hash) + getResponseID().hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static ResponseUpdate parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static ResponseUpdate parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static ResponseUpdate parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static ResponseUpdate parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static ResponseUpdate parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static ResponseUpdate parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static ResponseUpdate parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static ResponseUpdate parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static ResponseUpdate parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static ResponseUpdate parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static ResponseUpdate parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static ResponseUpdate parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(ResponseUpdate prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+        BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 请求响应
+     * </pre>
+     *
+     * Protobuf type {@code ResponseUpdate}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:ResponseUpdate)
+        ResponseUpdateOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return Flappy.internal_static_ResponseUpdate_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return Flappy.internal_static_ResponseUpdate_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                ResponseUpdate.class, Builder.class);
+      }
+
+      // Construct using Flappy.ResponseUpdate.newBuilder()
+      private Builder() {
+
+      }
+
+      private Builder(
+          BuilderParent parent) {
+        super(parent);
+
+      }
+      @Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        responseType_ = 0;
+        responseID_ = "";
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return Flappy.internal_static_ResponseUpdate_descriptor;
+      }
+
+      @Override
+      public ResponseUpdate getDefaultInstanceForType() {
+        return ResponseUpdate.getDefaultInstance();
+      }
+
+      @Override
+      public ResponseUpdate build() {
+        ResponseUpdate result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public ResponseUpdate buildPartial() {
+        ResponseUpdate result = new ResponseUpdate(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(ResponseUpdate result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.responseType_ = responseType_;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.responseID_ = responseID_;
+        }
+      }
+
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof ResponseUpdate) {
+          return mergeFrom((ResponseUpdate)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(ResponseUpdate other) {
+        if (other == ResponseUpdate.getDefaultInstance()) return this;
+        if (other.getResponseType() != 0) {
+          setResponseType(other.getResponseType());
+        }
+        if (!other.getResponseID().isEmpty()) {
+          responseID_ = other.responseID_;
+          bitField0_ |= 0x00000002;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                responseType_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                responseID_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int responseType_ ;
+      /**
+       * <pre>
+       * 回复的类型
+       * </pre>
+       *
+       * <code>int32 responseType = 1;</code>
+       * @return The responseType.
+       */
+      @Override
+      public int getResponseType() {
+        return responseType_;
+      }
+      /**
+       * <pre>
+       * 回复的类型
+       * </pre>
+       *
+       * <code>int32 responseType = 1;</code>
+       * @param value The responseType to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResponseType(int value) {
+
+        responseType_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复的类型
+       * </pre>
+       *
+       * <code>int32 responseType = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResponseType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        responseType_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private Object responseID_ = "";
+      /**
+       * <pre>
+       * 回复的ID
+       * </pre>
+       *
+       * <code>string responseID = 2;</code>
+       * @return The responseID.
+       */
+      public String getResponseID() {
+        Object ref = responseID_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          responseID_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 回复的ID
+       * </pre>
+       *
+       * <code>string responseID = 2;</code>
+       * @return The bytes for responseID.
+       */
+      public com.google.protobuf.ByteString
+          getResponseIDBytes() {
+        Object ref = responseID_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          responseID_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 回复的ID
+       * </pre>
+       *
+       * <code>string responseID = 2;</code>
+       * @param value The responseID to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResponseID(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        responseID_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复的ID
+       * </pre>
+       *
+       * <code>string responseID = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearResponseID() {
+        responseID_ = getDefaultInstance().getResponseID();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复的ID
+       * </pre>
+       *
+       * <code>string responseID = 2;</code>
+       * @param value The bytes for responseID to set.
+       * @return This builder for chaining.
+       */
+      public Builder setResponseIDBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        responseID_ = value;
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:ResponseUpdate)
+    }
+
+    // @@protoc_insertion_point(class_scope:ResponseUpdate)
+    private static final ResponseUpdate DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new ResponseUpdate();
+    }
+
+    public static ResponseUpdate getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ResponseUpdate>
+        PARSER = new com.google.protobuf.AbstractParser<ResponseUpdate>() {
+      @Override
+      public ResponseUpdate parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<ResponseUpdate> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<ResponseUpdate> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public ResponseUpdate getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface SessionOrBuilder extends
       // @@protoc_insertion_point(interface_extends:Session)
       com.google.protobuf.MessageOrBuilder {
@@ -6008,6 +6694,10 @@ public final class Flappy {
         getUsersBytes();
   }
   /**
+   * <pre>
+   * 会话
+   * </pre>
+   *
    * Protobuf type {@code Session}
    */
   public static final class Session extends
@@ -6819,6 +7509,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 会话
+     * </pre>
+     *
      * Protobuf type {@code Session}
      */
     public static final class Builder extends
@@ -8347,50 +9041,20 @@ public final class Flappy {
 
     /**
      * <pre>
-     * 消息发送秘钥
+     * 消息置顶状态
      * </pre>
      *
-     * <code>string messageSecret = 14;</code>
-     * @return The messageSecret.
+     * <code>int32 messagePinState = 14;</code>
+     * @return The messagePinState.
      */
-    String getMessageSecret();
-    /**
-     * <pre>
-     * 消息发送秘钥
-     * </pre>
-     *
-     * <code>string messageSecret = 14;</code>
-     * @return The bytes for messageSecret.
-     */
-    com.google.protobuf.ByteString
-        getMessageSecretBytes();
-
-    /**
-     * <pre>
-     * 消息时间
-     * </pre>
-     *
-     * <code>string messageDate = 15;</code>
-     * @return The messageDate.
-     */
-    String getMessageDate();
-    /**
-     * <pre>
-     * 消息时间
-     * </pre>
-     *
-     * <code>string messageDate = 15;</code>
-     * @return The bytes for messageDate.
-     */
-    com.google.protobuf.ByteString
-        getMessageDateBytes();
+    int getMessagePinState();
 
     /**
      * <pre>
      * 回复的消息ID
      * </pre>
      *
-     * <code>string messageReplyMsgId = 16;</code>
+     * <code>string messageReplyMsgId = 15;</code>
      * @return The messageReplyMsgId.
      */
     String getMessageReplyMsgId();
@@ -8399,7 +9063,7 @@ public final class Flappy {
      * 回复的消息ID
      * </pre>
      *
-     * <code>string messageReplyMsgId = 16;</code>
+     * <code>string messageReplyMsgId = 15;</code>
      * @return The bytes for messageReplyMsgId.
      */
     com.google.protobuf.ByteString
@@ -8410,7 +9074,7 @@ public final class Flappy {
      * 回复的消息类型
      * </pre>
      *
-     * <code>int32 messageReplyMsgType = 17;</code>
+     * <code>int32 messageReplyMsgType = 16;</code>
      * @return The messageReplyMsgType.
      */
     int getMessageReplyMsgType();
@@ -8420,7 +9084,7 @@ public final class Flappy {
      * 回复的消息内容
      * </pre>
      *
-     * <code>string messageReplyMsgContent = 18;</code>
+     * <code>string messageReplyMsgContent = 17;</code>
      * @return The messageReplyMsgContent.
      */
     String getMessageReplyMsgContent();
@@ -8429,7 +9093,7 @@ public final class Flappy {
      * 回复的消息内容
      * </pre>
      *
-     * <code>string messageReplyMsgContent = 18;</code>
+     * <code>string messageReplyMsgContent = 17;</code>
      * @return The bytes for messageReplyMsgContent.
      */
     com.google.protobuf.ByteString
@@ -8440,7 +9104,7 @@ public final class Flappy {
      * 回复的用户ID
      * </pre>
      *
-     * <code>string messageReplyUserId = 19;</code>
+     * <code>string messageReplyUserId = 18;</code>
      * @return The messageReplyUserId.
      */
     String getMessageReplyUserId();
@@ -8449,11 +9113,31 @@ public final class Flappy {
      * 回复的用户ID
      * </pre>
      *
-     * <code>string messageReplyUserId = 19;</code>
+     * <code>string messageReplyUserId = 18;</code>
      * @return The bytes for messageReplyUserId.
      */
     com.google.protobuf.ByteString
         getMessageReplyUserIdBytes();
+
+    /**
+     * <pre>
+     * 消息转发的title
+     * </pre>
+     *
+     * <code>string messageForwardTitle = 19;</code>
+     * @return The messageForwardTitle.
+     */
+    String getMessageForwardTitle();
+    /**
+     * <pre>
+     * 消息转发的title
+     * </pre>
+     *
+     * <code>string messageForwardTitle = 19;</code>
+     * @return The bytes for messageForwardTitle.
+     */
+    com.google.protobuf.ByteString
+        getMessageForwardTitleBytes();
 
     /**
      * <pre>
@@ -8537,10 +9221,50 @@ public final class Flappy {
 
     /**
      * <pre>
+     * 消息时间
+     * </pre>
+     *
+     * <code>string messageDate = 24;</code>
+     * @return The messageDate.
+     */
+    String getMessageDate();
+    /**
+     * <pre>
+     * 消息时间
+     * </pre>
+     *
+     * <code>string messageDate = 24;</code>
+     * @return The bytes for messageDate.
+     */
+    com.google.protobuf.ByteString
+        getMessageDateBytes();
+
+    /**
+     * <pre>
+     * 消息发送秘钥
+     * </pre>
+     *
+     * <code>string messageSecret = 25;</code>
+     * @return The messageSecret.
+     */
+    String getMessageSecret();
+    /**
+     * <pre>
+     * 消息发送秘钥
+     * </pre>
+     *
+     * <code>string messageSecret = 25;</code>
+     * @return The bytes for messageSecret.
+     */
+    com.google.protobuf.ByteString
+        getMessageSecretBytes();
+
+    /**
+     * <pre>
      * 消息是否被删除
      * </pre>
      *
-     * <code>int32 isDelete = 24;</code>
+     * <code>int32 isDelete = 26;</code>
      * @return The isDelete.
      */
     int getIsDelete();
@@ -8550,7 +9274,7 @@ public final class Flappy {
      * 消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 25;</code>
+     * <code>string deleteDate = 27;</code>
      * @return The deleteDate.
      */
     String getDeleteDate();
@@ -8559,13 +9283,17 @@ public final class Flappy {
      * 消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 25;</code>
+     * <code>string deleteDate = 27;</code>
      * @return The bytes for deleteDate.
      */
     com.google.protobuf.ByteString
         getDeleteDateBytes();
   }
   /**
+   * <pre>
+   * 消息
+   * </pre>
+   *
    * Protobuf type {@code Message}
    */
   public static final class Message extends
@@ -8591,15 +9319,16 @@ public final class Flappy {
       messageSendExtendId_ = "";
       messageReceiveExtendId_ = "";
       messageContent_ = "";
-      messageSecret_ = "";
-      messageDate_ = "";
       messageReplyMsgId_ = "";
       messageReplyMsgContent_ = "";
       messageReplyUserId_ = "";
+      messageForwardTitle_ = "";
       messageRecallUserId_ = "";
       messageAtUserIds_ = "";
       messageReadUserIds_ = "";
       messageDeleteUserIds_ = "";
+      messageDate_ = "";
+      messageSecret_ = "";
       deleteDate_ = "";
     }
 
@@ -8939,101 +9668,22 @@ public final class Flappy {
       return messageReadState_;
     }
 
-    public static final int MESSAGESECRET_FIELD_NUMBER = 14;
-    @SuppressWarnings("serial")
-    private volatile Object messageSecret_ = "";
+    public static final int MESSAGEPINSTATE_FIELD_NUMBER = 14;
+    private int messagePinState_ = 0;
     /**
      * <pre>
-     * 消息发送秘钥
+     * 消息置顶状态
      * </pre>
      *
-     * <code>string messageSecret = 14;</code>
-     * @return The messageSecret.
+     * <code>int32 messagePinState = 14;</code>
+     * @return The messagePinState.
      */
     @Override
-    public String getMessageSecret() {
-      Object ref = messageSecret_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        messageSecret_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * 消息发送秘钥
-     * </pre>
-     *
-     * <code>string messageSecret = 14;</code>
-     * @return The bytes for messageSecret.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getMessageSecretBytes() {
-      Object ref = messageSecret_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        messageSecret_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public int getMessagePinState() {
+      return messagePinState_;
     }
 
-    public static final int MESSAGEDATE_FIELD_NUMBER = 15;
-    @SuppressWarnings("serial")
-    private volatile Object messageDate_ = "";
-    /**
-     * <pre>
-     * 消息时间
-     * </pre>
-     *
-     * <code>string messageDate = 15;</code>
-     * @return The messageDate.
-     */
-    @Override
-    public String getMessageDate() {
-      Object ref = messageDate_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        messageDate_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     * 消息时间
-     * </pre>
-     *
-     * <code>string messageDate = 15;</code>
-     * @return The bytes for messageDate.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getMessageDateBytes() {
-      Object ref = messageDate_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        messageDate_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int MESSAGEREPLYMSGID_FIELD_NUMBER = 16;
+    public static final int MESSAGEREPLYMSGID_FIELD_NUMBER = 15;
     @SuppressWarnings("serial")
     private volatile Object messageReplyMsgId_ = "";
     /**
@@ -9041,7 +9691,7 @@ public final class Flappy {
      * 回复的消息ID
      * </pre>
      *
-     * <code>string messageReplyMsgId = 16;</code>
+     * <code>string messageReplyMsgId = 15;</code>
      * @return The messageReplyMsgId.
      */
     @Override
@@ -9062,7 +9712,7 @@ public final class Flappy {
      * 回复的消息ID
      * </pre>
      *
-     * <code>string messageReplyMsgId = 16;</code>
+     * <code>string messageReplyMsgId = 15;</code>
      * @return The bytes for messageReplyMsgId.
      */
     @Override
@@ -9080,14 +9730,14 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGEREPLYMSGTYPE_FIELD_NUMBER = 17;
+    public static final int MESSAGEREPLYMSGTYPE_FIELD_NUMBER = 16;
     private int messageReplyMsgType_ = 0;
     /**
      * <pre>
      * 回复的消息类型
      * </pre>
      *
-     * <code>int32 messageReplyMsgType = 17;</code>
+     * <code>int32 messageReplyMsgType = 16;</code>
      * @return The messageReplyMsgType.
      */
     @Override
@@ -9095,7 +9745,7 @@ public final class Flappy {
       return messageReplyMsgType_;
     }
 
-    public static final int MESSAGEREPLYMSGCONTENT_FIELD_NUMBER = 18;
+    public static final int MESSAGEREPLYMSGCONTENT_FIELD_NUMBER = 17;
     @SuppressWarnings("serial")
     private volatile Object messageReplyMsgContent_ = "";
     /**
@@ -9103,7 +9753,7 @@ public final class Flappy {
      * 回复的消息内容
      * </pre>
      *
-     * <code>string messageReplyMsgContent = 18;</code>
+     * <code>string messageReplyMsgContent = 17;</code>
      * @return The messageReplyMsgContent.
      */
     @Override
@@ -9124,7 +9774,7 @@ public final class Flappy {
      * 回复的消息内容
      * </pre>
      *
-     * <code>string messageReplyMsgContent = 18;</code>
+     * <code>string messageReplyMsgContent = 17;</code>
      * @return The bytes for messageReplyMsgContent.
      */
     @Override
@@ -9142,7 +9792,7 @@ public final class Flappy {
       }
     }
 
-    public static final int MESSAGEREPLYUSERID_FIELD_NUMBER = 19;
+    public static final int MESSAGEREPLYUSERID_FIELD_NUMBER = 18;
     @SuppressWarnings("serial")
     private volatile Object messageReplyUserId_ = "";
     /**
@@ -9150,7 +9800,7 @@ public final class Flappy {
      * 回复的用户ID
      * </pre>
      *
-     * <code>string messageReplyUserId = 19;</code>
+     * <code>string messageReplyUserId = 18;</code>
      * @return The messageReplyUserId.
      */
     @Override
@@ -9171,7 +9821,7 @@ public final class Flappy {
      * 回复的用户ID
      * </pre>
      *
-     * <code>string messageReplyUserId = 19;</code>
+     * <code>string messageReplyUserId = 18;</code>
      * @return The bytes for messageReplyUserId.
      */
     @Override
@@ -9183,6 +9833,53 @@ public final class Flappy {
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         messageReplyUserId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGEFORWARDTITLE_FIELD_NUMBER = 19;
+    @SuppressWarnings("serial")
+    private volatile Object messageForwardTitle_ = "";
+    /**
+     * <pre>
+     * 消息转发的title
+     * </pre>
+     *
+     * <code>string messageForwardTitle = 19;</code>
+     * @return The messageForwardTitle.
+     */
+    @Override
+    public String getMessageForwardTitle() {
+      Object ref = messageForwardTitle_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageForwardTitle_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 消息转发的title
+     * </pre>
+     *
+     * <code>string messageForwardTitle = 19;</code>
+     * @return The bytes for messageForwardTitle.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageForwardTitleBytes() {
+      Object ref = messageForwardTitle_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageForwardTitle_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -9377,14 +10074,108 @@ public final class Flappy {
       }
     }
 
-    public static final int ISDELETE_FIELD_NUMBER = 24;
+    public static final int MESSAGEDATE_FIELD_NUMBER = 24;
+    @SuppressWarnings("serial")
+    private volatile Object messageDate_ = "";
+    /**
+     * <pre>
+     * 消息时间
+     * </pre>
+     *
+     * <code>string messageDate = 24;</code>
+     * @return The messageDate.
+     */
+    @Override
+    public String getMessageDate() {
+      Object ref = messageDate_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageDate_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 消息时间
+     * </pre>
+     *
+     * <code>string messageDate = 24;</code>
+     * @return The bytes for messageDate.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageDateBytes() {
+      Object ref = messageDate_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageDate_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int MESSAGESECRET_FIELD_NUMBER = 25;
+    @SuppressWarnings("serial")
+    private volatile Object messageSecret_ = "";
+    /**
+     * <pre>
+     * 消息发送秘钥
+     * </pre>
+     *
+     * <code>string messageSecret = 25;</code>
+     * @return The messageSecret.
+     */
+    @Override
+    public String getMessageSecret() {
+      Object ref = messageSecret_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        messageSecret_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * 消息发送秘钥
+     * </pre>
+     *
+     * <code>string messageSecret = 25;</code>
+     * @return The bytes for messageSecret.
+     */
+    @Override
+    public com.google.protobuf.ByteString
+        getMessageSecretBytes() {
+      Object ref = messageSecret_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        messageSecret_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int ISDELETE_FIELD_NUMBER = 26;
     private int isDelete_ = 0;
     /**
      * <pre>
      * 消息是否被删除
      * </pre>
      *
-     * <code>int32 isDelete = 24;</code>
+     * <code>int32 isDelete = 26;</code>
      * @return The isDelete.
      */
     @Override
@@ -9392,7 +10183,7 @@ public final class Flappy {
       return isDelete_;
     }
 
-    public static final int DELETEDATE_FIELD_NUMBER = 25;
+    public static final int DELETEDATE_FIELD_NUMBER = 27;
     @SuppressWarnings("serial")
     private volatile Object deleteDate_ = "";
     /**
@@ -9400,7 +10191,7 @@ public final class Flappy {
      * 消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 25;</code>
+     * <code>string deleteDate = 27;</code>
      * @return The deleteDate.
      */
     @Override
@@ -9421,7 +10212,7 @@ public final class Flappy {
      * 消息删除日期
      * </pre>
      *
-     * <code>string deleteDate = 25;</code>
+     * <code>string deleteDate = 27;</code>
      * @return The bytes for deleteDate.
      */
     @Override
@@ -9492,23 +10283,23 @@ public final class Flappy {
       if (messageReadState_ != 0) {
         output.writeInt32(13, messageReadState_);
       }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageSecret_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 14, messageSecret_);
-      }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageDate_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 15, messageDate_);
+      if (messagePinState_ != 0) {
+        output.writeInt32(14, messagePinState_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageReplyMsgId_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 16, messageReplyMsgId_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 15, messageReplyMsgId_);
       }
       if (messageReplyMsgType_ != 0) {
-        output.writeInt32(17, messageReplyMsgType_);
+        output.writeInt32(16, messageReplyMsgType_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageReplyMsgContent_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 18, messageReplyMsgContent_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 17, messageReplyMsgContent_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageReplyUserId_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 19, messageReplyUserId_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 18, messageReplyUserId_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageForwardTitle_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 19, messageForwardTitle_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageRecallUserId_)) {
         com.google.protobuf.GeneratedMessage.writeString(output, 20, messageRecallUserId_);
@@ -9522,11 +10313,17 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageDeleteUserIds_)) {
         com.google.protobuf.GeneratedMessage.writeString(output, 23, messageDeleteUserIds_);
       }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageDate_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 24, messageDate_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageSecret_)) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 25, messageSecret_);
+      }
       if (isDelete_ != 0) {
-        output.writeInt32(24, isDelete_);
+        output.writeInt32(26, isDelete_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(deleteDate_)) {
-        com.google.protobuf.GeneratedMessage.writeString(output, 25, deleteDate_);
+        com.google.protobuf.GeneratedMessage.writeString(output, 27, deleteDate_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -9585,24 +10382,25 @@ public final class Flappy {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(13, messageReadState_);
       }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageSecret_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(14, messageSecret_);
-      }
-      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageDate_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(15, messageDate_);
+      if (messagePinState_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(14, messagePinState_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageReplyMsgId_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(16, messageReplyMsgId_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(15, messageReplyMsgId_);
       }
       if (messageReplyMsgType_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(17, messageReplyMsgType_);
+          .computeInt32Size(16, messageReplyMsgType_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageReplyMsgContent_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(18, messageReplyMsgContent_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(17, messageReplyMsgContent_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageReplyUserId_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(19, messageReplyUserId_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(18, messageReplyUserId_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageForwardTitle_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(19, messageForwardTitle_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageRecallUserId_)) {
         size += com.google.protobuf.GeneratedMessage.computeStringSize(20, messageRecallUserId_);
@@ -9616,12 +10414,18 @@ public final class Flappy {
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageDeleteUserIds_)) {
         size += com.google.protobuf.GeneratedMessage.computeStringSize(23, messageDeleteUserIds_);
       }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageDate_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(24, messageDate_);
+      }
+      if (!com.google.protobuf.GeneratedMessage.isStringEmpty(messageSecret_)) {
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(25, messageSecret_);
+      }
       if (isDelete_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(24, isDelete_);
+          .computeInt32Size(26, isDelete_);
       }
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(deleteDate_)) {
-        size += com.google.protobuf.GeneratedMessage.computeStringSize(25, deleteDate_);
+        size += com.google.protobuf.GeneratedMessage.computeStringSize(27, deleteDate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -9664,10 +10468,8 @@ public final class Flappy {
           != other.getMessageSendState()) return false;
       if (getMessageReadState()
           != other.getMessageReadState()) return false;
-      if (!getMessageSecret()
-          .equals(other.getMessageSecret())) return false;
-      if (!getMessageDate()
-          .equals(other.getMessageDate())) return false;
+      if (getMessagePinState()
+          != other.getMessagePinState()) return false;
       if (!getMessageReplyMsgId()
           .equals(other.getMessageReplyMsgId())) return false;
       if (getMessageReplyMsgType()
@@ -9676,6 +10478,8 @@ public final class Flappy {
           .equals(other.getMessageReplyMsgContent())) return false;
       if (!getMessageReplyUserId()
           .equals(other.getMessageReplyUserId())) return false;
+      if (!getMessageForwardTitle()
+          .equals(other.getMessageForwardTitle())) return false;
       if (!getMessageRecallUserId()
           .equals(other.getMessageRecallUserId())) return false;
       if (!getMessageAtUserIds()
@@ -9684,6 +10488,10 @@ public final class Flappy {
           .equals(other.getMessageReadUserIds())) return false;
       if (!getMessageDeleteUserIds()
           .equals(other.getMessageDeleteUserIds())) return false;
+      if (!getMessageDate()
+          .equals(other.getMessageDate())) return false;
+      if (!getMessageSecret()
+          .equals(other.getMessageSecret())) return false;
       if (getIsDelete()
           != other.getIsDelete()) return false;
       if (!getDeleteDate()
@@ -9730,10 +10538,8 @@ public final class Flappy {
       hash = (53 * hash) + getMessageSendState();
       hash = (37 * hash) + MESSAGEREADSTATE_FIELD_NUMBER;
       hash = (53 * hash) + getMessageReadState();
-      hash = (37 * hash) + MESSAGESECRET_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageSecret().hashCode();
-      hash = (37 * hash) + MESSAGEDATE_FIELD_NUMBER;
-      hash = (53 * hash) + getMessageDate().hashCode();
+      hash = (37 * hash) + MESSAGEPINSTATE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessagePinState();
       hash = (37 * hash) + MESSAGEREPLYMSGID_FIELD_NUMBER;
       hash = (53 * hash) + getMessageReplyMsgId().hashCode();
       hash = (37 * hash) + MESSAGEREPLYMSGTYPE_FIELD_NUMBER;
@@ -9742,6 +10548,8 @@ public final class Flappy {
       hash = (53 * hash) + getMessageReplyMsgContent().hashCode();
       hash = (37 * hash) + MESSAGEREPLYUSERID_FIELD_NUMBER;
       hash = (53 * hash) + getMessageReplyUserId().hashCode();
+      hash = (37 * hash) + MESSAGEFORWARDTITLE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageForwardTitle().hashCode();
       hash = (37 * hash) + MESSAGERECALLUSERID_FIELD_NUMBER;
       hash = (53 * hash) + getMessageRecallUserId().hashCode();
       hash = (37 * hash) + MESSAGEATUSERIDS_FIELD_NUMBER;
@@ -9750,6 +10558,10 @@ public final class Flappy {
       hash = (53 * hash) + getMessageReadUserIds().hashCode();
       hash = (37 * hash) + MESSAGEDELETEUSERIDS_FIELD_NUMBER;
       hash = (53 * hash) + getMessageDeleteUserIds().hashCode();
+      hash = (37 * hash) + MESSAGEDATE_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageDate().hashCode();
+      hash = (37 * hash) + MESSAGESECRET_FIELD_NUMBER;
+      hash = (53 * hash) + getMessageSecret().hashCode();
       hash = (37 * hash) + ISDELETE_FIELD_NUMBER;
       hash = (53 * hash) + getIsDelete();
       hash = (37 * hash) + DELETEDATE_FIELD_NUMBER;
@@ -9852,6 +10664,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 消息
+     * </pre>
+     *
      * Protobuf type {@code Message}
      */
     public static final class Builder extends
@@ -9898,16 +10714,18 @@ public final class Flappy {
         messageContent_ = "";
         messageSendState_ = 0;
         messageReadState_ = 0;
-        messageSecret_ = "";
-        messageDate_ = "";
+        messagePinState_ = 0;
         messageReplyMsgId_ = "";
         messageReplyMsgType_ = 0;
         messageReplyMsgContent_ = "";
         messageReplyUserId_ = "";
+        messageForwardTitle_ = "";
         messageRecallUserId_ = "";
         messageAtUserIds_ = "";
         messageReadUserIds_ = "";
         messageDeleteUserIds_ = "";
+        messageDate_ = "";
+        messageSecret_ = "";
         isDelete_ = 0;
         deleteDate_ = "";
         return this;
@@ -9983,22 +10801,22 @@ public final class Flappy {
           result.messageReadState_ = messageReadState_;
         }
         if (((from_bitField0_ & 0x00002000) != 0)) {
-          result.messageSecret_ = messageSecret_;
+          result.messagePinState_ = messagePinState_;
         }
         if (((from_bitField0_ & 0x00004000) != 0)) {
-          result.messageDate_ = messageDate_;
-        }
-        if (((from_bitField0_ & 0x00008000) != 0)) {
           result.messageReplyMsgId_ = messageReplyMsgId_;
         }
-        if (((from_bitField0_ & 0x00010000) != 0)) {
+        if (((from_bitField0_ & 0x00008000) != 0)) {
           result.messageReplyMsgType_ = messageReplyMsgType_;
         }
-        if (((from_bitField0_ & 0x00020000) != 0)) {
+        if (((from_bitField0_ & 0x00010000) != 0)) {
           result.messageReplyMsgContent_ = messageReplyMsgContent_;
         }
-        if (((from_bitField0_ & 0x00040000) != 0)) {
+        if (((from_bitField0_ & 0x00020000) != 0)) {
           result.messageReplyUserId_ = messageReplyUserId_;
+        }
+        if (((from_bitField0_ & 0x00040000) != 0)) {
+          result.messageForwardTitle_ = messageForwardTitle_;
         }
         if (((from_bitField0_ & 0x00080000) != 0)) {
           result.messageRecallUserId_ = messageRecallUserId_;
@@ -10013,9 +10831,15 @@ public final class Flappy {
           result.messageDeleteUserIds_ = messageDeleteUserIds_;
         }
         if (((from_bitField0_ & 0x00800000) != 0)) {
-          result.isDelete_ = isDelete_;
+          result.messageDate_ = messageDate_;
         }
         if (((from_bitField0_ & 0x01000000) != 0)) {
+          result.messageSecret_ = messageSecret_;
+        }
+        if (((from_bitField0_ & 0x02000000) != 0)) {
+          result.isDelete_ = isDelete_;
+        }
+        if (((from_bitField0_ & 0x04000000) != 0)) {
           result.deleteDate_ = deleteDate_;
         }
       }
@@ -10079,19 +10903,12 @@ public final class Flappy {
         if (other.getMessageReadState() != 0) {
           setMessageReadState(other.getMessageReadState());
         }
-        if (!other.getMessageSecret().isEmpty()) {
-          messageSecret_ = other.messageSecret_;
-          bitField0_ |= 0x00002000;
-          onChanged();
-        }
-        if (!other.getMessageDate().isEmpty()) {
-          messageDate_ = other.messageDate_;
-          bitField0_ |= 0x00004000;
-          onChanged();
+        if (other.getMessagePinState() != 0) {
+          setMessagePinState(other.getMessagePinState());
         }
         if (!other.getMessageReplyMsgId().isEmpty()) {
           messageReplyMsgId_ = other.messageReplyMsgId_;
-          bitField0_ |= 0x00008000;
+          bitField0_ |= 0x00004000;
           onChanged();
         }
         if (other.getMessageReplyMsgType() != 0) {
@@ -10099,11 +10916,16 @@ public final class Flappy {
         }
         if (!other.getMessageReplyMsgContent().isEmpty()) {
           messageReplyMsgContent_ = other.messageReplyMsgContent_;
-          bitField0_ |= 0x00020000;
+          bitField0_ |= 0x00010000;
           onChanged();
         }
         if (!other.getMessageReplyUserId().isEmpty()) {
           messageReplyUserId_ = other.messageReplyUserId_;
+          bitField0_ |= 0x00020000;
+          onChanged();
+        }
+        if (!other.getMessageForwardTitle().isEmpty()) {
+          messageForwardTitle_ = other.messageForwardTitle_;
           bitField0_ |= 0x00040000;
           onChanged();
         }
@@ -10127,12 +10949,22 @@ public final class Flappy {
           bitField0_ |= 0x00400000;
           onChanged();
         }
+        if (!other.getMessageDate().isEmpty()) {
+          messageDate_ = other.messageDate_;
+          bitField0_ |= 0x00800000;
+          onChanged();
+        }
+        if (!other.getMessageSecret().isEmpty()) {
+          messageSecret_ = other.messageSecret_;
+          bitField0_ |= 0x01000000;
+          onChanged();
+        }
         if (other.getIsDelete() != 0) {
           setIsDelete(other.getIsDelete());
         }
         if (!other.getDeleteDate().isEmpty()) {
           deleteDate_ = other.deleteDate_;
-          bitField0_ |= 0x01000000;
+          bitField0_ |= 0x04000000;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -10226,33 +11058,33 @@ public final class Flappy {
                 bitField0_ |= 0x00001000;
                 break;
               } // case 104
-              case 114: {
-                messageSecret_ = input.readStringRequireUtf8();
+              case 112: {
+                messagePinState_ = input.readInt32();
                 bitField0_ |= 0x00002000;
                 break;
-              } // case 114
+              } // case 112
               case 122: {
-                messageDate_ = input.readStringRequireUtf8();
+                messageReplyMsgId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00004000;
                 break;
               } // case 122
-              case 130: {
-                messageReplyMsgId_ = input.readStringRequireUtf8();
+              case 128: {
+                messageReplyMsgType_ = input.readInt32();
                 bitField0_ |= 0x00008000;
                 break;
-              } // case 130
-              case 136: {
-                messageReplyMsgType_ = input.readInt32();
+              } // case 128
+              case 138: {
+                messageReplyMsgContent_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00010000;
                 break;
-              } // case 136
+              } // case 138
               case 146: {
-                messageReplyMsgContent_ = input.readStringRequireUtf8();
+                messageReplyUserId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00020000;
                 break;
               } // case 146
               case 154: {
-                messageReplyUserId_ = input.readStringRequireUtf8();
+                messageForwardTitle_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00040000;
                 break;
               } // case 154
@@ -10276,16 +11108,26 @@ public final class Flappy {
                 bitField0_ |= 0x00400000;
                 break;
               } // case 186
-              case 192: {
-                isDelete_ = input.readInt32();
+              case 194: {
+                messageDate_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00800000;
                 break;
-              } // case 192
+              } // case 194
               case 202: {
-                deleteDate_ = input.readStringRequireUtf8();
+                messageSecret_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x01000000;
                 break;
               } // case 202
+              case 208: {
+                isDelete_ = input.readInt32();
+                bitField0_ |= 0x02000000;
+                break;
+              } // case 208
+              case 218: {
+                deleteDate_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x04000000;
+                break;
+              } // case 218
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -11067,186 +11909,46 @@ public final class Flappy {
         return this;
       }
 
-      private Object messageSecret_ = "";
+      private int messagePinState_ ;
       /**
        * <pre>
-       * 消息发送秘钥
+       * 消息置顶状态
        * </pre>
        *
-       * <code>string messageSecret = 14;</code>
-       * @return The messageSecret.
+       * <code>int32 messagePinState = 14;</code>
+       * @return The messagePinState.
        */
-      public String getMessageSecret() {
-        Object ref = messageSecret_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          messageSecret_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      @Override
+      public int getMessagePinState() {
+        return messagePinState_;
       }
       /**
        * <pre>
-       * 消息发送秘钥
+       * 消息置顶状态
        * </pre>
        *
-       * <code>string messageSecret = 14;</code>
-       * @return The bytes for messageSecret.
-       */
-      public com.google.protobuf.ByteString
-          getMessageSecretBytes() {
-        Object ref = messageSecret_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          messageSecret_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecret = 14;</code>
-       * @param value The messageSecret to set.
+       * <code>int32 messagePinState = 14;</code>
+       * @param value The messagePinState to set.
        * @return This builder for chaining.
        */
-      public Builder setMessageSecret(
-          String value) {
-        if (value == null) { throw new NullPointerException(); }
-        messageSecret_ = value;
-        bitField0_ |= 0x00002000;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecret = 14;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearMessageSecret() {
-        messageSecret_ = getDefaultInstance().getMessageSecret();
-        bitField0_ = (bitField0_ & ~0x00002000);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息发送秘钥
-       * </pre>
-       *
-       * <code>string messageSecret = 14;</code>
-       * @param value The bytes for messageSecret to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageSecretBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        messageSecret_ = value;
-        bitField0_ |= 0x00002000;
-        onChanged();
-        return this;
-      }
+      public Builder setMessagePinState(int value) {
 
-      private Object messageDate_ = "";
-      /**
-       * <pre>
-       * 消息时间
-       * </pre>
-       *
-       * <code>string messageDate = 15;</code>
-       * @return The messageDate.
-       */
-      public String getMessageDate() {
-        Object ref = messageDate_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          messageDate_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 消息时间
-       * </pre>
-       *
-       * <code>string messageDate = 15;</code>
-       * @return The bytes for messageDate.
-       */
-      public com.google.protobuf.ByteString
-          getMessageDateBytes() {
-        Object ref = messageDate_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          messageDate_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       * 消息时间
-       * </pre>
-       *
-       * <code>string messageDate = 15;</code>
-       * @param value The messageDate to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageDate(
-          String value) {
-        if (value == null) { throw new NullPointerException(); }
-        messageDate_ = value;
-        bitField0_ |= 0x00004000;
+        messagePinState_ = value;
+        bitField0_ |= 0x00002000;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       * 消息时间
+       * 消息置顶状态
        * </pre>
        *
-       * <code>string messageDate = 15;</code>
+       * <code>int32 messagePinState = 14;</code>
        * @return This builder for chaining.
        */
-      public Builder clearMessageDate() {
-        messageDate_ = getDefaultInstance().getMessageDate();
-        bitField0_ = (bitField0_ & ~0x00004000);
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息时间
-       * </pre>
-       *
-       * <code>string messageDate = 15;</code>
-       * @param value The bytes for messageDate to set.
-       * @return This builder for chaining.
-       */
-      public Builder setMessageDateBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        messageDate_ = value;
-        bitField0_ |= 0x00004000;
+      public Builder clearMessagePinState() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        messagePinState_ = 0;
         onChanged();
         return this;
       }
@@ -11257,7 +11959,7 @@ public final class Flappy {
        * 回复的消息ID
        * </pre>
        *
-       * <code>string messageReplyMsgId = 16;</code>
+       * <code>string messageReplyMsgId = 15;</code>
        * @return The messageReplyMsgId.
        */
       public String getMessageReplyMsgId() {
@@ -11277,7 +11979,7 @@ public final class Flappy {
        * 回复的消息ID
        * </pre>
        *
-       * <code>string messageReplyMsgId = 16;</code>
+       * <code>string messageReplyMsgId = 15;</code>
        * @return The bytes for messageReplyMsgId.
        */
       public com.google.protobuf.ByteString
@@ -11298,7 +12000,7 @@ public final class Flappy {
        * 回复的消息ID
        * </pre>
        *
-       * <code>string messageReplyMsgId = 16;</code>
+       * <code>string messageReplyMsgId = 15;</code>
        * @param value The messageReplyMsgId to set.
        * @return This builder for chaining.
        */
@@ -11306,7 +12008,7 @@ public final class Flappy {
           String value) {
         if (value == null) { throw new NullPointerException(); }
         messageReplyMsgId_ = value;
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00004000;
         onChanged();
         return this;
       }
@@ -11315,12 +12017,12 @@ public final class Flappy {
        * 回复的消息ID
        * </pre>
        *
-       * <code>string messageReplyMsgId = 16;</code>
+       * <code>string messageReplyMsgId = 15;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageReplyMsgId() {
         messageReplyMsgId_ = getDefaultInstance().getMessageReplyMsgId();
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         onChanged();
         return this;
       }
@@ -11329,7 +12031,7 @@ public final class Flappy {
        * 回复的消息ID
        * </pre>
        *
-       * <code>string messageReplyMsgId = 16;</code>
+       * <code>string messageReplyMsgId = 15;</code>
        * @param value The bytes for messageReplyMsgId to set.
        * @return This builder for chaining.
        */
@@ -11338,7 +12040,7 @@ public final class Flappy {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         messageReplyMsgId_ = value;
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00004000;
         onChanged();
         return this;
       }
@@ -11349,7 +12051,7 @@ public final class Flappy {
        * 回复的消息类型
        * </pre>
        *
-       * <code>int32 messageReplyMsgType = 17;</code>
+       * <code>int32 messageReplyMsgType = 16;</code>
        * @return The messageReplyMsgType.
        */
       @Override
@@ -11361,14 +12063,14 @@ public final class Flappy {
        * 回复的消息类型
        * </pre>
        *
-       * <code>int32 messageReplyMsgType = 17;</code>
+       * <code>int32 messageReplyMsgType = 16;</code>
        * @param value The messageReplyMsgType to set.
        * @return This builder for chaining.
        */
       public Builder setMessageReplyMsgType(int value) {
 
         messageReplyMsgType_ = value;
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00008000;
         onChanged();
         return this;
       }
@@ -11377,11 +12079,11 @@ public final class Flappy {
        * 回复的消息类型
        * </pre>
        *
-       * <code>int32 messageReplyMsgType = 17;</code>
+       * <code>int32 messageReplyMsgType = 16;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageReplyMsgType() {
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         messageReplyMsgType_ = 0;
         onChanged();
         return this;
@@ -11393,7 +12095,7 @@ public final class Flappy {
        * 回复的消息内容
        * </pre>
        *
-       * <code>string messageReplyMsgContent = 18;</code>
+       * <code>string messageReplyMsgContent = 17;</code>
        * @return The messageReplyMsgContent.
        */
       public String getMessageReplyMsgContent() {
@@ -11413,7 +12115,7 @@ public final class Flappy {
        * 回复的消息内容
        * </pre>
        *
-       * <code>string messageReplyMsgContent = 18;</code>
+       * <code>string messageReplyMsgContent = 17;</code>
        * @return The bytes for messageReplyMsgContent.
        */
       public com.google.protobuf.ByteString
@@ -11434,7 +12136,7 @@ public final class Flappy {
        * 回复的消息内容
        * </pre>
        *
-       * <code>string messageReplyMsgContent = 18;</code>
+       * <code>string messageReplyMsgContent = 17;</code>
        * @param value The messageReplyMsgContent to set.
        * @return This builder for chaining.
        */
@@ -11442,7 +12144,7 @@ public final class Flappy {
           String value) {
         if (value == null) { throw new NullPointerException(); }
         messageReplyMsgContent_ = value;
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00010000;
         onChanged();
         return this;
       }
@@ -11451,12 +12153,12 @@ public final class Flappy {
        * 回复的消息内容
        * </pre>
        *
-       * <code>string messageReplyMsgContent = 18;</code>
+       * <code>string messageReplyMsgContent = 17;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageReplyMsgContent() {
         messageReplyMsgContent_ = getDefaultInstance().getMessageReplyMsgContent();
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         onChanged();
         return this;
       }
@@ -11465,7 +12167,7 @@ public final class Flappy {
        * 回复的消息内容
        * </pre>
        *
-       * <code>string messageReplyMsgContent = 18;</code>
+       * <code>string messageReplyMsgContent = 17;</code>
        * @param value The bytes for messageReplyMsgContent to set.
        * @return This builder for chaining.
        */
@@ -11474,7 +12176,7 @@ public final class Flappy {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         messageReplyMsgContent_ = value;
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00010000;
         onChanged();
         return this;
       }
@@ -11485,7 +12187,7 @@ public final class Flappy {
        * 回复的用户ID
        * </pre>
        *
-       * <code>string messageReplyUserId = 19;</code>
+       * <code>string messageReplyUserId = 18;</code>
        * @return The messageReplyUserId.
        */
       public String getMessageReplyUserId() {
@@ -11505,7 +12207,7 @@ public final class Flappy {
        * 回复的用户ID
        * </pre>
        *
-       * <code>string messageReplyUserId = 19;</code>
+       * <code>string messageReplyUserId = 18;</code>
        * @return The bytes for messageReplyUserId.
        */
       public com.google.protobuf.ByteString
@@ -11526,7 +12228,7 @@ public final class Flappy {
        * 回复的用户ID
        * </pre>
        *
-       * <code>string messageReplyUserId = 19;</code>
+       * <code>string messageReplyUserId = 18;</code>
        * @param value The messageReplyUserId to set.
        * @return This builder for chaining.
        */
@@ -11534,7 +12236,7 @@ public final class Flappy {
           String value) {
         if (value == null) { throw new NullPointerException(); }
         messageReplyUserId_ = value;
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00020000;
         onChanged();
         return this;
       }
@@ -11543,12 +12245,12 @@ public final class Flappy {
        * 回复的用户ID
        * </pre>
        *
-       * <code>string messageReplyUserId = 19;</code>
+       * <code>string messageReplyUserId = 18;</code>
        * @return This builder for chaining.
        */
       public Builder clearMessageReplyUserId() {
         messageReplyUserId_ = getDefaultInstance().getMessageReplyUserId();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         onChanged();
         return this;
       }
@@ -11557,7 +12259,7 @@ public final class Flappy {
        * 回复的用户ID
        * </pre>
        *
-       * <code>string messageReplyUserId = 19;</code>
+       * <code>string messageReplyUserId = 18;</code>
        * @param value The bytes for messageReplyUserId to set.
        * @return This builder for chaining.
        */
@@ -11566,6 +12268,98 @@ public final class Flappy {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         messageReplyUserId_ = value;
+        bitField0_ |= 0x00020000;
+        onChanged();
+        return this;
+      }
+
+      private Object messageForwardTitle_ = "";
+      /**
+       * <pre>
+       * 消息转发的title
+       * </pre>
+       *
+       * <code>string messageForwardTitle = 19;</code>
+       * @return The messageForwardTitle.
+       */
+      public String getMessageForwardTitle() {
+        Object ref = messageForwardTitle_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageForwardTitle_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 消息转发的title
+       * </pre>
+       *
+       * <code>string messageForwardTitle = 19;</code>
+       * @return The bytes for messageForwardTitle.
+       */
+      public com.google.protobuf.ByteString
+          getMessageForwardTitleBytes() {
+        Object ref = messageForwardTitle_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageForwardTitle_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 消息转发的title
+       * </pre>
+       *
+       * <code>string messageForwardTitle = 19;</code>
+       * @param value The messageForwardTitle to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageForwardTitle(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        messageForwardTitle_ = value;
+        bitField0_ |= 0x00040000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息转发的title
+       * </pre>
+       *
+       * <code>string messageForwardTitle = 19;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageForwardTitle() {
+        messageForwardTitle_ = getDefaultInstance().getMessageForwardTitle();
+        bitField0_ = (bitField0_ & ~0x00040000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息转发的title
+       * </pre>
+       *
+       * <code>string messageForwardTitle = 19;</code>
+       * @param value The bytes for messageForwardTitle to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageForwardTitleBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageForwardTitle_ = value;
         bitField0_ |= 0x00040000;
         onChanged();
         return this;
@@ -11939,13 +12733,197 @@ public final class Flappy {
         return this;
       }
 
+      private Object messageDate_ = "";
+      /**
+       * <pre>
+       * 消息时间
+       * </pre>
+       *
+       * <code>string messageDate = 24;</code>
+       * @return The messageDate.
+       */
+      public String getMessageDate() {
+        Object ref = messageDate_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageDate_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 消息时间
+       * </pre>
+       *
+       * <code>string messageDate = 24;</code>
+       * @return The bytes for messageDate.
+       */
+      public com.google.protobuf.ByteString
+          getMessageDateBytes() {
+        Object ref = messageDate_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageDate_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 消息时间
+       * </pre>
+       *
+       * <code>string messageDate = 24;</code>
+       * @param value The messageDate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageDate(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        messageDate_ = value;
+        bitField0_ |= 0x00800000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息时间
+       * </pre>
+       *
+       * <code>string messageDate = 24;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageDate() {
+        messageDate_ = getDefaultInstance().getMessageDate();
+        bitField0_ = (bitField0_ & ~0x00800000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息时间
+       * </pre>
+       *
+       * <code>string messageDate = 24;</code>
+       * @param value The bytes for messageDate to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageDateBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageDate_ = value;
+        bitField0_ |= 0x00800000;
+        onChanged();
+        return this;
+      }
+
+      private Object messageSecret_ = "";
+      /**
+       * <pre>
+       * 消息发送秘钥
+       * </pre>
+       *
+       * <code>string messageSecret = 25;</code>
+       * @return The messageSecret.
+       */
+      public String getMessageSecret() {
+        Object ref = messageSecret_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          messageSecret_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 消息发送秘钥
+       * </pre>
+       *
+       * <code>string messageSecret = 25;</code>
+       * @return The bytes for messageSecret.
+       */
+      public com.google.protobuf.ByteString
+          getMessageSecretBytes() {
+        Object ref = messageSecret_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          messageSecret_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * 消息发送秘钥
+       * </pre>
+       *
+       * <code>string messageSecret = 25;</code>
+       * @param value The messageSecret to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageSecret(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        messageSecret_ = value;
+        bitField0_ |= 0x01000000;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息发送秘钥
+       * </pre>
+       *
+       * <code>string messageSecret = 25;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearMessageSecret() {
+        messageSecret_ = getDefaultInstance().getMessageSecret();
+        bitField0_ = (bitField0_ & ~0x01000000);
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息发送秘钥
+       * </pre>
+       *
+       * <code>string messageSecret = 25;</code>
+       * @param value The bytes for messageSecret to set.
+       * @return This builder for chaining.
+       */
+      public Builder setMessageSecretBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        messageSecret_ = value;
+        bitField0_ |= 0x01000000;
+        onChanged();
+        return this;
+      }
+
       private int isDelete_ ;
       /**
        * <pre>
        * 消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 24;</code>
+       * <code>int32 isDelete = 26;</code>
        * @return The isDelete.
        */
       @Override
@@ -11957,14 +12935,14 @@ public final class Flappy {
        * 消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 24;</code>
+       * <code>int32 isDelete = 26;</code>
        * @param value The isDelete to set.
        * @return This builder for chaining.
        */
       public Builder setIsDelete(int value) {
 
         isDelete_ = value;
-        bitField0_ |= 0x00800000;
+        bitField0_ |= 0x02000000;
         onChanged();
         return this;
       }
@@ -11973,11 +12951,11 @@ public final class Flappy {
        * 消息是否被删除
        * </pre>
        *
-       * <code>int32 isDelete = 24;</code>
+       * <code>int32 isDelete = 26;</code>
        * @return This builder for chaining.
        */
       public Builder clearIsDelete() {
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x02000000);
         isDelete_ = 0;
         onChanged();
         return this;
@@ -11989,7 +12967,7 @@ public final class Flappy {
        * 消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 25;</code>
+       * <code>string deleteDate = 27;</code>
        * @return The deleteDate.
        */
       public String getDeleteDate() {
@@ -12009,7 +12987,7 @@ public final class Flappy {
        * 消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 25;</code>
+       * <code>string deleteDate = 27;</code>
        * @return The bytes for deleteDate.
        */
       public com.google.protobuf.ByteString
@@ -12030,7 +13008,7 @@ public final class Flappy {
        * 消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 25;</code>
+       * <code>string deleteDate = 27;</code>
        * @param value The deleteDate to set.
        * @return This builder for chaining.
        */
@@ -12038,7 +13016,7 @@ public final class Flappy {
           String value) {
         if (value == null) { throw new NullPointerException(); }
         deleteDate_ = value;
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x04000000;
         onChanged();
         return this;
       }
@@ -12047,12 +13025,12 @@ public final class Flappy {
        * 消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 25;</code>
+       * <code>string deleteDate = 27;</code>
        * @return This builder for chaining.
        */
       public Builder clearDeleteDate() {
         deleteDate_ = getDefaultInstance().getDeleteDate();
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x04000000);
         onChanged();
         return this;
       }
@@ -12061,7 +13039,7 @@ public final class Flappy {
        * 消息删除日期
        * </pre>
        *
-       * <code>string deleteDate = 25;</code>
+       * <code>string deleteDate = 27;</code>
        * @param value The bytes for deleteDate to set.
        * @return This builder for chaining.
        */
@@ -12070,7 +13048,7 @@ public final class Flappy {
         if (value == null) { throw new NullPointerException(); }
         checkByteStringIsUtf8(value);
         deleteDate_ = value;
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x04000000;
         onChanged();
         return this;
       }
@@ -12121,1219 +13099,6 @@ public final class Flappy {
 
     @Override
     public Message getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface FlappyKafkaOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:FlappyKafka)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     * 类型
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
-     */
-    int getType();
-
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    java.util.List<Route>
-        getRouteList();
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    Route getRoute(int index);
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    int getRouteCount();
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    java.util.List<? extends RouteOrBuilder>
-        getRouteOrBuilderList();
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    RouteOrBuilder getRouteOrBuilder(
-        int index);
-
-    /**
-     * <pre>
-     * 消息信息
-     * </pre>
-     *
-     * <code>.Message msg = 3;</code>
-     * @return Whether the msg field is set.
-     */
-    boolean hasMsg();
-    /**
-     * <pre>
-     * 消息信息
-     * </pre>
-     *
-     * <code>.Message msg = 3;</code>
-     * @return The msg.
-     */
-    Message getMsg();
-    /**
-     * <pre>
-     * 消息信息
-     * </pre>
-     *
-     * <code>.Message msg = 3;</code>
-     */
-    MessageOrBuilder getMsgOrBuilder();
-  }
-  /**
-   * Protobuf type {@code FlappyKafka}
-   */
-  public static final class FlappyKafka extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:FlappyKafka)
-      FlappyKafkaOrBuilder {
-  private static final long serialVersionUID = 0L;
-    static {
-      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
-        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
-        /* major= */ 4,
-        /* minor= */ 29,
-        /* patch= */ 2,
-        /* suffix= */ "",
-        FlappyKafka.class.getName());
-    }
-    // Use FlappyKafka.newBuilder() to construct.
-    private FlappyKafka(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-    }
-    private FlappyKafka() {
-      route_ = java.util.Collections.emptyList();
-    }
-
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return Flappy.internal_static_FlappyKafka_descriptor;
-    }
-
-    @Override
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return Flappy.internal_static_FlappyKafka_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              FlappyKafka.class, Builder.class);
-    }
-
-    private int bitField0_;
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_ = 0;
-    /**
-     * <pre>
-     * 类型
-     * </pre>
-     *
-     * <code>int32 type = 1;</code>
-     * @return The type.
-     */
-    @Override
-    public int getType() {
-      return type_;
-    }
-
-    public static final int ROUTE_FIELD_NUMBER = 2;
-    @SuppressWarnings("serial")
-    private java.util.List<Route> route_;
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    @Override
-    public java.util.List<Route> getRouteList() {
-      return route_;
-    }
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    @Override
-    public java.util.List<? extends RouteOrBuilder>
-        getRouteOrBuilderList() {
-      return route_;
-    }
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    @Override
-    public int getRouteCount() {
-      return route_.size();
-    }
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    @Override
-    public Route getRoute(int index) {
-      return route_.get(index);
-    }
-    /**
-     * <pre>
-     * 路由信息
-     * </pre>
-     *
-     * <code>repeated .Route route = 2;</code>
-     */
-    @Override
-    public RouteOrBuilder getRouteOrBuilder(
-        int index) {
-      return route_.get(index);
-    }
-
-    public static final int MSG_FIELD_NUMBER = 3;
-    private Message msg_;
-    /**
-     * <pre>
-     * 消息信息
-     * </pre>
-     *
-     * <code>.Message msg = 3;</code>
-     * @return Whether the msg field is set.
-     */
-    @Override
-    public boolean hasMsg() {
-      return ((bitField0_ & 0x00000001) != 0);
-    }
-    /**
-     * <pre>
-     * 消息信息
-     * </pre>
-     *
-     * <code>.Message msg = 3;</code>
-     * @return The msg.
-     */
-    @Override
-    public Message getMsg() {
-      return msg_ == null ? Message.getDefaultInstance() : msg_;
-    }
-    /**
-     * <pre>
-     * 消息信息
-     * </pre>
-     *
-     * <code>.Message msg = 3;</code>
-     */
-    @Override
-    public MessageOrBuilder getMsgOrBuilder() {
-      return msg_ == null ? Message.getDefaultInstance() : msg_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (type_ != 0) {
-        output.writeInt32(1, type_);
-      }
-      for (int i = 0; i < route_.size(); i++) {
-        output.writeMessage(2, route_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) != 0)) {
-        output.writeMessage(3, getMsg());
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (type_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, type_);
-      }
-      for (int i = 0; i < route_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, route_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getMsg());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof FlappyKafka)) {
-        return super.equals(obj);
-      }
-      FlappyKafka other = (FlappyKafka) obj;
-
-      if (getType()
-          != other.getType()) return false;
-      if (!getRouteList()
-          .equals(other.getRouteList())) return false;
-      if (hasMsg() != other.hasMsg()) return false;
-      if (hasMsg()) {
-        if (!getMsg()
-            .equals(other.getMsg())) return false;
-      }
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + TYPE_FIELD_NUMBER;
-      hash = (53 * hash) + getType();
-      if (getRouteCount() > 0) {
-        hash = (37 * hash) + ROUTE_FIELD_NUMBER;
-        hash = (53 * hash) + getRouteList().hashCode();
-      }
-      if (hasMsg()) {
-        hash = (37 * hash) + MSG_FIELD_NUMBER;
-        hash = (53 * hash) + getMsg().hashCode();
-      }
-      hash = (29 * hash) + getUnknownFields().hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static FlappyKafka parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static FlappyKafka parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static FlappyKafka parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static FlappyKafka parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static FlappyKafka parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static FlappyKafka parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static FlappyKafka parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input);
-    }
-    public static FlappyKafka parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public static FlappyKafka parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-
-    public static FlappyKafka parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static FlappyKafka parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input);
-    }
-    public static FlappyKafka parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessage
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(FlappyKafka prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @Override
-    protected Builder newBuilderForType(
-        BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code FlappyKafka}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:FlappyKafka)
-        FlappyKafkaOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return Flappy.internal_static_FlappyKafka_descriptor;
-      }
-
-      @Override
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return Flappy.internal_static_FlappyKafka_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                FlappyKafka.class, Builder.class);
-      }
-
-      // Construct using Flappy.FlappyKafka.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage
-                .alwaysUseFieldBuilders) {
-          getRouteFieldBuilder();
-          getMsgFieldBuilder();
-        }
-      }
-      @Override
-      public Builder clear() {
-        super.clear();
-        bitField0_ = 0;
-        type_ = 0;
-        if (routeBuilder_ == null) {
-          route_ = java.util.Collections.emptyList();
-        } else {
-          route_ = null;
-          routeBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        msg_ = null;
-        if (msgBuilder_ != null) {
-          msgBuilder_.dispose();
-          msgBuilder_ = null;
-        }
-        return this;
-      }
-
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return Flappy.internal_static_FlappyKafka_descriptor;
-      }
-
-      @Override
-      public FlappyKafka getDefaultInstanceForType() {
-        return FlappyKafka.getDefaultInstance();
-      }
-
-      @Override
-      public FlappyKafka build() {
-        FlappyKafka result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @Override
-      public FlappyKafka buildPartial() {
-        FlappyKafka result = new FlappyKafka(this);
-        buildPartialRepeatedFields(result);
-        if (bitField0_ != 0) { buildPartial0(result); }
-        onBuilt();
-        return result;
-      }
-
-      private void buildPartialRepeatedFields(FlappyKafka result) {
-        if (routeBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) != 0)) {
-            route_ = java.util.Collections.unmodifiableList(route_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.route_ = route_;
-        } else {
-          result.route_ = routeBuilder_.build();
-        }
-      }
-
-      private void buildPartial0(FlappyKafka result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.type_ = type_;
-        }
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          result.msg_ = msgBuilder_ == null
-              ? msg_
-              : msgBuilder_.build();
-          to_bitField0_ |= 0x00000001;
-        }
-        result.bitField0_ |= to_bitField0_;
-      }
-
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof FlappyKafka) {
-          return mergeFrom((FlappyKafka)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(FlappyKafka other) {
-        if (other == FlappyKafka.getDefaultInstance()) return this;
-        if (other.getType() != 0) {
-          setType(other.getType());
-        }
-        if (routeBuilder_ == null) {
-          if (!other.route_.isEmpty()) {
-            if (route_.isEmpty()) {
-              route_ = other.route_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureRouteIsMutable();
-              route_.addAll(other.route_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.route_.isEmpty()) {
-            if (routeBuilder_.isEmpty()) {
-              routeBuilder_.dispose();
-              routeBuilder_ = null;
-              route_ = other.route_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              routeBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getRouteFieldBuilder() : null;
-            } else {
-              routeBuilder_.addAllMessages(other.route_);
-            }
-          }
-        }
-        if (other.hasMsg()) {
-          mergeMsg(other.getMsg());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        onChanged();
-        return this;
-      }
-
-      @Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new NullPointerException();
-        }
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 8: {
-                type_ = input.readInt32();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 8
-              case 18: {
-                Route m =
-                    input.readMessage(
-                        Route.parser(),
-                        extensionRegistry);
-                if (routeBuilder_ == null) {
-                  ensureRouteIsMutable();
-                  route_.add(m);
-                } else {
-                  routeBuilder_.addMessage(m);
-                }
-                break;
-              } // case 18
-              case 26: {
-                input.readMessage(
-                    getMsgFieldBuilder().getBuilder(),
-                    extensionRegistry);
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 26
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.unwrapIOException();
-        } finally {
-          onChanged();
-        } // finally
-        return this;
-      }
-      private int bitField0_;
-
-      private int type_ ;
-      /**
-       * <pre>
-       * 类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @return The type.
-       */
-      @Override
-      public int getType() {
-        return type_;
-      }
-      /**
-       * <pre>
-       * 类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @param value The type to set.
-       * @return This builder for chaining.
-       */
-      public Builder setType(int value) {
-
-        type_ = value;
-        bitField0_ |= 0x00000001;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 类型
-       * </pre>
-       *
-       * <code>int32 type = 1;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private java.util.List<Route> route_ =
-        java.util.Collections.emptyList();
-      private void ensureRouteIsMutable() {
-        if (!((bitField0_ & 0x00000002) != 0)) {
-          route_ = new java.util.ArrayList<Route>(route_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          Route, Route.Builder, RouteOrBuilder> routeBuilder_;
-
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public java.util.List<Route> getRouteList() {
-        if (routeBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(route_);
-        } else {
-          return routeBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public int getRouteCount() {
-        if (routeBuilder_ == null) {
-          return route_.size();
-        } else {
-          return routeBuilder_.getCount();
-        }
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Route getRoute(int index) {
-        if (routeBuilder_ == null) {
-          return route_.get(index);
-        } else {
-          return routeBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder setRoute(
-          int index, Route value) {
-        if (routeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRouteIsMutable();
-          route_.set(index, value);
-          onChanged();
-        } else {
-          routeBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder setRoute(
-          int index, Route.Builder builderForValue) {
-        if (routeBuilder_ == null) {
-          ensureRouteIsMutable();
-          route_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          routeBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder addRoute(Route value) {
-        if (routeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRouteIsMutable();
-          route_.add(value);
-          onChanged();
-        } else {
-          routeBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder addRoute(
-          int index, Route value) {
-        if (routeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRouteIsMutable();
-          route_.add(index, value);
-          onChanged();
-        } else {
-          routeBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder addRoute(
-          Route.Builder builderForValue) {
-        if (routeBuilder_ == null) {
-          ensureRouteIsMutable();
-          route_.add(builderForValue.build());
-          onChanged();
-        } else {
-          routeBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder addRoute(
-          int index, Route.Builder builderForValue) {
-        if (routeBuilder_ == null) {
-          ensureRouteIsMutable();
-          route_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          routeBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder addAllRoute(
-          Iterable<? extends Route> values) {
-        if (routeBuilder_ == null) {
-          ensureRouteIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, route_);
-          onChanged();
-        } else {
-          routeBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder clearRoute() {
-        if (routeBuilder_ == null) {
-          route_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          routeBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Builder removeRoute(int index) {
-        if (routeBuilder_ == null) {
-          ensureRouteIsMutable();
-          route_.remove(index);
-          onChanged();
-        } else {
-          routeBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Route.Builder getRouteBuilder(
-          int index) {
-        return getRouteFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public RouteOrBuilder getRouteOrBuilder(
-          int index) {
-        if (routeBuilder_ == null) {
-          return route_.get(index);  } else {
-          return routeBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public java.util.List<? extends RouteOrBuilder>
-           getRouteOrBuilderList() {
-        if (routeBuilder_ != null) {
-          return routeBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(route_);
-        }
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Route.Builder addRouteBuilder() {
-        return getRouteFieldBuilder().addBuilder(
-            Route.getDefaultInstance());
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public Route.Builder addRouteBuilder(
-          int index) {
-        return getRouteFieldBuilder().addBuilder(
-            index, Route.getDefaultInstance());
-      }
-      /**
-       * <pre>
-       * 路由信息
-       * </pre>
-       *
-       * <code>repeated .Route route = 2;</code>
-       */
-      public java.util.List<Route.Builder>
-           getRouteBuilderList() {
-        return getRouteFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          Route, Route.Builder, RouteOrBuilder>
-          getRouteFieldBuilder() {
-        if (routeBuilder_ == null) {
-          routeBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              Route, Route.Builder, RouteOrBuilder>(
-                  route_,
-                  ((bitField0_ & 0x00000002) != 0),
-                  getParentForChildren(),
-                  isClean());
-          route_ = null;
-        }
-        return routeBuilder_;
-      }
-
-      private Message msg_;
-      private com.google.protobuf.SingleFieldBuilder<
-          Message, Message.Builder, MessageOrBuilder> msgBuilder_;
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       * @return Whether the msg field is set.
-       */
-      public boolean hasMsg() {
-        return ((bitField0_ & 0x00000004) != 0);
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       * @return The msg.
-       */
-      public Message getMsg() {
-        if (msgBuilder_ == null) {
-          return msg_ == null ? Message.getDefaultInstance() : msg_;
-        } else {
-          return msgBuilder_.getMessage();
-        }
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      public Builder setMsg(Message value) {
-        if (msgBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          msg_ = value;
-        } else {
-          msgBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      public Builder setMsg(
-          Message.Builder builderForValue) {
-        if (msgBuilder_ == null) {
-          msg_ = builderForValue.build();
-        } else {
-          msgBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      public Builder mergeMsg(Message value) {
-        if (msgBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) != 0) &&
-            msg_ != null &&
-            msg_ != Message.getDefaultInstance()) {
-            getMsgBuilder().mergeFrom(value);
-          } else {
-            msg_ = value;
-          }
-        } else {
-          msgBuilder_.mergeFrom(value);
-        }
-        if (msg_ != null) {
-          bitField0_ |= 0x00000004;
-          onChanged();
-        }
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      public Builder clearMsg() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        msg_ = null;
-        if (msgBuilder_ != null) {
-          msgBuilder_.dispose();
-          msgBuilder_ = null;
-        }
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      public Message.Builder getMsgBuilder() {
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return getMsgFieldBuilder().getBuilder();
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      public MessageOrBuilder getMsgOrBuilder() {
-        if (msgBuilder_ != null) {
-          return msgBuilder_.getMessageOrBuilder();
-        } else {
-          return msg_ == null ?
-              Message.getDefaultInstance() : msg_;
-        }
-      }
-      /**
-       * <pre>
-       * 消息信息
-       * </pre>
-       *
-       * <code>.Message msg = 3;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          Message, Message.Builder, MessageOrBuilder>
-          getMsgFieldBuilder() {
-        if (msgBuilder_ == null) {
-          msgBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              Message, Message.Builder, MessageOrBuilder>(
-                  getMsg(),
-                  getParentForChildren(),
-                  isClean());
-          msg_ = null;
-        }
-        return msgBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:FlappyKafka)
-    }
-
-    // @@protoc_insertion_point(class_scope:FlappyKafka)
-    private static final FlappyKafka DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new FlappyKafka();
-    }
-
-    public static FlappyKafka getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<FlappyKafka>
-        PARSER = new com.google.protobuf.AbstractParser<FlappyKafka>() {
-      @Override
-      public FlappyKafka parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
-      }
-    };
-
-    public static com.google.protobuf.Parser<FlappyKafka> parser() {
-      return PARSER;
-    }
-
-    @Override
-    public com.google.protobuf.Parser<FlappyKafka> getParserForType() {
-      return PARSER;
-    }
-
-    @Override
-    public FlappyKafka getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -13504,6 +13269,10 @@ public final class Flappy {
         getTimeBytes();
   }
   /**
+   * <pre>
+   * 路由
+   * </pre>
+   *
    * Protobuf type {@code Route}
    */
   public static final class Route extends
@@ -14140,6 +13909,10 @@ public final class Flappy {
       return builder;
     }
     /**
+     * <pre>
+     * 路由
+     * </pre>
+     *
      * Protobuf type {@code Route}
      */
     public static final class Builder extends
@@ -15174,16 +14947,1232 @@ public final class Flappy {
 
   }
 
+  public interface FlappyQueueOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:FlappyQueue)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 类型
+     * </pre>
+     *
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    int getType();
+
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    java.util.List<Route>
+        getRouteList();
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    Route getRoute(int index);
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    int getRouteCount();
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    java.util.List<? extends RouteOrBuilder>
+        getRouteOrBuilderList();
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    RouteOrBuilder getRouteOrBuilder(
+        int index);
+
+    /**
+     * <pre>
+     * 消息信息
+     * </pre>
+     *
+     * <code>.Message msg = 3;</code>
+     * @return Whether the msg field is set.
+     */
+    boolean hasMsg();
+    /**
+     * <pre>
+     * 消息信息
+     * </pre>
+     *
+     * <code>.Message msg = 3;</code>
+     * @return The msg.
+     */
+    Message getMsg();
+    /**
+     * <pre>
+     * 消息信息
+     * </pre>
+     *
+     * <code>.Message msg = 3;</code>
+     */
+    MessageOrBuilder getMsgOrBuilder();
+  }
+  /**
+   * <pre>
+   * 消息队列
+   * </pre>
+   *
+   * Protobuf type {@code FlappyQueue}
+   */
+  public static final class FlappyQueue extends
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:FlappyQueue)
+      FlappyQueueOrBuilder {
+  private static final long serialVersionUID = 0L;
+    static {
+      com.google.protobuf.RuntimeVersion.validateProtobufGencodeVersion(
+        com.google.protobuf.RuntimeVersion.RuntimeDomain.PUBLIC,
+        /* major= */ 4,
+        /* minor= */ 29,
+        /* patch= */ 2,
+        /* suffix= */ "",
+        FlappyQueue.class.getName());
+    }
+    // Use FlappyQueue.newBuilder() to construct.
+    private FlappyQueue(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+    }
+    private FlappyQueue() {
+      route_ = java.util.Collections.emptyList();
+    }
+
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return Flappy.internal_static_FlappyQueue_descriptor;
+    }
+
+    @Override
+    protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return Flappy.internal_static_FlappyQueue_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              FlappyQueue.class, Builder.class);
+    }
+
+    private int bitField0_;
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private int type_ = 0;
+    /**
+     * <pre>
+     * 类型
+     * </pre>
+     *
+     * <code>int32 type = 1;</code>
+     * @return The type.
+     */
+    @Override
+    public int getType() {
+      return type_;
+    }
+
+    public static final int ROUTE_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
+    private java.util.List<Route> route_;
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    @Override
+    public java.util.List<Route> getRouteList() {
+      return route_;
+    }
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    @Override
+    public java.util.List<? extends RouteOrBuilder>
+        getRouteOrBuilderList() {
+      return route_;
+    }
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    @Override
+    public int getRouteCount() {
+      return route_.size();
+    }
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    @Override
+    public Route getRoute(int index) {
+      return route_.get(index);
+    }
+    /**
+     * <pre>
+     * 路由信息
+     * </pre>
+     *
+     * <code>repeated .Route route = 2;</code>
+     */
+    @Override
+    public RouteOrBuilder getRouteOrBuilder(
+        int index) {
+      return route_.get(index);
+    }
+
+    public static final int MSG_FIELD_NUMBER = 3;
+    private Message msg_;
+    /**
+     * <pre>
+     * 消息信息
+     * </pre>
+     *
+     * <code>.Message msg = 3;</code>
+     * @return Whether the msg field is set.
+     */
+    @Override
+    public boolean hasMsg() {
+      return ((bitField0_ & 0x00000001) != 0);
+    }
+    /**
+     * <pre>
+     * 消息信息
+     * </pre>
+     *
+     * <code>.Message msg = 3;</code>
+     * @return The msg.
+     */
+    @Override
+    public Message getMsg() {
+      return msg_ == null ? Message.getDefaultInstance() : msg_;
+    }
+    /**
+     * <pre>
+     * 消息信息
+     * </pre>
+     *
+     * <code>.Message msg = 3;</code>
+     */
+    @Override
+    public MessageOrBuilder getMsgOrBuilder() {
+      return msg_ == null ? Message.getDefaultInstance() : msg_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (type_ != 0) {
+        output.writeInt32(1, type_);
+      }
+      for (int i = 0; i < route_.size(); i++) {
+        output.writeMessage(2, route_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        output.writeMessage(3, getMsg());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    @Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (type_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, type_);
+      }
+      for (int i = 0; i < route_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, route_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getMsg());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof FlappyQueue)) {
+        return super.equals(obj);
+      }
+      FlappyQueue other = (FlappyQueue) obj;
+
+      if (getType()
+          != other.getType()) return false;
+      if (!getRouteList()
+          .equals(other.getRouteList())) return false;
+      if (hasMsg() != other.hasMsg()) return false;
+      if (hasMsg()) {
+        if (!getMsg()
+            .equals(other.getMsg())) return false;
+      }
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + TYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getType();
+      if (getRouteCount() > 0) {
+        hash = (37 * hash) + ROUTE_FIELD_NUMBER;
+        hash = (53 * hash) + getRouteList().hashCode();
+      }
+      if (hasMsg()) {
+        hash = (37 * hash) + MSG_FIELD_NUMBER;
+        hash = (53 * hash) + getMsg().hashCode();
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static FlappyQueue parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static FlappyQueue parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static FlappyQueue parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static FlappyQueue parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static FlappyQueue parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static FlappyQueue parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static FlappyQueue parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static FlappyQueue parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    public static FlappyQueue parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+
+    public static FlappyQueue parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static FlappyQueue parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input);
+    }
+    public static FlappyQueue parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessage
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(FlappyQueue prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @Override
+    protected Builder newBuilderForType(
+        BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * 消息队列
+     * </pre>
+     *
+     * Protobuf type {@code FlappyQueue}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:FlappyQueue)
+        FlappyQueueOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return Flappy.internal_static_FlappyQueue_descriptor;
+      }
+
+      @Override
+      protected FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return Flappy.internal_static_FlappyQueue_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                FlappyQueue.class, Builder.class);
+      }
+
+      // Construct using Flappy.FlappyQueue.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage
+                .alwaysUseFieldBuilders) {
+          getRouteFieldBuilder();
+          getMsgFieldBuilder();
+        }
+      }
+      @Override
+      public Builder clear() {
+        super.clear();
+        bitField0_ = 0;
+        type_ = 0;
+        if (routeBuilder_ == null) {
+          route_ = java.util.Collections.emptyList();
+        } else {
+          route_ = null;
+          routeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        msg_ = null;
+        if (msgBuilder_ != null) {
+          msgBuilder_.dispose();
+          msgBuilder_ = null;
+        }
+        return this;
+      }
+
+      @Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return Flappy.internal_static_FlappyQueue_descriptor;
+      }
+
+      @Override
+      public FlappyQueue getDefaultInstanceForType() {
+        return FlappyQueue.getDefaultInstance();
+      }
+
+      @Override
+      public FlappyQueue build() {
+        FlappyQueue result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @Override
+      public FlappyQueue buildPartial() {
+        FlappyQueue result = new FlappyQueue(this);
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(FlappyQueue result) {
+        if (routeBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) != 0)) {
+            route_ = java.util.Collections.unmodifiableList(route_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.route_ = route_;
+        } else {
+          result.route_ = routeBuilder_.build();
+        }
+      }
+
+      private void buildPartial0(FlappyQueue result) {
+        int from_bitField0_ = bitField0_;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.type_ = type_;
+        }
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.msg_ = msgBuilder_ == null
+              ? msg_
+              : msgBuilder_.build();
+          to_bitField0_ |= 0x00000001;
+        }
+        result.bitField0_ |= to_bitField0_;
+      }
+
+      @Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof FlappyQueue) {
+          return mergeFrom((FlappyQueue)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(FlappyQueue other) {
+        if (other == FlappyQueue.getDefaultInstance()) return this;
+        if (other.getType() != 0) {
+          setType(other.getType());
+        }
+        if (routeBuilder_ == null) {
+          if (!other.route_.isEmpty()) {
+            if (route_.isEmpty()) {
+              route_ = other.route_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureRouteIsMutable();
+              route_.addAll(other.route_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.route_.isEmpty()) {
+            if (routeBuilder_.isEmpty()) {
+              routeBuilder_.dispose();
+              routeBuilder_ = null;
+              route_ = other.route_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              routeBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getRouteFieldBuilder() : null;
+            } else {
+              routeBuilder_.addAllMessages(other.route_);
+            }
+          }
+        }
+        if (other.hasMsg()) {
+          mergeMsg(other.getMsg());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        onChanged();
+        return this;
+      }
+
+      @Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        if (extensionRegistry == null) {
+          throw new NullPointerException();
+        }
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                type_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 18: {
+                Route m =
+                    input.readMessage(
+                        Route.parser(),
+                        extensionRegistry);
+                if (routeBuilder_ == null) {
+                  ensureRouteIsMutable();
+                  route_.add(m);
+                } else {
+                  routeBuilder_.addMessage(m);
+                }
+                break;
+              } // case 18
+              case 26: {
+                input.readMessage(
+                    getMsgFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.unwrapIOException();
+        } finally {
+          onChanged();
+        } // finally
+        return this;
+      }
+      private int bitField0_;
+
+      private int type_ ;
+      /**
+       * <pre>
+       * 类型
+       * </pre>
+       *
+       * <code>int32 type = 1;</code>
+       * @return The type.
+       */
+      @Override
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <pre>
+       * 类型
+       * </pre>
+       *
+       * <code>int32 type = 1;</code>
+       * @param value The type to set.
+       * @return This builder for chaining.
+       */
+      public Builder setType(int value) {
+
+        type_ = value;
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 类型
+       * </pre>
+       *
+       * <code>int32 type = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<Route> route_ =
+        java.util.Collections.emptyList();
+      private void ensureRouteIsMutable() {
+        if (!((bitField0_ & 0x00000002) != 0)) {
+          route_ = new java.util.ArrayList<Route>(route_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          Route, Route.Builder, RouteOrBuilder> routeBuilder_;
+
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public java.util.List<Route> getRouteList() {
+        if (routeBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(route_);
+        } else {
+          return routeBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public int getRouteCount() {
+        if (routeBuilder_ == null) {
+          return route_.size();
+        } else {
+          return routeBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Route getRoute(int index) {
+        if (routeBuilder_ == null) {
+          return route_.get(index);
+        } else {
+          return routeBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder setRoute(
+          int index, Route value) {
+        if (routeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRouteIsMutable();
+          route_.set(index, value);
+          onChanged();
+        } else {
+          routeBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder setRoute(
+          int index, Route.Builder builderForValue) {
+        if (routeBuilder_ == null) {
+          ensureRouteIsMutable();
+          route_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          routeBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder addRoute(Route value) {
+        if (routeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRouteIsMutable();
+          route_.add(value);
+          onChanged();
+        } else {
+          routeBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder addRoute(
+          int index, Route value) {
+        if (routeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureRouteIsMutable();
+          route_.add(index, value);
+          onChanged();
+        } else {
+          routeBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder addRoute(
+          Route.Builder builderForValue) {
+        if (routeBuilder_ == null) {
+          ensureRouteIsMutable();
+          route_.add(builderForValue.build());
+          onChanged();
+        } else {
+          routeBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder addRoute(
+          int index, Route.Builder builderForValue) {
+        if (routeBuilder_ == null) {
+          ensureRouteIsMutable();
+          route_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          routeBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder addAllRoute(
+          Iterable<? extends Route> values) {
+        if (routeBuilder_ == null) {
+          ensureRouteIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, route_);
+          onChanged();
+        } else {
+          routeBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder clearRoute() {
+        if (routeBuilder_ == null) {
+          route_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          routeBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Builder removeRoute(int index) {
+        if (routeBuilder_ == null) {
+          ensureRouteIsMutable();
+          route_.remove(index);
+          onChanged();
+        } else {
+          routeBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Route.Builder getRouteBuilder(
+          int index) {
+        return getRouteFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public RouteOrBuilder getRouteOrBuilder(
+          int index) {
+        if (routeBuilder_ == null) {
+          return route_.get(index);  } else {
+          return routeBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public java.util.List<? extends RouteOrBuilder>
+           getRouteOrBuilderList() {
+        if (routeBuilder_ != null) {
+          return routeBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(route_);
+        }
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Route.Builder addRouteBuilder() {
+        return getRouteFieldBuilder().addBuilder(
+            Route.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public Route.Builder addRouteBuilder(
+          int index) {
+        return getRouteFieldBuilder().addBuilder(
+            index, Route.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * 路由信息
+       * </pre>
+       *
+       * <code>repeated .Route route = 2;</code>
+       */
+      public java.util.List<Route.Builder>
+           getRouteBuilderList() {
+        return getRouteFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          Route, Route.Builder, RouteOrBuilder>
+          getRouteFieldBuilder() {
+        if (routeBuilder_ == null) {
+          routeBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              Route, Route.Builder, RouteOrBuilder>(
+                  route_,
+                  ((bitField0_ & 0x00000002) != 0),
+                  getParentForChildren(),
+                  isClean());
+          route_ = null;
+        }
+        return routeBuilder_;
+      }
+
+      private Message msg_;
+      private com.google.protobuf.SingleFieldBuilder<
+          Message, Message.Builder, MessageOrBuilder> msgBuilder_;
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       * @return Whether the msg field is set.
+       */
+      public boolean hasMsg() {
+        return ((bitField0_ & 0x00000004) != 0);
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       * @return The msg.
+       */
+      public Message getMsg() {
+        if (msgBuilder_ == null) {
+          return msg_ == null ? Message.getDefaultInstance() : msg_;
+        } else {
+          return msgBuilder_.getMessage();
+        }
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      public Builder setMsg(Message value) {
+        if (msgBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          msg_ = value;
+        } else {
+          msgBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      public Builder setMsg(
+          Message.Builder builderForValue) {
+        if (msgBuilder_ == null) {
+          msg_ = builderForValue.build();
+        } else {
+          msgBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      public Builder mergeMsg(Message value) {
+        if (msgBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) != 0) &&
+            msg_ != null &&
+            msg_ != Message.getDefaultInstance()) {
+            getMsgBuilder().mergeFrom(value);
+          } else {
+            msg_ = value;
+          }
+        } else {
+          msgBuilder_.mergeFrom(value);
+        }
+        if (msg_ != null) {
+          bitField0_ |= 0x00000004;
+          onChanged();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      public Builder clearMsg() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        msg_ = null;
+        if (msgBuilder_ != null) {
+          msgBuilder_.dispose();
+          msgBuilder_ = null;
+        }
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      public Message.Builder getMsgBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getMsgFieldBuilder().getBuilder();
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      public MessageOrBuilder getMsgOrBuilder() {
+        if (msgBuilder_ != null) {
+          return msgBuilder_.getMessageOrBuilder();
+        } else {
+          return msg_ == null ?
+              Message.getDefaultInstance() : msg_;
+        }
+      }
+      /**
+       * <pre>
+       * 消息信息
+       * </pre>
+       *
+       * <code>.Message msg = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          Message, Message.Builder, MessageOrBuilder>
+          getMsgFieldBuilder() {
+        if (msgBuilder_ == null) {
+          msgBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              Message, Message.Builder, MessageOrBuilder>(
+                  getMsg(),
+                  getParentForChildren(),
+                  isClean());
+          msg_ = null;
+        }
+        return msgBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:FlappyQueue)
+    }
+
+    // @@protoc_insertion_point(class_scope:FlappyQueue)
+    private static final FlappyQueue DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new FlappyQueue();
+    }
+
+    public static FlappyQueue getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<FlappyQueue>
+        PARSER = new com.google.protobuf.AbstractParser<FlappyQueue>() {
+      @Override
+      public FlappyQueue parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
+      }
+    };
+
+    public static com.google.protobuf.Parser<FlappyQueue> parser() {
+      return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<FlappyQueue> getParserForType() {
+      return PARSER;
+    }
+
+    @Override
+    public FlappyQueue getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_FlappyRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_FlappyRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_FlappyResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_FlappyResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ReqLogin_descriptor;
   private static final 
@@ -15200,6 +16189,16 @@ public final class Flappy {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ReqReceipt_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_FlappyResponse_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_FlappyResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ResponseUpdate_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_ResponseUpdate_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Session_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -15210,15 +16209,15 @@ public final class Flappy {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Message_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_FlappyKafka_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_FlappyKafka_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_Route_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_Route_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_FlappyQueue_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_FlappyQueue_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -15231,46 +16230,49 @@ public final class Flappy {
       "\n\014flappy.proto\"\210\001\n\rFlappyRequest\022\014\n\004type" +
       "\030\001 \001(\005\022\025\n\003msg\030\002 \001(\0132\010.Message\022\030\n\005login\030\003" +
       " \001(\0132\t.ReqLogin\022\032\n\006update\030\004 \001(\0132\n.ReqUpd" +
-      "ate\022\034\n\007receipt\030\005 \001(\0132\013.ReqReceipt\"m\n\016Fla" +
-      "ppyResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003(\0132\010" +
-      ".Message\022\032\n\010sessions\030\003 \003(\0132\010.Session\022\032\n\006" +
-      "update\030\004 \001(\0132\n.ReqUpdate\"`\n\010ReqLogin\022\016\n\006" +
-      "userID\030\001 \001(\t\022\022\n\ndevicePlat\030\002 \001(\t\022\020\n\010devi" +
-      "ceId\030\003 \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006secret\030\005 \001" +
-      "(\t\"1\n\tReqUpdate\022\022\n\nupdateType\030\001 \001(\005\022\020\n\010u" +
-      "pdateID\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013receiptTy" +
-      "pe\030\001 \001(\005\022\021\n\treceiptID\030\002 \001(\t\"\242\002\n\007Session\022" +
-      "\021\n\tsessionId\030\001 \001(\003\022\027\n\017sessionExtendId\030\002 " +
-      "\001(\t\022\023\n\013sessionType\030\003 \001(\005\022\023\n\013sessionInfo\030" +
-      "\004 \001(\t\022\023\n\013sessionName\030\005 \001(\t\022\024\n\014sessionIma" +
-      "ge\030\006 \001(\t\022\025\n\rsessionOffset\030\007 \001(\t\022\024\n\014sessi" +
-      "onStamp\030\010 \001(\003\022\031\n\021sessionCreateDate\030\t \001(\t" +
-      "\022\031\n\021sessionCreateUser\030\n \001(\t\022\020\n\010isDelete\030" +
-      "\013 \001(\005\022\022\n\ndeleteDate\030\014 \001(\t\022\r\n\005users\030\r \001(\t" +
-      "\"\222\005\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020messa" +
-      "geSessionId\030\002 \001(\003\022\032\n\022messageSessionType\030" +
-      "\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\003\022\032\n\022m" +
-      "essageTableOffset\030\005 \001(\003\022\023\n\013messageType\030\006" +
-      " \001(\005\022\025\n\rmessageSendId\030\007 \001(\003\022\033\n\023messageSe" +
-      "ndExtendId\030\010 \001(\t\022\030\n\020messageReceiveId\030\t \001" +
-      "(\003\022\036\n\026messageReceiveExtendId\030\n \001(\t\022\026\n\016me" +
-      "ssageContent\030\013 \001(\t\022\030\n\020messageSendState\030\014" +
-      " \001(\005\022\030\n\020messageReadState\030\r \001(\005\022\025\n\rmessag" +
-      "eSecret\030\016 \001(\t\022\023\n\013messageDate\030\017 \001(\t\022\031\n\021me" +
-      "ssageReplyMsgId\030\020 \001(\t\022\033\n\023messageReplyMsg" +
-      "Type\030\021 \001(\005\022\036\n\026messageReplyMsgContent\030\022 \001" +
-      "(\t\022\032\n\022messageReplyUserId\030\023 \001(\t\022\033\n\023messag" +
-      "eRecallUserId\030\024 \001(\t\022\030\n\020messageAtUserIds\030" +
-      "\025 \001(\t\022\032\n\022messageReadUserIds\030\026 \001(\t\022\034\n\024mes" +
-      "sageDeleteUserIds\030\027 \001(\t\022\020\n\010isDelete\030\030 \001(" +
-      "\005\022\022\n\ndeleteDate\030\031 \001(\t\"I\n\013FlappyKafka\022\014\n\004" +
-      "type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg" +
-      "\030\003 \001(\0132\010.Message\"\274\001\n\005Route\022\016\n\006userID\030\001 \001" +
-      "(\003\022\022\n\ndevicePlat\030\002 \001(\t\022\020\n\010deviceId\030\003 \001(\t" +
-      "\022\020\n\010pushType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t\022\016\n\006" +
-      "pushId\030\006 \001(\t\022\024\n\014pushLanguage\030\007 \001(\t\022\023\n\013pu" +
-      "shPrivacy\030\010 \001(\005\022\020\n\010pushMute\030\t \001(\005\022\014\n\004tim" +
-      "e\030\n \001(\tb\006proto3"
+      "ate\022\034\n\007receipt\030\005 \001(\0132\013.ReqReceipt\"`\n\010Req" +
+      "Login\022\016\n\006userID\030\001 \001(\t\022\022\n\ndevicePlat\030\002 \001(" +
+      "\t\022\020\n\010deviceId\030\003 \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006s" +
+      "ecret\030\005 \001(\t\"1\n\tReqUpdate\022\022\n\nupdateType\030\001" +
+      " \001(\005\022\020\n\010updateID\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013" +
+      "receiptType\030\001 \001(\005\022\021\n\treceiptID\030\002 \001(\t\"r\n\016" +
+      "FlappyResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003(" +
+      "\0132\010.Message\022\032\n\010sessions\030\003 \003(\0132\010.Session\022" +
+      "\037\n\006update\030\004 \001(\0132\017.ResponseUpdate\":\n\016Resp" +
+      "onseUpdate\022\024\n\014responseType\030\001 \001(\005\022\022\n\nresp" +
+      "onseID\030\002 \001(\t\"\242\002\n\007Session\022\021\n\tsessionId\030\001 " +
+      "\001(\003\022\027\n\017sessionExtendId\030\002 \001(\t\022\023\n\013sessionT" +
+      "ype\030\003 \001(\005\022\023\n\013sessionInfo\030\004 \001(\t\022\023\n\013sessio" +
+      "nName\030\005 \001(\t\022\024\n\014sessionImage\030\006 \001(\t\022\025\n\rses" +
+      "sionOffset\030\007 \001(\t\022\024\n\014sessionStamp\030\010 \001(\003\022\031" +
+      "\n\021sessionCreateDate\030\t \001(\t\022\031\n\021sessionCrea" +
+      "teUser\030\n \001(\t\022\020\n\010isDelete\030\013 \001(\005\022\022\n\ndelete" +
+      "Date\030\014 \001(\t\022\r\n\005users\030\r \001(\t\"\310\005\n\007Message\022\021\n" +
+      "\tmessageId\030\001 \001(\t\022\030\n\020messageSessionId\030\002 \001" +
+      "(\003\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n\024messag" +
+      "eSessionOffset\030\004 \001(\003\022\032\n\022messageTableOffs" +
+      "et\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005\022\025\n\rmessage" +
+      "SendId\030\007 \001(\003\022\033\n\023messageSendExtendId\030\010 \001(" +
+      "\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036\n\026messageRe" +
+      "ceiveExtendId\030\n \001(\t\022\026\n\016messageContent\030\013 " +
+      "\001(\t\022\030\n\020messageSendState\030\014 \001(\005\022\030\n\020message" +
+      "ReadState\030\r \001(\005\022\027\n\017messagePinState\030\016 \001(\005" +
+      "\022\031\n\021messageReplyMsgId\030\017 \001(\t\022\033\n\023messageRe" +
+      "plyMsgType\030\020 \001(\005\022\036\n\026messageReplyMsgConte" +
+      "nt\030\021 \001(\t\022\032\n\022messageReplyUserId\030\022 \001(\t\022\033\n\023" +
+      "messageForwardTitle\030\023 \001(\t\022\033\n\023messageReca" +
+      "llUserId\030\024 \001(\t\022\030\n\020messageAtUserIds\030\025 \001(\t" +
+      "\022\032\n\022messageReadUserIds\030\026 \001(\t\022\034\n\024messageD" +
+      "eleteUserIds\030\027 \001(\t\022\023\n\013messageDate\030\030 \001(\t\022" +
+      "\025\n\rmessageSecret\030\031 \001(\t\022\020\n\010isDelete\030\032 \001(\005" +
+      "\022\022\n\ndeleteDate\030\033 \001(\t\"\274\001\n\005Route\022\016\n\006userID" +
+      "\030\001 \001(\003\022\022\n\ndevicePlat\030\002 \001(\t\022\020\n\010deviceId\030\003" +
+      " \001(\t\022\020\n\010pushType\030\004 \001(\005\022\020\n\010pushPlat\030\005 \001(\t" +
+      "\022\016\n\006pushId\030\006 \001(\t\022\024\n\014pushLanguage\030\007 \001(\t\022\023" +
+      "\n\013pushPrivacy\030\010 \001(\005\022\020\n\010pushMute\030\t \001(\005\022\014\n" +
+      "\004time\030\n \001(\t\"I\n\013FlappyQueue\022\014\n\004type\030\001 \001(\005" +
+      "\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(\0132\010.M" +
+      "essageb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -15282,54 +16284,60 @@ public final class Flappy {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_FlappyRequest_descriptor,
         new String[] { "Type", "Msg", "Login", "Update", "Receipt", });
-    internal_static_FlappyResponse_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_FlappyResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_FlappyResponse_descriptor,
-        new String[] { "Type", "Msg", "Sessions", "Update", });
     internal_static_ReqLogin_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(1);
     internal_static_ReqLogin_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ReqLogin_descriptor,
         new String[] { "UserID", "DevicePlat", "DeviceId", "Latest", "Secret", });
     internal_static_ReqUpdate_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(2);
     internal_static_ReqUpdate_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ReqUpdate_descriptor,
         new String[] { "UpdateType", "UpdateID", });
     internal_static_ReqReceipt_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_ReqReceipt_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_ReqReceipt_descriptor,
         new String[] { "ReceiptType", "ReceiptID", });
-    internal_static_Session_descriptor =
+    internal_static_FlappyResponse_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_FlappyResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_FlappyResponse_descriptor,
+        new String[] { "Type", "Msg", "Sessions", "Update", });
+    internal_static_ResponseUpdate_descriptor =
       getDescriptor().getMessageTypes().get(5);
+    internal_static_ResponseUpdate_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_ResponseUpdate_descriptor,
+        new String[] { "ResponseType", "ResponseID", });
+    internal_static_Session_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_Session_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_Session_descriptor,
         new String[] { "SessionId", "SessionExtendId", "SessionType", "SessionInfo", "SessionName", "SessionImage", "SessionOffset", "SessionStamp", "SessionCreateDate", "SessionCreateUser", "IsDelete", "DeleteDate", "Users", });
     internal_static_Message_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_Message_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_Message_descriptor,
-        new String[] { "MessageId", "MessageSessionId", "MessageSessionType", "MessageSessionOffset", "MessageTableOffset", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessageSecret", "MessageDate", "MessageReplyMsgId", "MessageReplyMsgType", "MessageReplyMsgContent", "MessageReplyUserId", "MessageRecallUserId", "MessageAtUserIds", "MessageReadUserIds", "MessageDeleteUserIds", "IsDelete", "DeleteDate", });
-    internal_static_FlappyKafka_descriptor =
-      getDescriptor().getMessageTypes().get(7);
-    internal_static_FlappyKafka_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_FlappyKafka_descriptor,
-        new String[] { "Type", "Route", "Msg", });
+        new String[] { "MessageId", "MessageSessionId", "MessageSessionType", "MessageSessionOffset", "MessageTableOffset", "MessageType", "MessageSendId", "MessageSendExtendId", "MessageReceiveId", "MessageReceiveExtendId", "MessageContent", "MessageSendState", "MessageReadState", "MessagePinState", "MessageReplyMsgId", "MessageReplyMsgType", "MessageReplyMsgContent", "MessageReplyUserId", "MessageForwardTitle", "MessageRecallUserId", "MessageAtUserIds", "MessageReadUserIds", "MessageDeleteUserIds", "MessageDate", "MessageSecret", "IsDelete", "DeleteDate", });
     internal_static_Route_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_Route_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_Route_descriptor,
         new String[] { "UserID", "DevicePlat", "DeviceId", "PushType", "PushPlat", "PushId", "PushLanguage", "PushPrivacy", "PushMute", "Time", });
+    internal_static_FlappyQueue_descriptor =
+      getDescriptor().getMessageTypes().get(9);
+    internal_static_FlappyQueue_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_FlappyQueue_descriptor,
+        new String[] { "Type", "Route", "Msg", });
     descriptor.resolveAllFeaturesImmutable();
   }
 

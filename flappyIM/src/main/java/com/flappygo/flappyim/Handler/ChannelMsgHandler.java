@@ -3,7 +3,6 @@ package com.flappygo.flappyim.Handler;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
-import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
 import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
@@ -15,27 +14,20 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-
 import io.netty.channel.SimpleChannelInboundHandler;
-
 import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.NettyAttrTool;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
-
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-
 import com.flappygo.flappyim.Tools.StringTool;
-
+import com.flappygo.flappyim.FlappyImService;
 import io.netty.channel.ChannelFuture;
-
 import java.util.ArrayList;
-
 import android.os.Message;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -409,7 +401,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 }
             }
             //移除正在更新
-            updatingIdLists.remove(response.getUpdate().getUpdateID());
+            updatingIdLists.remove(response.getUpdate().getResponseID());
         }
     }
 
