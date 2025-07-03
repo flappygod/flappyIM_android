@@ -186,21 +186,23 @@ public class Database {
             putIfNotNull(values, "messageSecret", chatMessage.getMessageSecret());
             putIfNotNull(values, "messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             putIfNotNull(values, "deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
-            values.put("messageInsertUser", user.getUserExtendId());
-            values.put("isDelete", chatMessage.getIsDelete());
 
-            values.put("messageReplyMsgId", chatMessage.getMessageReplyMsgId());
-            values.put("messageReplyMsgType", chatMessage.getMessageReplyMsgType());
-            values.put("messageReplyUserId", chatMessage.getMessageReplyUserId());
-            values.put("messageReplyMsgContent", chatMessage.getMessageReplyMsgContent());
+            putIfNotNull(values, "messageReplyMsgId", chatMessage.getMessageReplyMsgId());
+            putIfNotNull(values, "messageReplyMsgType", chatMessage.getMessageReplyMsgType());
+            putIfNotNull(values, "messageReplyUserId", chatMessage.getMessageReplyUserId());
+            putIfNotNull(values, "messageReplyMsgContent", chatMessage.getMessageReplyMsgContent());
 
-            values.put("messageForwardTitle", chatMessage.getMessageForwardTitle());
-            values.put("messageRecallUserId", chatMessage.getMessageRecallUserId());
-            values.put("messageAtUserIds", chatMessage.getMessageAtUserIds());
-            values.put("messageReadUserIds", chatMessage.getMessageReadUserIds());
-            values.put("messageDeleteUserIds", chatMessage.getMessageDeleteUserIds());
+            putIfNotNull(values, "messageForwardTitle", chatMessage.getMessageForwardTitle());
+            putIfNotNull(values, "messageRecallUserId", chatMessage.getMessageRecallUserId());
+            putIfNotNull(values, "messageAtUserIds", chatMessage.getMessageAtUserIds());
+            putIfNotNull(values, "messageReadUserIds", chatMessage.getMessageReadUserIds());
+            putIfNotNull(values, "messageDeleteUserIds", chatMessage.getMessageDeleteUserIds());
 
             ChatMessage formerMsg = getMessageById(chatMessage.getMessageId());
+
+            ///用户
+            values.put("messageInsertUser", user.getUserExtendId());
+            values.put("isDelete", chatMessage.getIsDelete());
             values.put("messageStamp", formerMsg != null ?
                     Long.toString(formerMsg.getMessageStamp()) :
                     Long.toString(System.currentTimeMillis()));
