@@ -244,27 +244,25 @@ class DoubleTypeAdapter extends TypeAdapter<Double> {
     }
 }
 
-///字符串
 class StringTypeAdapter extends TypeAdapter<String> {
 
     @Override
     public void write(JsonWriter out, String value) throws IOException {
-        //自定义序列化逻辑
+        // 自定义序列化逻辑
         if (value == null) {
             out.nullValue();
         } else {
-            //直接写入字符串值，不加引号
-            out.jsonValue(value);
+            out.value(value);
         }
     }
 
     @Override
     public String read(JsonReader in) throws IOException {
         //自定义反序列化逻辑
-        if (in.peek() == null) {
+        if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
             return null;
         }
-        //读取 JSON 中的字符串值
         return in.nextString();
     }
 }
