@@ -26,7 +26,6 @@ public class GsonTool {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Integer.class, new IntegerTypeAdapter())
             .registerTypeAdapter(Double.class, new DoubleTypeAdapter())
-            .registerTypeAdapter(String.class, new StringTypeAdapter())
             .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
 
@@ -138,6 +137,9 @@ public class GsonTool {
         if (t == null) {
             return null;
         }
+        if(t instanceof String){
+            return (String) t;
+        }
         return gson.toJson(t);
     }
 
@@ -241,28 +243,5 @@ class DoubleTypeAdapter extends TypeAdapter<Double> {
             }
         }
         return in.nextDouble();
-    }
-}
-
-class StringTypeAdapter extends TypeAdapter<String> {
-
-    @Override
-    public void write(JsonWriter out, String value) throws IOException {
-        // 自定义序列化逻辑
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value);
-        }
-    }
-
-    @Override
-    public String read(JsonReader in) throws IOException {
-        //自定义反序列化逻辑
-        if (in.peek() == JsonToken.NULL) {
-            in.nextNull();
-            return null;
-        }
-        return in.nextString();
     }
 }
