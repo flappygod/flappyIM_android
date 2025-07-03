@@ -117,6 +117,7 @@ public class ChatMessage {
         this.messageContent = cursor.getString(cursor.getColumnIndex("messageContent"));
         this.messageSendState = cursor.getInt(cursor.getColumnIndex("messageSendState"));
         this.messageReadState = cursor.getInt(cursor.getColumnIndex("messageReadState"));
+        this.messagePinState = cursor.getInt(cursor.getColumnIndex("messagePinState"));
         this.messageSecret = cursor.getString(cursor.getColumnIndex("messageSecret"));
         this.messageStamp = cursor.getLong(cursor.getColumnIndex("messageStamp"));
         this.messageDate = TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("messageDate")));
@@ -125,6 +126,7 @@ public class ChatMessage {
         this.messageReplyMsgType = cursor.getInt(cursor.getColumnIndex("messageReplyMsgType"));
         this.messageReplyMsgContent = cursor.getString(cursor.getColumnIndex("messageReplyMsgContent"));
         this.messageReplyUserId = cursor.getString(cursor.getColumnIndex("messageReplyUserId"));
+        this.messageForwardTitle = cursor.getString(cursor.getColumnIndex("messageForwardTitle"));
         this.messageRecallUserId = cursor.getString(cursor.getColumnIndex("messageRecallUserId"));
         this.messageAtUserIds = cursor.getString(cursor.getColumnIndex("messageAtUserIds"));
         this.messageReadUserIds = cursor.getString(cursor.getColumnIndex("messageReadUserIds"));
@@ -159,6 +161,8 @@ public class ChatMessage {
 
     private int messageReadState;
 
+    private int messagePinState;
+
     private String messageSecret;
 
     private Date messageDate;
@@ -172,6 +176,8 @@ public class ChatMessage {
     private String messageReplyMsgContent;
 
     private String messageReplyUserId;
+
+    private String messageForwardTitle;
 
     private String messageRecallUserId;
 
@@ -394,6 +400,21 @@ public class ChatMessage {
         this.messageStamp = (messageStamp != null) ? messageStamp : 0L;
     }
 
+    public Integer getMessagePinState() {
+        return messagePinState;
+    }
+
+    public void setMessagePinState(Integer messagePinState) {
+        this.messagePinState = messagePinState;
+    }
+
+    public String getMessageForwardTitle() {
+        return messageForwardTitle;
+    }
+
+    public void setMessageForwardTitle(String messageForwardTitle) {
+        this.messageForwardTitle = messageForwardTitle;
+    }
 
     /******
      * 设置系统消息
@@ -621,12 +642,15 @@ public class ChatMessage {
         messageContent = msg.getMessageContent();
         messageSendState = msg.getMessageSendState();
         messageReadState = msg.getMessageReadState();
+        messagePinState = msg.getMessagePinState();
 
         isDelete = msg.getIsDelete();
 
         messageReplyMsgId = msg.getMessageReplyMsgId();
         messageReplyMsgType = msg.getMessageReplyMsgType();
         messageReplyUserId = msg.getMessageReplyUserId();
+
+        messageForwardTitle = msg.getMessageForwardTitle();
 
         messageRecallUserId = msg.getMessageRecallUserId();
         messageAtUserIds = msg.getMessageAtUserIds();
@@ -686,24 +710,27 @@ public class ChatMessage {
             msgBuilder.setMessageSendState(getMessageSendState());
         if (getMessageReadState() != null)
             msgBuilder.setMessageReadState(getMessageReadState());
-        if (getMessageDate() != null)
-            msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
-        if (getIsDelete() != null)
-            msgBuilder.setIsDelete(getIsDelete());
+        if (getMessagePinState() != null)
+            msgBuilder.setMessagePinState(getMessagePinState());
+
 
         //用户
         if (getMessageReplyMsgId() != null)
             msgBuilder.setMessageReplyMsgId(getMessageReplyMsgId());
         if (getMessageReplyMsgType() != null)
             msgBuilder.setMessageReplyMsgType(getMessageReplyMsgType());
-        if (getMessageReplyMsgContent() != null)
-            msgBuilder.setMessageReplyMsgContent(getMessageReplyMsgContent());
         if (getMessageReplyUserId() != null)
             msgBuilder.setMessageReplyUserId(getMessageReplyUserId());
 
-        //Recall用户ID
+        //转发
+        if (getMessageForwardTitle() != null)
+            msgBuilder.setMessageForwardTitle(getMessageForwardTitle());
+
+        //撤回
         if (getMessageRecallUserId() != null)
             msgBuilder.setMessageRecallUserId(getMessageRecallUserId());
+
+        //AT/READ/DELETE
         if (getMessageAtUserIds() != null)
             msgBuilder.setMessageAtUserIds(getMessageAtUserIds());
         if (getMessageReadUserIds() != null)
@@ -712,6 +739,10 @@ public class ChatMessage {
             msgBuilder.setMessageDeleteUserIds(getMessageDeleteUserIds());
 
         ///删除的日期
+        if (getMessageDate() != null)
+            msgBuilder.setMessageDate(TimeTool.dateToStr(getMessageDate()));
+        if (getIsDelete() != null)
+            msgBuilder.setIsDelete(getIsDelete());
         if (getDeleteDate() != null)
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 

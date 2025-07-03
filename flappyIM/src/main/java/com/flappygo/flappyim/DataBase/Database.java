@@ -182,6 +182,7 @@ public class Database {
             putIfNotNull(values, "messageContent", chatMessage.getMessageContent());
             putIfNotNull(values, "messageSendState", chatMessage.getMessageSendState());
             putIfNotNull(values, "messageReadState", chatMessage.getMessageReadState());
+            putIfNotNull(values, "messagePinState", chatMessage.getMessagePinState());
             putIfNotNull(values, "messageSecret", chatMessage.getMessageSecret());
             putIfNotNull(values, "messageDate", TimeTool.dateToStr(chatMessage.getMessageDate()));
             putIfNotNull(values, "deleteDate", TimeTool.dateToStr(chatMessage.getDeleteDate()));
@@ -190,8 +191,10 @@ public class Database {
 
             values.put("messageReplyMsgId", chatMessage.getMessageReplyMsgId());
             values.put("messageReplyMsgType", chatMessage.getMessageReplyMsgType());
-            values.put("messageReplyMsgContent", chatMessage.getMessageReplyMsgContent());
             values.put("messageReplyUserId", chatMessage.getMessageReplyUserId());
+            values.put("messageReplyMsgContent", chatMessage.getMessageReplyMsgContent());
+
+            values.put("messageForwardTitle", chatMessage.getMessageForwardTitle());
             values.put("messageRecallUserId", chatMessage.getMessageRecallUserId());
             values.put("messageAtUserIds", chatMessage.getMessageAtUserIds());
             values.put("messageReadUserIds", chatMessage.getMessageReadUserIds());

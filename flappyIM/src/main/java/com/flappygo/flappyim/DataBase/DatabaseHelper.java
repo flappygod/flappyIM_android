@@ -37,6 +37,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "messageSendState" + " integer," +
             //是否已读
             "messageReadState" + " integer," +
+            //是否置顶
+            "messagePinState" + " integer," +
             //消息发送秘钥
             "messageSecret" + " varchar," +
             //是否被删除
@@ -51,6 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "messageReplyMsgContent" + " varchar," +
             //回复的用户
             "messageReplyUserId" + " varchar," +
+            //转发标题
+            "messageForwardTitle" + " varchar," +
             //撤回的用户
             "messageRecallUserId" + " varchar," +
             //AT的用户
