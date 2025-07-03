@@ -26,6 +26,7 @@ public class GsonTool {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Integer.class, new IntegerTypeAdapter())
             .registerTypeAdapter(Double.class, new DoubleTypeAdapter())
+            .registerTypeAdapter(String.class, new StringTypeAdapter())
             .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
 
@@ -187,7 +188,7 @@ public class GsonTool {
     }
 }
 
-
+///int类型
 class IntegerTypeAdapter extends TypeAdapter<Integer> {
     @Override
     public void write(JsonWriter out, Integer value) throws IOException {
@@ -215,6 +216,7 @@ class IntegerTypeAdapter extends TypeAdapter<Integer> {
     }
 }
 
+///爽精度类型
 class DoubleTypeAdapter extends TypeAdapter<Double> {
     @Override
     public void write(JsonWriter out, Double value) throws IOException {
@@ -239,5 +241,30 @@ class DoubleTypeAdapter extends TypeAdapter<Double> {
             }
         }
         return in.nextDouble();
+    }
+}
+
+///字符串
+class StringTypeAdapter extends TypeAdapter<String> {
+
+    @Override
+    public void write(JsonWriter out, String value) throws IOException {
+        //自定义序列化逻辑
+        if (value == null) {
+            out.nullValue();
+        } else {
+            //直接写入字符串值，不加引号
+            out.jsonValue(value);
+        }
+    }
+
+    @Override
+    public String read(JsonReader in) throws IOException {
+        //自定义反序列化逻辑
+        if (in.peek() == null) {
+            return null;
+        }
+        //读取 JSON 中的字符串值
+        return in.nextString();
     }
 }
