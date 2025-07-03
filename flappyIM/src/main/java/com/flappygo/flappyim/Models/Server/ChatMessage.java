@@ -766,16 +766,21 @@ public class ChatMessage {
             msgBuilder.setDeleteDate(TimeTool.dateToStr(getDeleteDate()));
 
         //生成临时秘钥,并加密内容
-        msgBuilder.setMessageContent(
-                AESTool.EncryptECBNoThrow(getMessageContent(), getMessageSecret())
-        );
-        msgBuilder.setMessageReplyMsgContent(
-                AESTool.EncryptECBNoThrow(getMessageReplyMsgContent(), getMessageSecret())
-        );
-        msgBuilder.setMessageSecret(
-                AESTool.EncryptECBNoThrow(getMessageSecret(), channelSecret)
-        );
-
+        if (getMessageContent() != null) {
+            msgBuilder.setMessageContent(
+                    AESTool.EncryptECBNoThrow(getMessageContent(), getMessageSecret())
+            );
+        }
+        if (getMessageReplyMsgContent() != null) {
+            msgBuilder.setMessageReplyMsgContent(
+                    AESTool.EncryptECBNoThrow(getMessageReplyMsgContent(), getMessageSecret())
+            );
+        }
+        if (getMessageSecret() != null) {
+            msgBuilder.setMessageSecret(
+                    AESTool.EncryptECBNoThrow(getMessageSecret(), channelSecret)
+            );
+        }
         return msgBuilder.build();
     }
 
