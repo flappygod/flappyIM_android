@@ -57,8 +57,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //检查是否是active状态的
     public volatile boolean isActive = false;
 
-    //秘钥
-    private final String secret;
+    //通道秘钥
+    private final String channelSecret;
 
     //回调
     public ChannelMsgHandler(HandlerLogin handler, NettyThreadListener deadCallback, ChatUser user) {
@@ -71,7 +71,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //用户数据
         this.user = user;
         //秘钥
-        this.secret = IDGenerateTool.getRandomStr(16);
+        this.channelSecret = IDGenerateTool.getRandomStr(16);
     }
 
 
@@ -256,7 +256,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //消息转换为我们的message
             List<ChatMessage> receiveMessageList = new ArrayList<>();
             for (int s = 0; s < response.getMsgCount(); s++) {
-                ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), secret);
+                ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), channelSecret);
                 receiveMessageList.add(chatMessage);
             }
 
@@ -349,7 +349,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         List<ChatMessage> receiveMessageList = new ArrayList<>();
         for (int s = 0; s < response.getMsgCount(); s++) {
             //得到真正的消息对象
-            ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), secret);
+            ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), channelSecret);
             //消息到达后的状态改变
             handleMessageSendReadState(chatMessage);
             //插入消息
@@ -607,11 +607,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //如果是空
         if (StringTool.isEmpty(DataManager.getInstance().getRSAPublicKey())) {
-            loginInfoBuilder.setSecret(this.secret);
+            loginInfoBuilder.setSecret(this.channelSecret);
         } else {
             loginInfoBuilder.setSecret(RSATool.encryptWithPublicKey(
                     DataManager.getInstance().getRSAPublicKey(),
-                    this.secret
+                    this.channelSecret
             ));
         }
 
@@ -665,7 +665,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     //消息创建
                     Flappy.Message message = chatMessage.toProtocMessage(
                             Flappy.Message.newBuilder(),
-                            secret
+                            channelSecret
                     );
                     Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
                             .setMsg(message)
