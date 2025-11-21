@@ -155,15 +155,6 @@ public class FlappyChatSession extends FlappyBaseSession {
         listenerList.remove(messageListener);
     }
 
-    /******
-     * 发送文本消息
-     * @param text  文本消息
-     * @param callback 回调
-     * @return 消息
-     */
-    public ChatMessage sendText(String text, FlappySendCallback<ChatMessage> callback) {
-        return sendReplyText(text, null, callback);
-    }
 
     /******
      * 发送文本消息
@@ -172,7 +163,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendReplyText(String text, ChatMessage replyMsg, FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendText(String text,
+                                ChatMessage replyMsg,
+                                FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -212,7 +205,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage sendLocalImage(String path, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalImage(String path,
+                                      ChatMessage replyMsg,
+                                      final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -250,6 +245,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatImage(chatImage);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //上传图片并发送信息
         uploadImageAndSend(msg, callback);
         //send image
@@ -263,7 +265,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendImage(ChatImage image, FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendImage(ChatImage image,
+                                 ChatMessage replyMsg,
+                                 FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -284,6 +288,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatImage(image);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -295,7 +306,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocalVoice(String path, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVoice(String path,
+                                      ChatMessage replyMsg,
+                                      final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -336,6 +349,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVoice(chatVoice);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //上传并发送
         uploadVoiceAndSend(msg, callback);
         //返回消息体
@@ -348,7 +368,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage sendVoice(ChatVoice chatVoice, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendVoice(ChatVoice chatVoice,
+                                 ChatMessage replyMsg,
+                                 final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -369,6 +391,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVoice(chatVoice);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -381,7 +410,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocation(ChatLocation location, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocation(ChatLocation location,
+                                    ChatMessage replyMsg,
+                                    final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -402,6 +433,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatLocation(location);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -413,7 +451,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocalVideo(String path, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalVideo(String path,
+                                      ChatMessage replyMsg,
+                                      final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -454,6 +494,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVideo(chatVideo);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //上传并发送
         uploadVideoAndSend(msg, callback);
         //返回消息体
@@ -466,7 +513,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 消息
      */
-    public ChatMessage sendVideo(ChatVideo chatVideo, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendVideo(ChatVideo chatVideo,
+                                 ChatMessage replyMsg,
+                                 final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -487,6 +536,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatVideo(chatVideo);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //上传并发送
         sendMessage(msg, callback);
         //返回消息体
@@ -501,7 +557,10 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendLocalFile(String path, String name, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendLocalFile(String path,
+                                     String name,
+                                     ChatMessage replyMsg,
+                                     final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -533,6 +592,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatFile(chatFile);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //上传并发送
         uploadFileAndSend(msg, callback);
         //返回消息体
@@ -545,7 +611,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendFile(ChatFile chatFile, final FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendFile(ChatFile chatFile,
+                                ChatMessage replyMsg,
+                                final FlappySendCallback<ChatMessage> callback) {
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -566,6 +634,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatFile(chatFile);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //发送消息
         sendMessage(msg, callback);
         return msg;
@@ -577,7 +652,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback 回调
      * @return 消息
      */
-    public ChatMessage sendCustom(String text, FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage sendCustom(String text,
+                                  ChatMessage replyMsg,
+                                  FlappySendCallback<ChatMessage> callback) {
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -598,6 +675,13 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setChatCustom(text);
         //时间
         msg.setMessageDate(new Date());
+        //回复的消息
+        if (replyMsg != null) {
+            msg.setMessageReplyMsgId(replyMsg.getMessageId());
+            msg.setMessageReplyMsgType(replyMsg.getMessageType());
+            msg.setMessageReplyMsgContent(replyMsg.getMessageContent());
+            msg.setMessageReplyUserId(replyMsg.getMessageSendId());
+        }
         //发送消息
         sendMessage(msg, callback);
         //返回消息
@@ -606,11 +690,51 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
+     * 转发消息
+     * @param rewardMsg 转发的消息
+     * @param callback  回调
+     * @return 消息
+     */
+    public ChatMessage sendForwardMessage(ChatMessage rewardMsg,
+                                          FlappySendCallback<ChatMessage> callback) {
+        //重新生成一个消息的ID
+        rewardMsg.setMessageId(IDGenerateTool.generateCommonID());
+        //设置
+        rewardMsg.setMessageSessionId(session.getSessionId());
+        //类型
+        rewardMsg.setMessageSessionType(session.getSessionType());
+        //发送者
+        rewardMsg.setMessageSendId(DataManager.getInstance().getLoginUser().getUserId());
+        //发送者
+        rewardMsg.setMessageSendExtendId(DataManager.getInstance().getLoginUser().getUserExtendId());
+        //接收者
+        rewardMsg.setMessageReceiveId(getPeerID());
+        //接收者
+        rewardMsg.setMessageReceiveExtendId(getPeerExtendID());
+        //时间
+        rewardMsg.setMessageDate(new Date());
+        //转发title
+        rewardMsg.setMessageForwardTitle("forward");
+        //回复的消息
+        rewardMsg.setMessageReplyMsgId(null);
+        //消息类型
+        rewardMsg.setMessageReplyMsgType(null);
+        //消息内容
+        rewardMsg.setMessageReplyMsgContent(null);
+        //消息用户ID
+        rewardMsg.setMessageReplyUserId(null);
+        //发送消息
+        sendMessage(rewardMsg, callback);
+        //返回消息
+        return rewardMsg;
+    }
+
+
+    /******
      * 设置消息已读sequence
      * @param  callback 回调
      * @return 消息
      */
-
     public ChatMessage readSessionMessage(FlappySendCallback<ChatMessage> callback) {
 
         //未读为零
