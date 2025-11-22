@@ -805,6 +805,16 @@ public class FlappyChatSession extends FlappyBaseSession {
         rewardMsg.setMessageReplyMsgContent(null);
         //消息用户ID
         rewardMsg.setMessageReplyUserId(null);
+
+        //撤回
+        rewardMsg.setMessageRecallUserId(null);
+        //AT的用户ID
+        rewardMsg.setMessageAtUserIds(null);
+        //已读的用户ID
+        rewardMsg.setMessageReadUserIds(null);
+        //删除的用户ID
+        rewardMsg.setMessageDeleteUserIds(null);
+
         //发送消息
         sendMessage(rewardMsg, callback);
         //返回消息
