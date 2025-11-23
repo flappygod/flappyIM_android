@@ -1,6 +1,8 @@
 package com.flappygo.flappyim.ApiServer.Tools;
 
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -13,7 +15,10 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /******
@@ -26,6 +31,7 @@ public class GsonTool {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Integer.class, new IntegerTypeAdapter())
             .registerTypeAdapter(Double.class, new DoubleTypeAdapter())
+            .registerTypeAdapter(Date.class, new DateTypeAdapter())
             .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
 
@@ -187,6 +193,39 @@ public class GsonTool {
      */
     public static <B> B modelA2B(Object modelA, Class<B> bClass) {
         return gson.fromJson(gson.toJson(modelA), bClass);
+    }
+}
+
+///日期类型
+class DateTypeAdapter extends TypeAdapter<Date> {
+    @SuppressLint("SimpleDateFormat")
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    @Override
+    public void write(JsonWriter out, Date value) throws IOException {
+        if (value == null) {
+            out.nullValue();
+        } else {
+            out.value(dateFormat.format(value));
+        }
+    }
+
+    @Override
+    public Date read(JsonReader in) throws IOException {
+        if (in.peek() == JsonToken.NULL) {
+            in.nextNull();
+            return null;
+        }
+        String dateStr = in.nextString();
+        // 返回 null 表示空日期
+        if (dateStr.isEmpty()) {
+            return null;
+        }
+        try {
+            return dateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            throw new IOException("Failed to parse date: " + dateStr, e);
+        }
     }
 }
 
