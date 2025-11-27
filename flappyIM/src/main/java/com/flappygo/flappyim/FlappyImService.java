@@ -1375,10 +1375,11 @@ public class FlappyImService {
         if (!checkUsers(userExtendIds, callback)) {
             return;
         }
+
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("createUserId", DataManager.getInstance().getLoginUser().getUserId());
+        hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("sessionExtendId", sessionExtendId);
         hashMap.put("sessionName", sessionName);
 
