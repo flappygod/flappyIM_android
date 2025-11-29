@@ -112,6 +112,11 @@ public class FlappyConfig {
         return serverUrl + "/api/addUserToSession";
     }
 
+    //向会话中添加人员
+    public String addUsersToSession() {
+        return serverUrl + "/api/addUsersToSession";
+    }
+
     //向会话中移除人员
     public String delUserInSession() {
         return serverUrl + "/api/delUserInSession";

@@ -1744,6 +1744,56 @@ public class FlappyImService {
 
     /******
      * 向群组中添加用户
+     * @param userExtendIds    用户ID
+     * @param sessionExtendId  群组ID
+     * @param callback 回调
+     */
+    public void addUsersToSession(List<String> userExtendIds, String sessionExtendId, final FlappyIMCallback<String> callback) {
+
+        //用户未登录
+        if (checkLogin(callback)) {
+            return;
+        }
+
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
+        hashMap.put("sessionExtendId", sessionExtendId);
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUsersToSession(), hashMap, new BaseParseCallback<String>(String.class) {
+            @Override
+            protected void stateFalse(BaseApiModel<String> model, String tag) {
+                if (callback != null) {
+                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                }
+            }
+
+            @Override
+            protected void jsonError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                }
+            }
+
+
+            @Override
+            protected void netError(Exception e, String tag) {
+                if (callback != null) {
+                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                }
+            }
+
+            @Override
+            public void stateTrue(String data, String tag) {
+                if (callback != null) {
+                    callback.success(data);
+                }
+            }
+        });
+    }
+
+
+    /******
+     * 向群组中添加用户
      * @param userExtendId   用户ID
      * @param sessionExtendId  群组ID
      * @param callback 回调
