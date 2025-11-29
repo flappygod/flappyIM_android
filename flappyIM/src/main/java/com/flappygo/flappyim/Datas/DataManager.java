@@ -116,6 +116,21 @@ public class DataManager {
 
 
     /******
+     * 清空当前的用户信息，用户已经退出登录了
+     */
+    public void clearLoginUser() {
+        chatUser = null;
+        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
+                PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(KEY_FOR_USER);
+        editor.apply();
+    }
+
+
+    /******
      * 保存用户信息
      * @param setting 配置信息
      */
@@ -164,20 +179,6 @@ public class DataManager {
         return GsonTool.jsonStrToModel(setting, PushSetting.class);
     }
 
-
-    /******
-     * 清空当前的用户信息，用户已经退出登录了
-     */
-    public void clearLoginUser() {
-        chatUser = null;
-        SharedPreferences mSharedPreferences = FlappyImService.getInstance().getAppContext().getSharedPreferences(
-                PREFERENCE_NAME,
-                Context.MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(KEY_FOR_USER);
-        editor.apply();
-    }
 
 
     /******
