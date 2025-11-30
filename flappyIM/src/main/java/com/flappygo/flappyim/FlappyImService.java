@@ -1125,8 +1125,17 @@ public class FlappyImService {
                     isRunningAutoLogin = false;
                 }
             });
+
+            //如果我们自动登录的用户和当前缓存的用户正好是同一个,那么我们需要设置之前的最近同步的latest偏移量
+            if (chatUser.getUserId().equals(response.getUser().getUserId())) {
+                response.getUser().setLatest(chatUser.getLatest());
+            }
+
             //开始链接
-            FlappySocketService.getInstance().startConnect(loginReqUDID, response, new NettyThreadListener() {
+            FlappySocketService.getInstance().startConnect(
+                    loginReqUDID,
+                    response,
+                    new NettyThreadListener() {
                 //断线重连，使用http的方式，也许服务器的ip已经发生了变化
                 @Override
                 public void threadDeadRetryHttp() {

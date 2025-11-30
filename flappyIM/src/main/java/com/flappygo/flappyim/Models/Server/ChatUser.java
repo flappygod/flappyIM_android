@@ -32,7 +32,6 @@ public class ChatUser implements Serializable {
     private Date userLoginDate;
 
     /***以下参数进用于当前用户存储***/
-    /***以下参数进用于当前用户存储***/
     //最后更新的时间戳
     private String latest;
 

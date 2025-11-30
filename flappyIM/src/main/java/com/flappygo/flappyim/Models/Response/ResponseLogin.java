@@ -94,11 +94,4 @@ public class ResponseLogin implements Serializable {
         this.route = route;
     }
 
-    public List<ChatSessionData> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<ChatSessionData> sessions) {
-        this.sessions = sessions;
-    }
 }

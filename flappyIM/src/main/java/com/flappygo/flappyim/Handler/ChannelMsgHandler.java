@@ -14,20 +14,28 @@ import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+
 import io.netty.channel.SimpleChannelInboundHandler;
+
 import com.flappygo.flappyim.Tools.Secret.RSATool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.NettyAttrTool;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
+
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+
 import com.flappygo.flappyim.Tools.StringTool;
 import com.flappygo.flappyim.FlappyImService;
+
 import io.netty.channel.ChannelFuture;
+
 import java.util.ArrayList;
+
 import android.os.Message;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -253,34 +261,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //保存数据
             DataManager.getInstance().saveLoginUser(user);
 
-            //消息转换为我们的message
+            //消息转换为我们的消息体(解码)，并进行排序
             List<ChatMessage> receiveMessageList = new ArrayList<>();
             for (int s = 0; s < response.getMsgCount(); s++) {
                 ChatMessage chatMessage = new ChatMessage(response.getMsgList().get(s), channelSecret);
                 receiveMessageList.add(chatMessage);
             }
-
-            //遍历消息进行通知
-            if (handlerLogin.getLoginResponse().getSessions() != null &&
-                    !handlerLogin.getLoginResponse().getSessions().isEmpty()) {
-                //插入会话
-                Database.getInstance().insertSessions(
-                        handlerLogin.getLoginResponse().getSessions()
-                );
-                //通知会话更新
-                HandlerNotifyManager.getInstance().notifySessionReceiveList(
-                        handlerLogin.getLoginResponse().getSessions()
-                );
-
-                //如果sessions不为空代表是登录，如果是登录的情况下，所有会话是已经同步的，所以不需要过多的处理
-                for (ChatMessage msg : receiveMessageList) {
-                    if (msg.getMessageType() == MSG_TYPE_SYSTEM || msg.getMessageType() == MSG_TYPE_ACTION) {
-                        msg.setMessageReadState(1);
-                    }
-                }
-            }
-
-            //进行排序
             receiveMessageList.sort((chatMessage, t1) -> {
                 if (chatMessage.getMessageTableOffset().intValue() > t1.getMessageTableOffset().intValue()) {
                     return 1;
@@ -290,9 +276,42 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 return 0;
             });
 
+            //获取登录同步的消息列表
+            List<Flappy.Session> session = response.getSessionsList();
 
-            //会话更新了的会话
-            Set<String> updatedSessionIdList = new HashSet<>();
+            //遍历消息进行处理
+            if (!session.isEmpty()) {
+
+                //会话进行转换
+                List<ChatSessionData> chatSessionDataList = new ArrayList<>();
+                for (Flappy.Session item : session) {
+                    chatSessionDataList.add(new ChatSessionData(item));
+                }
+
+                //插入会话
+                Database.getInstance().insertSessions(
+                        chatSessionDataList
+                );
+
+                //通知会话更新
+                HandlerNotifyManager.getInstance().notifySessionReceiveList(
+                        chatSessionDataList
+                );
+
+                //存在会话更新的情况下，该会话下的所有执行类消息默认设置未已读(已处理模式)
+                for (ChatSessionData data : chatSessionDataList) {
+                    for (ChatMessage msg : receiveMessageList) {
+                        if ((msg.getMessageType() == MSG_TYPE_SYSTEM ||
+                                msg.getMessageType() == MSG_TYPE_ACTION) &&
+                                data.getSessionId().equals(msg.getMessageSessionId())) {
+                            msg.setMessageReadState(1);
+                        }
+                    }
+                }
+            }
+
+            //因为消息更新了，所以会话的最后一条消息更新了，这里需要收集处理一下
+            Set<String> notifySessionIdList = new HashSet<>();
 
             //登录的时候插入的消息必然是新收到的消息
             for (int s = 0; s < receiveMessageList.size(); s++) {
@@ -306,12 +325,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //消息发送回调
                 HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
                 //更新了的会话ID
-                updatedSessionIdList.add(chatMessage.getMessageSessionId());
+                notifySessionIdList.add(chatMessage.getMessageSessionId());
             }
 
             //更新了的列表
             List<ChatSessionData> updatedSessionList = new ArrayList<>();
-            for (String id : updatedSessionIdList) {
+            for (String id : notifySessionIdList) {
                 ChatSessionData item = Database.getInstance().getUserSessionById(id);
                 if (item != null) {
                     updatedSessionList.add(Database.getInstance().getUserSessionById(id));
@@ -512,7 +531,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         else {
             msg.setMessageSendState(ChatMessage.SEND_STATE_REACHED);
         }
-        //保留之前的已读状态
+        // 这里
+        // 如果是普通消息，那么保留之前的已读状态，
+        // 如果是action消息的话之前必然是处理过的或者没有正常插入的
         msg.setMessageReadState((former != null) ? former.getMessageReadState() : msg.getMessageReadState());
     }
 
@@ -523,7 +544,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
      */
     private void messageArrivedReceipt(ChannelHandlerContext cxt, List<ChatMessage> messageList) {
 
-        //最后一条消息做处理
+        //前面已经排序了，这里获取最后一条消息
         ChatMessage chatMessage;
         if (!messageList.isEmpty()) {
             chatMessage = messageList.get(messageList.size() - 1);
@@ -531,7 +552,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             return;
         }
 
-        //保存最近一条的偏移量
+        //获取保存的最近一条的偏移量
         ChatUser user = DataManager.getInstance().getLoginUser();
 
         //检查这个消息是不是最新的
@@ -554,7 +575,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         DataManager.getInstance().saveLoginUser(user);
 
         //不是自己，而且确实是最新的消息
-        if (!chatMessage.getMessageSendId().equals(DataManager.getInstance().getLoginUser().getUserId()) && isLatest) {
+        if (!chatMessage.getMessageSendId().equals(user.getUserId()) && isLatest) {
 
             //创建消息到达的回执
             Flappy.ReqReceipt receipt = Flappy.ReqReceipt.newBuilder()
@@ -567,7 +588,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     .setReceipt(receipt)
                     .setType(FlappyRequest.REQ_RECEIPT);
 
-            //发送回执，发送回执后，所有之前的消息都会被列为已经收到，因为端口是阻塞的
+            //发送回执，发送回执后，所有之前的消息都会被列为已经收到
             cxt.writeAndFlush(builder.build());
         }
     }
@@ -601,25 +622,23 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void sendLoginRequest(ChannelHandlerContext ctx) throws Exception {
         //创建builder
         Flappy.ReqLogin.Builder loginInfoBuilder = Flappy.ReqLogin.newBuilder()
-                .setUserID(this.user.getUserId())
+                .setUserID(user.getUserId())
                 .setDevicePlat(DataManager.getInstance().getDevicePlat())
                 .setDeviceId(DataManager.getInstance().getDeviceId());
 
         //如果是空
         if (StringTool.isEmpty(DataManager.getInstance().getRSAPublicKey())) {
-            loginInfoBuilder.setSecret(this.channelSecret);
+            loginInfoBuilder.setSecret(channelSecret);
         } else {
             loginInfoBuilder.setSecret(RSATool.encryptWithPublicKey(
                     DataManager.getInstance().getRSAPublicKey(),
-                    this.channelSecret
+                    channelSecret
             ));
         }
 
         //设置最近的消息偏移量作为请求消息数据
-        ChatUser user = DataManager.getInstance().getLoginUser();
-        if (user != null && user.getLatest() != null) {
-            loginInfoBuilder.setLatest(user.getLatest());
-        }
+        //(注意一下，如果是登录，这里必然是没有值的，如果是自动登录，这里的值已经在前面的流程中将latest赋值了)
+        loginInfoBuilder.setLatest(user.getLatest());
 
         //创建登录请求消息
         Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
