@@ -638,7 +638,9 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //设置最近的消息偏移量作为请求消息数据
         //(注意一下，如果是登录，这里必然是没有值的，如果是自动登录，这里的值已经在前面的流程中将latest赋值了)
-        loginInfoBuilder.setLatest(user.getLatest());
+        if(!StringTool.isEmpty(user.getLatest())){
+            loginInfoBuilder.setLatest(user.getLatest());
+        }
 
         //创建登录请求消息
         Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
