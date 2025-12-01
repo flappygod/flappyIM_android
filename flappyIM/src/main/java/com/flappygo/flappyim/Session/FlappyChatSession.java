@@ -967,7 +967,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback  回调
      * @return 删除会话的消息
      */
-    public ChatMessage setSessionDelete(FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage deleteSessionTemporary(FlappySendCallback<ChatMessage> callback) {
 
         //创建消息
         ChatMessage msg = new ChatMessage();
