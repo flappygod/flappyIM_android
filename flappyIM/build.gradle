@@ -6,7 +6,7 @@ android {
     defaultConfig {
         minSdkVersion 24
         versionCode 3
-        versionName "3.14.11"
+        versionName "3.15.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
