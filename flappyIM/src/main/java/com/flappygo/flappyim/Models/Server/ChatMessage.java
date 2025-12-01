@@ -56,20 +56,31 @@ public class ChatMessage {
 
 
     /***信息更新***/
-    //什么也不做
-    public final static int SYSTEM_MSG_NOTHING = 0;
-
-    //更新单条会话(所有数据)
-    public final static int SYSTEM_MSG_UPDATE_SESSION = 1;
+    //制作提醒
+    public final static int SYSTEM_MSG_NOTICE = 0;
 
     //用户信息更新(获取)
-    public final static int SYSTEM_MSG_UPDATE_MEMBER = 2;
+    public final static int SYSTEM_MSG_MEMBER_UPDATE = 1;
 
     //用户信息更新(删除)
-    public final static int SYSTEM_MSG_DELETE_MEMBER = 3;
+    public final static int SYSTEM_MSG_MEMBER_DELETE = 2;
 
     //用户信息增加(获取)
-    public final static int SYSTEM_MSG_ADD_MEMBER = 4;
+    public final static int SYSTEM_MSG_MEMBER_ADD = 3;
+
+    //更新单条会话(所有数据)
+    public final static int SYSTEM_MSG_SESSION_UPDATE = 11;
+
+    //会话Enable
+    public final static int SYSTEM_MSG_SESSION_ENABLE = 12;
+
+    //会话Disable
+    public final static int SYSTEM_MSG_SESSION_DISABLE = 13;
+
+    //完全删除会话
+    public final static int SYSTEM_MSG_SESSION_DELETE = 14;
+
+
 
 
     /***动作消息***/
@@ -91,9 +102,6 @@ public class ChatMessage {
 
     //会话删除临时
     public final static int ACTION_TYPE_SESSION_DELETE_TEMP = 6;
-
-    //会话删除全部
-    public final static int ACTION_TYPE_SESSION_DELETE_PERMANENT = 7;
 
 
     public ChatMessage() {

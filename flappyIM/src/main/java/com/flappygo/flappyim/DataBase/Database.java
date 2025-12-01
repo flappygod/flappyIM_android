@@ -1309,13 +1309,6 @@ public class Database {
                 updateSessionDeleteTemp(sessionId, userId, sessionOffset);
                 break;
             }
-            case ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT: {
-                String userId = action.getActionIds().get(0);
-                String sessionId = action.getActionIds().get(1);
-                String sessionOffset = action.getActionIds().get(2);
-                updateSessionDeletePermanent(sessionId, userId, sessionOffset);
-                break;
-            }
         }
         updateMessageReadByMsgId(chatMessage.getMessageId());
     }
@@ -1430,20 +1423,6 @@ public class Database {
         if (memberModel != null) {
             memberModel.setSessionMemberLatestDelete(StringTool.strToLong(sessionOffset));
             insertSessionMember(memberModel);
-        }
-    }
-
-    /******
-     * 更新会话用户permanent
-     * @param sessionId        会话id
-     * @param userId           用户id
-     * @param sessionOffset    是否置顶
-     */
-    private void updateSessionDeletePermanent(String sessionId, String userId, String sessionOffset) {
-        ChatSessionData session = getUserSessionById(sessionId);
-        if (session != null) {
-            session.setIsDelete(1);
-            insertSession(session);
         }
     }
 

@@ -186,56 +186,86 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //区分更新,全量更新和只更新部分用户信息
         List<ChatMessage> actionUpdateSessionAll = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionMember = new ArrayList<>();
-        List<ChatMessage> actionUpdateSessionMemberDelete = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionEnable = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionDisable = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionDelete = new ArrayList<>();
 
         //遍历消息处理
         for (ChatMessage item : latestMessages) {
             ChatSystem chatSystem = item.getChatSystem();
-            //全量更新
-            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_NOTHING) {
-                //保存消息状态数据
-                item.setMessageReadState(1);
-                Database.getInstance().insertMessage(item);
-            }
-            //全量更新
-            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_UPDATE_SESSION) {
-                actionUpdateSessionAll.add(item);
-            }
-            //用户加入是自己也全量更新
-            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_ADD_MEMBER) {
-                ChatSessionMember chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), ChatSessionMember.class);
-                if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
+
+            switch (chatSystem.getSysAction()) {
+                ///只是提示消息
+                case ChatMessage.SYSTEM_MSG_NOTICE:
+                    item.setMessageReadState(1);
+                    Database.getInstance().insertMessage(item);
+                    break;
+                ///需要会话全量更新
+                case ChatMessage.SYSTEM_MSG_SESSION_UPDATE:
                     actionUpdateSessionAll.add(item);
-                } else {
+                    break;
+                ///启用会话
+                case ChatMessage.SYSTEM_MSG_SESSION_ENABLE:
+                    actionUpdateSessionDisable.removeIf(
+                            msg -> msg.getMessageSessionId().equals(item.getMessageSessionId())
+                    );
+                    actionUpdateSessionEnable.add(item);
+                    break;
+                ///禁用会话
+                case ChatMessage.SYSTEM_MSG_SESSION_DISABLE:
+                    actionUpdateSessionEnable.removeIf(
+                            msg -> msg.getMessageSessionId().equals(item.getMessageSessionId())
+                    );
+                    actionUpdateSessionDisable.add(item);
+                    break;
+                ///直接删除会话
+                case ChatMessage.SYSTEM_MSG_SESSION_DELETE:
+                    actionUpdateSessionDelete.add(item);
+                    break;
+                ///添加用户
+                ///如果是当前用户加入会话，那么必然用户需要全量更新会话信息，否则就只需要更新用户信息
+                case ChatMessage.SYSTEM_MSG_MEMBER_ADD:
+                    ChatSessionMember addUser = GsonTool.jsonStrToModel(
+                            item.getChatSystem().getSysData(),
+                            ChatSessionMember.class
+                    );
+                    String currentUserId = DataManager.getInstance().getLoginUser().getUserId();
+                    if (addUser != null && addUser.getUserId().equals(currentUserId)) {
+                        actionUpdateSessionAll.add(item);
+                    } else {
+                        actionUpdateSessionMember.add(item);
+                    }
+                    break;
+                ///删除用户
+                case ChatMessage.SYSTEM_MSG_MEMBER_DELETE:
                     actionUpdateSessionMember.add(item);
-                }
-            }
-            //用户删除是自己删除会话
-            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_DELETE_MEMBER) {
-                ChatSessionMember chatUser = GsonTool.jsonStrToModel(item.getChatSystem().getSysData(), ChatSessionMember.class);
-                if (chatUser != null && chatUser.getUserId().equals(DataManager.getInstance().getLoginUser().getUserId())) {
-                    actionUpdateSessionMemberDelete.add(item);
-                } else {
+                    break;
+                ///更新用户
+                case ChatMessage.SYSTEM_MSG_MEMBER_UPDATE:
                     actionUpdateSessionMember.add(item);
-                }
-            }
-            //用户加入/删除增量更新
-            if (chatSystem.getSysAction() == ChatMessage.SYSTEM_MSG_UPDATE_MEMBER) {
-                actionUpdateSessionMember.add(item);
+                    break;
             }
         }
 
-        //全量更新
+        //会话全量更新
         if (!actionUpdateSessionAll.isEmpty()) {
             updateSessionAll(ctx, actionUpdateSessionAll);
         }
-        //用户更新
+        //会话用户更新
         if (!actionUpdateSessionMember.isEmpty()) {
             updateSessionMemberUpdate(actionUpdateSessionMember);
         }
-        //用户删除
-        if (!actionUpdateSessionMemberDelete.isEmpty()) {
-            updateSessionDeleteSelf(actionUpdateSessionMemberDelete);
+        //会话(启用)
+        if (!actionUpdateSessionEnable.isEmpty()) {
+            updateSessionEnable(actionUpdateSessionEnable);
+        }
+        //会话(禁用)
+        if (!actionUpdateSessionDisable.isEmpty()) {
+            updateSessionDisable(actionUpdateSessionDisable);
+        }
+        //会话(删除)
+        if (!actionUpdateSessionDelete.isEmpty()) {
+            updateSessionDelete(actionUpdateSessionDelete);
         }
     }
 
@@ -485,19 +515,50 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
     /******
-     * 用户的会话被删除
+     * 会话被启用
      * @param messages  消息
      */
-    private void updateSessionDeleteSelf(List<ChatMessage> messages) {
+    private void updateSessionEnable(List<ChatMessage> messages) {
         //遍历请求处理
         for (ChatMessage message : messages) {
 
-            //数据进入数据库
-            ChatSessionMember chatUser = GsonTool.jsonStrToModel(
-                    message.getChatSystem().getSysData(),
-                    ChatSessionMember.class
-            );
-            Database.getInstance().insertSessionMember(chatUser);
+            //保存消息状态数据
+            message.setMessageReadState(1);
+            Database.getInstance().insertMessage(message);
+
+            //获取会话信息
+            ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
+            sessionModel.setIsEnable(1);
+            HandlerNotifyManager.getInstance().notifySessionDelete(sessionModel);
+        }
+    }
+
+    /******
+     * 会话被禁用
+     * @param messages  消息
+     */
+    private void updateSessionDisable(List<ChatMessage> messages) {
+        //遍历请求处理
+        for (ChatMessage message : messages) {
+
+            //保存消息状态数据
+            message.setMessageReadState(1);
+            Database.getInstance().insertMessage(message);
+
+            //获取会话信息
+            ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
+            sessionModel.setIsEnable(0);
+            HandlerNotifyManager.getInstance().notifySessionDelete(sessionModel);
+        }
+    }
+
+    /******
+     * 会话被删除
+     * @param messages  消息
+     */
+    private void updateSessionDelete(List<ChatMessage> messages) {
+        //遍历请求处理
+        for (ChatMessage message : messages) {
 
             //保存消息状态数据
             message.setMessageReadState(1);
@@ -638,7 +699,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //设置最近的消息偏移量作为请求消息数据
         //(注意一下，如果是登录，这里必然是没有值的，如果是自动登录，这里的值已经在前面的流程中将latest赋值了)
-        if(!StringTool.isEmpty(user.getLatest())){
+        if (!StringTool.isEmpty(user.getLatest())) {
             loginInfoBuilder.setLatest(user.getLatest());
         }
 

@@ -963,12 +963,11 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
-     * 删除会话，删除后
-     * @param permanent 永久删除
+     * 临时删除会话
      * @param callback  回调
      * @return 删除会话的消息
      */
-    public ChatMessage setSessionDelete(boolean permanent, FlappySendCallback<ChatMessage> callback) {
+    public ChatMessage setSessionDelete(FlappySendCallback<ChatMessage> callback) {
 
         //创建消息
         ChatMessage msg = new ChatMessage();
@@ -994,7 +993,7 @@ public class FlappyChatSession extends FlappyBaseSession {
 
         //读取消息的action消息
         ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(permanent ? ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT : ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP);
+        chatAction.setActionType(ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP);
         chatAction.setActionIds(new ArrayList<>(
                 Arrays.asList(
                         DataManager.getInstance().getLoginUser().getUserId(),

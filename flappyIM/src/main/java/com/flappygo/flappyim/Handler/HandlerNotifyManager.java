@@ -196,8 +196,7 @@ public class HandlerNotifyManager {
                 handlerSession.sendMessage(msg);
             }
             ///会话用户更新了
-            case ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP:
-            case ChatMessage.ACTION_TYPE_SESSION_DELETE_PERMANENT: {
+            case ChatMessage.ACTION_TYPE_SESSION_DELETE_TEMP: {
                 Message msg = new Message();
                 msg.what = HandlerSession.SESSION_DELETE;
                 msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
