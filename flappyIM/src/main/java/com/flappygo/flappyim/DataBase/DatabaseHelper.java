@@ -99,6 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sessionCreateDate" + " varchar," +
             //会话创建者
             "sessionCreateUser" + " varchar," +
+            //是否可用
+            "sessionEnable" + " integer," +
             //是否删除
             "sessionDeleted" + " integer," +
             //删除时间

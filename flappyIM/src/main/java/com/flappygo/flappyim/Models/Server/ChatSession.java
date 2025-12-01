@@ -32,6 +32,8 @@ public class ChatSession implements Serializable {
 
     private String sessionCreateUser;
 
+    private int isEnable;
+
     private int isDelete;
 
     private Date deleteDate;
@@ -106,6 +108,14 @@ public class ChatSession implements Serializable {
 
     public void setSessionCreateUser(String sessionCreateUser) {
         this.sessionCreateUser = sessionCreateUser == null ? null : sessionCreateUser.trim();
+    }
+
+    public int getIsEnable() {
+        return isEnable;
+    }
+
+    public void setIsEnable(int isEnable) {
+        this.isEnable = isEnable;
     }
 
     public Integer getIsDelete() {

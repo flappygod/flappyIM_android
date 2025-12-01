@@ -449,6 +449,7 @@ public class Database {
                 info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
                 info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
+                info.setIsEnable(cursor.getInt(cursor.getColumnIndex("sessionEnable")));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(info.getSessionId()));
@@ -479,6 +480,7 @@ public class Database {
             putIfNotNull(values, "sessionStamp", session.getSessionStamp());
             putIfNotNull(values, "sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
             putIfNotNull(values, "sessionCreateUser", session.getSessionCreateUser());
+            putIfNotNull(values, "sessionEnable", session.getIsEnable());
             putIfNotNull(values, "sessionDeleted", session.getIsDelete());
             putIfNotNull(values, "sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
             values.put("sessionInsertUser", user.getUserExtendId());
@@ -531,6 +533,7 @@ public class Database {
                 info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
                 info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
+                info.setIsEnable(cursor.getInt(cursor.getColumnIndex("sessionEnable")));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(sessionId));
@@ -573,6 +576,7 @@ public class Database {
                 info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
                 info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
                 info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
+                info.setIsEnable(cursor.getInt(cursor.getColumnIndex("sessionEnable")));
                 info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(info.getSessionId()));
