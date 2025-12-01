@@ -526,10 +526,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             message.setMessageReadState(1);
             Database.getInstance().insertMessage(message);
 
+            //设置启用
+            Database.getInstance().setUserSessionEnable(message.getMessageSessionId(), 1);
+
             //获取会话信息
             ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             sessionModel.setIsEnable(1);
-            HandlerNotifyManager.getInstance().notifySessionDelete(sessionModel);
+            HandlerNotifyManager.getInstance().notifySessionUpdate(sessionModel);
         }
     }
 
@@ -545,10 +548,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             message.setMessageReadState(1);
             Database.getInstance().insertMessage(message);
 
+            //设置禁用
+            Database.getInstance().setUserSessionEnable(message.getMessageSessionId(), 0);
+
             //获取会话信息
             ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
             sessionModel.setIsEnable(0);
-            HandlerNotifyManager.getInstance().notifySessionDelete(sessionModel);
+            HandlerNotifyManager.getInstance().notifySessionUpdate(sessionModel);
         }
     }
 

@@ -609,6 +609,25 @@ public class Database {
     }
 
     /******
+     * 更新用户会话是否enable
+     * @param sessionId 会话ID
+     */
+    public void setUserSessionEnable(String sessionId, int enable) {
+        executeDbOperation(chatUser -> {
+            ContentValues values = new ContentValues();
+            values.put("sessionEnable", enable);
+            db.update(
+                    DataBaseConfig.TABLE_SESSION,
+                    values,
+                    "sessionId = ? and sessionInsertUser = ?",
+                    new String[]{sessionId, chatUser.getUserExtendId()}
+            );
+            return true;
+        });
+    }
+
+
+    /******
      * 插入会话用户
      * @param member 会话用户
      */
