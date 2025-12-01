@@ -88,12 +88,14 @@ message Session{
   string sessionCreateDate = 9;
   //会话创建用户
   string sessionCreateUser = 10;
+  //是否有效
+  int32  isEnable = 11;
   //是否删除
-  int32  isDelete = 11;
+  int32  isDelete = 12;
   //删除日期
-  string deleteDate = 12;
+  string deleteDate = 13;
   //会话用户
-  string users = 13;
+  string users = 14;
 }
 
 //消息

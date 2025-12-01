@@ -31,7 +31,7 @@ allprojects {
 dependencies {
     implementation group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.protobuf:protobuf-java:4.29.2'
+    implementation 'com.google.protobuf:protobuf-java:4.33.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'androidx.core:core:1.15.0'
