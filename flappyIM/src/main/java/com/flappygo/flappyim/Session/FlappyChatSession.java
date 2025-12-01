@@ -155,11 +155,14 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 是否可以发送
      */
     private boolean checkMsgCantSend(FlappySendCallback<ChatMessage> callback) {
-        ChatSessionData currentData = Database.getInstance().getUserSessionById(
-                session.getSessionId()
+        ///获取当前的用户Id
+        String currentUserId = DataManager.getInstance().getLoginUser().getUserId();
+        ///获取当前的会话和当前的用户
+        ChatSessionData currentData = Database.getInstance().getUserSessionWithCurrentUserById(
+                session.getSessionId(),
+                currentUserId
         );
         ///用户已经离开了
-        String currentUserId = DataManager.getInstance().getLoginUser().getUserId();
         for (ChatSessionMember user : currentData.getUsers()) {
             if (user.getUserId().equals(currentUserId) && user.getIsLeave() == 1) {
                 callback.failure(

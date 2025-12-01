@@ -26,6 +26,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -498,6 +500,53 @@ public class Database {
                 }
             }
             return true;
+        });
+    }
+
+    /******
+     * 获取当前用户的会话
+     * @param sessionId  会话ID
+     * @return 会话
+     */
+    @SuppressLint("Range")
+    public ChatSessionData getUserSessionWithCurrentUserById(String sessionId,String userId) {
+        return executeDbOperation(chatUser -> {
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_SESSION,
+                    null,
+                    "sessionId=? and sessionInsertUser=? ",
+                    new String[]{
+                            sessionId,
+                            chatUser.getUserExtendId()
+                    },
+                    null,
+                    null,
+                    null
+            );
+            if (cursor.moveToFirst()) {
+                ChatSessionData info = new ChatSessionData();
+                info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+                info.setSessionExtendId(cursor.getString(cursor.getColumnIndex("sessionExtendId")));
+                info.setSessionType(cursor.getInt(cursor.getColumnIndex("sessionType")));
+                info.setSessionInfo(cursor.getString(cursor.getColumnIndex("sessionInfo")));
+                info.setSessionName(cursor.getString(cursor.getColumnIndex("sessionName")));
+                info.setSessionImage(cursor.getString(cursor.getColumnIndex("sessionImage")));
+                info.setSessionOffset(cursor.getLong(cursor.getColumnIndex("sessionOffset")));
+                info.setSessionStamp(cursor.getLong(cursor.getColumnIndex("sessionStamp")));
+                info.setSessionCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionCreateDate"))));
+                info.setSessionCreateUser(cursor.getString(cursor.getColumnIndex("sessionCreateUser")));
+                info.setIsEnable(cursor.getInt(cursor.getColumnIndex("sessionEnable")));
+                info.setIsDelete(cursor.getInt(cursor.getColumnIndex("sessionDeleted")));
+                info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
+                info.setUnReadMessageCount(getSessionMessageUnReadCount(sessionId));
+                info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
+                ChatSessionMember member = getSessionMember(sessionId,info.getSessionId());
+                info.setUsers(Collections.singletonList(member));
+                cursor.close();
+                return info;
+            }
+            cursor.close();
+            return null;
         });
     }
 
