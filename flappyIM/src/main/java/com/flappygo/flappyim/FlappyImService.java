@@ -960,7 +960,7 @@ public class FlappyImService {
                             //当前不在自动登录状态了
                             isRunningAutoLogin = false;
                             //当前的用户已经被踢下线了
-                            if (StringTool.strToInt(model.getCode(),0)==RESULT_EXPIRED) {
+                            if (StringTool.strToInt(model.getCode(), 0) == RESULT_EXPIRED) {
                                 //当前已经被踢下线了
                                 sendKickedOutEvent();
                             } else {
@@ -1136,18 +1136,18 @@ public class FlappyImService {
                     loginReqUDID,
                     response,
                     new NettyThreadListener() {
-                //断线重连，使用http的方式，也许服务器的ip已经发生了变化
-                @Override
-                public void threadDeadRetryHttp() {
-                    checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
-                }
+                        //断线重连，使用http的方式，也许服务器的ip已经发生了变化
+                        @Override
+                        public void threadDeadRetryHttp() {
+                            checkAutoLoginHttp(FlappyConfig.getInstance().autoLoginSpace);
+                        }
 
-                //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
-                @Override
-                protected void threadDeadRetryNetty() {
-                    checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
-                }
-            });
+                        //断线重连，先试用netty的方式，防止http请求被过多的调用造成问题
+                        @Override
+                        protected void threadDeadRetryNetty() {
+                            checkAutoLoginNetty(FlappyConfig.getInstance().autoLoginSpace, response);
+                        }
+                    });
         }
     }
 
@@ -1898,6 +1898,106 @@ public class FlappyImService {
             }
 
         });
+    }
+
+    /******
+     * 启用/禁用会话
+     * @param sessionExtendId  群组ID
+     * @param callback 回调
+     */
+    public void setSessionEnable(String sessionExtendId,
+                                 String enable,
+                                 final FlappyIMCallback<String> callback) {
+        //用户未登录
+        if (checkLogin(callback)) {
+            return;
+        }
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
+        hashMap.put("sessionExtendId", sessionExtendId);
+        hashMap.put("enable", enable);
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().setSessionEnable(),
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(String data, String tag) {
+                        if (callback != null) {
+                            callback.success(data);
+                        }
+                    }
+
+                });
+    }
+
+    /******
+     * 启用/禁用会话
+     * @param sessionExtendId  群组ID
+     * @param callback 回调
+     */
+    public void deleteSession(String sessionExtendId,
+                              final FlappyIMCallback<String> callback) {
+        //用户未登录
+        if (checkLogin(callback)) {
+            return;
+        }
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
+        hashMap.put("sessionExtendId", sessionExtendId);
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().deleteSession(),
+                hashMap,
+                new BaseParseCallback<String>(String.class) {
+                    @Override
+                    protected void stateFalse(BaseApiModel<String> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(String data, String tag) {
+                        if (callback != null) {
+                            callback.success(data);
+                        }
+                    }
+
+                });
     }
 
     /******

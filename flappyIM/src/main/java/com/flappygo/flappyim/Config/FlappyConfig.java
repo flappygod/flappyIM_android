@@ -122,6 +122,16 @@ public class FlappyConfig {
         return serverUrl + "/api/delUserInSession";
     }
 
+    //启用/禁用会话
+    public String setSessionEnable(){
+        return serverUrl + "/api/setSessionEnable";
+    }
+
+    //删除会话
+    public String deleteSession(){
+        return serverUrl + "/api/deleteSession";
+    }
+
     /******
      * 服务器的地址
      * @param serverUrl       服务器地址
