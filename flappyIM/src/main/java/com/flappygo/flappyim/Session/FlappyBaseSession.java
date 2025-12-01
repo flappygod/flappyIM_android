@@ -28,8 +28,6 @@ import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.Tools.StringTool;
 
-import java.math.BigDecimal;
-
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -149,7 +147,7 @@ public class FlappyBaseSession {
         ChannelMsgHandler handler = getCurrentChannelMessageHandler();
         if (handler == null) {
             updateMsgFailure(chatMessage);
-            callback.failure(chatMessage, new Exception("Channel error"), Integer.parseInt(RESULT_NET_ERROR));
+            callback.failure(chatMessage, new Exception("Channel error"), RESULT_NET_ERROR);
             return;
         }
         //取得了Handler,再发送消息
@@ -206,7 +204,7 @@ public class FlappyBaseSession {
                     baseApiModel.setData(Objects.requireNonNull(jb.optJSONArray("data")).getString(0));
                 }
                 //上传不成功抛出异常
-                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                if (StringTool.strToInt(baseApiModel.getCode(), 0) != RESULT_SUCCESS) {
                     throw new Exception(baseApiModel.getMsg());
                 }
                 //设置数据返回
@@ -272,7 +270,7 @@ public class FlappyBaseSession {
                     baseApiModel.setData(Objects.requireNonNull(jb.optJSONArray("data")).getString(0));
                 }
                 //上传不成功抛出异常
-                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                if (StringTool.strToInt(baseApiModel.getCode(), 0) != RESULT_SUCCESS) {
                     throw new Exception(baseApiModel.getMsg());
                 }
                 //设置数据返回
@@ -286,7 +284,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String s) {
                 updateMsgFailure(msg);
-                callback.failure(msg, e, Integer.parseInt(RESULT_NET_ERROR));
+                callback.failure(msg, e, RESULT_NET_ERROR);
             }
 
             @Override
@@ -343,7 +341,7 @@ public class FlappyBaseSession {
                 //设置返回的数据
                 baseApiModel.setData(GsonTool.jsonStrToModel(jb.optString("data"), ResponseUpload.class));
                 //上传不成功抛出异常
-                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                if (StringTool.strToInt(baseApiModel.getCode(), 0) != RESULT_SUCCESS) {
                     throw new Exception(baseApiModel.getMsg());
                 }
                 //设置数据返回
@@ -412,7 +410,7 @@ public class FlappyBaseSession {
                     baseApiModel.setData(Objects.requireNonNull(jb.optJSONArray("data")).getString(0));
                 }
                 //上传不成功抛出异常
-                if (!baseApiModel.getCode().equals(RESULT_SUCCESS)) {
+                if (StringTool.strToInt(baseApiModel.getCode(), 0) != RESULT_SUCCESS) {
                     throw new Exception(baseApiModel.getMsg());
                 }
 
@@ -427,7 +425,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String s) {
                 updateMsgFailure(msg);
-                callback.failure(msg, e, Integer.parseInt(RESULT_NET_ERROR));
+                callback.failure(msg, e, RESULT_NET_ERROR);
             }
 
             @Override

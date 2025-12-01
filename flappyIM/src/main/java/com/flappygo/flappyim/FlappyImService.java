@@ -639,14 +639,14 @@ public class FlappyImService {
                     @Override
                     protected void jsonError(Exception e, String tag) {
                         if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                            callback.failure(e, RESULT_JSON_ERROR);
                         }
                     }
 
                     @Override
                     protected void netError(Exception e, String tag) {
                         if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                            callback.failure(e, RESULT_NET_ERROR);
                         }
                     }
                 });
@@ -686,7 +686,7 @@ public class FlappyImService {
                     @Override
                     protected void jsonError(Exception e, String tag) {
                         if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                            callback.failure(e, RESULT_JSON_ERROR);
                         }
                     }
 
@@ -700,7 +700,7 @@ public class FlappyImService {
                     @Override
                     protected void netError(Exception e, String tag) {
                         if (callback != null) {
-                            callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                            callback.failure(e, RESULT_NET_ERROR);
                         }
                     }
                 });
@@ -807,14 +807,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_JSON_ERROR));
+                    callback.failure(e, RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_NET_ERROR));
+                    callback.failure(e, RESULT_NET_ERROR);
                 }
             }
 
@@ -877,7 +877,7 @@ public class FlappyImService {
                 protected void jsonError(Exception e, String tag) {
                     isRunningLogin = false;
                     if (callback != null) {
-                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                     }
                 }
 
@@ -885,7 +885,7 @@ public class FlappyImService {
                 protected void netError(Exception e, String tag) {
                     isRunningLogin = false;
                     if (callback != null) {
-                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                     }
                 }
 
@@ -960,7 +960,7 @@ public class FlappyImService {
                             //当前不在自动登录状态了
                             isRunningAutoLogin = false;
                             //当前的用户已经被踢下线了
-                            if (model.getCode().equals(RESULT_EXPIRED)) {
+                            if (StringTool.strToInt(model.getCode(),0)==RESULT_EXPIRED) {
                                 //当前已经被踢下线了
                                 sendKickedOutEvent();
                             } else {
@@ -1186,14 +1186,14 @@ public class FlappyImService {
                 @Override
                 protected void jsonError(Exception e, String tag) {
                     if (callback != null) {
-                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                        callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                     }
                 }
 
                 @Override
                 protected void netError(Exception e, String tag) {
                     if (callback != null) {
-                        callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                        callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                     }
                 }
 
@@ -1250,14 +1250,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1346,14 +1346,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1405,14 +1405,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1486,14 +1486,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1567,14 +1567,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1628,10 +1628,10 @@ public class FlappyImService {
 
                 //进行最后一条消息整体排序
                 sessions.sort((one, two) -> {
-                    if (one.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                    if (one.getSession().getSessionType() == ChatSession.TYPE_SYSTEM) {
                         return -1;
                     }
-                    if (two.getSession().getSessionType().intValue() == ChatSession.TYPE_SYSTEM) {
+                    if (two.getSession().getSessionType() == ChatSession.TYPE_SYSTEM) {
                         return 1;
                     }
 
@@ -1645,7 +1645,7 @@ public class FlappyImService {
                     if (msgTwo == null) {
                         return -1;
                     }
-                    return Long.compare(msgTwo.getMessageTableOffset().longValue(), msgOne.getMessageTableOffset().longValue());
+                    return Long.compare(msgTwo.getMessageTableOffset(), msgOne.getMessageTableOffset());
                 });
                 return sessions;
             }
@@ -1654,7 +1654,7 @@ public class FlappyImService {
             public void failure(Exception e, String tag) {
                 //失败
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(RESULT_DATABASE_ERROR));
+                    callback.failure(e, RESULT_DATABASE_ERROR);
                 }
             }
 
@@ -1695,14 +1695,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1743,7 +1743,7 @@ public class FlappyImService {
                         if (msgTwo == null) {
                             return -1;
                         }
-                        return Long.compare(msgTwo.getMessageTableOffset().longValue(), msgOne.getMessageTableOffset().longValue());
+                        return Long.compare(msgTwo.getMessageTableOffset(), msgOne.getMessageTableOffset());
                     });
                     callback.success(sessions);
                 }
@@ -1779,7 +1779,7 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
@@ -1787,7 +1787,7 @@ public class FlappyImService {
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1829,7 +1829,7 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
@@ -1837,7 +1837,7 @@ public class FlappyImService {
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1876,14 +1876,14 @@ public class FlappyImService {
             @Override
             protected void jsonError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_JSON_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
                 }
             }
 
             @Override
             protected void netError(Exception e, String tag) {
                 if (callback != null) {
-                    callback.failure(e, Integer.parseInt(FlappyIMCode.RESULT_NET_ERROR));
+                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
                 }
             }
 
@@ -1906,13 +1906,13 @@ public class FlappyImService {
     private boolean checkPeerUserNotAvailable(String peerUser, FlappyIMCallback<FlappyChatSession> callback) {
         if (StringTool.isEmpty(peerUser)) {
             if (callback != null) {
-                callback.failure(new Exception("Peer user id is empty"), Integer.parseInt(RESULT_FAILURE));
+                callback.failure(new Exception("Peer user id is empty"), RESULT_FAILURE);
             }
             return true;
         }
         if (peerUser.equals(DataManager.getInstance().getLoginUser().getUserExtendId())) {
             if (callback != null) {
-                callback.failure(new Exception("Can't chat with your self"), Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(new Exception("Can't chat with your self"), RESULT_NOT_LOGIN);
             }
             return true;
         }
@@ -1928,7 +1928,7 @@ public class FlappyImService {
     private boolean checkUsers(List<String> users, FlappyIMCallback<FlappyChatSession> callback) {
         if (users == null || users.isEmpty()) {
             if (callback != null) {
-                callback.failure(new Exception("Users is empty"), Integer.parseInt(RESULT_FAILURE));
+                callback.failure(new Exception("Users is empty"), RESULT_FAILURE);
             }
             return false;
         }
@@ -1943,7 +1943,7 @@ public class FlappyImService {
     private boolean checkLogin(FlappyIMCallback<?> callback) {
         if (!DataManager.getInstance().isLogin()) {
             if (callback != null) {
-                callback.failure(new Exception("Not login"), Integer.parseInt(RESULT_NOT_LOGIN));
+                callback.failure(new Exception("Not login"), RESULT_NOT_LOGIN);
             }
             return true;
         }
@@ -1958,7 +1958,7 @@ public class FlappyImService {
     private boolean checkLoginBusy(FlappyIMCallback<?> callback) {
         if (isRunningLogin) {
             if (callback != null) {
-                callback.failure(new Exception("Other thread is running login"), Integer.parseInt(RESULT_FAILURE));
+                callback.failure(new Exception("Other thread is running login"), RESULT_FAILURE);
             }
             return true;
         }

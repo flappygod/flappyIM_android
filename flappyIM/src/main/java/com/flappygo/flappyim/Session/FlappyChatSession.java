@@ -2,6 +2,7 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
+import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
 import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
@@ -17,6 +18,7 @@ import com.flappygo.flappyim.Listener.MessageListener;
 import com.flappygo.flappyim.Tools.Upload.ImageReadWH;
 import com.flappygo.flappyim.Models.Request.ChatFile;
 import com.flappygo.flappyim.Models.Server.ChatUser;
+import com.flappygo.flappyim.Datas.FlappyIMCode;
 import com.flappygo.flappyim.DataBase.Database;
 import com.flappygo.flappyim.Datas.DataManager;
 import com.flappygo.flappyim.FlappyImService;
@@ -149,6 +151,48 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
+     * 检查是否不能发送消息
+     * @return 是否可以发送
+     */
+    private boolean checkMsgCantSend(FlappySendCallback<ChatMessage> callback) {
+        ChatSessionData currentData = Database.getInstance().getUserSessionById(
+                session.getSessionId()
+        );
+        ///用户已经离开了
+        String currentUserId = DataManager.getInstance().getLoginUser().getUserId();
+        for (ChatSessionMember user : currentData.getUsers()) {
+            if (user.getUserId().equals(currentUserId) && user.getIsLeave() == 1) {
+                callback.failure(
+                        null,
+                        new Exception("User leaved"),
+                        FlappyIMCode.RESULT_SESSION_MEMBER_UNABLE
+                );
+                return true;
+            }
+        }
+        ///不可用了
+        if (currentData.getIsEnable() == 0) {
+            callback.failure(
+                    null,
+                    new Exception("Session unable"),
+                    FlappyIMCode.RESULT_SESSION_UNABLE
+            );
+            return true;
+        }
+        ///已经删除了
+        if (currentData.getIsDelete() == 1) {
+            callback.failure(
+                    null,
+                    new Exception("Session deleted"),
+                    FlappyIMCode.RESULT_SESSION_DELETED
+            );
+            return true;
+        }
+        return false;
+    }
+
+
+    /******
      * 回复的消息
      * @param replyMsg 回复的消息
      * @param message 消息
@@ -184,6 +228,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendText(String text,
                                 ChatMessage replyMsg,
                                 FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -232,6 +279,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendLocalImage(String path,
                                       ChatMessage replyMsg,
                                       final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -260,7 +310,7 @@ public class FlappyChatSession extends FlappyBaseSession {
             //设置高度
             chatImage.setHeight(Integer.toString(imageSize.getHeight()));
         } catch (Exception ex) {
-            callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
+            callback.failure(msg, ex, RESULT_PARSE_ERROR);
             return msg;
         }
         //设置内容
@@ -297,6 +347,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendImage(ChatImage image,
                                  ChatMessage replyMsg,
                                  FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -344,6 +397,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendLocalVoice(String path,
                                       ChatMessage replyMsg,
                                       final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -377,7 +433,7 @@ public class FlappyChatSession extends FlappyBaseSession {
             //释放
             retriever.release();
         } catch (Exception ex) {
-            callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
+            callback.failure(msg, ex, RESULT_PARSE_ERROR);
             return msg;
         }
         //设置内容
@@ -412,6 +468,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendVoice(ChatVoice chatVoice,
                                  ChatMessage replyMsg,
                                  final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -460,6 +519,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendLocation(ChatLocation location,
                                     ChatMessage replyMsg,
                                     final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -507,6 +569,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendLocalVideo(String path,
                                       ChatMessage replyMsg,
                                       final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -540,7 +605,7 @@ public class FlappyChatSession extends FlappyBaseSession {
             //高度
             chatVideo.setHeight(info.getHeight());
         } catch (Exception ex) {
-            callback.failure(msg, ex, Integer.parseInt(RESULT_PARSE_ERROR));
+            callback.failure(msg, ex, RESULT_PARSE_ERROR);
             return msg;
         }
         //设置内容
@@ -575,6 +640,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendVideo(ChatVideo chatVideo,
                                  ChatMessage replyMsg,
                                  final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -628,6 +696,9 @@ public class FlappyChatSession extends FlappyBaseSession {
                                      String name,
                                      ChatMessage replyMsg,
                                      final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -687,6 +758,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendFile(ChatFile chatFile,
                                 ChatMessage replyMsg,
                                 final FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         final ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -734,6 +808,9 @@ public class FlappyChatSession extends FlappyBaseSession {
     public ChatMessage sendCustom(String text,
                                   ChatMessage replyMsg,
                                   FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //创建消息
         ChatMessage msg = new ChatMessage();
         //生成一个消息的ID
@@ -771,6 +848,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      */
     public ChatMessage sendForwardMessage(ChatMessage rewardMsg,
                                           FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return null;
+        }
         //重新生成一个消息的ID
         rewardMsg.setMessageId(IDGenerateTool.generateCommonID());
         //设置
@@ -1119,6 +1199,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param callback    回调
      */
     public void resendMessage(ChatMessage chatMessage, FlappySendCallback<ChatMessage> callback) {
+        if (checkMsgCantSend(callback)) {
+            return;
+        }
         //文本消息
         if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_TEXT) {
             sendMessage(chatMessage, callback);

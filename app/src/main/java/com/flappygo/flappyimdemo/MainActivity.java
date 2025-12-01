@@ -1,9 +1,11 @@
 package com.flappygo.flappyimdemo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
@@ -139,16 +141,16 @@ public class MainActivity extends Activity {
             @Override
             public void messageReceive(ChatMessage chatMessage) {
 
-                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_TEXT) {
+                if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_TEXT) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatText(), Toast.LENGTH_SHORT).show();
                 }
-                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_IMG) {
+                if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_IMG) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatImage().getPath(), Toast.LENGTH_SHORT).show();
                 }
-                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_LOCATE) {
+                if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_LOCATE) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatLocation().getAddress(), Toast.LENGTH_SHORT).show();
                 }
-                if (chatMessage.getMessageType().intValue() == ChatMessage.MSG_TYPE_VIDEO) {
+                if (chatMessage.getMessageType() == ChatMessage.MSG_TYPE_VIDEO) {
                     Toast.makeText(getBaseContext(), chatMessage.getChatVideo().getSendPath(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -283,7 +285,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 if (mySession != null) {
 
-                    if (message.getText().toString().equals("")) {
+                    if (message.getText().toString().isEmpty()) {
                         return;
                     }
 
@@ -322,7 +324,7 @@ public class MainActivity extends Activity {
     }
 
 
-    final Handler handler = new Handler() {
+    final Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
             Toast.makeText(getBaseContext(), (String) msg.obj, Toast.LENGTH_SHORT).show();
         }

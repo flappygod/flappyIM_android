@@ -65,7 +65,7 @@ public class HandlerLogin extends Handler {
         //登录失败
         else if (message.what == LOGIN_FAILURE) {
             if (callback != null) {
-                callback.failure((Exception) message.obj, Integer.parseInt(RESULT_NET_ERROR));
+                callback.failure((Exception) message.obj, RESULT_NET_ERROR);
                 callback = null;
             }
         }

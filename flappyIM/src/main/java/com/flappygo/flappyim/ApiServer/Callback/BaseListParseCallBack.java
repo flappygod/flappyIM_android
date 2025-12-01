@@ -4,6 +4,7 @@ import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_SUCCESS;
 
 import com.flappygo.flappyim.ApiServer.Callback.Parser.BaseListParser;
 import com.flappygo.flappyim.ApiServer.Clients.OkHttpAsyncCallback;
+import com.flappygo.flappyim.Tools.StringTool;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public abstract class BaseListParseCallBack<T> implements OkHttpAsyncCallback {
         //解析成功
         if (parser.isSuccess()) {
             //此处可以对sign进行必要的验证
-            if (parser.getData().getCode().equals(RESULT_SUCCESS)) {
+            if (StringTool.strToInt(parser.getData().getCode(),0)==RESULT_SUCCESS) {
                 stateTrue(parser.getData().getData(), tag);
             }
             //状态错误
