@@ -103,7 +103,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String tag) {
                 if (e != null) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
 
@@ -128,7 +128,7 @@ public class FlappyBaseSession {
             @Override
             public void failure(Exception e, String tag) {
                 if (e != null) {
-                    e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
             }
 

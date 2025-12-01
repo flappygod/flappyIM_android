@@ -52,72 +52,6 @@ public class FlappyChatSession extends FlappyBaseSession {
 
 
     /******
-     * 获取会话数据
-     * @return 会话数据
-     */
-    public ChatSessionData getSession() {
-        return session;
-    }
-
-
-    /******
-     * 获取要发送的ID
-     * @return 对方ID
-     */
-    private String getPeerID() {
-        switch (getSession().getSessionType()) {
-            ///群聊会话
-            case ChatSessionData.TYPE_GROUP:
-                return getSession().getSessionId();
-            ///单聊会话
-            case ChatSessionData.TYPE_SINGLE: {
-                ChatUser loginUser = DataManager.getInstance().getLoginUser();
-                for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
-                        return chatUser.getUserId();
-                    }
-                }
-                break;
-            }
-            ///系统会话
-            case ChatSessionData.TYPE_SYSTEM:
-                return "0";
-            default:
-                throw new RuntimeException("账号错误，聊天对象丢失");
-        }
-        return null;
-    }
-
-    /******
-     * 获取对方的extendID
-     * @return 对方ID
-     */
-    private String getPeerExtendID() {
-        switch (getSession().getSessionType()) {
-            ///群聊会话
-            case ChatSessionData.TYPE_GROUP:
-                return getSession().getSessionExtendId();
-            ///单聊会话
-            case ChatSessionData.TYPE_SINGLE: {
-                ChatUser loginUser = DataManager.getInstance().getLoginUser();
-                for (ChatUser chatUser : getSession().getUsers()) {
-                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
-                        return chatUser.getUserExtendId();
-                    }
-                }
-                break;
-            }
-            ///系统会话
-            case ChatSessionData.TYPE_SYSTEM:
-                return "0";
-            default:
-                throw new RuntimeException("账号错误，聊天对象丢失");
-        }
-        return null;
-    }
-
-
-    /******
      * 始终都要移除它，防止内存泄漏
      */
     protected void finalize() {
@@ -130,7 +64,10 @@ public class FlappyChatSession extends FlappyBaseSession {
      */
     public void close() {
         for (int s = 0; s < listenerList.size(); s++) {
-            HolderMessageSession.getInstance().removeMessageListener(listenerList.get(s), session.getSessionId());
+            HolderMessageSession.getInstance().removeMessageListener(
+                    listenerList.get(s),
+                    session.getSessionId()
+            );
         }
         listenerList.clear();
     }
@@ -153,6 +90,61 @@ public class FlappyChatSession extends FlappyBaseSession {
     public void removeListener(MessageListener messageListener) {
         HolderMessageSession.getInstance().removeMessageListener(messageListener, session.getSessionId());
         listenerList.remove(messageListener);
+    }
+
+
+    /******
+     * 获取会话数据
+     * @return 会话数据
+     */
+    public ChatSessionData getSession() {
+        return session;
+    }
+
+
+    /******
+     * 获取要发送的ID
+     * @return 对方ID
+     */
+    private String getPeerID() {
+        return getPeerInfoID(false);
+    }
+
+    /******
+     * 获取对方的extendID
+     * @return 对方的extendID
+     */
+    private String getPeerExtendID() {
+        return getPeerInfoID(true);
+    }
+
+    /******
+     * 获取对方信息（ID 或 ExtendID）
+     * @param isExtend 是否获取 ExtendID
+     * @return 对方的 ID 或 ExtendID
+     */
+    private String getPeerInfoID(boolean isExtend) {
+        switch (getSession().getSessionType()) {
+            //群聊会话
+            case ChatSessionData.TYPE_GROUP:
+                return isExtend ? getSession().getSessionExtendId() : getSession().getSessionId();
+            //单聊会话
+            case ChatSessionData.TYPE_SINGLE: {
+                ChatUser loginUser = DataManager.getInstance().getLoginUser();
+                for (ChatUser chatUser : getSession().getUsers()) {
+                    if (!chatUser.getUserId().equals(loginUser.getUserId())) {
+                        return isExtend ? chatUser.getUserExtendId() : chatUser.getUserId();
+                    }
+                }
+                break;
+            }
+            //系统会话
+            case ChatSessionData.TYPE_SYSTEM:
+                return "0";
+            default:
+                throw new RuntimeException("账号错误，聊天对象丢失");
+        }
+        return null;
     }
 
 
