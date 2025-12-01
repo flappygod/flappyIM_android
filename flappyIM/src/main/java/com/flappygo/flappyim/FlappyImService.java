@@ -1766,6 +1766,7 @@ public class FlappyImService {
 
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("sessionExtendId", sessionExtendId);
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUsersToSession(), hashMap, new BaseParseCallback<String>(String.class) {
@@ -1816,6 +1817,7 @@ public class FlappyImService {
 
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUserToSession(), hashMap, new BaseParseCallback<String>(String.class) {
@@ -1863,6 +1865,7 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().delUserInSession(), hashMap, new BaseParseCallback<String>(String.class) {
