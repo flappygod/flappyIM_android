@@ -306,29 +306,20 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 return 0;
             });
 
+
             //获取登录同步的消息列表
+            //存在会话更新的情况下，该会话下的所有执行类消息默认设置未已读(已处理模式)
+            Set<String> notifySessionReceiveIdList = new HashSet<>();
             List<Flappy.Session> session = response.getSessionsList();
-
-            //遍历消息进行处理
             if (!session.isEmpty()) {
-
-                //会话进行转换
                 List<ChatSessionData> chatSessionDataList = new ArrayList<>();
                 for (Flappy.Session item : session) {
                     chatSessionDataList.add(new ChatSessionData(item));
+                    notifySessionReceiveIdList.add(Long.toString(item.getSessionId()));
                 }
-
-                //插入会话
                 Database.getInstance().insertSessions(
                         chatSessionDataList
                 );
-
-                //通知会话更新
-                HandlerNotifyManager.getInstance().notifySessionReceiveList(
-                        chatSessionDataList
-                );
-
-                //存在会话更新的情况下，该会话下的所有执行类消息默认设置未已读(已处理模式)
                 for (ChatMessage msg : receiveMessageList) {
                     for (ChatSessionData data : chatSessionDataList) {
                         if ((msg.getMessageType() == MSG_TYPE_SYSTEM ||
@@ -341,10 +332,8 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 }
             }
 
-            //因为消息更新了，所以会话的最后一条消息更新了，这里需要收集处理一下
-            Set<String> notifySessionIdList = new HashSet<>();
-
             //登录的时候插入的消息必然是新收到的消息
+            Set<String> notifySessionUpdateIdList = new HashSet<>();
             for (int s = 0; s < receiveMessageList.size(); s++) {
                 ChatMessage chatMessage = receiveMessageList.get(s);
                 //消息状态更改
@@ -356,20 +345,18 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 //消息发送回调
                 HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
                 //更新了的会话ID
-                notifySessionIdList.add(chatMessage.getMessageSessionId());
+                notifySessionUpdateIdList.add(chatMessage.getMessageSessionId());
             }
 
-            //更新了的列表
-            List<ChatSessionData> updatedSessionList = new ArrayList<>();
-            for (String id : notifySessionIdList) {
-                ChatSessionData item = Database.getInstance().getUserSessionById(id);
-                if (item != null) {
-                    updatedSessionList.add(Database.getInstance().getUserSessionById(id));
-                }
-            }
 
-            //会话监听变化
+            //接收的消息
+            List<ChatSessionData> receiveList = getSessionDataListByIds(notifySessionReceiveIdList);
+            HandlerNotifyManager.getInstance().notifySessionReceiveList(receiveList);
+
+            //更新的消息
+            List<ChatSessionData> updatedSessionList = getSessionDataListByIds(notifySessionUpdateIdList);
             HandlerNotifyManager.getInstance().notifySessionUpdateList(updatedSessionList);
+
 
             //消息监听变化
             HandlerNotifyManager.getInstance().notifyMessageListReceive(receiveMessageList);
@@ -386,6 +373,18 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             //如果说之前有消息不是在active状态发送的，那么链接成功后就触发发送
             checkCachedMessagesToSend();
         }
+    }
+
+    //通用方法：根据 ID 列表获取会话数据列表
+    private List<ChatSessionData> getSessionDataListByIds(Set<String> idList) {
+        List<ChatSessionData> sessionDataList = new ArrayList<>();
+        for (String id : idList) {
+            ChatSessionData item = Database.getInstance().getUserSessionById(id);
+            if (item != null) {
+                sessionDataList.add(item);
+            }
+        }
+        return sessionDataList;
     }
 
 
