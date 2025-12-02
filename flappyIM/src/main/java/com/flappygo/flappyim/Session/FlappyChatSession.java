@@ -164,7 +164,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         );
         ///用户已经离开了
         for (ChatSessionMember user : currentData.getUsers()) {
-            if (user.getUserId().equals(currentUserId) && user.getIsLeave() == 1) {
+            if (user!=null && user.getUserId().equals(currentUserId) && user.getIsLeave() == 1) {
                 callback.failure(
                         null,
                         new Exception("User leaved"),
