@@ -540,7 +540,7 @@ public class Database {
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(sessionId));
                 info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
-                ChatSessionMember member = getSessionMember(sessionId,info.getSessionId());
+                ChatSessionMember member = getSessionMember(sessionId,userId);
                 info.setUsers(Collections.singletonList(member));
                 cursor.close();
                 return info;
