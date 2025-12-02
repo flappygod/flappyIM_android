@@ -329,12 +329,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 );
 
                 //存在会话更新的情况下，该会话下的所有执行类消息默认设置未已读(已处理模式)
-                for (ChatSessionData data : chatSessionDataList) {
-                    for (ChatMessage msg : receiveMessageList) {
+                for (ChatMessage msg : receiveMessageList) {
+                    for (ChatSessionData data : chatSessionDataList) {
                         if ((msg.getMessageType() == MSG_TYPE_SYSTEM ||
                                 msg.getMessageType() == MSG_TYPE_ACTION) &&
                                 data.getSessionId().equals(msg.getMessageSessionId())) {
                             msg.setMessageReadState(1);
+                            break;
                         }
                     }
                 }
