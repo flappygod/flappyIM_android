@@ -60,7 +60,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final NettyThreadListener deadCallback;
 
     //更新的sessions
-    private final Set<String> updatingIdLists = new HashSet<>();
+    private final List<String> updatingIdLists = new ArrayList<>();
 
     //检查是否是active状态的
     public volatile boolean isActive = false;
@@ -430,14 +430,16 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private void receiveUpdate(Flappy.FlappyResponse response) {
         //进行会话更新
         List<Flappy.Session> session = response.getSessionsList();
+        //数据
+        List<ChatSessionData> sessionDataList = new ArrayList<>();
         //数据开始
         for (int s = 0; s < session.size(); s++) {
             //更新数据
             ChatSessionData data = new ChatSessionData(session.get(s));
             //插入数据
             Database.getInstance().insertSession(data);
-            //通知session更新
-            HandlerNotifyManager.getInstance().notifySessionReceive(data);
+            //添加进入
+            sessionDataList.add(data);
             //消息标记为已经处理
             List<ChatMessage> messages = Database.getInstance().getNotActionSystemMessageBySessionId(data.getSessionId());
             //将系统消息标记成为已经处理，不再需要重复处理
@@ -450,9 +452,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                     Database.getInstance().insertMessage(message);
                 }
             }
-            //移除正在更新
-            updatingIdLists.remove(response.getUpdate().getResponseID());
         }
+        //通知session更新
+        HandlerNotifyManager.getInstance().notifySessionReceiveList(sessionDataList);
+        //所有的更新都移除
+        updatingIdLists.removeAll(
+                GsonTool.listJsonArrayStr(response.getUpdate().getResponseID())
+        );
     }
 
     /******
