@@ -231,7 +231,7 @@ public class FlappyImService {
     private void setKickedOut() {
         //被踢下线,防止重复执行
         ChatUser user = DataManager.getInstance().getLoginUser();
-        if (user.isLogin() == 0) {
+        if (user == null || user.isLogin() == 0) {
             return;
         }
         user.setLogin(0);
