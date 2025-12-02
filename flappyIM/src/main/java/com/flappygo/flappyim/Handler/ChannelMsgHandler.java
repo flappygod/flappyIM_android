@@ -60,7 +60,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     private final NettyThreadListener deadCallback;
 
     //更新的sessions
-    private final List<String> updatingIdLists = new ArrayList<>();
+    private final Set<String> updatingIdLists = new HashSet<>();
 
     //检查是否是active状态的
     public volatile boolean isActive = false;
@@ -465,30 +465,27 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     //更新所有会话
     private void updateSessionAll(ChannelHandlerContext ctx, List<ChatMessage> messages) {
         //获取更新Session并去重,且判断正在进行中的更新
-        List<String> updateIdList = new ArrayList<>();
+        Set<String> updateIdList = new HashSet<>();
         for (int s = 0; s < messages.size(); s++) {
             String updateId = messages.get(s).getMessageSessionId();
-            if (!updateIdList.contains(updateId) &&
-                    !updatingIdLists.contains(updateId)) {
+            if (!updatingIdLists.contains(updateId)) {
                 updateIdList.add(updateId);
             }
         }
         //进入正在更新列表
         updatingIdLists.addAll(updateIdList);
         //遍历发送请求消息
-        for (String updateId : updateIdList) {
-            //更新消息
-            Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
-                    .setUpdateID(updateId)
-                    .setUpdateType(FlappyRequest.REQ_UPDATE_SESSION_ALL)
-                    .build();
-            //创建登录请求消息
-            Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
-                    .setUpdate(reqUpdate)
-                    .setType(FlappyRequest.REQ_UPDATE);
-            //发送需要更新的消息
-            ctx.writeAndFlush(builder.build());
-        }
+        //更新消息
+        Flappy.ReqUpdate reqUpdate = Flappy.ReqUpdate.newBuilder()
+                .setUpdateID(GsonTool.jsonArrayListStr(new ArrayList<>(updateIdList)))
+                .setUpdateType(FlappyRequest.REQ_UPDATE_SESSION_BATCH)
+                .build();
+        //创建登录请求消息
+        Flappy.FlappyRequest.Builder builder = Flappy.FlappyRequest.newBuilder()
+                .setUpdate(reqUpdate)
+                .setType(FlappyRequest.REQ_UPDATE);
+        //发送需要更新的消息
+        ctx.writeAndFlush(builder.build());
     }
 
     /******

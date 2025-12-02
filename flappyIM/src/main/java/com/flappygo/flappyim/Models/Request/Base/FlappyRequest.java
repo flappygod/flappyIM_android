@@ -30,7 +30,8 @@ public class FlappyRequest {
 
 
     /***更新类型***/
-    public final static int REQ_UPDATE_SESSION_ALL = 1;
+    //批量更新
+    public final static int REQ_UPDATE_SESSION_BATCH = 1;
 
 
 }
