@@ -191,7 +191,7 @@ public class HandlerNotifyManager {
             case ChatMessage.ACTION_TYPE_SESSION_MUTE:
             case ChatMessage.ACTION_TYPE_SESSION_PIN: {
                 Message msg = new Message();
-                msg.what = HandlerSession.SESSION_RECEIVE;
+                msg.what = HandlerSession.SESSION_UPDATE;
                 msg.obj = Database.getInstance().getUserSessionById(chatAction.getActionIds().get(1));
                 handlerSession.sendMessage(msg);
             }
