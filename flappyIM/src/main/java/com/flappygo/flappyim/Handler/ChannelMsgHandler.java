@@ -513,7 +513,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //通知会话更新了
             ChatSessionData sessionModel = Database.getInstance().getUserSessionById(message.getMessageSessionId());
-            HandlerNotifyManager.getInstance().notifySessionReceive(sessionModel);
+            HandlerNotifyManager.getInstance().notifySessionUpdate(sessionModel);
         }
     }
 
