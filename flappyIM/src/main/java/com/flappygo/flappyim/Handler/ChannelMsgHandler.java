@@ -454,7 +454,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             }
         }
         //通知session更新
-        HandlerNotifyManager.getInstance().notifySessionReceiveList(sessionDataList);
+        HandlerNotifyManager.getInstance().notifySessionUpdateList(sessionDataList);
         //所有的更新都移除
         updatingIdLists.removeAll(
                 GsonTool.listJsonArrayStr(response.getUpdate().getResponseID())
