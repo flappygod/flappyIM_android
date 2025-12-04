@@ -3,7 +3,7 @@ package com.flappygo.flappyim.Models.Response;
 
 import com.flappygo.flappyim.Models.Server.ChatRoute;
 import com.flappygo.flappyim.Models.Server.ChatUser;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Models.Server.ChatSessionData;
 
 import java.io.Serializable;
 import java.util.List;

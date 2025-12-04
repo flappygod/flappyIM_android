@@ -1,6 +1,6 @@
 package com.flappygo.flappyim.Listener;
 
-import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Models.Server.ChatSessionData;
 
 import java.util.List;
 

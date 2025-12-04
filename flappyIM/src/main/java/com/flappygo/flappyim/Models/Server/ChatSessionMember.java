@@ -1,6 +1,4 @@
-package com.flappygo.flappyim.DataBase.Models;
-
-import com.flappygo.flappyim.Models.Server.ChatUser;
+package com.flappygo.flappyim.Models.Server;
 
 import java.util.Date;
 

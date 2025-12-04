@@ -1,6 +1,5 @@
-package com.flappygo.flappyim.DataBase.Models;
+package com.flappygo.flappyim.Models.Server;
 
-import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
 import com.flappygo.flappyim.Models.Protoc.Flappy;
 import com.flappygo.flappyim.Tools.StringTool;

@@ -2,8 +2,8 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
-import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Models.Server.ChatSessionMember;
+import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Holder.HolderMessageSession;
@@ -25,6 +25,7 @@ import com.flappygo.flappyim.FlappyImService;
 import com.flappygo.flappyim.Tools.VideoTool;
 
 import android.media.MediaMetadataRetriever;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,7 +165,7 @@ public class FlappyChatSession extends FlappyBaseSession {
         );
         ///用户已经离开了
         for (ChatSessionMember user : currentData.getUsers()) {
-            if (user!=null && user.getUserId().equals(currentUserId) && user.getIsLeave() == 1) {
+            if (user != null && user.getUserId().equals(currentUserId) && user.getIsLeave() == 1) {
                 callback.failure(
                         null,
                         new Exception("User leaved"),
@@ -217,8 +218,9 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 消息
      */
     public ChatMessage sendText(String text,
+                                List<String> atUserIds,
                                 FlappySendCallback<ChatMessage> callback) {
-        return sendText(text, null, callback);
+        return sendText(text, atUserIds, null, callback);
     }
 
     /******
@@ -229,6 +231,7 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 消息
      */
     public ChatMessage sendText(String text,
+                                List<String> atUserIds,
                                 ChatMessage replyMsg,
                                 FlappySendCallback<ChatMessage> callback) {
         if (checkMsgCantSend(callback)) {
@@ -250,6 +253,8 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveId(getPeerID());
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
+        //AT的用户ID列表
+        msg.setMessageAtUserIds(TextUtils.join(",", atUserIds));
         //设置内容
         msg.setChatText(text);
         //时间

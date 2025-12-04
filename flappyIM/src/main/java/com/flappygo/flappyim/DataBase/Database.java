@@ -8,8 +8,8 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
-import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Models.Server.ChatSessionMember;
+import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -26,7 +26,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;

@@ -4,9 +4,9 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
 import com.flappygo.flappyim.Models.Response.Base.FlappyResponse;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionMember;
+import com.flappygo.flappyim.Models.Server.ChatSessionMember;
 import com.flappygo.flappyim.Models.Request.Base.FlappyRequest;
-import com.flappygo.flappyim.DataBase.Models.ChatSessionData;
+import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Thread.NettyThreadListener;
