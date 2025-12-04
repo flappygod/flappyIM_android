@@ -1375,7 +1375,12 @@ public class FlappyImService {
      * @param sessionName 群组名称
      * @param callback  回调
      */
-    public void createGroupSession(List<String> userExtendIds, String sessionExtendId, String sessionName, final FlappyIMCallback<FlappyChatSession> callback) {
+    public void createGroupSession(List<String> userExtendIds,
+                                   String sessionExtendId,
+                                   String sessionName,
+                                   String sessionImage,
+                                   String sessionInfo,
+                                   final FlappyIMCallback<FlappyChatSession> callback) {
         //检查登录
         if (checkLogin(callback)) {
             return;
@@ -1391,14 +1396,21 @@ public class FlappyImService {
         hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("sessionExtendId", sessionExtendId);
         hashMap.put("sessionName", sessionName);
+        hashMap.put("sessionImage", sessionImage);
+        hashMap.put("sessionInfo", sessionInfo);
 
         //调用
-        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().createGroupSession(), hashMap, new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().createGroupSession(),
+                hashMap,
+                new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
 
             @Override
             protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
                 if (callback != null) {
-                    callback.failure(new Exception(model.getMsg()), Integer.parseInt(model.getCode()));
+                    callback.failure(
+                            new Exception(model.getMsg()),
+                            Integer.parseInt(model.getCode())
+                    );
                 }
             }
 
