@@ -1454,14 +1454,16 @@ public class FlappyImService {
         if (checkLogin(callback)) {
             return;
         }
-
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sessionId", sessionId);
         hashMap.put("sessionName", sessionName);
-        hashMap.put("sessionImage", sessionImage);
-        hashMap.put("sessionInfo", sessionInfo);
-
+        if (sessionImage != null) {
+            hashMap.put("sessionImage", sessionImage);
+        }
+        if (sessionInfo != null) {
+            hashMap.put("sessionInfo", sessionInfo);
+        }
         //调用
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().updateSessionData(),
                 hashMap,
