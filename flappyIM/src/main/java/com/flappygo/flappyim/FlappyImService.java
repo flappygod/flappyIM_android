@@ -1907,6 +1907,7 @@ public class FlappyImService {
      */
     public void setSessionEnable(String sessionExtendId,
                                  String enable,
+                                 String reason,
                                  final FlappyIMCallback<String> callback) {
         //用户未登录
         if (checkLogin(callback)) {
@@ -1917,6 +1918,7 @@ public class FlappyImService {
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("sessionExtendId", sessionExtendId);
         hashMap.put("enable", enable);
+        hashMap.put("reason", reason);
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().setSessionEnable(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
@@ -1957,6 +1959,7 @@ public class FlappyImService {
      * @param callback 回调
      */
     public void deleteSession(String sessionExtendId,
+                              String reason,
                               final FlappyIMCallback<String> callback) {
         //用户未登录
         if (checkLogin(callback)) {
@@ -1966,6 +1969,7 @@ public class FlappyImService {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("sessionExtendId", sessionExtendId);
+        hashMap.put("reason", reason);
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().deleteSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
