@@ -1833,13 +1833,13 @@ public class FlappyImService {
     /******
      * 向群组中添加用户
      * @param userExtendIds    用户ID
+     * @param reasons   原因
      * @param sessionExtendId  群组ID
-     * @param reason   原因
      * @param callback 回调
      */
     public void addUsersToSession(List<String> userExtendIds,
+                                  List<String> reasons,
                                   String sessionExtendId,
-                                  String reason,
                                   final FlappyIMCallback<String> callback) {
 
         //用户未登录
@@ -1852,7 +1852,7 @@ public class FlappyImService {
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("sessionExtendId", sessionExtendId);
-        hashMap.put("reason", reason != null ? reason : "");
+        hashMap.put("reasons", GsonTool.jsonArrayListStr(reasons));
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUsersToSession(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
