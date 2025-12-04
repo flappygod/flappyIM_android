@@ -1755,9 +1755,13 @@ public class FlappyImService {
      * 向群组中添加用户
      * @param userExtendIds    用户ID
      * @param sessionExtendId  群组ID
+     * @param reason   原因
      * @param callback 回调
      */
-    public void addUsersToSession(List<String> userExtendIds, String sessionExtendId, final FlappyIMCallback<String> callback) {
+    public void addUsersToSession(List<String> userExtendIds,
+                                  String sessionExtendId,
+                                  String reason,
+                                  final FlappyIMCallback<String> callback) {
 
         //用户未登录
         if (checkLogin(callback)) {
@@ -1769,6 +1773,7 @@ public class FlappyImService {
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendIds", GsonTool.jsonArrayListStr(userExtendIds));
         hashMap.put("sessionExtendId", sessionExtendId);
+        hashMap.put("reason", reason != null ? reason : "");
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUsersToSession(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
@@ -1806,9 +1811,13 @@ public class FlappyImService {
      * 向群组中添加用户
      * @param userExtendId   用户ID
      * @param sessionExtendId  群组ID
+     * @param reason   原因
      * @param callback 回调
      */
-    public void addUserToSession(String userExtendId, String sessionExtendId, final FlappyIMCallback<String> callback) {
+    public void addUserToSession(String userExtendId,
+                                 String sessionExtendId,
+                                 String reason,
+                                 final FlappyIMCallback<String> callback) {
 
         //用户未登录
         if (checkLogin(callback)) {
@@ -1820,6 +1829,7 @@ public class FlappyImService {
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
+        hashMap.put("reason", reason != null ? reason : "");
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().addUserToSession(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
@@ -1856,9 +1866,13 @@ public class FlappyImService {
      * 删除群组中的用户
      * @param userExtendId     用户ID
      * @param sessionExtendId  群组ID
+     * @param reason   原因
      * @param callback 回调
      */
-    public void delUserInSession(String userExtendId, String sessionExtendId, final FlappyIMCallback<String> callback) {
+    public void delUserInSession(String userExtendId,
+                                 String sessionExtendId,
+                                 String reason,
+                                 final FlappyIMCallback<String> callback) {
         //用户未登录
         if (checkLogin(callback)) {
             return;
@@ -1868,6 +1882,7 @@ public class FlappyImService {
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("userExtendId", userExtendId);
         hashMap.put("sessionExtendId", sessionExtendId);
+        hashMap.put("reason", reason != null ? reason : "");
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().delUserInSession(), hashMap, new BaseParseCallback<String>(String.class) {
             @Override
             protected void stateFalse(BaseApiModel<String> model, String tag) {
@@ -1903,6 +1918,7 @@ public class FlappyImService {
     /******
      * 启用/禁用会话
      * @param sessionExtendId  群组ID
+     * @param reason   原因
      * @param callback 回调
      */
     public void setSessionEnable(String sessionExtendId,
@@ -1918,7 +1934,7 @@ public class FlappyImService {
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("sessionExtendId", sessionExtendId);
         hashMap.put("enable", enable);
-        hashMap.put("reason", reason);
+        hashMap.put("reason", reason != null ? reason : "");
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().setSessionEnable(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
@@ -1956,6 +1972,7 @@ public class FlappyImService {
     /******
      * 启用/禁用会话
      * @param sessionExtendId  群组ID
+     * @param reason   原因
      * @param callback 回调
      */
     public void deleteSession(String sessionExtendId,
@@ -1969,7 +1986,7 @@ public class FlappyImService {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("currentUserExtendId", DataManager.getInstance().getLoginUser().getUserExtendId());
         hashMap.put("sessionExtendId", sessionExtendId);
-        hashMap.put("reason", reason);
+        hashMap.put("reason", reason != null ? reason : "");
         OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().deleteSession(),
                 hashMap,
                 new BaseParseCallback<String>(String.class) {
