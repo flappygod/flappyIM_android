@@ -1439,13 +1439,13 @@ public class FlappyImService {
 
     /******
      * 创建群组会话
-     * @param sessionId    会话ID
+     * @param sessionExtendId    会话ID
      * @param sessionName  群组名称
      * @param sessionImage 群组图片
      * @param sessionInfo  群组信息
      * @param callback  回调
      */
-    public void updateSessionData(String sessionId,
+    public void updateSessionData(String sessionExtendId,
                                   String sessionName,
                                   String sessionImage,
                                   String sessionInfo,
@@ -1456,7 +1456,7 @@ public class FlappyImService {
         }
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sessionId", sessionId);
+        hashMap.put("sessionExtendId", sessionExtendId);
         if (sessionName != null) {
             hashMap.put("sessionName", sessionName);
         }
