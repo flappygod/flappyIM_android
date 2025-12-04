@@ -541,7 +541,7 @@ public class Database {
      * @return 会话
      */
     @SuppressLint("Range")
-    public ChatSessionData getUserSessionWithCurrentUserById(String sessionId,String userId) {
+    public ChatSessionData getUserSessionWithCurrentUserById(String sessionId, String userId) {
         return executeDbOperation(chatUser -> {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION,
@@ -572,7 +572,7 @@ public class Database {
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(sessionId));
                 info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
-                ChatSessionMember member = getSessionMember(sessionId,userId);
+                ChatSessionMember member = getSessionMember(sessionId, userId);
                 info.setUsers(Collections.singletonList(member));
                 cursor.close();
                 return info;
@@ -923,6 +923,49 @@ public class Database {
             cursor.close();
             return null;
         });
+    }
+
+    //获取会话之前的消息列表
+    @SuppressLint("Range")
+    public List<ChatMessage> getUnReadAtMessages(String messageSessionId, int limit) {
+        return executeDbOperation(chatUser -> {
+
+            //当前用户
+            ChatSessionMember chatSessionMember = getSessionMember(messageSessionId, chatUser.getUserId());
+
+            //查询比它小的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
+            Cursor cursor = db.rawQuery(
+                    "SELECT * FROM " + DataBaseConfig.TABLE_MESSAGE +
+                            " WHERE messageSessionId = ? and messageReadState = 0" +
+                            " AND messageAtUserIds LIKE ? " +
+                            " AND messageSessionOffset > ? " +
+                            " AND messageInsertUser = ? " +
+                            " AND messageType != ? " +
+                            " AND isDelete != 1 " +
+                            " ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?",
+                    new String[]{
+                            messageSessionId,
+                            "%" + chatUser.getUserId() + "%",
+                            chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0",
+                            chatUser.getUserExtendId(),
+                            Integer.toString(MSG_TYPE_ACTION),
+                            Integer.toString(limit)
+                    }
+            );
+            //全部数据转换
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage(cursor);
+                    retMessages.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+            return retMessages;
+        }, new ArrayList<>());
     }
 
 

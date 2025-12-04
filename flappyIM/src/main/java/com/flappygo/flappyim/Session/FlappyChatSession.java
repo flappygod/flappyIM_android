@@ -1273,6 +1273,16 @@ public class FlappyChatSession extends FlappyBaseSession {
     }
 
     /******
+     * 获取AT我的未读的消息
+     * @param  limit   大小限制
+     * @return 消息列表
+     */
+    public List<ChatMessage> getUnReadAtMessages(int limit) {
+        return Database.getInstance().getUnReadAtMessages(getSession().getSessionId(), limit);
+    }
+
+
+    /******
      * 获取这条消息之前的消息
      * @param messageId 消息ID
      * @param size      大小
