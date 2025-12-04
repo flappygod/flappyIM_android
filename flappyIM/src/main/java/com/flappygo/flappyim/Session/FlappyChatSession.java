@@ -218,6 +218,17 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @return 消息
      */
     public ChatMessage sendText(String text,
+                                FlappySendCallback<ChatMessage> callback) {
+        return sendText(text, null, null, callback);
+    }
+
+    /******
+     * 发送文本消息
+     * @param text  文本消息
+     * @param callback 回调
+     * @return 消息
+     */
+    public ChatMessage sendText(String text,
                                 List<String> atUserIds,
                                 FlappySendCallback<ChatMessage> callback) {
         return sendText(text, atUserIds, null, callback);
@@ -254,7 +265,11 @@ public class FlappyChatSession extends FlappyBaseSession {
         //接收者
         msg.setMessageReceiveExtendId(getPeerExtendID());
         //AT的用户ID列表
-        msg.setMessageAtUserIds(TextUtils.join(",", atUserIds));
+        msg.setMessageAtUserIds(
+                (atUserIds != null && !atUserIds.isEmpty()) ?
+                        TextUtils.join(",", atUserIds) :
+                        null
+        );
         //设置内容
         msg.setChatText(text);
         //时间
