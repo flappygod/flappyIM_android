@@ -1404,37 +1404,100 @@ public class FlappyImService {
                 hashMap,
                 new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
 
-            @Override
-            protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
-                if (callback != null) {
-                    callback.failure(
-                            new Exception(model.getMsg()),
-                            Integer.parseInt(model.getCode())
-                    );
-                }
-            }
+                    @Override
+                    protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
+                        }
+                    }
 
-            @Override
-            protected void jsonError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
-                }
-            }
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
+                        }
+                    }
 
-            @Override
-            protected void netError(Exception e, String tag) {
-                if (callback != null) {
-                    callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
-                }
-            }
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
+                        }
+                    }
 
-            @Override
-            public void stateTrue(ChatSessionData data, String tag) {
-                if (callback != null) {
-                    callback.success(new FlappyChatSession(data));
-                }
-            }
-        });
+                    @Override
+                    public void stateTrue(ChatSessionData data, String tag) {
+                        if (callback != null) {
+                            callback.success(new FlappyChatSession(data));
+                        }
+                    }
+                });
+    }
+
+    /******
+     * 创建群组会话
+     * @param sessionId    会话ID
+     * @param sessionName  群组名称
+     * @param sessionImage 群组图片
+     * @param sessionInfo  群组信息
+     * @param callback  回调
+     */
+    public void updateSessionData(String sessionId,
+                                  String sessionName,
+                                  String sessionImage,
+                                  String sessionInfo,
+                                  final FlappyIMCallback<FlappyChatSession> callback) {
+        //检查登录
+        if (checkLogin(callback)) {
+            return;
+        }
+
+        //创建这个HashMap
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("sessionId", sessionId);
+        hashMap.put("sessionName", sessionName);
+        hashMap.put("sessionImage", sessionImage);
+        hashMap.put("sessionInfo", sessionInfo);
+
+        //调用
+        OkHttpClient.getInstance().postJson(FlappyConfig.getInstance().updateSessionData(),
+                hashMap,
+                new BaseParseCallback<ChatSessionData>(ChatSessionData.class) {
+
+                    @Override
+                    protected void stateFalse(BaseApiModel<ChatSessionData> model, String tag) {
+                        if (callback != null) {
+                            callback.failure(
+                                    new Exception(model.getMsg()),
+                                    Integer.parseInt(model.getCode())
+                            );
+                        }
+                    }
+
+                    @Override
+                    protected void jsonError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_JSON_ERROR);
+                        }
+                    }
+
+                    @Override
+                    protected void netError(Exception e, String tag) {
+                        if (callback != null) {
+                            callback.failure(e, FlappyIMCode.RESULT_NET_ERROR);
+                        }
+                    }
+
+                    @Override
+                    public void stateTrue(ChatSessionData data, String tag) {
+                        if (callback != null) {
+                            callback.success(new FlappyChatSession(data));
+                        }
+                    }
+                });
     }
 
     /******

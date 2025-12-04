@@ -92,6 +92,11 @@ public class FlappyConfig {
         return serverUrl + "/api/createGroupSession";
     }
 
+    //更新会话信息
+    public String updateSessionData(){
+        return serverUrl + "/api/updateSessionData";
+    }
+
     //获取群组会话
     public String getSessionById() {
         return serverUrl + "/api/getSessionById";
