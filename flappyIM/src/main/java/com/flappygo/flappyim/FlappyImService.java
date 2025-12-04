@@ -1457,7 +1457,9 @@ public class FlappyImService {
         //创建这个HashMap
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sessionId", sessionId);
-        hashMap.put("sessionName", sessionName);
+        if (sessionName != null) {
+            hashMap.put("sessionName", sessionName);
+        }
         if (sessionImage != null) {
             hashMap.put("sessionImage", sessionImage);
         }
