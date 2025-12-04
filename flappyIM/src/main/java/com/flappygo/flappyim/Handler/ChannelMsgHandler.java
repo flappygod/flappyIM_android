@@ -10,6 +10,7 @@ import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Callback.FlappySendCallback;
 import com.flappygo.flappyim.Thread.NettyThreadListener;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Request.ChatSystem;
 import com.flappygo.flappyim.ApiServer.Tools.GsonTool;
@@ -185,6 +186,7 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
         //区分更新,全量更新和只更新部分用户信息
         List<ChatMessage> actionUpdateSessionAll = new ArrayList<>();
+        List<ChatMessage> actionUpdateSessionInfo = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionMember = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionEnable = new ArrayList<>();
         List<ChatMessage> actionUpdateSessionDisable = new ArrayList<>();
@@ -204,6 +206,12 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 case ChatMessage.SYSTEM_MSG_SESSION_UPDATE:
                     actionUpdateSessionAll.add(item);
                     break;
+
+                ///需要会话信息更新(sessionName,sessionImage,sessionInfo)
+                case ChatMessage.SYSTEM_MSG_SESSION_UPDATE_INFO:
+                    actionUpdateSessionInfo.add(item);
+                    break;
+
                 ///启用会话
                 case ChatMessage.SYSTEM_MSG_SESSION_ENABLE:
                     actionUpdateSessionDisable.removeIf(
@@ -250,6 +258,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
         //会话全量更新
         if (!actionUpdateSessionAll.isEmpty()) {
             updateSessionAll(ctx, actionUpdateSessionAll);
+        }
+        //会话信息更新
+        if (!actionUpdateSessionInfo.isEmpty()) {
+            updateSessionInfo(actionUpdateSessionInfo);
         }
         //会话用户更新
         if (!actionUpdateSessionMember.isEmpty()) {
@@ -491,6 +503,32 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 .setType(FlappyRequest.REQ_UPDATE);
         //发送需要更新的消息
         ctx.writeAndFlush(builder.build());
+    }
+
+    /******
+     * 更新会话信息
+     * @param messages 消息数据
+     */
+    private void updateSessionInfo(List<ChatMessage> messages) {
+        //遍历请求处理
+        for (ChatMessage message : messages) {
+            //数据进入数据库
+            ChatSession session = GsonTool.jsonStrToModel(
+                    message.getChatSystem().getSysData(),
+                    ChatSession.class
+            );
+            Database.getInstance().insertSession(session);
+
+            //保存消息状态数据
+            message.setMessageReadState(1);
+            Database.getInstance().insertMessage(message);
+
+            //通知会话更新了
+            ChatSessionData sessionModel = Database.getInstance().getUserSessionById(
+                    message.getMessageSessionId()
+            );
+            HandlerNotifyManager.getInstance().notifySessionUpdate(sessionModel);
+        }
     }
 
     /******

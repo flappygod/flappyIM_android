@@ -80,6 +80,8 @@ public class ChatMessage {
     //完全删除会话
     public final static int SYSTEM_MSG_SESSION_DELETE = 14;
 
+    //更新单条会话(仅会话信息，不包含人员信息)
+    public final static int SYSTEM_MSG_SESSION_UPDATE_INFO = 15;
 
 
 

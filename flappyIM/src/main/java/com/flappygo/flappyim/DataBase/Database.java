@@ -8,6 +8,7 @@ import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
 
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Server.ChatSessionMember;
 import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
@@ -462,6 +463,38 @@ public class Database {
             cursor.close();
             return sessionList;
         }, new ArrayList<>());
+    }
+
+
+    /******
+     * 插入数据
+     * @param session 会话
+     */
+    public void insertSession(ChatSession session) {
+        executeDbOperation(user -> {
+            ContentValues values = new ContentValues();
+            putIfNotNull(values, "sessionId", session.getSessionId());
+            putIfNotNull(values, "sessionExtendId", session.getSessionExtendId());
+            putIfNotNull(values, "sessionType", session.getSessionType());
+            putIfNotNull(values, "sessionInfo", session.getSessionInfo());
+            putIfNotNull(values, "sessionName", session.getSessionName());
+            putIfNotNull(values, "sessionImage", session.getSessionImage());
+            putIfNotNull(values, "sessionOffset", session.getSessionOffset());
+            putIfNotNull(values, "sessionStamp", session.getSessionStamp());
+            putIfNotNull(values, "sessionCreateDate", TimeTool.dateToStr(session.getSessionCreateDate()));
+            putIfNotNull(values, "sessionCreateUser", session.getSessionCreateUser());
+            putIfNotNull(values, "sessionEnable", session.getIsEnable());
+            putIfNotNull(values, "sessionDeleted", session.getIsDelete());
+            putIfNotNull(values, "sessionDeletedDate", TimeTool.dateToStr(session.getDeleteDate()));
+            values.put("sessionInsertUser", user.getUserExtendId());
+            db.insertWithOnConflict(
+                    DataBaseConfig.TABLE_SESSION,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE
+            );
+            return true;
+        });
     }
 
     /******
