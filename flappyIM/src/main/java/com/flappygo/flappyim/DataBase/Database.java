@@ -801,9 +801,10 @@ public class Database {
 
         return executeDbOperation(chatUser -> {
 
-            StringBuilder whereClause = new StringBuilder("sessionInsertUser= ? and isLeave != 1");
+            StringBuilder whereClause = new StringBuilder("sessionInsertUser = ? and userId = ？and isLeave != 1");
             List<String> whereArgsList = new ArrayList<>();
             whereArgsList.add(chatUser.getUserExtendId());
+            whereArgsList.add(chatUser.getUserId());
             if (activeSessionIdSet!=null && !activeSessionIdSet.isEmpty()) {
                 String placeholders = String.join(",", Collections.nCopies(activeSessionIdSet.size(), "?"));
                 whereClause.append(" and sessionId NOT IN (").append(placeholders).append(")");
