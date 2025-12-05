@@ -804,7 +804,7 @@ public class Database {
             StringBuilder whereClause = new StringBuilder("sessionInsertUser= ? and isLeave != 1");
             List<String> whereArgsList = new ArrayList<>();
             whereArgsList.add(chatUser.getUserExtendId());
-            if (!activeSessionIdSet.isEmpty()) {
+            if (activeSessionIdSet!=null && !activeSessionIdSet.isEmpty()) {
                 String placeholders = String.join(",", Collections.nCopies(activeSessionIdSet.size(), "?"));
                 whereClause.append(" and sessionId NOT IN (").append(placeholders).append(")");
                 whereArgsList.addAll(activeSessionIdSet);
