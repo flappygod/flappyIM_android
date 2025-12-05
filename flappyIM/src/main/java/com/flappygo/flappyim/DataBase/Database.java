@@ -799,24 +799,22 @@ public class Database {
     @SuppressLint("Range")
     public List<ChatSessionMember> getSyncNotActiveMember(List<String> activeSessionIdSet) {
 
-        ///构建SQL查询条件
-        StringBuilder whereClause = new StringBuilder();
-        if (!activeSessionIdSet.isEmpty()) {
-            String placeholders = String.join(",", activeSessionIdSet);
-            whereClause.append(" and sessionId NOT IN (").append(placeholders).append(")");
-        }
-
-        //构建查询参数
-        String[] whereArgs = activeSessionIdSet.toArray(new String[0]);
         return executeDbOperation(chatUser -> {
 
+            StringBuilder whereClause = new StringBuilder("sessionInsertUser= ? and isLeave != 1");
+            List<String> whereArgsList = new ArrayList<>();
+            whereArgsList.add(chatUser.getUserExtendId());
+            if (!activeSessionIdSet.isEmpty()) {
+                String placeholders = String.join(",", Collections.nCopies(activeSessionIdSet.size(), "?"));
+                whereClause.append(" and sessionId NOT IN (").append(placeholders).append(")");
+                whereArgsList.addAll(activeSessionIdSet);
+            }
+            String[] whereArgs = whereArgsList.toArray(new String[0]);
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_SESSION_MEMBER,
                     null,
-                    "sessionInsertUser= ? and isLeave != 1" + whereClause,
-                    new String[]{
-                            chatUser.getUserExtendId(),
-                    },
+                    whereClause.toString(),
+                    whereArgs,
                     null,
                     null,
                     null
