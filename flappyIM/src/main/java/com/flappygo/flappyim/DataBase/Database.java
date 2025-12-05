@@ -801,7 +801,7 @@ public class Database {
 
         return executeDbOperation(chatUser -> {
 
-            StringBuilder whereClause = new StringBuilder("sessionInsertUser = ? and userId = ？and isLeave != 1");
+            StringBuilder whereClause = new StringBuilder("sessionInsertUser = ? and userId = ? and isLeave != 1");
             List<String> whereArgsList = new ArrayList<>();
             whereArgsList.add(chatUser.getUserExtendId());
             whereArgsList.add(chatUser.getUserId());
