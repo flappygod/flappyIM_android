@@ -4219,10 +4219,51 @@ public final class Flappy {
 
     /**
      * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @return A list containing the activeSessionIds.
+     */
+    java.util.List<String>
+        getActiveSessionIdsList();
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @return The count of activeSessionIds.
+     */
+    int getActiveSessionIdsCount();
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @param index The index of the element to return.
+     * @return The activeSessionIds at the given index.
+     */
+    String getActiveSessionIds(int index);
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the activeSessionIds at the given index.
+     */
+    com.google.protobuf.ByteString
+        getActiveSessionIdsBytes(int index);
+
+    /**
+     * <pre>
      * 回复更新
      * </pre>
      *
-     * <code>.ResponseUpdate update = 4;</code>
+     * <code>.ResponseUpdate update = 5;</code>
      * @return Whether the update field is set.
      */
     boolean hasUpdate();
@@ -4231,7 +4272,7 @@ public final class Flappy {
      * 回复更新
      * </pre>
      *
-     * <code>.ResponseUpdate update = 4;</code>
+     * <code>.ResponseUpdate update = 5;</code>
      * @return The update.
      */
     ResponseUpdate getUpdate();
@@ -4240,7 +4281,7 @@ public final class Flappy {
      * 回复更新
      * </pre>
      *
-     * <code>.ResponseUpdate update = 4;</code>
+     * <code>.ResponseUpdate update = 5;</code>
      */
     ResponseUpdateOrBuilder getUpdateOrBuilder();
   }
@@ -4272,6 +4313,8 @@ public final class Flappy {
     private FlappyResponse() {
       msg_ = java.util.Collections.emptyList();
       sessions_ = java.util.Collections.emptyList();
+      activeSessionIds_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor
@@ -4425,14 +4468,67 @@ public final class Flappy {
       return sessions_.get(index);
     }
 
-    public static final int UPDATE_FIELD_NUMBER = 4;
+    public static final int ACTIVESESSIONIDS_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.LazyStringArrayList activeSessionIds_ =
+        com.google.protobuf.LazyStringArrayList.emptyList();
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @return A list containing the activeSessionIds.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getActiveSessionIdsList() {
+      return activeSessionIds_;
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @return The count of activeSessionIds.
+     */
+    public int getActiveSessionIdsCount() {
+      return activeSessionIds_.size();
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @param index The index of the element to return.
+     * @return The activeSessionIds at the given index.
+     */
+    public String getActiveSessionIds(int index) {
+      return activeSessionIds_.get(index);
+    }
+    /**
+     * <pre>
+     * 回复回话
+     * </pre>
+     *
+     * <code>repeated string activeSessionIds = 4;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the activeSessionIds at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getActiveSessionIdsBytes(int index) {
+      return activeSessionIds_.getByteString(index);
+    }
+
+    public static final int UPDATE_FIELD_NUMBER = 5;
     private ResponseUpdate update_;
     /**
      * <pre>
      * 回复更新
      * </pre>
      *
-     * <code>.ResponseUpdate update = 4;</code>
+     * <code>.ResponseUpdate update = 5;</code>
      * @return Whether the update field is set.
      */
     @Override
@@ -4444,7 +4540,7 @@ public final class Flappy {
      * 回复更新
      * </pre>
      *
-     * <code>.ResponseUpdate update = 4;</code>
+     * <code>.ResponseUpdate update = 5;</code>
      * @return The update.
      */
     @Override
@@ -4456,7 +4552,7 @@ public final class Flappy {
      * 回复更新
      * </pre>
      *
-     * <code>.ResponseUpdate update = 4;</code>
+     * <code>.ResponseUpdate update = 5;</code>
      */
     @Override
     public ResponseUpdateOrBuilder getUpdateOrBuilder() {
@@ -4486,8 +4582,11 @@ public final class Flappy {
       for (int i = 0; i < sessions_.size(); i++) {
         output.writeMessage(3, sessions_.get(i));
       }
+      for (int i = 0; i < activeSessionIds_.size(); i++) {
+        com.google.protobuf.GeneratedMessage.writeString(output, 4, activeSessionIds_.getRaw(i));
+      }
       if (((bitField0_ & 0x00000001) != 0)) {
-        output.writeMessage(4, getUpdate());
+        output.writeMessage(5, getUpdate());
       }
       getUnknownFields().writeTo(output);
     }
@@ -4510,9 +4609,17 @@ public final class Flappy {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, sessions_.get(i));
       }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < activeSessionIds_.size(); i++) {
+          dataSize += computeStringSizeNoTag(activeSessionIds_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getActiveSessionIdsList().size();
+      }
       if (((bitField0_ & 0x00000001) != 0)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getUpdate());
+          .computeMessageSize(5, getUpdate());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
@@ -4535,6 +4642,8 @@ public final class Flappy {
           .equals(other.getMsgList())) return false;
       if (!getSessionsList()
           .equals(other.getSessionsList())) return false;
+      if (!getActiveSessionIdsList()
+          .equals(other.getActiveSessionIdsList())) return false;
       if (hasUpdate() != other.hasUpdate()) return false;
       if (hasUpdate()) {
         if (!getUpdate()
@@ -4560,6 +4669,10 @@ public final class Flappy {
       if (getSessionsCount() > 0) {
         hash = (37 * hash) + SESSIONS_FIELD_NUMBER;
         hash = (53 * hash) + getSessionsList().hashCode();
+      }
+      if (getActiveSessionIdsCount() > 0) {
+        hash = (37 * hash) + ACTIVESESSIONIDS_FIELD_NUMBER;
+        hash = (53 * hash) + getActiveSessionIdsList().hashCode();
       }
       if (hasUpdate()) {
         hash = (37 * hash) + UPDATE_FIELD_NUMBER;
@@ -4723,6 +4836,8 @@ public final class Flappy {
           sessionsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
+        activeSessionIds_ =
+            com.google.protobuf.LazyStringArrayList.emptyList();
         update_ = null;
         if (updateBuilder_ != null) {
           updateBuilder_.dispose();
@@ -4786,8 +4901,12 @@ public final class Flappy {
         if (((from_bitField0_ & 0x00000001) != 0)) {
           result.type_ = type_;
         }
-        int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000008) != 0)) {
+          activeSessionIds_.makeImmutable();
+          result.activeSessionIds_ = activeSessionIds_;
+        }
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000010) != 0)) {
           result.update_ = updateBuilder_ == null
               ? update_
               : updateBuilder_.build();
@@ -4863,6 +4982,16 @@ public final class Flappy {
             }
           }
         }
+        if (!other.activeSessionIds_.isEmpty()) {
+          if (activeSessionIds_.isEmpty()) {
+            activeSessionIds_ = other.activeSessionIds_;
+            bitField0_ |= 0x00000008;
+          } else {
+            ensureActiveSessionIdsIsMutable();
+            activeSessionIds_.addAll(other.activeSessionIds_);
+          }
+          onChanged();
+        }
         if (other.hasUpdate()) {
           mergeUpdate(other.getUpdate());
         }
@@ -4924,12 +5053,18 @@ public final class Flappy {
                 break;
               } // case 26
               case 34: {
+                String s = input.readStringRequireUtf8();
+                ensureActiveSessionIdsIsMutable();
+                activeSessionIds_.add(s);
+                break;
+              } // case 34
+              case 42: {
                 input.readMessage(
                     getUpdateFieldBuilder().getBuilder(),
                     extensionRegistry);
-                bitField0_ |= 0x00000008;
+                bitField0_ |= 0x00000010;
                 break;
-              } // case 34
+              } // case 42
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -5615,6 +5750,153 @@ public final class Flappy {
         return sessionsBuilder_;
       }
 
+      private com.google.protobuf.LazyStringArrayList activeSessionIds_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+      private void ensureActiveSessionIdsIsMutable() {
+        if (!activeSessionIds_.isModifiable()) {
+          activeSessionIds_ = new com.google.protobuf.LazyStringArrayList(activeSessionIds_);
+        }
+        bitField0_ |= 0x00000008;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @return A list containing the activeSessionIds.
+       */
+      public com.google.protobuf.ProtocolStringList
+          getActiveSessionIdsList() {
+        activeSessionIds_.makeImmutable();
+        return activeSessionIds_;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @return The count of activeSessionIds.
+       */
+      public int getActiveSessionIdsCount() {
+        return activeSessionIds_.size();
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @param index The index of the element to return.
+       * @return The activeSessionIds at the given index.
+       */
+      public String getActiveSessionIds(int index) {
+        return activeSessionIds_.get(index);
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the activeSessionIds at the given index.
+       */
+      public com.google.protobuf.ByteString
+          getActiveSessionIdsBytes(int index) {
+        return activeSessionIds_.getByteString(index);
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @param index The index to set the value at.
+       * @param value The activeSessionIds to set.
+       * @return This builder for chaining.
+       */
+      public Builder setActiveSessionIds(
+          int index, String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureActiveSessionIdsIsMutable();
+        activeSessionIds_.set(index, value);
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @param value The activeSessionIds to add.
+       * @return This builder for chaining.
+       */
+      public Builder addActiveSessionIds(
+          String value) {
+        if (value == null) { throw new NullPointerException(); }
+        ensureActiveSessionIdsIsMutable();
+        activeSessionIds_.add(value);
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @param values The activeSessionIds to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllActiveSessionIds(
+          Iterable<String> values) {
+        ensureActiveSessionIdsIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, activeSessionIds_);
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearActiveSessionIds() {
+        activeSessionIds_ =
+          com.google.protobuf.LazyStringArrayList.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000008);;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * 回复回话
+       * </pre>
+       *
+       * <code>repeated string activeSessionIds = 4;</code>
+       * @param value The bytes of the activeSessionIds to add.
+       * @return This builder for chaining.
+       */
+      public Builder addActiveSessionIdsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) { throw new NullPointerException(); }
+        checkByteStringIsUtf8(value);
+        ensureActiveSessionIdsIsMutable();
+        activeSessionIds_.add(value);
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return this;
+      }
+
       private ResponseUpdate update_;
       private com.google.protobuf.SingleFieldBuilder<
           ResponseUpdate, ResponseUpdate.Builder, ResponseUpdateOrBuilder> updateBuilder_;
@@ -5623,18 +5905,18 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        * @return Whether the update field is set.
        */
       public boolean hasUpdate() {
-        return ((bitField0_ & 0x00000008) != 0);
+        return ((bitField0_ & 0x00000010) != 0);
       }
       /**
        * <pre>
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        * @return The update.
        */
       public ResponseUpdate getUpdate() {
@@ -5649,7 +5931,7 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       public Builder setUpdate(ResponseUpdate value) {
         if (updateBuilder_ == null) {
@@ -5660,7 +5942,7 @@ public final class Flappy {
         } else {
           updateBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -5669,7 +5951,7 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       public Builder setUpdate(
           ResponseUpdate.Builder builderForValue) {
@@ -5678,7 +5960,7 @@ public final class Flappy {
         } else {
           updateBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -5687,11 +5969,11 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       public Builder mergeUpdate(ResponseUpdate value) {
         if (updateBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) != 0) &&
+          if (((bitField0_ & 0x00000010) != 0) &&
             update_ != null &&
             update_ != ResponseUpdate.getDefaultInstance()) {
             getUpdateBuilder().mergeFrom(value);
@@ -5702,7 +5984,7 @@ public final class Flappy {
           updateBuilder_.mergeFrom(value);
         }
         if (update_ != null) {
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
           onChanged();
         }
         return this;
@@ -5712,10 +5994,10 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       public Builder clearUpdate() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         update_ = null;
         if (updateBuilder_ != null) {
           updateBuilder_.dispose();
@@ -5729,10 +6011,10 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       public ResponseUpdate.Builder getUpdateBuilder() {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         onChanged();
         return getUpdateFieldBuilder().getBuilder();
       }
@@ -5741,7 +6023,7 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       public ResponseUpdateOrBuilder getUpdateOrBuilder() {
         if (updateBuilder_ != null) {
@@ -5756,7 +6038,7 @@ public final class Flappy {
        * 回复更新
        * </pre>
        *
-       * <code>.ResponseUpdate update = 4;</code>
+       * <code>.ResponseUpdate update = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           ResponseUpdate, ResponseUpdate.Builder, ResponseUpdateOrBuilder>
@@ -16327,44 +16609,45 @@ public final class Flappy {
       "\t\022\020\n\010deviceId\030\003 \001(\t\022\016\n\006latest\030\004 \001(\t\022\016\n\006s" +
       "ecret\030\005 \001(\t\"1\n\tReqUpdate\022\022\n\nupdateType\030\001" +
       " \001(\005\022\020\n\010updateID\030\002 \001(\t\"4\n\nReqReceipt\022\023\n\013" +
-      "receiptType\030\001 \001(\005\022\021\n\treceiptID\030\002 \001(\t\"r\n\016" +
-      "FlappyResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003(" +
-      "\0132\010.Message\022\032\n\010sessions\030\003 \003(\0132\010.Session\022" +
-      "\037\n\006update\030\004 \001(\0132\017.ResponseUpdate\":\n\016Resp" +
-      "onseUpdate\022\024\n\014responseType\030\001 \001(\005\022\022\n\nresp" +
-      "onseID\030\002 \001(\t\"\264\002\n\007Session\022\021\n\tsessionId\030\001 " +
-      "\001(\003\022\027\n\017sessionExtendId\030\002 \001(\t\022\023\n\013sessionT" +
-      "ype\030\003 \001(\005\022\023\n\013sessionInfo\030\004 \001(\t\022\023\n\013sessio" +
-      "nName\030\005 \001(\t\022\024\n\014sessionImage\030\006 \001(\t\022\025\n\rses" +
-      "sionOffset\030\007 \001(\t\022\024\n\014sessionStamp\030\010 \001(\003\022\031" +
-      "\n\021sessionCreateDate\030\t \001(\t\022\031\n\021sessionCrea" +
-      "teUser\030\n \001(\t\022\020\n\010isEnable\030\013 \001(\005\022\020\n\010isDele" +
-      "te\030\014 \001(\005\022\022\n\ndeleteDate\030\r \001(\t\022\r\n\005users\030\016 " +
-      "\001(\t\"\310\005\n\007Message\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020me" +
-      "ssageSessionId\030\002 \001(\003\022\032\n\022messageSessionTy" +
-      "pe\030\003 \001(\005\022\034\n\024messageSessionOffset\030\004 \001(\003\022\032" +
-      "\n\022messageTableOffset\030\005 \001(\003\022\023\n\013messageTyp" +
-      "e\030\006 \001(\005\022\025\n\rmessageSendId\030\007 \001(\003\022\033\n\023messag" +
-      "eSendExtendId\030\010 \001(\t\022\030\n\020messageReceiveId\030" +
-      "\t \001(\003\022\036\n\026messageReceiveExtendId\030\n \001(\t\022\026\n" +
-      "\016messageContent\030\013 \001(\t\022\030\n\020messageSendStat" +
-      "e\030\014 \001(\005\022\030\n\020messageReadState\030\r \001(\005\022\027\n\017mes" +
-      "sagePinState\030\016 \001(\005\022\031\n\021messageReplyMsgId\030" +
-      "\017 \001(\t\022\033\n\023messageReplyMsgType\030\020 \001(\005\022\036\n\026me" +
-      "ssageReplyMsgContent\030\021 \001(\t\022\032\n\022messageRep" +
-      "lyUserId\030\022 \001(\t\022\033\n\023messageForwardTitle\030\023 " +
-      "\001(\t\022\033\n\023messageRecallUserId\030\024 \001(\t\022\030\n\020mess" +
-      "ageAtUserIds\030\025 \001(\t\022\032\n\022messageReadUserIds" +
-      "\030\026 \001(\t\022\034\n\024messageDeleteUserIds\030\027 \001(\t\022\023\n\013" +
-      "messageDate\030\030 \001(\t\022\025\n\rmessageSecret\030\031 \001(\t" +
-      "\022\020\n\010isDelete\030\032 \001(\005\022\022\n\ndeleteDate\030\033 \001(\t\"\274" +
-      "\001\n\005Route\022\016\n\006userID\030\001 \001(\003\022\022\n\ndevicePlat\030\002" +
-      " \001(\t\022\020\n\010deviceId\030\003 \001(\t\022\020\n\010pushType\030\004 \001(\005" +
-      "\022\020\n\010pushPlat\030\005 \001(\t\022\016\n\006pushId\030\006 \001(\t\022\024\n\014pu" +
-      "shLanguage\030\007 \001(\t\022\023\n\013pushPrivacy\030\010 \001(\005\022\020\n" +
-      "\010pushMute\030\t \001(\005\022\014\n\004time\030\n \001(\t\"I\n\013FlappyQ" +
-      "ueue\022\014\n\004type\030\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Rout" +
-      "e\022\025\n\003msg\030\003 \001(\0132\010.Messageb\006proto3"
+      "receiptType\030\001 \001(\005\022\021\n\treceiptID\030\002 \001(\t\"\214\001\n" +
+      "\016FlappyResponse\022\014\n\004type\030\001 \001(\005\022\025\n\003msg\030\002 \003" +
+      "(\0132\010.Message\022\032\n\010sessions\030\003 \003(\0132\010.Session" +
+      "\022\030\n\020activeSessionIds\030\004 \003(\t\022\037\n\006update\030\005 \001" +
+      "(\0132\017.ResponseUpdate\":\n\016ResponseUpdate\022\024\n" +
+      "\014responseType\030\001 \001(\005\022\022\n\nresponseID\030\002 \001(\t\"" +
+      "\264\002\n\007Session\022\021\n\tsessionId\030\001 \001(\003\022\027\n\017sessio" +
+      "nExtendId\030\002 \001(\t\022\023\n\013sessionType\030\003 \001(\005\022\023\n\013" +
+      "sessionInfo\030\004 \001(\t\022\023\n\013sessionName\030\005 \001(\t\022\024" +
+      "\n\014sessionImage\030\006 \001(\t\022\025\n\rsessionOffset\030\007 " +
+      "\001(\t\022\024\n\014sessionStamp\030\010 \001(\003\022\031\n\021sessionCrea" +
+      "teDate\030\t \001(\t\022\031\n\021sessionCreateUser\030\n \001(\t\022" +
+      "\020\n\010isEnable\030\013 \001(\005\022\020\n\010isDelete\030\014 \001(\005\022\022\n\nd" +
+      "eleteDate\030\r \001(\t\022\r\n\005users\030\016 \001(\t\"\310\005\n\007Messa" +
+      "ge\022\021\n\tmessageId\030\001 \001(\t\022\030\n\020messageSessionI" +
+      "d\030\002 \001(\003\022\032\n\022messageSessionType\030\003 \001(\005\022\034\n\024m" +
+      "essageSessionOffset\030\004 \001(\003\022\032\n\022messageTabl" +
+      "eOffset\030\005 \001(\003\022\023\n\013messageType\030\006 \001(\005\022\025\n\rme" +
+      "ssageSendId\030\007 \001(\003\022\033\n\023messageSendExtendId" +
+      "\030\010 \001(\t\022\030\n\020messageReceiveId\030\t \001(\003\022\036\n\026mess" +
+      "ageReceiveExtendId\030\n \001(\t\022\026\n\016messageConte" +
+      "nt\030\013 \001(\t\022\030\n\020messageSendState\030\014 \001(\005\022\030\n\020me" +
+      "ssageReadState\030\r \001(\005\022\027\n\017messagePinState\030" +
+      "\016 \001(\005\022\031\n\021messageReplyMsgId\030\017 \001(\t\022\033\n\023mess" +
+      "ageReplyMsgType\030\020 \001(\005\022\036\n\026messageReplyMsg" +
+      "Content\030\021 \001(\t\022\032\n\022messageReplyUserId\030\022 \001(" +
+      "\t\022\033\n\023messageForwardTitle\030\023 \001(\t\022\033\n\023messag" +
+      "eRecallUserId\030\024 \001(\t\022\030\n\020messageAtUserIds\030" +
+      "\025 \001(\t\022\032\n\022messageReadUserIds\030\026 \001(\t\022\034\n\024mes" +
+      "sageDeleteUserIds\030\027 \001(\t\022\023\n\013messageDate\030\030" +
+      " \001(\t\022\025\n\rmessageSecret\030\031 \001(\t\022\020\n\010isDelete\030" +
+      "\032 \001(\005\022\022\n\ndeleteDate\030\033 \001(\t\"\274\001\n\005Route\022\016\n\006u" +
+      "serID\030\001 \001(\003\022\022\n\ndevicePlat\030\002 \001(\t\022\020\n\010devic" +
+      "eId\030\003 \001(\t\022\020\n\010pushType\030\004 \001(\005\022\020\n\010pushPlat\030" +
+      "\005 \001(\t\022\016\n\006pushId\030\006 \001(\t\022\024\n\014pushLanguage\030\007 " +
+      "\001(\t\022\023\n\013pushPrivacy\030\010 \001(\005\022\020\n\010pushMute\030\t \001" +
+      "(\005\022\014\n\004time\030\n \001(\t\"I\n\013FlappyQueue\022\014\n\004type\030" +
+      "\001 \001(\005\022\025\n\005route\030\002 \003(\0132\006.Route\022\025\n\003msg\030\003 \001(" +
+      "\0132\010.Messageb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -16399,7 +16682,7 @@ public final class Flappy {
     internal_static_FlappyResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_FlappyResponse_descriptor,
-        new String[] { "Type", "Msg", "Sessions", "Update", });
+        new String[] { "Type", "Msg", "Sessions", "ActiveSessionIds", "Update", });
     internal_static_ResponseUpdate_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_ResponseUpdate_fieldAccessorTable = new

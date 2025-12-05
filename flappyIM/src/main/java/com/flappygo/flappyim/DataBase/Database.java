@@ -795,6 +795,65 @@ public class Database {
         });
     }
 
+
+    @SuppressLint("Range")
+    public List<ChatSessionMember> getSyncNotActiveMember(List<String> activeSessionIdSet) {
+
+        ///构建SQL查询条件
+        StringBuilder whereClause = new StringBuilder();
+        if (!activeSessionIdSet.isEmpty()) {
+            String placeholders = String.join(",", activeSessionIdSet);
+            whereClause.append(" and sessionId NOT IN (").append(placeholders).append(")");
+        }
+
+        //构建查询参数
+        String[] whereArgs = activeSessionIdSet.toArray(new String[0]);
+        return executeDbOperation(chatUser -> {
+
+            Cursor cursor = db.query(
+                    DataBaseConfig.TABLE_SESSION_MEMBER,
+                    null,
+                    "sessionInsertUser= ? and isLeave != 1" + whereClause,
+                    new String[]{
+                            chatUser.getUserExtendId(),
+                    },
+                    null,
+                    null,
+                    null
+            );
+            List<ChatSessionMember> list = new ArrayList<>();
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+                return list;
+            }
+            while (!cursor.isAfterLast()) {
+                ChatSessionMember info = new ChatSessionMember();
+                info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
+                info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
+                info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
+                info.setUserAvatar(cursor.getString(cursor.getColumnIndex("userAvatar")));
+                info.setUserData(cursor.getString(cursor.getColumnIndex("userData")));
+                info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
+                info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
+                info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+                info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
+                info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
+                info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
+                info.setSessionMemberType(cursor.getInt(cursor.getColumnIndex("sessionMemberType")));
+                info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
+                info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
+                info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
+                info.setSessionLeaveDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionLeaveDate"))));
+                info.setIsLeave(cursor.getInt(cursor.getColumnIndex("isLeave")));
+                list.add(info);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            return list;
+        }, new ArrayList<>());
+    }
+
+
     /******
      * 获取会话用户列表
      * @param sessionId 会话ID

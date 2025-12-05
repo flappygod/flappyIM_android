@@ -175,6 +175,24 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
     }
 
 
+    /*******
+     * 同步活跃的会话
+     */
+    private void syncActiveSessions(List<String> activeSessionIds) {
+        List<ChatSessionMember> memberList = Database.getInstance().getSyncNotActiveMember(activeSessionIds);
+        List<ChatSessionData> updateSessions = new ArrayList<>();
+        for (ChatSessionMember member : memberList) {
+            ///这些都是已经废弃的群
+            member.setIsLeave(1);
+            Database.getInstance().insertSessionMember(member);
+            ///获取会话信息
+            ChatSessionData sessionModel = Database.getInstance().getUserSessionById(member.getSessionId());
+            updateSessions.add(sessionModel);
+        }
+        HandlerNotifyManager.getInstance().notifySessionUpdateList(updateSessions);
+    }
+
+
     /******
      * 检查会话是否需要更新
      * @param ctx ctx
@@ -384,6 +402,13 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
 
             //如果说之前有消息不是在active状态发送的，那么链接成功后就触发发送
             checkCachedMessagesToSend();
+
+            List<String> activeSessionIdList = new ArrayList<>();
+            for (int s = 0; s < response.getActiveSessionIdsCount(); s++) {
+                activeSessionIdList.add(response.getActiveSessionIds(s));
+            }
+            //同步活跃的群聊
+            syncActiveSessions(activeSessionIdList);
         }
     }
 
