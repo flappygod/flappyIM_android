@@ -135,6 +135,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sessionMemberLatestDelete" + " integer," +
             //用户在会话中的附加名称
             "sessionMemberMarkName" + " varchar," +
+            //用户在会话中的角色
+            "sessionMemberType" + " integer," +
             //用户设置会话免打扰
             "sessionMemberMute" + " integer," +
             //用户设置会话置顶

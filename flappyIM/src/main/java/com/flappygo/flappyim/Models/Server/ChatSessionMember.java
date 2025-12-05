@@ -8,31 +8,34 @@ import java.util.Date;
  */
 public class ChatSessionMember extends ChatUser {
 
-    // 会话ID
+    //会话ID
     private String sessionId;
 
-    // 最近阅读
+    //最近阅读
     private long sessionMemberLatestRead;
 
-    // 最近删除
+    //最近删除
     private long sessionMemberLatestDelete;
 
-    // 标记名称
+    //标记名称
     private String sessionMemberMarkName;
 
-    // 会话免打扰
+    //类型
+    private int sessionMemberType;
+
+    //会话免打扰
     private int sessionMemberMute;
 
-    // 会话置顶
+    //会话置顶
     private int sessionMemberPinned;
 
-    // 用户加入时间
+    //用户加入时间
     private Date sessionJoinDate;
 
-    // 用户离开时间
+    //用户离开时间
     private Date sessionLeaveDate;
 
-    // 用户是否离开
+    //用户是否离开
     private int isLeave;
 
     public String getSessionId() {
@@ -57,6 +60,14 @@ public class ChatSessionMember extends ChatUser {
 
     public void setSessionMemberLatestDelete(Long sessionMemberLatestDelete) {
         this.sessionMemberLatestDelete = (sessionMemberLatestDelete != null) ? sessionMemberLatestDelete : 0;
+    }
+
+    public int getSessionMemberType() {
+        return sessionMemberType;
+    }
+
+    public void setSessionMemberType(int sessionMemberType) {
+        this.sessionMemberType = sessionMemberType;
     }
 
     public String getSessionMemberMarkName() {

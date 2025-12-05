@@ -726,6 +726,7 @@ public class Database {
             putIfNotNull(values, "sessionMemberLatestRead", member.getSessionMemberLatestRead());
             putIfNotNull(values, "sessionMemberLatestDelete", member.getSessionMemberLatestDelete());
             putIfNotNull(values, "sessionMemberMarkName", member.getSessionMemberMarkName());
+            putIfNotNull(values, "sessionMemberType", member.getSessionMemberType());
             putIfNotNull(values, "sessionMemberMute", member.getSessionMemberMute());
             putIfNotNull(values, "sessionMemberPinned", member.getSessionMemberPinned());
             putIfNotNull(values, "sessionJoinDate", TimeTool.dateToStr(member.getSessionJoinDate()));
@@ -780,6 +781,7 @@ public class Database {
                 info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
                 info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
+                info.setSessionMemberType(cursor.getInt(cursor.getColumnIndex("sessionMemberType")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
                 info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
@@ -830,6 +832,7 @@ public class Database {
                 info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
                 info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
                 info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
+                info.setSessionMemberType(cursor.getInt(cursor.getColumnIndex("sessionMemberType")));
                 info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
                 info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
                 info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
