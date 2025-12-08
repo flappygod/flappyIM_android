@@ -282,34 +282,38 @@ public class Database {
     private void updateMessageRead(String sessionId, String userId, String tableOffset) {
         executeDbOperation(chatUser -> {
 
-            //SQL
+            // SQL 语句，添加 NOT LIKE 条件避免重复
             String sql = "UPDATE " + DataBaseConfig.TABLE_MESSAGE + " " +
                     "SET messageReadState = 1, " +
                     "messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ? " +
                     "WHERE messageInsertUser = ? AND " +
                     "messageSendId != ? AND " +
-                    "messageType NOT IN (?, ? ,?) AND " +
+                    "messageType NOT IN (?, ?, ?) AND " +
                     "messageSessionId = ? AND " +
-                    "messageTableOffset <= ?";
+                    "messageTableOffset <= ? AND " +
+                    "(messageReadUserIds IS NULL OR messageReadUserIds NOT LIKE ?)";
 
-            //Prepare the statement with the actual values
+            // 准备参数
             Object[] args = new Object[]{
-                    //New user ID to add
+                    // 要追加的 userId
                     userId,
-                    //messageInsertUser
+                    // messageInsertUser
                     chatUser.getUserExtendId(),
-                    //messageSendId (to exclude)
+                    // 排除的 messageSendId
                     userId,
+                    // 排除的消息类型
                     MSG_TYPE_SYSTEM,
                     MSG_TYPE_ACTION,
                     MSG_TYPE_READ_RECEIPT,
-                    //messageSessionId
+                    // messageSessionId
                     sessionId,
-                    //messageTableOffset
-                    tableOffset
+                    // messageTableOffset
+                    tableOffset,
+                    // NOT LIKE 条件，避免重复
+                    "%" + userId + "%"
             };
 
-            //Execute the update
+            // 执行更新
             db.execSQL(sql, args);
 
             return true;
