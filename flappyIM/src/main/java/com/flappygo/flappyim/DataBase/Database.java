@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /******
  * 数据库操作
@@ -91,22 +92,50 @@ public class Database {
         }
     }
 
-    //通用的数据库操作模板方法
+    // 通用的数据库操作模板方法，默认不使用事务
     private <T> T executeDbOperation(DbOperation<T> operation) {
-        return executeDbOperation(operation, null);
+        return executeDbOperation(operation, null, false);
     }
 
-    //通用的数据库操作模板方法，支持默认值
+    // 通用的数据库操作模板方法，支持默认值，默认不使用事务
     private <T> T executeDbOperation(DbOperation<T> operation, T defaultValue) {
+        return executeDbOperation(operation, defaultValue, false);
+    }
+
+    // 通用的数据库操作模板方法，支持事务开关
+    private <T> T executeDbOperation(DbOperation<T> operation,
+                                     T defaultValue,
+                                     boolean useTransaction) {
+        //打开数据库连接
         open();
+        //如果启用事务，则开启事务
+        if (useTransaction) {
+            db.beginTransaction();
+        }
         try {
+            //获取当前登录用户
             ChatUser chatUser = DataManager.getInstance().getLoginUser();
+            //如果用户存在，执行具体的数据库操作
             if (chatUser != null) {
-                return operation.execute(chatUser);
+                T result = operation.execute(chatUser);
+                //如果启用事务，则标记事务成功
+                if (useTransaction) {
+                    db.setTransactionSuccessful();
+                }
+                return result;
             } else {
+                //如果用户不存在，返回默认值
                 return defaultValue;
             }
+        } catch (Exception e) {
+            //抛出运行时异常
+            throw new RuntimeException("Database operation failed", e);
         } finally {
+            //如果启用事务，则结束事务
+            if (useTransaction) {
+                db.endTransaction();
+            }
+            //关闭数据库连接
             close();
         }
     }
@@ -502,6 +531,7 @@ public class Database {
      * 插入数据
      * @param session 会话
      */
+    @SuppressLint("Range")
     public void insertSession(ChatSessionData session) {
         executeDbOperation(user -> {
             ContentValues values = new ContentValues();
@@ -527,13 +557,86 @@ public class Database {
                     SQLiteDatabase.CONFLICT_REPLACE
             );
 
+            ///用户不为空
             if (session.getUsers() != null && !session.getUsers().isEmpty()) {
-                for (ChatSessionMember memberModel : session.getUsers()) {
-                    insertSessionMember(memberModel);
+
+                //1.获取当前会话的所有用户ID
+                List<String> currentUserIds = session.getUsers().stream()
+                        .map(ChatSessionMember::getUserId)
+                        .collect(Collectors.toList());
+
+
+                //2.查询数据库中该会话的所有用户 ID（根据 sessionId 和 sessionInsertUser 筛选）
+                List<String> existingUserIds = new ArrayList<>();
+                Cursor cursor = db.query(
+                        DataBaseConfig.TABLE_SESSION_MEMBER,
+                        new String[]{"userId"},
+                        "sessionId = ? AND sessionInsertUser = ?",
+                        new String[]{session.getSessionId(), user.getUserExtendId()},
+                        null, null, null
+                );
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        existingUserIds.add(cursor.getString(cursor.getColumnIndex("userId")));
+                    }
+                    cursor.close();
+                }
+
+                //3.找出需要更新的用户 ID
+                List<String> usersToMarkAsLeft = new ArrayList<>(existingUserIds);
+                usersToMarkAsLeft.removeAll(currentUserIds);
+
+                //4.将这些用户的 isLeave 字段置为 true
+                if (!usersToMarkAsLeft.isEmpty()) {
+                    StringBuilder placeholders = new StringBuilder();
+                    for (int i = 0; i < usersToMarkAsLeft.size(); i++) {
+                        placeholders.append("?");
+                        if (i < usersToMarkAsLeft.size() - 1) {
+                            placeholders.append(",");
+                        }
+                    }
+                    String sql = "UPDATE " + DataBaseConfig.TABLE_SESSION_MEMBER +
+                            " SET isLeave = 1 WHERE sessionId = ? AND sessionInsertUser = ? AND userId IN (" + placeholders + ")";
+                    List<String> args = new ArrayList<>();
+                    args.add(session.getSessionId());
+                    args.add(user.getUserExtendId());
+                    args.addAll(usersToMarkAsLeft);
+                    db.execSQL(sql, args.toArray(new String[0]));
+                }
+
+
+                //5.插入或更新当前会话的用户
+                for (ChatSessionMember member : session.getUsers()) {
+                    ContentValues memberValues = new ContentValues();
+                    putIfNotNull(memberValues, "userId", member.getUserId());
+                    putIfNotNull(memberValues, "userExtendId", member.getUserExtendId());
+                    putIfNotNull(memberValues, "userName", member.getUserName());
+                    putIfNotNull(memberValues, "userAvatar", member.getUserAvatar());
+                    putIfNotNull(memberValues, "userData", member.getUserData());
+                    putIfNotNull(memberValues, "userCreateDate", TimeTool.dateToStr(member.getUserCreateDate()));
+                    putIfNotNull(memberValues, "userLoginDate", TimeTool.dateToStr(member.getUserLoginDate()));
+                    putIfNotNull(memberValues, "sessionId", member.getSessionId());
+                    putIfNotNull(memberValues, "sessionMemberLatestRead", member.getSessionMemberLatestRead());
+                    putIfNotNull(memberValues, "sessionMemberLatestDelete", member.getSessionMemberLatestDelete());
+                    putIfNotNull(memberValues, "sessionMemberMarkName", member.getSessionMemberMarkName());
+                    putIfNotNull(memberValues, "sessionMemberType", member.getSessionMemberType());
+                    putIfNotNull(memberValues, "sessionMemberMute", member.getSessionMemberMute());
+                    putIfNotNull(memberValues, "sessionMemberPinned", member.getSessionMemberPinned());
+                    putIfNotNull(memberValues, "sessionJoinDate", TimeTool.dateToStr(member.getSessionJoinDate()));
+                    putIfNotNull(memberValues, "sessionLeaveDate", TimeTool.dateToStr(member.getSessionLeaveDate()));
+                    putIfNotNull(memberValues, "isLeave", member.getIsLeave());
+                    memberValues.put("sessionInsertUser", user.getUserExtendId());
+
+                    db.insertWithOnConflict(
+                            DataBaseConfig.TABLE_SESSION_MEMBER,
+                            null,
+                            memberValues,
+                            SQLiteDatabase.CONFLICT_REPLACE
+                    );
                 }
             }
             return true;
-        });
+        }, null, true);
     }
 
     /******
