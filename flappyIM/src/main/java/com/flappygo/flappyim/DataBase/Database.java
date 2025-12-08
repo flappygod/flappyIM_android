@@ -987,6 +987,72 @@ public class Database {
         });
     }
 
+    //获取所有 @ 我的消息（支持分页）
+    @SuppressLint("Range")
+    public List<ChatMessage> getAllAtMeMessages(String messageSessionId, boolean includeAll, int page, int size) {
+        return executeDbOperation(chatUser -> {
+            //当前用户
+            ChatSessionMember chatSessionMember = getSessionMember(messageSessionId, chatUser.getUserId());
+            //查询比它小的消息
+            List<ChatMessage> retMessages = new ArrayList<>();
+
+            //构建 SQL 查询和参数列表
+            StringBuilder queryBuilder = new StringBuilder(
+                    "SELECT * FROM " + DataBaseConfig.TABLE_MESSAGE +
+                            " WHERE messageSessionId = ?" +
+                            " AND messageSessionOffset > ? " +
+                            " AND messageInsertUser = ? " +
+                            " AND messageType != ? " +
+                            " AND isDelete != 1 "
+            );
+
+            //如果 includeAll 为 true，则增加对 "all" 的判断
+            if (includeAll) {
+                queryBuilder.append(" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?) ");
+            } else {
+                queryBuilder.append(" AND messageAtUserIds LIKE ? ");
+            }
+            queryBuilder.append(" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ? OFFSET ?");
+            //构建参数列表
+            List<String> queryParams = new ArrayList<>();
+            //对应 messageSessionId = ?
+            queryParams.add(messageSessionId);
+            //对应 messageSessionOffset > ?
+            queryParams.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
+            //对应 messageInsertUser = ?
+            queryParams.add(chatUser.getUserExtendId());
+            //对应 messageType != ?
+            queryParams.add(Integer.toString(MSG_TYPE_ACTION));
+            if (includeAll) {
+                //针对当前用户的 @
+                queryParams.add("%" + chatUser.getUserId() + "%");
+                //针对 "all" 的 @
+                queryParams.add("%" + MESSAGE_AT_ALL + "%");
+            } else {
+                //仅针对当前用户的 @
+                queryParams.add("%" + chatUser.getUserId() + "%");
+            }
+            //对应 LIMIT ?
+            queryParams.add(Integer.toString(size));
+            //对应 OFFSET ?
+            queryParams.add(Integer.toString((page - 1) * size));
+            //执行查询
+            Cursor cursor = db.rawQuery(queryBuilder.toString(), queryParams.toArray(new String[0]));
+            //全部数据转换
+            if (!cursor.moveToFirst()) {
+                cursor.close();
+            } else {
+                while (!cursor.isAfterLast()) {
+                    ChatMessage info = new ChatMessage(cursor);
+                    retMessages.add(info);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+            return retMessages;
+        }, new ArrayList<>());
+    }
+
     //获取会话之前的消息列表
     @SuppressLint("Range")
     public List<ChatMessage> getUnReadAtMessages(String messageSessionId, boolean includeAll, int limit) {
