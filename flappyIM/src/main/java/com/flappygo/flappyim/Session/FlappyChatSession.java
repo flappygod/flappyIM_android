@@ -1277,8 +1277,8 @@ public class FlappyChatSession extends FlappyBaseSession {
      * @param  limit   大小限制
      * @return 消息列表
      */
-    public List<ChatMessage> getUnReadAtMessages(int limit) {
-        return Database.getInstance().getUnReadAtMessages(getSession().getSessionId(), limit);
+    public List<ChatMessage> getUnReadAtMessages(boolean includeAll, int limit) {
+        return Database.getInstance().getUnReadAtMessages(getSession().getSessionId(), includeAll, limit);
     }
 
 

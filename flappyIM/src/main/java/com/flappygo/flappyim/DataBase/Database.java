@@ -1,5 +1,6 @@
 package com.flappygo.flappyim.DataBase;
 
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MESSAGE_AT_ALL;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
@@ -805,7 +806,7 @@ public class Database {
             List<String> whereArgsList = new ArrayList<>();
             whereArgsList.add(chatUser.getUserExtendId());
             whereArgsList.add(chatUser.getUserId());
-            if (activeSessionIdSet!=null && !activeSessionIdSet.isEmpty()) {
+            if (activeSessionIdSet != null && !activeSessionIdSet.isEmpty()) {
                 String placeholders = String.join(",", Collections.nCopies(activeSessionIdSet.size(), "?"));
                 whereClause.append(" and sessionId NOT IN (").append(placeholders).append(")");
                 whereArgsList.addAll(activeSessionIdSet);
@@ -988,7 +989,7 @@ public class Database {
 
     //获取会话之前的消息列表
     @SuppressLint("Range")
-    public List<ChatMessage> getUnReadAtMessages(String messageSessionId, int limit) {
+    public List<ChatMessage> getUnReadAtMessages(String messageSessionId, boolean includeAll, int limit) {
         return executeDbOperation(chatUser -> {
 
             //当前用户
@@ -996,24 +997,56 @@ public class Database {
 
             //查询比它小的消息
             List<ChatMessage> retMessages = new ArrayList<>();
-            Cursor cursor = db.rawQuery(
+
+            //构建 SQL 查询和参数列表
+            StringBuilder queryBuilder = new StringBuilder(
                     "SELECT * FROM " + DataBaseConfig.TABLE_MESSAGE +
                             " WHERE messageSessionId = ? and messageReadState = 0" +
-                            " AND messageAtUserIds LIKE ? " +
                             " AND messageSessionOffset > ? " +
                             " AND messageInsertUser = ? " +
                             " AND messageType != ? " +
-                            " AND isDelete != 1 " +
-                            " ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?",
-                    new String[]{
-                            messageSessionId,
-                            "%" + chatUser.getUserId() + "%",
-                            chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0",
-                            chatUser.getUserExtendId(),
-                            Integer.toString(MSG_TYPE_ACTION),
-                            Integer.toString(limit)
-                    }
+                            " AND isDelete != 1 "
             );
+
+            //如果 includeAll 为 true，则增加对 "all" 的判断
+            if (includeAll) {
+                queryBuilder.append(" AND (messageAtUserIds LIKE ? OR messageAtUserIds LIKE ?) ");
+            } else {
+                queryBuilder.append(" AND messageAtUserIds LIKE ? ");
+            }
+
+            queryBuilder.append(" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?");
+
+            //构建参数列表
+            List<String> queryParams = new ArrayList<>();
+
+            //对应 messageSessionId = ?
+            queryParams.add(messageSessionId);
+
+            //对应 messageSessionOffset > ?
+            queryParams.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
+
+            //对应 messageInsertUser = ?
+            queryParams.add(chatUser.getUserExtendId());
+
+            //对应 messageType != ?
+            queryParams.add(Integer.toString(MSG_TYPE_ACTION));
+
+            if (includeAll) {
+                //针对当前用户的 @
+                queryParams.add("%" + chatUser.getUserId() + "%");
+                //针对 "all" 的 @
+                queryParams.add("%" + MESSAGE_AT_ALL + "%");
+            } else {
+                //仅针对当前用户的 @
+                queryParams.add("%" + chatUser.getUserId() + "%");
+            }
+            //对应 LIMIT ?
+            queryParams.add(Integer.toString(limit));
+
+            //执行查询
+            Cursor cursor = db.rawQuery(queryBuilder.toString(), queryParams.toArray(new String[0]));
+
             //全部数据转换
             if (!cursor.moveToFirst()) {
                 cursor.close();
