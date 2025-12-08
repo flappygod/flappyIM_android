@@ -1274,11 +1274,24 @@ public class FlappyChatSession extends FlappyBaseSession {
 
     /******
      * 获取AT我的未读的消息
+     * @param  includeAll   包含at all
      * @param  limit   大小限制
      * @return 消息列表
      */
     public List<ChatMessage> getUnReadAtMessages(boolean includeAll, int limit) {
-        return Database.getInstance().getUnReadAtMessages(getSession().getSessionId(), includeAll, limit);
+        return Database.getInstance().getUnReadAtMeMessages(getSession().getSessionId(), includeAll, limit);
+    }
+
+
+    /******
+     * 获取AT我的未读的消息
+     * @param  includeAll   包含at all
+     * @param page  分页
+     * @param size  大小
+     * @return 消息列表
+     */
+    public List<ChatMessage> getUnReadAtMessages(boolean includeAll, int page, int size) {
+        return Database.getInstance().getAllAtMeMessages(getSession().getSessionId(), includeAll, page, size);
     }
 
 

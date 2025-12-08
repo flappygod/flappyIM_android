@@ -1055,7 +1055,7 @@ public class Database {
 
     //获取会话之前的消息列表
     @SuppressLint("Range")
-    public List<ChatMessage> getUnReadAtMessages(String messageSessionId, boolean includeAll, int limit) {
+    public List<ChatMessage> getUnReadAtMeMessages(String messageSessionId, boolean includeAll, int limit) {
         return executeDbOperation(chatUser -> {
 
             //当前用户
