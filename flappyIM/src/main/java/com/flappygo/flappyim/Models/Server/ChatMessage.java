@@ -3,6 +3,7 @@ package com.flappygo.flappyim.Models.Server;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 
+import com.flappygo.flappyim.Models.Request.ChatReadReceipt;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
 import com.flappygo.flappyim.Models.Request.ChatLocation;
 import com.flappygo.flappyim.Models.Request.ChatAction;
@@ -55,6 +56,10 @@ public class ChatMessage {
     public final static int MSG_TYPE_ACTION = 8;
 
 
+    //已读回执(因为群消息中数量实在太大，所以需要优化)
+    public final static int MSG_TYPE_READ_RECEIPT = 20;
+
+
     /***信息更新***/
     //制作提醒
     public final static int SYSTEM_MSG_NOTICE = 0;
@@ -76,26 +81,21 @@ public class ChatMessage {
     public final static int SYSTEM_MSG_SESSION_UPDATE_INFO = 15;
 
 
-
     /***动作消息***/
     //撤回消息
     public final static int ACTION_TYPE_MSG_RECALL = 1;
     //删除消息
     public final static int ACTION_TYPE_MSG_DELETE = 2;
-    //会话已读
-    public final static int ACTION_TYPE_SESSION_READ = 3;
     //会话静音
-    public final static int ACTION_TYPE_SESSION_MUTE = 4;
+    public final static int ACTION_TYPE_SESSION_MUTE = 3;
     //会话置顶
-    public final static int ACTION_TYPE_SESSION_PIN = 5;
+    public final static int ACTION_TYPE_SESSION_PIN = 4;
     //会话删除临时
-    public final static int ACTION_TYPE_SESSION_DELETE_TEMP = 6;
+    public final static int ACTION_TYPE_SESSION_DELETE_TEMP = 5;
 
 
     /****所有消息的AT*****/
     public final static String MESSAGE_AT_ALL = "all";
-
-
 
 
     public ChatMessage() {
@@ -450,6 +450,29 @@ public class ChatMessage {
         }
         return null;
     }
+
+
+    /******
+     * 设置已读回执消息
+     * @param chatAction 回执消息
+     */
+    public void setReadReceipt(ChatReadReceipt chatAction) {
+        messageType = ChatMessage.MSG_TYPE_READ_RECEIPT;
+        setMessageContent(modelToStr(chatAction));
+    }
+
+
+    /******
+     * 设置已读回执消息
+     * @return 动作消息
+     */
+    public ChatReadReceipt getReadReceipt() {
+        if (getMessageType() == MSG_TYPE_READ_RECEIPT) {
+            return strToModel(ChatReadReceipt.class);
+        }
+        return null;
+    }
+
 
     /******
      * 设置动作消息

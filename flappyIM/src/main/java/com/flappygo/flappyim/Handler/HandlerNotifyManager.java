@@ -2,7 +2,9 @@ package com.flappygo.flappyim.Handler;
 
 
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_READ_RECEIPT;
 
+import com.flappygo.flappyim.Models.Request.ChatReadReceipt;
 import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
@@ -142,6 +144,43 @@ public class HandlerNotifyManager {
         }
     }
 
+
+    /******
+     * 消息已读回执,对方的阅读消息存在的时候才会执行
+     * @param chatMessage 消息
+     */
+    public void handleMessageReadReceipt(ChatMessage chatMessage) {
+        //不是Action消息,或者已经处理过了
+        if (chatMessage == null || chatMessage.getMessageType() != MSG_TYPE_READ_RECEIPT || chatMessage.getMessageReadState() == 1) {
+            return;
+        }
+        //执行数据库更新操作
+        Database.getInstance().handleReceiptMessageUpdate(chatMessage);
+        //获取对象
+        ChatReadReceipt chatReadReceipt = chatMessage.getReadReceipt();
+
+        if (DataManager.getInstance().getLoginUser().getUserId().equals(chatReadReceipt.getUserId())) {
+            Message msg = new Message();
+            msg.what = HandlerMessage.MSG_READ_SELF;
+            msg.obj = new ArrayList<>(Arrays.asList(
+                    chatReadReceipt.getSessionId(),
+                    chatReadReceipt.getUserId(),
+                    chatReadReceipt.getReadOffset()
+            ));
+            handlerMessage.sendMessage(msg);
+        } else {
+            Message msg = new Message();
+            msg.what = HandlerMessage.MSG_READ_OTHER;
+            msg.obj = new ArrayList<>(Arrays.asList(
+                    chatReadReceipt.getSessionId(),
+                    chatReadReceipt.getUserId(),
+                    chatReadReceipt.getReadOffset()
+            ));
+            handlerMessage.sendMessage(msg);
+        }
+    }
+
+
     /******
      * 消息已读回执,对方的阅读消息存在的时候才会执行
      * @param chatMessage 消息
@@ -162,29 +201,6 @@ public class HandlerNotifyManager {
             case ChatMessage.ACTION_TYPE_MSG_RECALL: {
                 ChatMessage message = Database.getInstance().getMessageById(chatAction.getActionIds().get(2));
                 notifyMessageDelete(message);
-                break;
-            }
-            ///插入的情况下，代表已读，进行通知
-            case ChatMessage.ACTION_TYPE_SESSION_READ: {
-                if (DataManager.getInstance().getLoginUser().getUserId().equals(chatAction.getActionIds().get(0))) {
-                    Message msg = new Message();
-                    msg.what = HandlerMessage.MSG_READ_SELF;
-                    msg.obj = new ArrayList<>(Arrays.asList(
-                            chatAction.getActionIds().get(1),
-                            chatAction.getActionIds().get(0),
-                            chatAction.getActionIds().get(2)
-                    ));
-                    handlerMessage.sendMessage(msg);
-                } else {
-                    Message msg = new Message();
-                    msg.what = HandlerMessage.MSG_READ_OTHER;
-                    msg.obj = new ArrayList<>(Arrays.asList(
-                            chatAction.getActionIds().get(1),
-                            chatAction.getActionIds().get(0),
-                            chatAction.getActionIds().get(2)
-                    ));
-                    handlerMessage.sendMessage(msg);
-                }
                 break;
             }
             ///会话用户更新了

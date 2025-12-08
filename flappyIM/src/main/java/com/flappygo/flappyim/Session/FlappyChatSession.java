@@ -2,6 +2,7 @@ package com.flappygo.flappyim.Session;
 
 import static com.flappygo.flappyim.Datas.FlappyIMCode.RESULT_PARSE_ERROR;
 
+import com.flappygo.flappyim.Models.Request.ChatReadReceipt;
 import com.flappygo.flappyim.Models.Server.ChatSessionMember;
 import com.flappygo.flappyim.Models.Server.ChatSessionData;
 import com.flappygo.flappyim.Tools.Generate.IDGenerateTool;
@@ -950,18 +951,16 @@ public class FlappyChatSession extends FlappyBaseSession {
         msg.setMessageReceiveExtendId(getPeerExtendID());
 
         //读取消息的action消息
-        ChatAction chatAction = new ChatAction();
-        chatAction.setActionType(ChatMessage.ACTION_TYPE_SESSION_READ);
-        chatAction.setActionIds(new ArrayList<>(
-                Arrays.asList(
-                        DataManager.getInstance().getLoginUser().getUserId(),
-                        session.getSessionId(),
-                        getLatestMessage().getMessageTableOffset().toString()
-                )
-        ));
+        ChatReadReceipt readReceipt = new ChatReadReceipt();
+        //设置会话ID
+        readReceipt.setSessionId(session.getSessionId());
+        //设置用户ID
+        readReceipt.setUserId(DataManager.getInstance().getLoginUser().getUserId());
+        //设置读取ID
+        readReceipt.setReadOffset(getLatestMessage().getMessageTableOffset().toString());
 
         //设置内容
-        msg.setChatAction(chatAction);
+        msg.setReadReceipt(readReceipt);
         //时间
         msg.setMessageDate(new Date());
         //发送消息

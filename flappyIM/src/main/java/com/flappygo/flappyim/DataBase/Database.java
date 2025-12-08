@@ -1,17 +1,19 @@
 package com.flappygo.flappyim.DataBase;
 
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MESSAGE_AT_ALL;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
-import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.SEND_STATE_FAILURE;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_ACTION;
 import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_SYSTEM;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VIDEO;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_VOICE;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MESSAGE_AT_ALL;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_READ_RECEIPT;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_TEXT;
+import static com.flappygo.flappyim.Models.Server.ChatMessage.MSG_TYPE_IMG;
 
-import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Server.ChatSessionMember;
+import com.flappygo.flappyim.Models.Request.ChatReadReceipt;
 import com.flappygo.flappyim.Models.Server.ChatSessionData;
+import com.flappygo.flappyim.Models.Server.ChatSession;
 import com.flappygo.flappyim.Models.Request.ChatAction;
 import com.flappygo.flappyim.Models.Server.ChatMessage;
 import com.flappygo.flappyim.Models.Server.ChatUser;
@@ -25,15 +27,17 @@ import com.flappygo.flappyim.Tools.TimeTool;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+
+import java.util.stream.Collectors;
+
 import android.database.Cursor;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /******
  * 数据库操作
@@ -271,11 +275,11 @@ public class Database {
 
     /******
      * 更新消息已读(ACTION消息/系统消息、的已读状态不做处理)
-     * @param userId        用户ID
      * @param sessionId     会话ID
-     * @param tableOffset 表序号
+     * @param userId        用户ID
+     * @param tableOffset   表序号
      */
-    private void updateMessageRead(String userId, String sessionId, String tableOffset) {
+    private void updateMessageRead(String sessionId, String userId, String tableOffset) {
         executeDbOperation(chatUser -> {
 
             //SQL
@@ -284,7 +288,7 @@ public class Database {
                     "messageReadUserIds = IFNULL(messageReadUserIds, '') || CASE WHEN messageReadUserIds IS NULL OR messageReadUserIds = '' THEN '' ELSE ',' END || ? " +
                     "WHERE messageInsertUser = ? AND " +
                     "messageSendId != ? AND " +
-                    "messageType NOT IN (?, ?) AND " +
+                    "messageType NOT IN (?, ? ,?) AND " +
                     "messageSessionId = ? AND " +
                     "messageTableOffset <= ?";
 
@@ -296,10 +300,9 @@ public class Database {
                     chatUser.getUserExtendId(),
                     //messageSendId (to exclude)
                     userId,
-                    //First messageType to exclude
                     MSG_TYPE_SYSTEM,
-                    //Second messageType to exclude
                     MSG_TYPE_ACTION,
+                    MSG_TYPE_READ_RECEIPT,
                     //messageSessionId
                     sessionId,
                     //messageTableOffset
@@ -350,8 +353,12 @@ public class Database {
                     "and messageReadState = 0 " +
                     "and (messageRecallUserId is null or messageRecallUserId == '')" +
                     "and (messageDeleteUserIds not like ?)" +
-                    String.format(Locale.US, "and messageType != %d ", MSG_TYPE_SYSTEM) +
-                    String.format(Locale.US, "and messageType != %d", MSG_TYPE_ACTION);
+                    String.format(Locale.US,
+                            "and messageType not in (%d, %d, %d)",
+                            MSG_TYPE_SYSTEM,
+                            MSG_TYPE_ACTION,
+                            MSG_TYPE_READ_RECEIPT
+                    );
             Cursor cursor = db.rawQuery(countQuery, new String[]{
                     chatUser.getUserExtendId(),
                     sessionID,
@@ -381,11 +388,12 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSessionId = ? and messageInsertUser = ? and messageType != ? and isDelete != 1 ",
+                    "messageSessionId = ? AND messageInsertUser = ? AND messageType NOT IN (?, ?) AND isDelete != 1",
                     new String[]{
                             sessionId,
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
+                            Integer.toString(MSG_TYPE_READ_RECEIPT),
                     },
                     null,
                     null,
@@ -1038,11 +1046,12 @@ public class Database {
             Cursor cursor = db.query(
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
-                    "messageSessionId = ? and messageInsertUser = ? and messageType != ? and messageSendState in (1,2,3,4) ",
+                    "messageSessionId = ? AND messageInsertUser = ? AND messageType NOT IN (?, ?) AND messageSendState IN (1, 2, 3, 4)",
                     new String[]{
                             messageSessionId,
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
+                            Integer.toString(MSG_TYPE_READ_RECEIPT),
                     },
                     null,
                     null,
@@ -1066,14 +1075,15 @@ public class Database {
                     DataBaseConfig.TABLE_MESSAGE,
                     null,
                     "messageSessionId = ? " +
-                            "and messageInsertUser = ? " +
-                            "and messageType != ? " +
-                            "and messageSessionOffset > ? " +
-                            "and isDelete != 1 ",
+                            "AND messageInsertUser = ? " +
+                            "AND messageType NOT IN (?, ?) " +
+                            "AND messageSessionOffset > ? " +
+                            "AND isDelete != 1",
                     new String[]{
                             messageSessionId,
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
+                            Integer.toString(MSG_TYPE_READ_RECEIPT),
                             chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0",
                     },
                     null,
@@ -1105,7 +1115,7 @@ public class Database {
                             " WHERE messageSessionId = ?" +
                             " AND messageSessionOffset > ? " +
                             " AND messageInsertUser = ? " +
-                            " AND messageType != ? " +
+                            " AND messageType NOT IN (?, ?) " +
                             " AND isDelete != 1 "
             );
 
@@ -1126,6 +1136,7 @@ public class Database {
             queryParams.add(chatUser.getUserExtendId());
             //对应 messageType != ?
             queryParams.add(Integer.toString(MSG_TYPE_ACTION));
+            queryParams.add(Integer.toString(MSG_TYPE_READ_RECEIPT));
             if (includeAll) {
                 //针对当前用户的 @
                 queryParams.add("%" + chatUser.getUserId() + "%");
@@ -1173,7 +1184,7 @@ public class Database {
                             " WHERE messageSessionId = ? and messageReadState = 0" +
                             " AND messageSessionOffset > ? " +
                             " AND messageInsertUser = ? " +
-                            " AND messageType != ? " +
+                            " AND messageType NOT IN (?, ?) " +
                             " AND isDelete != 1 "
             );
 
@@ -1200,6 +1211,7 @@ public class Database {
 
             //对应 messageType != ?
             queryParams.add(Integer.toString(MSG_TYPE_ACTION));
+            queryParams.add(Integer.toString(MSG_TYPE_READ_RECEIPT));
 
             if (includeAll) {
                 //针对当前用户的 @
@@ -1251,7 +1263,7 @@ public class Database {
                             "and (messageTableOffset < ? or (messageTableOffset = ? and messageStamp < ?)) " +
                             "and messageSessionOffset > ? " +
                             "and messageInsertUser = ? " +
-                            "and messageType != ? " +
+                            "and messageType not in (?, ?) " +
                             "and isDelete != 1 ",
                     new String[]{
                             messageSessionId,
@@ -1261,6 +1273,7 @@ public class Database {
                             chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0",
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
+                            Integer.toString(MSG_TYPE_READ_RECEIPT),
                     },
                     null,
                     null,
@@ -1297,7 +1310,7 @@ public class Database {
                     "messageSessionId = ? " +
                             "and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) " +
                             "and messageInsertUser = ? " +
-                            "and messageType != ? " +
+                            "and messageType not in (?, ?) " +
                             "and isDelete != 1 ",
                     new String[]{
                             messageSessionId,
@@ -1306,6 +1319,7 @@ public class Database {
                             chatMessage.getMessageStamp().toString(),
                             chatUser.getUserExtendId(),
                             Integer.toString(MSG_TYPE_ACTION),
+                            Integer.toString(MSG_TYPE_READ_RECEIPT),
                     },
                     null,
                     null,
@@ -1661,6 +1675,32 @@ public class Database {
     }
 
     /******
+     * 已读回执消息
+     * @param chatMessage 消息
+     */
+    public void handleReceiptMessageUpdate(ChatMessage chatMessage) {
+        ChatUser chatUser = DataManager.getInstance().getLoginUser();
+        if (chatUser == null) {
+            return;
+        }
+        if (chatMessage.getMessageType() != MSG_TYPE_READ_RECEIPT) {
+            return;
+        }
+        ChatReadReceipt readReceipt = chatMessage.getReadReceipt();
+        updateMessageRead(
+                readReceipt.getSessionId(),
+                readReceipt.getUserId(),
+                readReceipt.getReadOffset()
+        );
+        updateSessionMemberLatestRead(
+                readReceipt.getSessionId(),
+                readReceipt.getUserId(),
+                readReceipt.getReadOffset()
+        );
+        updateMessageReadByMsgId(chatMessage.getMessageId());
+    }
+
+    /******
      * 处理动作消息
      * @param chatMessage 消息
      */
@@ -1684,14 +1724,6 @@ public class Database {
                 String userId = action.getActionIds().get(0);
                 String messageId = action.getActionIds().get(2);
                 updateMessageDelete(userId, messageId);
-                break;
-            }
-            case ChatMessage.ACTION_TYPE_SESSION_READ: {
-                String userId = action.getActionIds().get(0);
-                String sessionId = action.getActionIds().get(1);
-                String tableOffset = action.getActionIds().get(2);
-                updateMessageRead(userId, sessionId, tableOffset);
-                updateSessionMemberLatestRead(sessionId, userId, tableOffset);
                 break;
             }
             case ChatMessage.ACTION_TYPE_SESSION_MUTE: {

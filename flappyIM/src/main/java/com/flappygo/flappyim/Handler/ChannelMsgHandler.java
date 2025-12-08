@@ -370,8 +370,10 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
                 handleMessageSendReadState(chatMessage);
                 //插入消息
                 Database.getInstance().insertMessage(chatMessage);
-                //通知监听变化
+                //动作消息修改
                 HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
+                //已读回执消息修改
+                HandlerNotifyManager.getInstance().handleMessageReadReceipt(chatMessage);
                 //消息发送回调
                 HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
                 //更新了的会话ID
@@ -440,9 +442,11 @@ public class ChannelMsgHandler extends SimpleChannelInboundHandler<Flappy.Flappy
             handleMessageSendReadState(chatMessage);
             //插入消息
             Database.getInstance().insertMessage(chatMessage);
-            //新消息到达
+            //动作消息修改
             HandlerNotifyManager.getInstance().handleMessageAction(chatMessage);
-            //发送成功
+            //回执消息修改
+            HandlerNotifyManager.getInstance().handleMessageReadReceipt(chatMessage);
+            //发送成功回调
             HandlerNotifyManager.getInstance().handleSendSuccessCallback(chatMessage);
             //会话监听变化
             HandlerNotifyManager.getInstance().notifySessionUpdate(
