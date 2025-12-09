@@ -498,13 +498,13 @@ public class Database {
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(info.getSessionId()));
                 info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
-                info.setUsers(getSessionMemberList(info.getSessionId()));
+                info.setUsers(getSessionMemberList(chatUser,info.getSessionId()));
                 sessionList.add(info);
                 cursor.moveToNext();
             }
             cursor.close();
             return sessionList;
-        }, new ArrayList<>());
+        },new ArrayList<>(),true);
     }
 
 
@@ -735,13 +735,13 @@ public class Database {
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(sessionId));
                 info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
-                info.setUsers(getSessionMemberList(info.getSessionId()));
+                info.setUsers(getSessionMemberList(chatUser,info.getSessionId()));
                 cursor.close();
                 return info;
             }
             cursor.close();
             return null;
-        });
+        },null,true);
     }
 
     /******
@@ -778,13 +778,13 @@ public class Database {
                 info.setDeleteDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionDeletedDate"))));
                 info.setUnReadMessageCount(getSessionMessageUnReadCount(info.getSessionId()));
                 info.setDeleteTemp(getSessionIsTempDelete(info.getSessionId()));
-                info.setUsers(getSessionMemberList(info.getSessionId()));
+                info.setUsers(getSessionMemberList(chatUser,info.getSessionId()));
                 cursor.close();
                 return info;
             }
             cursor.close();
             return null;
-        });
+        },null,true);
     }
 
     /******
@@ -974,50 +974,48 @@ public class Database {
      * @param sessionId 会话ID
      */
     @SuppressLint("Range")
-    public List<ChatSessionMember> getSessionMemberList(String sessionId) {
-        return executeDbOperation(chatUser -> {
-            Cursor cursor = db.query(
-                    DataBaseConfig.TABLE_SESSION_MEMBER,
-                    null,
-                    "sessionId = ? and sessionInsertUser= ?",
-                    new String[]{
-                            sessionId,
-                            chatUser.getUserExtendId()
-                    },
-                    null,
-                    null,
-                    "sessionJoinDate asc"
-            );
-            List<ChatSessionMember> list = new ArrayList<>();
-            if (!cursor.moveToFirst()) {
-                cursor.close();
-                return list;
-            }
-            while (!cursor.isAfterLast()) {
-                ChatSessionMember info = new ChatSessionMember();
-                info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
-                info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
-                info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
-                info.setUserAvatar(cursor.getString(cursor.getColumnIndex("userAvatar")));
-                info.setUserData(cursor.getString(cursor.getColumnIndex("userData")));
-                info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
-                info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
-                info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
-                info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
-                info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
-                info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
-                info.setSessionMemberType(cursor.getInt(cursor.getColumnIndex("sessionMemberType")));
-                info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
-                info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
-                info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
-                info.setSessionLeaveDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionLeaveDate"))));
-                info.setIsLeave(cursor.getInt(cursor.getColumnIndex("isLeave")));
-                list.add(info);
-                cursor.moveToNext();
-            }
+    private List<ChatSessionMember> getSessionMemberList(ChatUser chatUser, String sessionId) {
+        Cursor cursor = db.query(
+                DataBaseConfig.TABLE_SESSION_MEMBER,
+                null,
+                "sessionId = ? and sessionInsertUser= ?",
+                new String[]{
+                        sessionId,
+                        chatUser.getUserExtendId()
+                },
+                null,
+                null,
+                "sessionJoinDate asc"
+        );
+        List<ChatSessionMember> list = new ArrayList<>();
+        if (!cursor.moveToFirst()) {
             cursor.close();
             return list;
-        }, new ArrayList<>());
+        }
+        while (!cursor.isAfterLast()) {
+            ChatSessionMember info = new ChatSessionMember();
+            info.setUserId(cursor.getString(cursor.getColumnIndex("userId")));
+            info.setUserExtendId(cursor.getString(cursor.getColumnIndex("userExtendId")));
+            info.setUserName(cursor.getString(cursor.getColumnIndex("userName")));
+            info.setUserAvatar(cursor.getString(cursor.getColumnIndex("userAvatar")));
+            info.setUserData(cursor.getString(cursor.getColumnIndex("userData")));
+            info.setUserCreateDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userCreateDate"))));
+            info.setUserLoginDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("userLoginDate"))));
+            info.setSessionId(cursor.getString(cursor.getColumnIndex("sessionId")));
+            info.setSessionMemberLatestRead(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestRead")));
+            info.setSessionMemberLatestDelete(cursor.getLong(cursor.getColumnIndex("sessionMemberLatestDelete")));
+            info.setSessionMemberMarkName(cursor.getString(cursor.getColumnIndex("sessionMemberMarkName")));
+            info.setSessionMemberType(cursor.getInt(cursor.getColumnIndex("sessionMemberType")));
+            info.setSessionMemberMute(cursor.getInt(cursor.getColumnIndex("sessionMemberMute")));
+            info.setSessionMemberPinned(cursor.getInt(cursor.getColumnIndex("sessionMemberPinned")));
+            info.setSessionJoinDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionJoinDate"))));
+            info.setSessionLeaveDate(TimeTool.strToDate(cursor.getString(cursor.getColumnIndex("sessionLeaveDate"))));
+            info.setIsLeave(cursor.getInt(cursor.getColumnIndex("isLeave")));
+            list.add(info);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
     }
 
     //获取最近的一条消息
