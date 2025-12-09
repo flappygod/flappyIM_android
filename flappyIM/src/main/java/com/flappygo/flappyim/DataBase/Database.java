@@ -1129,7 +1129,7 @@ public class Database {
             } else {
                 queryBuilder.append(" AND messageAtUserIds LIKE ? ");
             }
-            queryBuilder.append(" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ? OFFSET ?");
+            queryBuilder.append(" ORDER BY messageTableOffset ASC, messageStamp ASC LIMIT ? OFFSET ?");
             //构建参数列表
             List<String> queryParams = new ArrayList<>();
             //对应 messageSessionId = ?
@@ -1202,7 +1202,7 @@ public class Database {
                 queryBuilder.append(" AND messageAtUserIds LIKE ? ");
             }
 
-            queryBuilder.append(" ORDER BY messageTableOffset DESC, messageStamp DESC LIMIT ?");
+            queryBuilder.append(" ORDER BY messageTableOffset ASC, messageStamp ASC LIMIT ?");
 
             //构建参数列表
             List<String> queryParams = new ArrayList<>();
