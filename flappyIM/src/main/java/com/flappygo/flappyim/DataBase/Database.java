@@ -1320,6 +1320,7 @@ public class Database {
                     "messageSessionId = ? " +
                             "and (messageTableOffset > ? or (messageTableOffset = ? and messageStamp > ?)) " +
                             "and messageInsertUser = ? " +
+
                             "and messageType not in (?, ?) " +
                             "and isDelete != 1 ",
                     new String[]{
