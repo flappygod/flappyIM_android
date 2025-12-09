@@ -1333,7 +1333,7 @@ public class Database {
                     },
                     null,
                     null,
-                    "messageTableOffset DESC,messageStamp desc limit " + size
+                    "messageTableOffset asc,messageStamp asc limit " + size
             );
 
             //全部数据转换
@@ -1347,6 +1347,7 @@ public class Database {
                 }
                 cursor.close();
             }
+            Collections.reverse(retMessages);
             return retMessages;
         }, new ArrayList<>());
     }
