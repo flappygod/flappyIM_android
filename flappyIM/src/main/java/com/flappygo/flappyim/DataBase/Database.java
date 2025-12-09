@@ -1112,11 +1112,11 @@ public class Database {
             ChatSessionMember chatSessionMember = getSessionMember(messageSessionId, chatUser.getUserId());
             //查询比它小的消息
             List<ChatMessage> retMessages = new ArrayList<>();
-
             //构建 SQL 查询和参数列表
             StringBuilder queryBuilder = new StringBuilder(
                     "SELECT * FROM " + DataBaseConfig.TABLE_MESSAGE +
                             " WHERE messageSessionId = ?" +
+                            " AND messageSendId != ? " +
                             " AND messageSessionOffset > ? " +
                             " AND messageInsertUser = ? " +
                             " AND messageType NOT IN (?, ?) " +
@@ -1134,6 +1134,8 @@ public class Database {
             List<String> queryParams = new ArrayList<>();
             //对应 messageSessionId = ?
             queryParams.add(messageSessionId);
+            //不是自己发送的
+            queryParams.add(chatUser.getUserId());
             //对应 messageSessionOffset > ?
             queryParams.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
             //对应 messageInsertUser = ?
@@ -1186,6 +1188,7 @@ public class Database {
             StringBuilder queryBuilder = new StringBuilder(
                     "SELECT * FROM " + DataBaseConfig.TABLE_MESSAGE +
                             " WHERE messageSessionId = ? and messageReadState = 0" +
+                            " AND messageSendId != ? " +
                             " AND messageSessionOffset > ? " +
                             " AND messageInsertUser = ? " +
                             " AND messageType NOT IN (?, ?) " +
@@ -1206,6 +1209,9 @@ public class Database {
 
             //对应 messageSessionId = ?
             queryParams.add(messageSessionId);
+
+            //不是自己发送的
+            queryParams.add(chatUser.getUserId());
 
             //对应 messageSessionOffset > ?
             queryParams.add(chatSessionMember != null ? chatSessionMember.getSessionMemberLatestDelete().toString() : "0");
