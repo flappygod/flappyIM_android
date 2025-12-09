@@ -986,7 +986,7 @@ public class Database {
                     },
                     null,
                     null,
-                    null
+                    "sessionJoinDate asc"
             );
             List<ChatSessionMember> list = new ArrayList<>();
             if (!cursor.moveToFirst()) {
